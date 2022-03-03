@@ -1,0 +1,42 @@
+#
+# Git Ingore file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+#
+# See https://help.github.com/articles/ignoring-files for more about ignoring files.
+#
+
+# Ignore PyCharm stuff.
+.idea
+
+# Ignore Python stuff.
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+venv*
+.installed.cfg
+*.egg-info/
+*.egg
+
+# Ignore node modules.
+node_modules/**
+
+# Ignore Mac stuff.
+**/.DS_Store

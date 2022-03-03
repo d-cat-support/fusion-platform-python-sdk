@@ -1,0 +1,317 @@
+{
+  "id": "e694deb4-bd83-4075-b1b7-a1d2346e9199",
+  "created_at": "2022-02-15T10:04:12.753131+00:00",
+  "updated_at": "2022-02-15T10:04:19.090684+00:00",
+  "organisation_id": "b8fe5452-9289-49c4-8110-5209462b2eaf",
+  "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+  "service_id": "5e98fdd7-77a3-451f-ba49-d67002fc420d",
+  "name": "Test",
+  "inputs": [
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "input": 1,
+      "file_type": "GeoJSON",
+      "resolution": null,
+      "selectors": null,
+      "id": "92eb24e5-9639-4207-9f8e-67eebadc97ab",
+      "model": "Data",
+      "change_trigger": false,
+      "change_hash": null,
+      "title": "Area",
+      "description": "The area of interest for which data is to be ingested."
+    }
+  ],
+  "options": [
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "latest_date",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": null,
+      "title": "Use Latest Date",
+      "description": "True to use the most recent date available within the maximum scan days back from now."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "start_date",
+      "value": null,
+      "required": false,
+      "data_type": "datetime",
+      "validation": "format=%Y-%m-%dT%H:%M:%S;min=2017-01-01T00:00:00;max=2022-02-15T10:04:19",
+      "mutually_exclusive": "latest_date=true",
+      "advanced": null,
+      "title": "Start Date",
+      "description": "The date from which data will be ingested (inclusive)."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "end_date",
+      "value": null,
+      "required": false,
+      "data_type": "datetime",
+      "validation": "format=%Y-%m-%dT%H:%M:%S;min=2017-01-01T00:00:00;max=2022-02-15T10:04:19",
+      "mutually_exclusive": "latest_date=true",
+      "advanced": null,
+      "title": "End Date",
+      "description": "The optional date up to which data will be ingested (inclusive). If not defined then a single date will be ingested corresponding to the start date. If defined, all available dates between the start and end date (inclusive) will be ingested."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "find_nearest",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Find Nearest",
+      "description": "True to find the nearest available date to that specified to ingest, False to use the exact date."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "maximum_scan_days",
+      "value": "5",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=1",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Maximum Scan Days",
+      "description": "When finding the nearest date, how many days ahead can be used to find the best available image?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "merge_image_days",
+      "value": "1",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=0",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Merge Image Days",
+      "description": "When finding the nearest date, how many best-matching images should be merged together to form the final image?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "maximum_cloud",
+      "value": "95",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=0;max=100",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Maximum Cloud",
+      "description": "What is the maximum cloud coverage which is acceptable for any ingested image?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "atmospherically_corrected",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Atmospherically Corrected",
+      "description": "Ingest atmospherically corrected images?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "coverage_tolerance",
+      "value": "4",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=0;max=100",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Coverage Tolerance",
+      "description": "When finding the nearest date, what tolerance percentage points are allowed to determine if image coverage is equivalent?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "error_no_image",
+      "value": "false",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Error No Image",
+      "description": "When finding the nearest date, if no suitable image can be found for a scan date range, should an error be raised to stop processing?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "mask",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Mask",
+      "description": "Should the image be masked to only allow through the allowed mask classes?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "mask_classes",
+      "value": "4,5,6,7",
+      "required": false,
+      "data_type": "string",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Mask Classes",
+      "description": "From the Sentinel-2 scene classification, which classes should be allowed in the image when masking?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "only_mrgs_cells",
+      "value": null,
+      "required": false,
+      "data_type": "string",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Only MGRS Cells",
+      "description": "Force only certain MGRS cells to be processed for the area of interest? A comma separated list of cell names, or blank for all."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "generate_preview",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Generate Preview",
+      "description": "Generate the preview image? Note that this can take a long time on large images. Default True."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "clip",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Clip",
+      "description": "Clip the image to the supplied area of interest? Default True."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "platform",
+      "value": "A",
+      "required": false,
+      "data_type": "constrained",
+      "validation": "values=A,B,*;names=Sentinel-1A,Sentinel-1B,Both",
+      "title": "Platform",
+      "description": "Which satellite platform should be used for ingestion? Either Sentinel-1A, Sentinel-1B or both."
+    }
+  ],
+  "chains": [
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "service_id": "5e98fdd7-77a3-451f-ba49-d67002fc420d",
+      "inputs": [
+        "850b6a6d-8154-434a-8f2a-c65d6848d5f9"
+      ],
+      "outputs": [
+        "e7b9640d-46a3-4df8-a3eb-49696c4622ba",
+        "d4a03c23-ebd9-454b-b090-588de442a335",
+        "409c3eaa-1f28-4984-a2dd-3fa1e8a6961c",
+        "dfdf1e91-99eb-4847-a04a-49c7903acd0d",
+        "9b69d8f6-f080-4726-83b0-452a1a9d8eec",
+        "2bfab68f-37a3-485e-b322-098c46198e35",
+        "a1eeb66d-184d-4c32-8b4b-984ac2a264c4",
+        "63708af6-24fb-4306-8474-04cf66d96e87",
+        "3b49b291-5c43-483a-b605-238abad7d9fc",
+        "4aba3c86-5a47-47d0-887d-d7554467dc7e",
+        "60a108c5-a6e6-4bd8-87c0-47f539437d83",
+        "a017d666-1406-43c0-b925-22949bd97ec6",
+        "3656cb6e-0c37-4e5e-976d-23120a3bd3ae",
+        "b21e572a-895f-4d67-8369-a4d804138f34",
+        "749da4b8-ec2c-41fc-83fc-eca7bbb07af2"
+      ],
+      "options": [
+        {
+          "name": "latest_date",
+          "value": "true"
+        },
+        {
+          "name": "start_date",
+          "value": null
+        },
+        {
+          "name": "end_date",
+          "value": null
+        },
+        {
+          "name": "find_nearest",
+          "value": "true"
+        },
+        {
+          "name": "maximum_scan_days",
+          "value": "5"
+        },
+        {
+          "name": "merge_image_days",
+          "value": "1"
+        },
+        {
+          "name": "maximum_cloud",
+          "value": "95"
+        },
+        {
+          "name": "atmospherically_corrected",
+          "value": "true"
+        },
+        {
+          "name": "coverage_tolerance",
+          "value": "4"
+        },
+        {
+          "name": "error_no_image",
+          "value": "false"
+        },
+        {
+          "name": "mask",
+          "value": "true"
+        },
+        {
+          "name": "mask_classes",
+          "value": "4,5,6,7"
+        },
+        {
+          "name": "only_mrgs_cells",
+          "value": null
+        },
+        {
+          "name": "generate_preview",
+          "value": "true"
+        },
+        {
+          "name": "clip",
+          "value": "true"
+        }
+      ]
+    }
+  ],
+  "run_type": "run_once",
+  "repeat_count": 1,
+  "repeat_start": "2022-02-15T10:04:18.975020+00:00",
+  "repeat_end": null,
+  "repeat_gap": null,
+  "repeat_offset": null,
+  "process_status": "draft",
+  "process_status_at": "2022-02-15T10:04:18.975020+00:00",
+  "output_storage_period": 0,
+  "test_run": false,
+  "price": 0,
+  "deletable": null,
+  "executions": true
+}

@@ -1,0 +1,10 @@
+#
+# Process execution English localisation file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+en:
+  execution_failed: "Execution has failed"

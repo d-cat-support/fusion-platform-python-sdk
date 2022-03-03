@@ -1,0 +1,284 @@
+{
+  "id": "00cb167e-9fad-4e84-8e7e-6871f8f79454",
+  "created_at": "2022-02-15T10:22:53.780403+00:00",
+  "updated_at": "2022-02-15T11:00:05.182968+00:00",
+  "organisation_id": "b8fe5452-9289-49c4-8110-5209462b2eaf",
+  "process_id": "e694deb4-bd83-4075-b1b7-a1d2346e9199",
+  "options": [
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "latest_date",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": null,
+      "title": "Use Latest Date",
+      "description": "True to use the most recent date available within the maximum scan days back from now."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "start_date",
+      "value": null,
+      "required": false,
+      "data_type": "datetime",
+      "validation": "format=%Y-%m-%dT%H:%M:%S;min=2017-01-01T00:00:00;max=2022-02-15T10:22:53",
+      "mutually_exclusive": "latest_date=true",
+      "advanced": null,
+      "title": "Start Date",
+      "description": "The date from which data will be ingested (inclusive)."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "end_date",
+      "value": null,
+      "required": false,
+      "data_type": "datetime",
+      "validation": "format=%Y-%m-%dT%H:%M:%S;min=2017-01-01T00:00:00;max=2022-02-15T10:22:53",
+      "mutually_exclusive": "latest_date=true",
+      "advanced": null,
+      "title": "End Date",
+      "description": "The optional date up to which data will be ingested (inclusive). If not defined then a single date will be ingested corresponding to the start date. If defined, all available dates between the start and end date (inclusive) will be ingested."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "find_nearest",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Find Nearest",
+      "description": "True to find the nearest available date to that specified to ingest, False to use the exact date."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "maximum_scan_days",
+      "value": "5",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=1",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Maximum Scan Days",
+      "description": "When finding the nearest date, how many days ahead can be used to find the best available image?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "merge_image_days",
+      "value": "1",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=0",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Merge Image Days",
+      "description": "When finding the nearest date, how many best-matching images should be merged together to form the final image?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "maximum_cloud",
+      "value": "95",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=0;max=100",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Maximum Cloud",
+      "description": "What is the maximum cloud coverage which is acceptable for any ingested image?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "atmospherically_corrected",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Atmospherically Corrected",
+      "description": "Ingest atmospherically corrected images?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "coverage_tolerance",
+      "value": "4",
+      "required": false,
+      "data_type": "numeric",
+      "validation": "min=0;max=100",
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Coverage Tolerance",
+      "description": "When finding the nearest date, what tolerance percentage points are allowed to determine if image coverage is equivalent?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "error_no_image",
+      "value": "false",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Error No Image",
+      "description": "When finding the nearest date, if no suitable image can be found for a scan date range, should an error be raised to stop processing?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "mask",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Mask",
+      "description": "Should the image be masked to only allow through the allowed mask classes?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "mask_classes",
+      "value": "4,5,6,7",
+      "required": false,
+      "data_type": "string",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Mask Classes",
+      "description": "From the Sentinel-2 scene classification, which classes should be allowed in the image when masking?"
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "only_mrgs_cells",
+      "value": null,
+      "required": false,
+      "data_type": "string",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Only MGRS Cells",
+      "description": "Force only certain MGRS cells to be processed for the area of interest? A comma separated list of cell names, or blank for all."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "generate_preview",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Generate Preview",
+      "description": "Generate the preview image? Note that this can take a long time on large images. Default True."
+    },
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "name": "clip",
+      "value": "true",
+      "required": false,
+      "data_type": "boolean",
+      "validation": null,
+      "mutually_exclusive": null,
+      "advanced": true,
+      "title": "Clip",
+      "description": "Clip the image to the supplied area of interest? Default True."
+    }
+  ],
+  "chains": [
+    {
+      "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+      "service_id": "5e98fdd7-77a3-451f-ba49-d67002fc420d",
+      "inputs": [
+        "92eb24e5-9639-4207-9f8e-67eebadc97ab"
+      ],
+      "outputs": [
+        "eabed068-9dd5-411b-b204-bda08daaf7af",
+        "3f10dfbf-5b34-4a7e-b45f-560c773443ee",
+        "fdc82fa1-8665-42f4-ab26-0891a3e9b3b6",
+        "af86977a-9692-4bf5-a6be-b898cc46cb71",
+        "1824f60a-0c8a-451f-89ce-5aef5ddb710b",
+        "73b81044-6bd6-4a64-a709-69d012699d3e",
+        "7f784416-7c07-49a2-b13c-143bff5a0f31",
+        "b75d740e-3da3-4f76-986c-d2542a4f41aa",
+        "838cb03d-29d2-4d01-a69c-669c0377187f",
+        "7897f382-d44f-4095-8c70-4eb5fee9cc0c",
+        "d30927f9-9979-432e-b461-ab3ee7e9fc80",
+        "dd8da911-9878-4474-b369-2299dd59eb8b",
+        "b93bc3d4-7a54-4e60-b432-3dbeb94d9af6",
+        "0e27196b-9e6f-4ec2-83a0-abd288a2d645",
+        "8a2c6f00-2334-4a1a-9b59-fe8796011e3d"
+      ],
+      "options": [
+        {
+          "name": "latest_date",
+          "value": "true"
+        },
+        {
+          "name": "start_date",
+          "value": null
+        },
+        {
+          "name": "end_date",
+          "value": null
+        },
+        {
+          "name": "find_nearest",
+          "value": "true"
+        },
+        {
+          "name": "maximum_scan_days",
+          "value": "5"
+        },
+        {
+          "name": "merge_image_days",
+          "value": "1"
+        },
+        {
+          "name": "maximum_cloud",
+          "value": "95"
+        },
+        {
+          "name": "atmospherically_corrected",
+          "value": "true"
+        },
+        {
+          "name": "coverage_tolerance",
+          "value": "4"
+        },
+        {
+          "name": "error_no_image",
+          "value": "false"
+        },
+        {
+          "name": "mask",
+          "value": "true"
+        },
+        {
+          "name": "mask_classes",
+          "value": "4,5,6,7"
+        },
+        {
+          "name": "only_mrgs_cells",
+          "value": null
+        },
+        {
+          "name": "generate_preview",
+          "value": "true"
+        },
+        {
+          "name": "clip",
+          "value": "true"
+        }
+      ]
+    }
+  ],
+  "started_at": "2022-02-15T10:22:53.780425+00:00",
+  "ended_at": "2022-02-15T10:27:07.811025+00:00",
+  "abort": false,
+  "success": true,
+  "progress": 100,
+  "delete_expiry": "2022-02-16T11:00:05.062082+00:00",
+  "delete_warning_status": "delete_warning_sent"
+}

@@ -1,0 +1,6 @@
+{
+  "file": "9c8acc92-fbe7-4995-87b8-b73e34fc9339",
+  "name": "test.tif",
+  "url": "https://download-file.com/test",
+  "commands": "curl --output test.tif 'https://download-file.com/test'"
+}

@@ -1,0 +1,10 @@
+#
+# Setup manifest file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+# Include the documentation and examples.
+recursive-include fusion_platform/ *.pdf *.geojson

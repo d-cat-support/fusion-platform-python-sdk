@@ -1,0 +1,64 @@
+#
+# Model fields English localisation file
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+en:
+  boolean:
+    invalid: "Not a valid boolean"
+
+  datetime:
+    invalid: "Not a valid {obj_type}"
+    invalid_awareness: "Not a valid {awareness} {obj_type}"
+    format: "'{input}' cannot be formatted as a {obj_type}"
+
+  decimal:
+    invalid: "Not a valid decimal"
+    too_large: "Decimal too large"
+    special: "Special numeric values (nan or infinity) are not permitted"
+
+  dict:
+    invalid: "Not a valid dictionary"
+
+  email:
+    invalid: "Not a valid email address"
+
+  float:
+    invalid: "Not a valid float"
+    too_large: "Float too large"
+    special: "Special numeric values (nan or infinity) are not permitted."
+
+  integer:
+    invalid: "Not a valid integer"
+    too_large: "Integer too large"
+
+  ip:
+    invalid_ip: "Not a valid IP address"
+
+  list:
+    invalid: "Not a valid list"
+
+  nested:
+    type: "Invalid type"
+
+  relativedelta:
+    invalid: "Not a valid relative period of time"
+
+  string:
+    invalid: "Not a valid string"
+    invalid_utf8: "Not a valid utf-8 string"
+
+  timedelta:
+    invalid: "Not a valid period of time"
+
+  tuple:
+    invalid: "Not a valid tuple"
+
+  url:
+    invalid_url: "Not a valid URL"
+
+  uuid:
+    invalid_uuid: "Not a valid utf-8 string"

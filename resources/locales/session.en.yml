@@ -1,0 +1,14 @@
+#
+# Session English localisation file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+en:
+  missing_email_user_id: "Either an email address or a user id must be specified"
+  missing_password: "Password must be specified"
+  login_failed: "Login failed"
+
+  request_failed: "API request failed: %{message}"

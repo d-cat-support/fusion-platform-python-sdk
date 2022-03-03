@@ -1,0 +1,12 @@
+#
+# Data file English localisation file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+en:
+  download_already_in_progress: "Cannot download file as the download is already in progress"
+  no_download: "No download is in progress"
+  failed_download_url: "Failed to get URL from download file response"

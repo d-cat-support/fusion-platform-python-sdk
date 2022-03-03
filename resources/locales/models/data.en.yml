@@ -1,0 +1,14 @@
+#
+# Data English localisation file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+en:
+  failed_add_file_id: "Failed to get id from add file response"
+  failed_add_file_url: "Failed to get URL from add file response"
+  failed_add_file_not_unique: "Failed to add file as the id is not unique"
+
+  no_create: "No create is in progress"

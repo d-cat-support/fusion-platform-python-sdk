@@ -1,0 +1,10 @@
+marshmallow
+mock
+pyjwt[crypto]
+pytest
+python-dateutil
+python-i18n[YAML]
+pytz
+requests
+requests-mock
+twine

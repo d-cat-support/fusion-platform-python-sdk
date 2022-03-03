@@ -1,0 +1,65 @@
+{
+  "id": "5e98fdd7-77a3-451f-ba49-d67002fc420d",
+  "created_at": "2020-12-01T14:26:34.717734+00:00",
+  "updated_at": "2021-08-06T11:17:04.326578+00:00",
+  "organisation_id": "b8fe5452-9289-49c4-8110-5209462b2eaf",
+  "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
+  "version": 1,
+  "approval_status": "approved",
+  "name": "Sentinel-2 (Multispectral)",
+  "categories": [
+    "Ingester"
+  ],
+  "keywords": [
+    "Sentinel-2"
+  ],
+  "image_id": "516251fb-1200-4bcd-8cbb-95cb9502a3d2",
+  "option_validations": [
+    "latest_date or ((not latest_date) and (start_date is not None))"
+  ],
+  "license_id": "9a088ac0-db69-403a-b075-1ddc45afb5ec",
+  "charge_expression_platform": "0",
+  "charge_expression_owner": "0",
+  "documentation_summary": "This service provides the full imagery set from Sentinel-2 (10m, 20m, 60m) atmospherically corrected, for a specified region of interest.",
+  "documentation_description": "Sentinel-2 data products provide global multispectral images. You must provide a region of interest and then a start date and optional end date. For every day from the start to the end (inclusive), atmospherically corrected waveband responses are then output as separate images representing 13 wavebands. The imagery is output as a series of GeoTIFF files, each with a single band representing a waveband. Preview images are also provided. All GeoTIFF files will have the same geographic projection and resolution (up-sampled to 10m). Additional options allow specification of options which control the aggregation of images over a number of days.",
+  "documentation_assumptions": "The Sentinel-2 data is taken from the Sinergise S3 repositories of level 1C and level 2A data, and therefore it is assumed that data for the required dates has been published to these repositories.",
+  "documentation_performance": "",
+  "documentation_actions": "",
+  "documentation_inputs": [
+    "1. Area: The area of interest for which data is to be ingested. (GeoJSON)"
+  ],
+  "documentation_outputs": [
+    "1. (GeoTIFF) band 1 - Coastal Aerosol.",
+    "2. (GeoTIFF) band 1 - Blue.",
+    "3. (GeoTIFF) band 1 - Green.",
+    "4. (GeoTIFF) band 1 - Red.",
+    "5. (GeoTIFF) band 1 - Red Edge 1.",
+    "6. (GeoTIFF) band 1 - Red Edge 2.",
+    "7. (GeoTIFF) band 1 - Red Edge 3.",
+    "8. (GeoTIFF) band 1 - NIR.",
+    "9. (GeoTIFF) band 1 - Narrow NIR.",
+    "10. (GeoTIFF) band 1 - Water Vapour.",
+    "11. (GeoTIFF) band 1 - SWIR Cirrus.",
+    "12. (GeoTIFF) band 1 - SWIR 1.",
+    "13. (GeoTIFF) band 1 - SWIR 2.",
+    "14. Preview: The preview image for the ingested data. (GeoTIFF) band 1 - Red, band 2 - Green, band 3 - Blue, band 4 - Alpha.",
+    "15. Preview: The preview image for the ingested data. (PNG)"
+  ],
+  "documentation_options": [
+    "Use Latest Date: True to use the most recent date available within the maximum scan days back from now. Required, default true.",
+    "Start Date: The date from which data will be ingested (inclusive). Optional, default none.",
+    "End Date: The optional date up to which data will be ingested (inclusive). If not defined then a single date will be ingested corresponding to the start date. If defined, all available dates between the start and end date (inclusive) will be ingested. Optional, default none.",
+    "Find Nearest: True to find the nearest available date to that specified to ingest, False to use the exact date. Optional, default true.",
+    "Maximum Scan Days: When finding the nearest date, how many days ahead can be used to find the best available image? Optional, default 5.",
+    "Merge Image Days: When finding the nearest date, how many best-matching images should be merged together to form the final image? Optional, default 1.",
+    "Maximum Cloud: What is the maximum cloud coverage which is acceptable for any ingested image? Optional, default 95.",
+    "Atmospherically Corrected: Ingest atmospherically corrected images? Optional, default true.",
+    "Coverage Tolerance: When finding the nearest date, what tolerance percentage points are allowed to determine if image coverage is equivalent? Optional, default 4.",
+    "Error No Image: When finding the nearest date, if no suitable image can be found for a scan date range, should an error be raised to stop processing? Optional, default false.",
+    "Mask: Should the image be masked to only allow through the allowed mask classes? Optional, default true.",
+    "Mask Classes: From the Sentinel-2 scene classification, which classes should be allowed in the image when masking? Optional, default 4,5,6,7.",
+    "Only MGRS Cells: Force only certain MGRS cells to be processed for the area of interest? A comma separated list of cell names, or blank for all. Optional, default none.",
+    "Generate Preview: Generate the preview image? Note that this can take a long time on large images. Default True. Optional, default true.",
+    "Clip: Clip the image to the supplied area of interest? Default True. Optional, default true."
+  ]
+}

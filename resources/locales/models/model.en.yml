@@ -1,0 +1,21 @@
+#
+# Model English localisation file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+en:
+  already_persisted: "Model is already persisted in the Fusion Platform(r)"
+  not_persisted: "Model is not persisted in the Fusion Platform(r)"
+
+  readonly_property: "Property %{property} is read-only and cannot be set"
+  no_such_keys: "No such keys %{keys}"
+
+  failed_model_send_and_load: "Failed to request and load model"
+  failed_model_new: "Failed to get model template from response"
+  failed_model_validation: "Failed to validate model: %{message}"
+
+  create_empty_body: "Create cannot be requested as there are no attributes to be used (read-only attributes have been removed)"
+  update_empty_body: "Update cannot be requested as there are no attributes to be used (read-only attributes have been removed)"

@@ -1,0 +1,27 @@
+{
+  "id": "a42782cf-f050-4786-908c-db92a4febca6",
+  "created_at": "2021-06-09T11:55:43.969381+00:00",
+  "updated_at": "2022-02-14T11:50:59.569998+00:00",
+  "name": "Joe Bloggs",
+  "address_line_1": "",
+  "address_town_city": "",
+  "address_post_zip_code": "",
+  "address_country": "GBR",
+  "payment_valid": false,
+  "income_valid": false,
+  "currency": "GBP",
+  "users": [
+    {
+      "id": "ea9e93a4-9915-4da1-92de-368b3a819479",
+      "email": "joe.bloggs@d-cat.co.uk",
+      "roles": [
+        "view_processing_chains",
+        "create_and_execute_processing_chains",
+        "audit_ssds",
+        "create_ssds",
+        "manage_organisation"
+      ]
+    }
+  ],
+  "maximum_output_storage_period": 1
+}

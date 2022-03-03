@@ -1,0 +1,8 @@
+{
+  "id": "83402d4f-e08d-497f-8577-99552d4073eb",
+  "created_at": "2022-02-04T12:26:20.881516+00:00",
+  "updated_at": "2022-02-04T12:26:20.881906+00:00",
+  "process_service_execution_id": "282e874c-e79a-4f92-a798-4742ac0b6fe0",
+  "logged_at": "2022-02-04T12:26:18.340000+00:00",
+  "message": "2022-02-04 12:26:18,340 [INFO] /app/services/app.py:execute:130 - teardown_app.py -> status: 0 duration: 2682 ms"
+}

@@ -1,0 +1,13 @@
+#
+# Fusion platform core English localisation file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2022
+#
+
+en:
+  sdk: "Fusion Platform(r) SDK"
+  version: "Version: %{version}"
+  version_date: "Date: %{version_date}"
+  support: "Support: support@d-cat.co.uk"

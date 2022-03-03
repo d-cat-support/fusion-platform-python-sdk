@@ -1,0 +1,40 @@
+{
+  "id": "ea9e93a4-9915-4da1-92de-368b3a819479",
+  "created_at": "2021-06-09T11:55:43.955929+00:00",
+  "updated_at": "2022-02-11T08:27:02.310943+00:00",
+  "email": "joe.bloggs@d-cat.co.uk",
+  "given_name": "Joe",
+  "family_name": "Bloggs",
+  "telephone": "+447123456789",
+  "role": 1,
+  "default_output_storage_period": 3,
+  "time_zone": "Europe/London",
+  "locale": "en_GB",
+  "units": "metric",
+  "notification_service_status": [
+    "email"
+  ],
+  "notification_account": [
+    "email"
+  ],
+  "notification_processing_chain": [
+    "email"
+  ],
+  "notification_new_features": [
+    "email"
+  ],
+  "notification_contact": [
+    "email"
+  ],
+  "organisations": [
+    {
+      "id": "b8fe5452-9289-49c4-8110-5209462b2eaf",
+      "last": true
+    },
+    {
+      "id": "a42782cf-f050-4786-908c-db92a4febca6",
+      "last": false
+    }
+  ],
+  "last_request_at": "2022-02-11T08:27:02.310909+00:00"
+}

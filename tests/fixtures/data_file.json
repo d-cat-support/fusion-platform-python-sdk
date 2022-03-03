@@ -1,0 +1,46 @@
+{
+  "id": "05e3a152-e56c-4d7d-b744-273c4266e928",
+  "created_at": "2022-01-26T15:46:40.188910+00:00",
+  "updated_at": "2022-01-26T15:47:18.870723+00:00",
+  "data_id": "92eb24e5-9639-4207-9f8e-67eebadc97ab",
+  "file_id": "9c8acc92-fbe7-4995-87b8-b73e34fc9339",
+  "file_type": "ESRI Shapefile",
+  "file_name": "adelaide.zip",
+  "crs": "EPSG:4326",
+  "bounds": [
+    137.14280251090364,
+    -34.48420544424931,
+    139.1288442541587,
+    -33.2271235256643
+  ],
+  "area": 21420824776.176483,
+  "mgrs_cells": [
+    "54HUG",
+    "54HTJ",
+    "54HUJ",
+    "53HQD",
+    "53HPB",
+    "54HTG",
+    "53HPC",
+    "53HQC",
+    "54HUH",
+    "53HQB",
+    "54HTH"
+  ],
+  "sinusoidal_cells": [
+    [
+      29,
+      12
+    ]
+  ],
+  "size": 1024,
+  "publishable": false,
+  "alternative": "6db1b72f-3de1-409c-b897-a0c29e7c7240",
+  "selectors": [
+    {
+      "selector": "1",
+      "category": "Polygon",
+      "area": 21420824776.176483
+    }
+  ]
+}
