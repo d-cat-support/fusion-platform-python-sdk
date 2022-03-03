@@ -100,7 +100,7 @@ Full documentation can be found in [fusion_platform_sdk.pdf](fusion_platform/fus
 
 ## Support
 
-Support for the SDK can be obtained by contacting Digital Content Analysis Technology Ltd via [support@d-cat.co.uk](support@d-cat.co.uk).
+Support for the SDK can be obtained by contacting Digital Content Analysis Technology Ltd via [support@d-cat.co.uk](mailto:support@d-cat.co.uk).
 
 ## License
 

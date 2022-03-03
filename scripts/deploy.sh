@@ -60,7 +60,7 @@ if [ "$1" == "" ]; then
   version=${version%$suffix}
 
   # Add all files to the commit, commit and push.
-  (cd /tmp/fusion-platform-python-sdk && git add . && git commit -m "Latest release" && git tag -l "$version" && git push)
+  (cd /tmp/fusion-platform-python-sdk && git add . && git commit -m "Latest release" && git push && git tag "$version" && git push origin "$version")
 fi
 
 deployment_command=(twine upload)
@@ -73,5 +73,5 @@ fi
 deployment_command+=("dist/*")
 
 # Deploy the built packages.
-#echo "${deployment_command[@]}"
-#"${deployment_command[@]}"
+echo "${deployment_command[@]}"
+"${deployment_command[@]}"
