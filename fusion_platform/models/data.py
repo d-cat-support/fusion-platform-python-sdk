@@ -162,7 +162,8 @@ class Data(Model):
         # Load in each of the file models and check that every file has been uploaded, and has a publishable or error  field to indicate that the analysis is
         # complete.
         for file in self.files:
-            has_fields = hasattr(file, self.__class__.FIELD_SIZE) and (hasattr(file, self.__class__.FIELD_PUBLISHABLE) or hasattr(file, self.__class__.FIELD_ERROR))
+            has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                        hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
 
             if not has_fields:
                 self._logger.debug('file %s not yet analysed', file.file_name)

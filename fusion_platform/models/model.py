@@ -40,42 +40,42 @@ class Model(Base):
     _PATH_PATCH = None
 
     # Useful fields and templates.
-    FIELD_CONSTRAINED_NAMES = 'constrained_names'
-    FIELD_CONSTRAINED_VALUES = 'constrained_values'
-    FIELD_DATA_TYPE = 'data_type'
-    FIELD_ERROR = 'error'
-    FIELD_FILE_TYPE = 'file_type'
-    FIELD_GROUP_ID = 'group_id'
-    FIELD_ID = 'id'
-    FIELD_INPUT = 'input'
-    FIELD_INPUTS = 'inputs'
-    FIELD_KEYWORDS = 'keywords'
-    FIELD_NAME = 'name'
-    FIELD_OPTIONS = 'options'
-    FIELD_OUTPUTS = 'outputs'
-    FIELD_PROCESS_STATUS = 'process_status'
-    FIELD_SSD_ID = 'ssd_id'
-    FIELD_PUBLISHABLE = 'publishable'
-    FIELD_SIZE = 'size'
-    FIELD_VALIDATION = 'validation'
-    FIELD_VALUE = 'value'
+    _FIELD_CONSTRAINED_NAMES = 'constrained_names'
+    _FIELD_CONSTRAINED_VALUES = 'constrained_values'
+    _FIELD_DATA_TYPE = 'data_type'
+    _FIELD_ERROR = 'error'
+    _FIELD_FILE_TYPE = 'file_type'
+    _FIELD_GROUP_ID = 'group_id'
+    _FIELD_ID = 'id'
+    _FIELD_INPUT = 'input'
+    _FIELD_INPUTS = 'inputs'
+    _FIELD_KEYWORDS = 'keywords'
+    _FIELD_NAME = 'name'
+    _FIELD_OPTIONS = 'options'
+    _FIELD_OUTPUTS = 'outputs'
+    _FIELD_PROCESS_STATUS = 'process_status'
+    _FIELD_SSD_ID = 'ssd_id'
+    _FIELD_PUBLISHABLE = 'publishable'
+    _FIELD_SIZE = 'size'
+    _FIELD_VALIDATION = 'validation'
+    _FIELD_VALUE = 'value'
 
     _FIELD_ID_NAME = '{name}_id'
 
     # Filter templates.
-    FILTER_MODIFIER_EQ = 'eq'
-    FILTER_MODIFIER_NE = 'ne'
-    FILTER_MODIFIER_LE = 'le'
-    FILTER_MODIFIER_LT = 'lt'
-    FILTER_MODIFIER_GE = 'ge'
-    FILTER_MODIFIER_GT = 'gt'
-    FILTER_MODIFIER_BEGINS_WITH = 'begins_with'
-    FILTER_MODIFIER_CONTAINS = 'contains'
-    FILTER_MODIFIER_NOT_CONTAINS = 'not_contains'
-    FILTER_MODIFIER_NULL = 'null'
-    FILTER_MODIFIER_NOT_NULL = 'not_null'
-    FILTER_MODIFIER_IN = 'in'
-    FILTER_MODIFIER_BETWEEN = 'between'
+    _FILTER_MODIFIER_EQ = 'eq'
+    _FILTER_MODIFIER_NE = 'ne'
+    _FILTER_MODIFIER_LE = 'le'
+    _FILTER_MODIFIER_LT = 'lt'
+    _FILTER_MODIFIER_GE = 'ge'
+    _FILTER_MODIFIER_GT = 'gt'
+    _FILTER_MODIFIER_BEGINS_WITH = 'begins_with'
+    _FILTER_MODIFIER_CONTAINS = 'contains'
+    _FILTER_MODIFIER_NOT_CONTAINS = 'not_contains'
+    _FILTER_MODIFIER_NULL = 'null'
+    _FILTER_MODIFIER_NOT_NULL = 'not_null'
+    _FILTER_MODIFIER_IN = 'in'
+    _FILTER_MODIFIER_BETWEEN = 'between'
 
     _FILTER_TEMPLATE = '{name}__{modifier}'
 
@@ -286,7 +286,7 @@ class Model(Base):
         :return: A dictionary of the relevant model ids.
         """
         model_id_name = Model._get_id_name(self.__class__.__name__)
-        result = {model_id_name: self.id if hasattr(self, Model.FIELD_ID) else None}
+        result = {model_id_name: self.id if hasattr(self, Model._FIELD_ID) else None}
 
         if self.__class__._BASE_MODEL_CLASS_NAME is not None:
             base_model_id_name = Model._get_id_name(self.__class__._BASE_MODEL_CLASS_NAME)
@@ -294,7 +294,7 @@ class Model(Base):
 
         # Override with any keywords. We explicitly replace 'id' with the correct key using a prefix.
         for key, value in kwargs.items():
-            if (key == Model.FIELD_ID) and (model_id_name in result):
+            if (key == Model._FIELD_ID) and (model_id_name in result):
                 result[model_id_name] = value
             else:
                 result[key] = value

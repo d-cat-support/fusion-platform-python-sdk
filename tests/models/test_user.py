@@ -40,7 +40,7 @@ class TestUser(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        user_id = content.get(Model.FIELD_ID)
+        user_id = content.get(Model._FIELD_ID)
         path = User._PATH_CHANGE_PASSWORD.format(user_id=user_id)
         old_password = 'old'
         new_password = 'new'
@@ -75,7 +75,7 @@ class TestUser(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        user_id = content.get(Model.FIELD_ID)
+        user_id = content.get(Model._FIELD_ID)
         path = User._PATH_DELETE.format(user_id=user_id)
 
         user = User(session)
@@ -106,7 +106,7 @@ class TestUser(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        user_id = content.get(Model.FIELD_ID)
+        user_id = content.get(Model._FIELD_ID)
         path = User._PATH_GET.format(user_id=user_id)
 
         user = User(session)
@@ -142,7 +142,7 @@ class TestUser(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        user_id = content.get(Model.FIELD_ID)
+        user_id = content.get(Model._FIELD_ID)
         path = User._PATH_GET.format(user_id=user_id)
 
         with requests_mock.Mocker() as mock:
@@ -171,12 +171,12 @@ class TestUser(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        user_id = content.get(Model.FIELD_ID)
+        user_id = content.get(Model._FIELD_ID)
         path = User._PATH_GET.format(user_id=user_id)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-            users = User._models_from_api_ids(session, [{Model.FIELD_ID: user_id}])
+            users = User._models_from_api_ids(session, [{Model._FIELD_ID: user_id}])
             self.assertIsNotNone(users)
 
             for user in users:
@@ -190,7 +190,7 @@ class TestUser(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        user_id = content.get(Model.FIELD_ID)
+        user_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
@@ -209,9 +209,9 @@ class TestUser(CustomTestCase):
             user_content = json.loads(file.read())
 
         session = Session()
-        organisation_ids = [organisation.get(Model.FIELD_ID) for organisation in user_content.get('organisations')]
+        organisation_ids = [organisation.get(Model._FIELD_ID) for organisation in user_content.get('organisations')]
 
-        user_id = user_content.get(Model.FIELD_ID)
+        user_id = user_content.get(Model._FIELD_ID)
 
         user = User(session)
         self.assertIsNotNone(user)
@@ -256,7 +256,7 @@ class TestUser(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        user_id = content.get(Model.FIELD_ID)
+        user_id = content.get(Model._FIELD_ID)
         path = User._PATH_PATCH.format(user_id=user_id)
         given_name = 'Test'
 

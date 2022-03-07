@@ -47,7 +47,7 @@ class TestProcessServiceExecution(CustomTestCase):
 
         session = Session()
         organisation_id = process_service_execution_content.get('organisation_id')
-        process_service_execution_id = process_service_execution_content.get(Model.FIELD_ID)
+        process_service_execution_id = process_service_execution_content.get(Model._FIELD_ID)
         path = ProcessServiceExecution._PATH_LOGS.format(organisation_id=organisation_id, process_service_execution_id=process_service_execution_id)
 
         process_service_execution = ProcessServiceExecution(session)
@@ -105,7 +105,7 @@ class TestProcessServiceExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_service_execution_id = content.get(Model.FIELD_ID)
+        process_service_execution_id = content.get(Model._FIELD_ID)
         path = ProcessServiceExecution._PATH_GET.format(organisation_id=organisation_id, process_service_execution_id=process_service_execution_id)
 
         process_service_execution = ProcessServiceExecution(session)
@@ -145,7 +145,7 @@ class TestProcessServiceExecution(CustomTestCase):
 
         session = Session()
         organisation_id = process_service_execution_content.get('organisation_id')
-        process_service_execution_id = process_service_execution_content.get(Model.FIELD_ID)
+        process_service_execution_id = process_service_execution_content.get(Model._FIELD_ID)
 
         process_service_execution = ProcessServiceExecution(session)
         self.assertIsNotNone(process_service_execution)
@@ -170,7 +170,7 @@ class TestProcessServiceExecution(CustomTestCase):
 
             for id in process_service_execution._model['inputs']:
                 path = Data._PATH_GET.format(organisation_id=organisation_id, data_id=id)
-                data_content[Model.FIELD_ID] = str(id)
+                data_content[Model._FIELD_ID] = str(id)
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
 
             for input in process_service_execution.inputs:
@@ -185,7 +185,7 @@ class TestProcessServiceExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_service_execution_id = content.get(Model.FIELD_ID)
+        process_service_execution_id = content.get(Model._FIELD_ID)
         path = ProcessServiceExecution._PATH_GET.format(organisation_id=organisation_id, process_service_execution_id=process_service_execution_id)
 
         with requests_mock.Mocker() as mock:
@@ -215,13 +215,13 @@ class TestProcessServiceExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_service_execution_id = content.get(Model.FIELD_ID)
+        process_service_execution_id = content.get(Model._FIELD_ID)
         path = ProcessServiceExecution._PATH_GET.format(organisation_id=organisation_id, process_service_execution_id=process_service_execution_id)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
             process_service_executions = ProcessServiceExecution._models_from_api_ids(session, [
-                {Model.FIELD_ID: process_service_execution_id, 'organisation_id': organisation_id}])
+                {Model._FIELD_ID: process_service_execution_id, 'organisation_id': organisation_id}])
             self.assertIsNotNone(process_service_executions)
 
             for process_service_execution in process_service_executions:
@@ -235,7 +235,7 @@ class TestProcessServiceExecution(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        process_service_execution_id = content.get(Model.FIELD_ID)
+        process_service_execution_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
@@ -258,7 +258,7 @@ class TestProcessServiceExecution(CustomTestCase):
 
         session = Session()
         organisation_id = process_service_execution_content.get('organisation_id')
-        process_service_execution_id = process_service_execution_content.get(Model.FIELD_ID)
+        process_service_execution_id = process_service_execution_content.get(Model._FIELD_ID)
 
         process_service_execution = ProcessServiceExecution(session)
         self.assertIsNotNone(process_service_execution)
@@ -283,7 +283,7 @@ class TestProcessServiceExecution(CustomTestCase):
 
             for id in process_service_execution._model['outputs']:
                 path = Data._PATH_GET.format(organisation_id=organisation_id, data_id=id)
-                data_content[Model.FIELD_ID] = str(id)
+                data_content[Model._FIELD_ID] = str(id)
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
 
             for output in process_service_execution.outputs:

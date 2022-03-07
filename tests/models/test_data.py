@@ -49,7 +49,7 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = data_content.get('organisation_id')
-        data_id = data_content.get(Model.FIELD_ID)
+        data_id = data_content.get(Model._FIELD_ID)
         name = 'Glasgow'
         file_type = fusion_platform.FILE_TYPE_GEOJSON,
         files = [fusion_platform.EXAMPLE_GLASGOW_FILE]
@@ -138,7 +138,7 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = data_content.get('organisation_id')
-        data_id = data_content.get(Model.FIELD_ID)
+        data_id = data_content.get(Model._FIELD_ID)
         name = 'Glasgow'
         file_type = fusion_platform.FILE_TYPE_GEOJSON,
         files = [fusion_platform.EXAMPLE_GLASGOW_FILE]
@@ -237,7 +237,7 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        data_id = content.get(Model.FIELD_ID)
+        data_id = content.get(Model._FIELD_ID)
         path = Data._PATH_DELETE.format(organisation_id=organisation_id, data_id=data_id)
 
         data = Data(session)
@@ -273,7 +273,7 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = data_content.get('organisation_id')
-        data_id = data_content.get(Model.FIELD_ID)
+        data_id = data_content.get(Model._FIELD_ID)
         path = Data._PATH_FILES.format(organisation_id=organisation_id, data_id=data_id)
 
         data = Data(session)
@@ -313,7 +313,7 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        data_id = content.get(Model.FIELD_ID)
+        data_id = content.get(Model._FIELD_ID)
         path = Data._PATH_GET.format(organisation_id=organisation_id, data_id=data_id)
 
         data = Data(session)
@@ -350,7 +350,7 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        data_id = content.get(Model.FIELD_ID)
+        data_id = content.get(Model._FIELD_ID)
         path = Data._PATH_GET.format(organisation_id=organisation_id, data_id=data_id)
 
         with requests_mock.Mocker() as mock:
@@ -380,12 +380,12 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        data_id = content.get(Model.FIELD_ID)
+        data_id = content.get(Model._FIELD_ID)
         path = Data._PATH_GET.format(organisation_id=organisation_id, data_id=data_id)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-            data_items = Data._models_from_api_ids(session, [{Model.FIELD_ID: data_id, 'organisation_id': organisation_id}])
+            data_items = Data._models_from_api_ids(session, [{Model._FIELD_ID: data_id, 'organisation_id': organisation_id}])
             self.assertIsNotNone(data_items)
 
             for data in data_items:
@@ -399,7 +399,7 @@ class TestData(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        data_id = content.get(Model.FIELD_ID)
+        data_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
@@ -477,7 +477,7 @@ class TestData(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        data_id = content.get(Model.FIELD_ID)
+        data_id = content.get(Model._FIELD_ID)
         path = Data._PATH_PATCH.format(organisation_id=organisation_id, data_id=data_id)
         name = 'Test'
 

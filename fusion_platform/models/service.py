@@ -138,6 +138,21 @@ class ServiceOptionExpressionSchema(Schema):
         ordered = True
 
 
+class ServiceValidationSchema(Schema):
+    """
+    Nested schema class for service validation.
+    """
+    expression = fields.String(required=True)
+    message = fields.String(required=True)
+
+    class Meta:
+        """
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        """
+        unknown = EXCLUDE
+        ordered = True
+
+
 class ServiceSchema(Schema):
     """
     Schema class for service model. Abridged from API to provide only key fields.
@@ -168,9 +183,9 @@ class ServiceSchema(Schema):
     cidrs = fields.List(fields.String(required=True), allow_none=True)
 
     input_expressions = fields.List(fields.Nested(ServiceInputExpressionSchema()), allow_none=True)
-    input_validations = fields.List(fields.String(required=True), allow_none=True)
+    input_validations = fields.List(fields.Nested(ServiceValidationSchema()), allow_none=True)
     option_expressions = fields.List(fields.Nested(ServiceOptionExpressionSchema()), allow_none=True)
-    option_validations = fields.List(fields.String(required=True), allow_none=True)
+    option_validations = fields.List(fields.Nested(ServiceValidationSchema()), allow_none=True)
 
     license_id = fields.UUID(required=True)
 

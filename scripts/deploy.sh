@@ -61,6 +61,9 @@ if [ "$1" == "" ]; then
 
   # Add all files to the commit, commit and push.
   (cd /tmp/fusion-platform-python-sdk && git add . && git commit -m "Latest release" && git push && git tag "$version" && git push origin "$version")
+
+  # Clean up.
+  rm -rf /tmp/fusion-platform-python-sdk
 fi
 
 deployment_command=(twine upload)

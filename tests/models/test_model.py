@@ -63,8 +63,8 @@ class TestModel(CustomTestCase):
         """
         id = uuid.uuid4()
 
-        self.assertEqual({'id__eq': id}, Model._build_filter([(Model.FIELD_ID, Model.FILTER_MODIFIER_EQ, id)]))
-        self.assertEqual({}, Model._build_filter([(Model.FIELD_ID, Model.FILTER_MODIFIER_EQ, None)]))
+        self.assertEqual({'id__eq': id}, Model._build_filter([(Model._FIELD_ID, Model._FILTER_MODIFIER_EQ, id)]))
+        self.assertEqual({}, Model._build_filter([(Model._FIELD_ID, Model._FILTER_MODIFIER_EQ, None)]))
 
     def test_create_abstract(self):
         """
@@ -332,7 +332,7 @@ class TestModel(CustomTestCase):
         Tests generating an iterator through models with ids from the API method does not work with abstract methods.
         """
         with pytest.raises(NotImplementedError):
-            iterator = Model._models_from_api_ids(Session(), [{Model.FIELD_ID: uuid.uuid4()}])
+            iterator = Model._models_from_api_ids(Session(), [{Model._FIELD_ID: uuid.uuid4()}])
             next(iterator)
 
     def test_models_from_api_path(self):

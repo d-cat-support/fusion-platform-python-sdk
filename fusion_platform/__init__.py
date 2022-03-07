@@ -12,8 +12,8 @@ https://www.d-cat.co.uk
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '0.0.40'
-__version_date__ = '2022-03-03T16:02:51Z'
+__version__ = '0.0.41'
+__version_date__ = '2022-03-07T12:55:41Z'
 
 # No "*" imports.
 __all__ = []

@@ -82,7 +82,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_DELETE.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
@@ -118,8 +118,8 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = process_content.get('organisation_id')
-        process_id = process_content.get(Model.FIELD_ID)
-        process_execution_id = execution_content.get(Model.FIELD_ID)
+        process_id = process_content.get(Model._FIELD_ID)
+        process_execution_id = execution_content.get(Model._FIELD_ID)
         execute_path = Process._PATH_EXECUTE.format(organisation_id=organisation_id, process_id=process_id)
         get_path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
         executions_path = Process._PATH_EXECUTIONS.format(organisation_id=organisation_id, process_id=process_id)
@@ -207,8 +207,8 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = process_content.get('organisation_id')
-        process_id = process_content.get(Model.FIELD_ID)
-        process_execution_id = execution_content.get(Model.FIELD_ID)
+        process_id = process_content.get(Model._FIELD_ID)
+        process_execution_id = execution_content.get(Model._FIELD_ID)
         execute_path = Process._PATH_EXECUTE.format(organisation_id=organisation_id, process_id=process_id)
         get_path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
         executions_path = Process._PATH_EXECUTIONS.format(organisation_id=organisation_id, process_id=process_id)
@@ -254,7 +254,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = process_content.get('organisation_id')
-        process_id = process_content.get(Model.FIELD_ID)
+        process_id = process_content.get(Model._FIELD_ID)
         path = Process._PATH_EXECUTIONS.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
@@ -296,9 +296,9 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = process_content.get('organisation_id')
-        process_id = process_content.get(Model.FIELD_ID)
-        process_execution_id = execution_content.get(Model.FIELD_ID)
-        group_id = execution_content.get(Model.FIELD_GROUP_ID)
+        process_id = process_content.get(Model._FIELD_ID)
+        process_execution_id = execution_content.get(Model._FIELD_ID)
+        group_id = execution_content.get(Model._FIELD_GROUP_ID)
         path = Process._PATH_EXECUTIONS.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
@@ -341,7 +341,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
@@ -378,7 +378,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
@@ -405,7 +405,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
 
         with requests_mock.Mocker() as mock:
@@ -435,12 +435,12 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-            processes = Process._models_from_api_ids(session, [{Model.FIELD_ID: process_id, 'organisation_id': organisation_id}])
+            processes = Process._models_from_api_ids(session, [{Model._FIELD_ID: process_id, 'organisation_id': organisation_id}])
             self.assertIsNotNone(processes)
 
             for process in processes:
@@ -454,7 +454,7 @@ class TestProcess(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
@@ -519,7 +519,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
@@ -559,7 +559,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_STOP.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
@@ -596,7 +596,7 @@ class TestProcess(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_id = content.get(Model.FIELD_ID)
+        process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_PATCH.format(organisation_id=organisation_id, process_id=process_id)
         name = 'New Name'
 

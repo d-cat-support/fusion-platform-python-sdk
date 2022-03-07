@@ -40,7 +40,7 @@ class TestCredit(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        credit_id = content.get(Model.FIELD_ID)
+        credit_id = content.get(Model._FIELD_ID)
         path = Credit._PATH_GET.format(organisation_id=organisation_id, credit_id=credit_id)
 
         credit = Credit(session)
@@ -77,7 +77,7 @@ class TestCredit(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        credit_id = content.get(Model.FIELD_ID)
+        credit_id = content.get(Model._FIELD_ID)
         path = Credit._PATH_GET.format(organisation_id=organisation_id, credit_id=credit_id)
 
         with requests_mock.Mocker() as mock:

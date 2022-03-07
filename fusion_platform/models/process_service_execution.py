@@ -166,7 +166,7 @@ class ProcessServiceExecution(Model):
         :raises RequestError if any get fails.
         :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
         """
-        inputs = self._model.get(self.__class__.FIELD_INPUTS, []) if self._model.get(self.__class__.FIELD_INPUTS) is not None else []
+        inputs = self._model.get(self.__class__._FIELD_INPUTS, []) if self._model.get(self.__class__._FIELD_INPUTS) is not None else []
 
         return Data._models_from_api_ids(self._session, Data._get_ids_from_list(inputs, organisation_id=self.organisation_id))
 
@@ -209,6 +209,6 @@ class ProcessServiceExecution(Model):
         :raises RequestError if any get fails.
         :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
         """
-        outputs = self._model.get(self.__class__.FIELD_OUTPUTS, []) if self._model.get(self.__class__.FIELD_OUTPUTS) is not None else []
+        outputs = self._model.get(self.__class__._FIELD_OUTPUTS, []) if self._model.get(self.__class__._FIELD_OUTPUTS) is not None else []
 
         return Data._models_from_api_ids(self._session, Data._get_ids_from_list(outputs, organisation_id=self.organisation_id))

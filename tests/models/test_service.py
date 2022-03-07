@@ -40,7 +40,7 @@ class TestService(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        service_id = content.get(Model.FIELD_ID)
+        service_id = content.get(Model._FIELD_ID)
         path = Service._PATH_DELETE.format(organisation_id=organisation_id, service_id=service_id)
 
         service = Service(session)
@@ -73,7 +73,7 @@ class TestService(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        service_id = content.get(Model.FIELD_ID)
+        service_id = content.get(Model._FIELD_ID)
         path = Service._PATH_GET.format(organisation_id=organisation_id, service_id=service_id)
 
         service = Service(session)
@@ -110,7 +110,7 @@ class TestService(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        service_id = content.get(Model.FIELD_ID)
+        service_id = content.get(Model._FIELD_ID)
         path = Service._PATH_GET.format(organisation_id=organisation_id, service_id=service_id)
 
         with requests_mock.Mocker() as mock:
@@ -140,12 +140,12 @@ class TestService(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        service_id = content.get(Model.FIELD_ID)
+        service_id = content.get(Model._FIELD_ID)
         path = Service._PATH_GET.format(organisation_id=organisation_id, service_id=service_id)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-            services = Service._models_from_api_ids(session, [{Model.FIELD_ID: service_id, 'organisation_id': organisation_id}])
+            services = Service._models_from_api_ids(session, [{Model._FIELD_ID: service_id, 'organisation_id': organisation_id}])
             self.assertIsNotNone(services)
 
             for service in services:
@@ -159,7 +159,7 @@ class TestService(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        service_id = content.get(Model.FIELD_ID)
+        service_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
@@ -192,7 +192,7 @@ class TestService(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        service_id = content.get(Model.FIELD_ID)
+        service_id = content.get(Model._FIELD_ID)
         path = Service._PATH_PATCH.format(organisation_id=organisation_id, service_id=service_id)
         name = 'Test'
 

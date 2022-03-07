@@ -115,5 +115,5 @@ class User(Model):
         :raises RequestError if any get fails.
         :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
         """
-        return Organisation._models_from_api_ids(self._session, [{self.__class__.FIELD_ID: organisation.get(self.__class__.FIELD_ID)} for organisation in
+        return Organisation._models_from_api_ids(self._session, [{self.__class__._FIELD_ID: organisation.get(self.__class__._FIELD_ID)} for organisation in
                                                                  self._model.get('organisations', [])])

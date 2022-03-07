@@ -357,7 +357,7 @@ class Process(Model):
         :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
         """
         filter = self.__class__._build_filter(
-            [(self.__class__.FIELD_ID, self.__class__.FILTER_MODIFIER_EQ, id), (self.__class__.FIELD_GROUP_ID, self.__class__.FILTER_MODIFIER_EQ, group_id)])
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
 
         # Build the partial find generator and execute it.
         find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
@@ -370,7 +370,7 @@ class Process(Model):
 
         :return: An iterator through the inputs.
         """
-        for input in self._model.get(self.__class__.FIELD_INPUTS, []):
+        for input in self._model.get(self.__class__._FIELD_INPUTS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
             input = dict(input)
 
@@ -387,17 +387,18 @@ class Process(Model):
 
         :return: An iterator through the options.
         """
-        for option in self._model.get(self.__class__.FIELD_OPTIONS, []):
+        for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
             option = dict(option)
 
             # If the option is a constrained data type, then add in the constrained names and values from the validation.
-            if option.get(self.__class__.FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
-                option[self.__class__.FIELD_CONSTRAINED_NAMES], option[self.__class__.FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
-                    option.get(self.__class__.FIELD_VALIDATION, ''))
+            if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
+                option[self.__class__._FIELD_CONSTRAINED_NAMES], option[self.__class__._FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
+                    option.get(self.__class__._FIELD_VALIDATION, ''))
 
             # Coerce the value to be of the correct data type.
-            option[self.__class__.FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__.FIELD_VALUE), option.get(self.__class__.FIELD_DATA_TYPE))
+            option[self.__class__._FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__._FIELD_VALUE),
+                                                                                option.get(self.__class__._FIELD_DATA_TYPE))
 
             # Encapsulate the dictionary within a model (which does not talk to the API).
             model = Model(None, schema=ProcessOptionSchema())
@@ -426,17 +427,17 @@ class Process(Model):
             raise ModelError(i18n.t('models.process.data_not_specified'))
 
         # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__.FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
             raise ModelError(i18n.t('models.process.no_change_executing'))
 
         # Find the corresponding input.
         index = None
         found_input = None
 
-        for index, item in enumerate(self._model.get(self.__class__.FIELD_INPUTS, [])):
-            found = (number is not None) and (number == item.get(self.__class__.FIELD_INPUT))
-            found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__.FIELD_SSD_ID))) and (
-                    input.input == item.get(self.__class__.FIELD_INPUT)) if not found else found
+        for index, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
+            found = (number is not None) and (number == item.get(self.__class__._FIELD_INPUT))
+            found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
+                    input.input == item.get(self.__class__._FIELD_INPUT)) if not found else found
 
             if found:
                 found_input = item
@@ -452,18 +453,18 @@ class Process(Model):
         for file in data.files:
             found_file_type = file.file_type if found_file_type is None else found_file_type
 
-            if not hasattr(file, self.__class__.FIELD_PUBLISHABLE):
+            if not hasattr(file, self.__class__._FIELD_PUBLISHABLE):
                 ready = False
 
         if not ready:
             raise ModelError(i18n.t('models.process.data_not_ready'))
 
         # Check the file type.
-        if found_input.get(self.__class__.FIELD_FILE_TYPE) != found_file_type:
-            raise ModelError(i18n.t('models.process.wrong_file_type', expected=found_input.get(self.__class__.FIELD_FILE_TYPE), actual=found_file_type))
+        if found_input.get(self.__class__._FIELD_FILE_TYPE) != found_file_type:
+            raise ModelError(i18n.t('models.process.wrong_file_type', expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
 
         # We can now update the input.
-        self._set_field([self.__class__.FIELD_INPUTS, index, self.__class__.FIELD_ID], data.id)
+        self._set_field([self.__class__._FIELD_INPUTS, index, self.__class__._FIELD_ID], data.id)
 
     def __set_option(self, name=None, option=None, value=None):
         """
@@ -481,17 +482,17 @@ class Process(Model):
             raise ModelError(i18n.t('models.process.option_not_specified'))
 
         # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__.FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
             raise ModelError(i18n.t('models.process.no_change_executing'))
 
         # Find the corresponding option.
         index = None
         found_option = None
 
-        for index, item in enumerate(self._model.get(self.__class__.FIELD_OPTIONS, [])):
-            found = (name is not None) and (name == item.get(self.__class__.FIELD_NAME))
-            found = (option is not None) and (str(option.ssd_id) == str(item.get(self.__class__.FIELD_SSD_ID))) and (
-                    option.name == item.get(self.__class__.FIELD_NAME)) if not found else found
+        for index, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
+            found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME))
+            found = (option is not None) and (str(option.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
+                    option.name == item.get(self.__class__._FIELD_NAME)) if not found else found
 
             if found:
                 found_option = item
@@ -501,15 +502,15 @@ class Process(Model):
             raise ModelError(i18n.t('models.process.cannot_find_option'))
 
         # Check that the option has the same data type as the value. We cannot check this if either value is None.
-        data_type = found_option.get(self.__class__.FIELD_DATA_TYPE)
-        existing_value = self.__class__.__coerce_value(found_option[self.__class__.FIELD_VALUE], data_type)
+        data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
+        existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
 
         if (value is not None) and (existing_value is not None) and (not isinstance(value, existing_value.__class__)):
             raise ModelError(i18n.t('models.process.option_wrong_type', type=existing_value.__class__))
 
         # We can now update the option. All options are expressed as strings with the correct format.
-        validation = found_option.get(self.__class__.FIELD_VALIDATION)
-        self._set_field([self.__class__.FIELD_OPTIONS, index, self.__class__.FIELD_VALUE], self.__class__.__value_to_option(value, data_type, validation))
+        validation = found_option.get(self.__class__._FIELD_VALIDATION)
+        self._set_field([self.__class__._FIELD_OPTIONS, index, self.__class__._FIELD_VALUE], self.__class__.__value_to_option(value, data_type, validation))
 
     def stop(self):
         """
@@ -539,7 +540,7 @@ class Process(Model):
         :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
         """
         # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__.FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
             raise ModelError(i18n.t('models.process.no_change_executing'))
 
         # Deal with the special case of inputs.

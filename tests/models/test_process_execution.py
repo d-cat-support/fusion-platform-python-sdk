@@ -41,7 +41,7 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_GET.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
 
         process_execution = ProcessExecution(session)
@@ -83,7 +83,7 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_GET.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
 
         process_execution = ProcessExecution(session)
@@ -131,7 +131,7 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = process_execution_content.get('organisation_id')
-        process_execution_id = process_execution_content.get(Model.FIELD_ID)
+        process_execution_id = process_execution_content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_COMPONENTS.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
 
         process = ProcessExecution(session)
@@ -170,7 +170,7 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_DELETE.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
 
         process_execution = ProcessExecution(session)
@@ -203,7 +203,7 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_GET.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
 
         process_execution = ProcessExecution(session)
@@ -240,7 +240,7 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_GET.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
 
         with requests_mock.Mocker() as mock:
@@ -270,12 +270,12 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_GET.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-            process_executions = ProcessExecution._models_from_api_ids(session, [{Model.FIELD_ID: process_execution_id, 'organisation_id': organisation_id}])
+            process_executions = ProcessExecution._models_from_api_ids(session, [{Model._FIELD_ID: process_execution_id, 'organisation_id': organisation_id}])
             self.assertIsNotNone(process_executions)
 
             for process_execution in process_executions:
@@ -289,7 +289,7 @@ class TestProcessExecution(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
@@ -322,7 +322,7 @@ class TestProcessExecution(CustomTestCase):
 
         session = Session()
         organisation_id = content.get('organisation_id')
-        process_execution_id = content.get(Model.FIELD_ID)
+        process_execution_id = content.get(Model._FIELD_ID)
         path = ProcessExecution._PATH_PATCH.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
         delete_expiry = datetime.now(timezone.utc) + timedelta(days=2)
 

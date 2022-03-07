@@ -15,7 +15,10 @@
   ],
   "image_id": "516251fb-1200-4bcd-8cbb-95cb9502a3d2",
   "option_validations": [
-    "latest_date or ((not latest_date) and (start_date is not None))"
+    {
+      "expression": "latest_date or ((not latest_date) and (start_date is not None))",
+      "message": "Failed"
+    }
   ],
   "license_id": "9a088ac0-db69-403a-b075-1ddc45afb5ec",
   "charge_expression_platform": "0",

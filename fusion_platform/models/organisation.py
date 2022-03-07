@@ -158,7 +158,7 @@ class Organisation(Model):
         """
         # Note that name is a key field, and hence we can only search using begins with.
         filter = self.__class__._build_filter(
-            [(self.__class__.FIELD_ID, self.__class__.FILTER_MODIFIER_EQ, id), (self.__class__.FIELD_NAME, self.__class__.FILTER_MODIFIER_BEGINS_WITH, name)])
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name)])
 
         # Build the partial find generator and execute it.
         find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter)
@@ -175,7 +175,7 @@ class Organisation(Model):
         :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
         """
         filter = self.__class__._build_filter(
-            [(self.__class__.FIELD_ID, self.__class__.FILTER_MODIFIER_EQ, id), (self.__class__.FIELD_NAME, self.__class__.FILTER_MODIFIER_CONTAINS, name)])
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_CONTAINS, name)])
 
         # Build the partial find generator and execute it.
         find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter)
@@ -195,9 +195,9 @@ class Organisation(Model):
         """
         # Note that name is a key field, and hence we can only search using begins with.
         filter = self.__class__._build_filter(
-            [(self.__class__.FIELD_ID, self.__class__.FILTER_MODIFIER_EQ, id), (self.__class__.FIELD_SSD_ID, self.__class__.FILTER_MODIFIER_EQ, ssd_id),
-             (self.__class__.FIELD_NAME, self.__class__.FILTER_MODIFIER_BEGINS_WITH, name),
-             (self.__class__.FIELD_KEYWORDS, self.__class__.FILTER_MODIFIER_CONTAINS, keyword)])
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_SSD_ID, self.__class__._FILTER_MODIFIER_EQ, ssd_id),
+             (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name),
+             (self.__class__._FIELD_KEYWORDS, self.__class__._FILTER_MODIFIER_CONTAINS, keyword)])
 
         # Build the partial find generator and execute it.
         find = partial(Service._models_from_api_path, self._session, self._get_path(self.__class__._PATH_SERVICES), filter=filter)

@@ -56,7 +56,7 @@ class TestOrganisation(CustomTestCase):
 
         session = Session()
         organisation_id = data_content.get('organisation_id')
-        data_id = data_content.get(Model.FIELD_ID)
+        data_id = data_content.get(Model._FIELD_ID)
         name = 'Glasgow'
         file_type = fusion_platform.FILE_TYPE_GEOJSON,
         files = [fusion_platform.EXAMPLE_GLASGOW_FILE]
@@ -156,7 +156,7 @@ class TestOrganisation(CustomTestCase):
 
         session = Session()
         organisation_id = data_content.get('organisation_id')
-        data_id = data_content.get(Model.FIELD_ID)
+        data_id = data_content.get(Model._FIELD_ID)
         name = 'Glasgow'
         file_type = fusion_platform.FILE_TYPE_GEOJSON,
         files = [fusion_platform.EXAMPLE_GLASGOW_FILE]
@@ -264,8 +264,8 @@ class TestOrganisation(CustomTestCase):
             credit_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
-        credit_id = credit_content.get(Model.FIELD_ID)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
+        credit_id = credit_content.get(Model._FIELD_ID)
         path = Credit._PATH_GET.format(credit_id=credit_id, organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -306,7 +306,7 @@ class TestOrganisation(CustomTestCase):
             data_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
         path = Organisation._PATH_DATA.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -344,7 +344,7 @@ class TestOrganisation(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        organisation_id = content.get(Model.FIELD_ID)
+        organisation_id = content.get(Model._FIELD_ID)
         path = Organisation._PATH_DELETE.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -379,9 +379,9 @@ class TestOrganisation(CustomTestCase):
             data_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
-        data_id = data_content.get(Model.FIELD_ID)
-        name = data_content.get(Model.FIELD_NAME)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
+        data_id = data_content.get(Model._FIELD_ID)
+        name = data_content.get(Model._FIELD_NAME)
         path = Organisation._PATH_DATA.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -426,9 +426,9 @@ class TestOrganisation(CustomTestCase):
             process_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
-        process_id = process_content.get(Model.FIELD_ID)
-        name = process_content.get(Model.FIELD_NAME)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
+        process_id = process_content.get(Model._FIELD_ID)
+        name = process_content.get(Model._FIELD_NAME)
         path = Organisation._PATH_PROCESSES.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -473,11 +473,11 @@ class TestOrganisation(CustomTestCase):
             service_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
-        service_id = service_content.get(Model.FIELD_ID)
-        ssd_id = service_content.get(Model.FIELD_SSD_ID)
-        name = service_content.get(Model.FIELD_NAME)
-        keyword = service_content.get(Model.FIELD_KEYWORDS)[0]
+        organisation_id = organisation_content.get(Model._FIELD_ID)
+        service_id = service_content.get(Model._FIELD_ID)
+        ssd_id = service_content.get(Model._FIELD_SSD_ID)
+        name = service_content.get(Model._FIELD_NAME)
+        keyword = service_content.get(Model._FIELD_KEYWORDS)[0]
         path = Organisation._PATH_SERVICES.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -519,7 +519,7 @@ class TestOrganisation(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        organisation_id = content.get(Model.FIELD_ID)
+        organisation_id = content.get(Model._FIELD_ID)
         path = Organisation._PATH_GET.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -555,7 +555,7 @@ class TestOrganisation(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        organisation_id = content.get(Model.FIELD_ID)
+        organisation_id = content.get(Model._FIELD_ID)
         path = Organisation._PATH_GET.format(organisation_id=organisation_id)
 
         with requests_mock.Mocker() as mock:
@@ -584,12 +584,12 @@ class TestOrganisation(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        organisation_id = content.get(Model.FIELD_ID)
+        organisation_id = content.get(Model._FIELD_ID)
         path = Organisation._PATH_GET.format(organisation_id=organisation_id)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-            organisations = Organisation._models_from_api_ids(session, [{Model.FIELD_ID: organisation_id}])
+            organisations = Organisation._models_from_api_ids(session, [{Model._FIELD_ID: organisation_id}])
             self.assertIsNotNone(organisations)
 
             for organisation in organisations:
@@ -603,7 +603,7 @@ class TestOrganisation(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        organisation_id = content.get(Model.FIELD_ID)
+        organisation_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
@@ -633,8 +633,8 @@ class TestOrganisation(CustomTestCase):
             service_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
-        service_id = service_content.get(Model.FIELD_ID)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
+        service_id = service_content.get(Model._FIELD_ID)
         path = Process._PATH_NEW.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -692,7 +692,7 @@ class TestOrganisation(CustomTestCase):
             service_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
         path = Organisation._PATH_OWN_SERVICES.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -733,7 +733,7 @@ class TestOrganisation(CustomTestCase):
             process_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
         path = Organisation._PATH_PROCESSES.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -787,7 +787,7 @@ class TestOrganisation(CustomTestCase):
             service_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = organisation_content.get(Model.FIELD_ID)
+        organisation_id = organisation_content.get(Model._FIELD_ID)
         path = Organisation._PATH_SERVICES.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -825,7 +825,7 @@ class TestOrganisation(CustomTestCase):
             content = json.loads(file.read())
 
         session = Session()
-        organisation_id = content.get(Model.FIELD_ID)
+        organisation_id = content.get(Model._FIELD_ID)
         path = Organisation._PATH_PATCH.format(organisation_id=organisation_id)
         name = 'Test'
 
