@@ -26,6 +26,9 @@ if [ "$1" == "" ]; then
   git clone git@github-support.com:d-cat-support/fusion-platform-python-sdk.git /tmp/fusion-platform-python-sdk
 
   # Update the version with the latest release.
+  mkdir -p /tmp/fusion-platform-python-sdk/docs/
+  cp -r ./fusion_platform/ /tmp/fusion-platform-python-sdk/docs/
+
   mkdir -p /tmp/fusion-platform-python-sdk/fusion_platform/
   cp -r ./fusion_platform/ /tmp/fusion-platform-python-sdk/fusion_platform/
 
