@@ -1,10 +1,10 @@
-#
-# Data model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Data model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 import i18n
 from marshmallow import Schema, EXCLUDE
@@ -38,27 +38,32 @@ class DataIngesterSchema(Schema):
 
 class DataSchema(Schema):
     """
-    Schema class for data model. Abridged from API to provide only key fields.
+    Schema class for data model.
+
+    Each data has the following fields (and nested fields):
+
+    .. include::data.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    organisation_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    organisation_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     name = fields.String(required=True)
 
     # Removed lock.
-    unlinked = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    unlinked = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    ingester_availability = fields.List(fields.Nested(DataIngesterSchema()), allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    ingester_availability = fields.List(fields.Nested(DataIngesterSchema()), allow_none=True,
+                                        metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed link_id.
     # Removed link_model.
     # Removed link_hash.
 
-    uploaded = fields.Boolean(required=True, read_only=True)  # Changed to prevent this being updated.
-    deletable = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    uploaded = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed creator.
 
@@ -103,7 +108,8 @@ class Data(Model):
         """
         Initialises the object.
 
-        :param session: The linked session object for interfacing with the Fusion Platform(r).
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
         """
         super(Data, self).__init__(session)
 
@@ -114,9 +120,12 @@ class Data(Model):
         """
         Attempts to add a file to the data object and then starts its upload. The file is uploaded using a thread.
 
-        :param file_type: The type of file to add.
-        :param file: The path to the file to add.
-        :raises RequestError if the add fails.
+        Args:
+            file_type: The type of file to add.
+            file: The path to the file to add.
+
+        Raises:
+            RequestError: if the add fails.
         """
         # Add the file to the data model.
         body = {self.__class__.__name__: {'name': os.path.basename(file), 'file_type': file_type}}
@@ -153,9 +162,12 @@ class Data(Model):
         """
         Checks that the analysis of all files associated with this data object is complete.
 
-        :return: True if the analysis is complete for all files.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            True if the analysis is complete for all files.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         complete = True
 
@@ -163,7 +175,7 @@ class Data(Model):
         # complete.
         for file in self.files:
             has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
-                        hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
+                    hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
 
             if not has_fields:
                 self._logger.debug('file %s not yet analysed', file.file_name)
@@ -179,13 +191,18 @@ class Data(Model):
 
         This method is overridden to also upload the corresponding files and optionally wait for the upload and analysis to complete.
 
-        :param name: The name of the data object.
-        :param file_type: The type of files that the data object will hold.
-        :param files: The list of file paths to be uploaded.
-        :param wait: Optionally wait for the upload and analysis to complete? Default False.
-        :return: The created data object.
-        :raises RequestError if the create fails.
-        :raises ModelError if the model could not be created and validated by the Fusion Platform(r).
+        Args:
+        name: The name of the data object.
+        file_type: The type of files that the data object will hold.
+        files: The list of file paths to be uploaded.
+        wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            The created data object.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
         """
         # Use the super method to create the data item with the correct attributes. This will raise an exception if anything fails.
         super(Data, self)._create(name=name)
@@ -209,10 +226,15 @@ class Data(Model):
         Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
         until all upload and analysis (or errored) has completed and this method returns True.
 
-        :param wait: Optionally wait for the upload and analysis to complete? Default False.
-        :return: True if the upload and analysis are complete for all files.
-        :raises RequestError if any request fails.
-        :raises ModelError if the upload or analysis failed.
+        Args:
+            wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            True if the upload and analysis are complete for all files.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if the upload or analysis failed.
         """
         # Make sure a create is in progress.
         if len(self.__upload_threads) <= 0:
@@ -289,8 +311,11 @@ class Data(Model):
         """
         Provides an iterator through the data object's files.
 
-        :return: An iterator through the data object's files.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the data object's files.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)

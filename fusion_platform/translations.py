@@ -1,10 +1,10 @@
-#
-# Compiled translations.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Compiled translations.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 # Do not modify this file manually as it is built automatically by the localisations.py script.
 
@@ -22,6 +22,8 @@ i18n.add_translation('fusion_platform.sdk', 'Fusion Platform(r) SDK', 'en')
 i18n.add_translation('models.data_file.failed_download_url', 'Failed to get URL from download file response', 'en')
 i18n.add_translation('models.data_file.no_download', 'No download is in progress', 'en')
 i18n.add_translation('models.data_file.download_already_in_progress', 'Cannot download file as the download is already in progress', 'en')
+i18n.add_translation('models.data_file.organisation_id.description', 'The owning organisation.', 'en')
+i18n.add_translation('models.data_file.organisation_id.title', 'Organisation', 'en')
 i18n.add_translation('models.data.no_create', 'No create is in progress', 'en')
 i18n.add_translation('models.data.failed_add_file_not_unique', 'Failed to add file as the id is not unique', 'en')
 i18n.add_translation('models.data.failed_add_file_url', 'Failed to get URL from add file response', 'en')
@@ -71,4 +73,8 @@ i18n.add_translation('models.process.option_not_specified', 'Option name or obje
 i18n.add_translation('models.process.data_not_specified', 'Data object must be provided to set input', 'en')
 i18n.add_translation('models.process.input_not_specified', 'Input number or object must be provided to set input', 'en')
 i18n.add_translation('models.process.no_change_executing', 'Process cannot be modified as it is currently executing', 'en')
+i18n.add_translation('models.process.option.constrained_values.description', 'The constrained values for the option.', 'en')
+i18n.add_translation('models.process.option.constrained_values.title', 'Constrained Values', 'en')
+i18n.add_translation('models.process.option.constrained_names.description', 'The constrained value names for the option.', 'en')
+i18n.add_translation('models.process.option.constrained_names.title', 'Constrained Names', 'en')
 # @formatter:on

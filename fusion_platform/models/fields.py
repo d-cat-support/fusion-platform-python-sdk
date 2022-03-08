@@ -1,10 +1,10 @@
-#
-# Fields classes.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Fields classes.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from datetime import datetime, timedelta, timezone
 from dateutil.relativedelta import relativedelta
@@ -41,11 +41,14 @@ class DateTime(fields.DateTime):
         """
         Overrides the serialization. This is because when a nested model is validated, it may be passed as a string already (from an update), instead of a datetime.
 
-        :param value: The value to serialize.
-        :param attr: The attribute/key in `data` to deserialize.
-        :param obj: The associated object.
-        :param kwargs: Field-specific keyword arguments.
-        :return: The serialised datetime.
+        Args:
+            value: The value to serialize.
+            attr: The attribute/key in `data` to deserialize.
+            obj: The associated object.
+            kwargs: Field-specific keyword arguments.
+
+        Returns:
+            The serialised datetime.
         """
 
         if isinstance(value, str):
@@ -61,11 +64,14 @@ class DateTime(fields.DateTime):
         because the datetime is native, and not a string, the validation fails. We therefore pass the validation if the value is already a
         datetime.
 
-        :param value: The value to deserialize.
-        :param attr: The attribute/key in `data` to deserialize.
-        :param data: The raw input data passed to `Schema.load`.
-        :param kwargs: Field-specific keyword arguments.
-        :raise ValidationError: If an invalid value is passed or if a required value is missing.
+        Args:
+            value: The value to deserialize.
+            attr: The attribute/key in `data` to deserialize.
+            data: The raw input data passed to `Schema.load`.
+            kwargs: Field-specific keyword arguments.
+
+        Raises:
+            ValidationError: If an invalid value is passed or if a required value is missing.
         """
         if not value:
             return None
@@ -162,11 +168,14 @@ class RelativeDelta(fields.Field):
         """
         Deserializes the field.
 
-        :param value: The value of the field.
-        :param attr: The attribute. Not used.
-        :param data: The data. Not used.
-        :param kwargs: The additional keyword arguments. Not used.
-        :return: The serialized value or None if the value is None.
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            data: The data. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
         """
 
         if not value:
@@ -203,11 +212,14 @@ class RelativeDelta(fields.Field):
         """
         Serializes the field.
 
-        :param value: The value of the field.
-        :param attr: The attribute. Not used.
-        :param obj: The object. Not used.
-        :param kwargs: The additional keyword arguments. Not used.
-        :return: The serialized value or None if the value is None.
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            obj: The object. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
         """
 
         if value is None:
@@ -234,11 +246,14 @@ class String(fields.String):
         """
         Deserializes a value. This method is overridden to replace empty strings with None when allowed.
 
-        :param value: The value to deserialize.
-        :param attr: The attribute/key in `data` to deserialize.
-        :param data: The raw input data passed to `Schema.load`.
-        :param kwargs: Field-specific keyword arguments.
-        :raise ValidationError: If an invalid value is passed or if a required value is missing.
+        Args:
+            value: The value to deserialize.
+            attr: The attribute/key in `data` to deserialize.
+            data: The raw input data passed to `Schema.load`.
+            kwargs: Field-specific keyword arguments.
+
+        Raises:
+            ValidationError: If an invalid value is passed or if a required value is missing.
         """
         if (value is not None) and isinstance(value, str) and (len(value) <= 0) and self.allow_none:
             value = None
@@ -258,11 +273,14 @@ class TimeDelta(fields.Field):
         """
         Deserializes the field.
 
-        :param value: The value of the field.
-        :param attr: The attribute. Not used.
-        :param data: The data. Not used.
-        :param kwargs: The additional keyword arguments. Not used.
-        :return: The serialized value or None if the value is None.
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            data: The data. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
         """
 
         if not value:
@@ -290,11 +308,14 @@ class TimeDelta(fields.Field):
         """
         Serializes the field.
 
-        :param value: The value of the field.
-        :param attr: The attribute. Not used.
-        :param obj: The object. Not used.
-        :param kwargs: The additional keyword arguments. Not used.
-        :return: The serialized value or None if the value is None.
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            obj: The object. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
         """
 
         if value is None:

@@ -1,10 +1,10 @@
-#
-# Data file model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Data file model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 import i18n
 from marshmallow import Schema, EXCLUDE
@@ -49,39 +49,44 @@ class DataFileSelectorSchema(Schema):
 
 class DataFileSchema(Schema):
     """
-    Schema class for data file model. Abridged from API to provide only key fields.
+    Schema class for data file model.
+
+    Each data file model has the following fields (and nested fields):
+
+    .. include::data_file.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    organisation_id = fields.UUID(allow_none=True, read_only=True)  # Added parameter so that it can be used.
-    data_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    organisation_id = fields.UUID(allow_none=True, metadata={'read_only': True, 'title': i18n.t('models.data_file.organisation_id.title'), 'description': i18n.t(
+        'models.data_file.organisation_id.description')})  # Added parameter so that it can be used.
+    data_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    file_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    file_type = fields.String(required=True, read_only=True)  # Changed to prevent this being updated.
-    file_name = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    file_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    file_type = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    file_name = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    resolution = fields.Integer(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    crs = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    bounds = fields.List(fields.Decimal(required=True), allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    area = fields.Decimal(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    mgrs_cells = fields.List(fields.String(required=True), allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    resolution = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    crs = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    area = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
-                                   read_only=True)  # Changed to prevent this being updated.
+                                   metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    size = fields.Integer(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    error = fields.Boolean(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    publishable = fields.Boolean(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    size = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    error = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    publishable = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    alternative = fields.UUID(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    source = fields.UUID(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    alternative = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    source = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    title = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    description = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    title = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    description = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """
@@ -111,7 +116,8 @@ class DataFile(Model):
         """
         Initialises the object.
 
-        :param session: The linked session object for interfacing with the Fusion Platform(r).
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
         """
         super(DataFile, self).__init__(session)
 
@@ -123,9 +129,12 @@ class DataFile(Model):
         """
         Downloads the file to the specified path. Optionally waits for the download to complete.
 
-        :param path: The local path to download the file to.
-        :param wait: Optionally wait for the download to complete? Default False.
-        :raises RequestError if the download fails.
+        Args:
+            path: The local path to download the file to.
+            wait: Optionally wait for the download to complete? Default False.
+
+        Raises:
+            RequestError: if the download fails.
         """
         # Make sure no download is currently in progress.
         if self.__download_thread is not None:
@@ -146,9 +155,10 @@ class DataFile(Model):
         """
         Callback method used to receive progress from download. Updates the download progress.
 
-        :param url: The URL to download as a file.
-        :param destination: The destination file path.
-        :param size: The total size in bytes so far downloaded.
+        Args:
+            url: The URL to download as a file.
+            destination: The destination file path.
+            size: The total size in bytes so far downloaded.
         """
         self.__download_progress = (url, destination, size)
 
@@ -157,10 +167,15 @@ class DataFile(Model):
         Checks whether the download has completed. If an error has occurred during the download, then this will raise a corresponding exception. Optionally waits
         for the download to complete.
 
-        :param wait: Optionally wait for the download to complete? Default False.
-        :return: True if the download is complete.
-        :raises RequestError if any request fails.
-        :raises ModelError if no download is in progress.
+        Args:
+            wait: Optionally wait for the download to complete? Default False.
+
+        Returns:
+            True if the download is complete.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if no download is in progress.
         """
         # Make sure a download is in progress.
         if self.__download_thread is None:
@@ -193,8 +208,11 @@ class DataFile(Model):
         """
         Returns current download progress.
 
-        :return: A tuple of the URL, destination and total number of bytes downloaded so far.
-        :raises ModelError if no download is in progress.
+        Returns:
+            A tuple of the URL, destination and total number of bytes downloaded so far.
+
+        Raies:
+            ModelError: if no download is in progress.
         """
         # Make sure a download is in progress.
         if self.__download_thread is None:
@@ -206,7 +224,8 @@ class DataFile(Model):
         """
         Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.
 
-        :raises RequestError if the request fails.
+        Raies:
+            RequestError: if the request fails.
         """
         response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id))
 

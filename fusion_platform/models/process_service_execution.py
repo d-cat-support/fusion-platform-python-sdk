@@ -1,10 +1,10 @@
-#
-# Process service execution model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Process service execution model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from marshmallow import Schema, EXCLUDE
 import os
@@ -98,36 +98,41 @@ class ProcessServiceExecutionOptionSchema(Schema):
 
 class ProcessServiceExecutionSchema(Schema):
     """
-    Schema class for process execution model. Abridged from API to provide only key fields.
+    Schema class for process service execution model.
+
+    Each process service execution model has the following fields (and nested fields):
+
+    .. include::process_service_execution.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    organisation_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    process_execution_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    process_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    service_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    image_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    organisation_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    process_execution_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    process_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    service_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    image_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    name = fields.String(required=True, read_only=True)  # Changed to prevent this being updated.
-    started_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    ended_at = fields.DateTime(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    runtime = fields.Integer(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    name = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    started_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    ended_at = fields.DateTime(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    runtime = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed input_size.
-    cpu = fields.Decimal(required=True, read_only=True)  # Changed to prevent this being updated.
-    memory = fields.Decimal(required=True, read_only=True)  # Changed to prevent this being updated.
+    cpu = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    memory = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     actions = fields.List(fields.Nested(ProcessServiceExecutionActionSchema()), allow_none=True)
-    options = fields.List(fields.Nested(ProcessServiceExecutionOptionSchema()), allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    inputs = fields.List(fields.UUID(required=True), allow_none=True, hide=True)  # Changed to hide as an attribute.
-    outputs = fields.List(fields.UUID(required=True), allow_none=True, hide=True)  # Changed to hide as an attribute.
+    options = fields.List(fields.Nested(ProcessServiceExecutionOptionSchema()), allow_none=True,
+                          metadata={'read_only': True})  # Changed to prevent this being updated.
+    inputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    outputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
     # Removed task_id.
     # Removed task_definition_id.
     # Removed access_point_ids.
     # Removed security_group_id.
-    success = fields.Boolean(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    success = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """
@@ -162,9 +167,12 @@ class ProcessServiceExecution(Model):
         """
         Provides an iterator through the process execution component's inputs.
 
-        :return: An iterator through the input data objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the input data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         inputs = self._model.get(self.__class__._FIELD_INPUTS, []) if self._model.get(self.__class__._FIELD_INPUTS) is not None else []
 
@@ -174,8 +182,11 @@ class ProcessServiceExecution(Model):
         """
         Downloads the log output from the component's execution to the specified path as a CSV file.
 
-        :param path: The path to save the log records to.
-        :raises RequestError if any get fails.
+        Args:
+            path: The path to save the log records to.
+
+        Raises:
+            RequestError if any get fails.
         """
         logs = ProcessServiceExecutionLog._models_from_api_path(self._session, self._get_path(self.__class__._PATH_LOGS), reverse=True)
         first = True
@@ -205,9 +216,12 @@ class ProcessServiceExecution(Model):
         """
         Provides an iterator through the process execution component's outputs.
 
-        :return: An iterator through the output data objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the output data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         outputs = self._model.get(self.__class__._FIELD_OUTPUTS, []) if self._model.get(self.__class__._FIELD_OUTPUTS) is not None else []
 

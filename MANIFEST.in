@@ -7,4 +7,4 @@
 #
 
 # Include the documentation and examples.
-recursive-include fusion_platform/ *.pdf *.geojson
+recursive-include fusion_platform/ *.geojson *.md *.pdf

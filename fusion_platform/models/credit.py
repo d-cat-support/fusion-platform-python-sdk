@@ -1,10 +1,10 @@
-#
-# Credit model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Credit model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from marshmallow import Schema, EXCLUDE
 
@@ -31,21 +31,25 @@ class CreditSsdsSchema(Schema):
 
 class CreditSchema(Schema):
     """
-    Schema class for credit model. Abridged from API to provide only key fields.
+    Schema class for credit model.
+
+    Each credit model has the following fields (and nested fields):
+
+    .. include::credit.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    organisation_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    organisation_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     # Removed lock.
 
-    any_credits = fields.Decimal(required=True, read_only=True)  # Changed to prevent this being updated.
-    cloud_storage_credits = fields.Decimal(required=True, read_only=True)  # Changed to prevent this being updated.
-    registry_storage_credits = fields.Decimal(required=True, read_only=True)  # Changed to prevent this being updated.
-    runtime_any_credits = fields.Decimal(required=True, read_only=True)  # Changed to prevent this being updated.
-    runtime_ssds = fields.List(fields.Nested(CreditSsdsSchema()), allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    any_credits = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    cloud_storage_credits = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    registry_storage_credits = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    runtime_any_credits = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    runtime_ssds = fields.List(fields.Nested(CreditSsdsSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """

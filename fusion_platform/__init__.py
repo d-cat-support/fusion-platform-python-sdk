@@ -1,22 +1,31 @@
 """
-This package contains the Python SDK used to interact with the Fusion Platform(r). The Fusion Platform(r) provides enhanced remote monitoring services. By ingesting
+This package contains the Python SDK used to interact with the Fusion Platform<sup>&reg;</sup>. The Fusion Platform<sup>&reg;</sup> provides enhanced remote monitoring services. By ingesting
 remotely sensed Earth Observation (EO) data, and data from other sources, the platform uses and fuses this data to execute algorithms which provide actionable
 knowledge to customers.
 
-The Python SDK is designed to enable interaction with the Fusion Platform(r) via its API. As such, the SDK therefore allows software to login, upload
+The Python SDK is designed to enable interaction with the Fusion Platform<sup>&reg;</sup> via its API. As such, the SDK therefore allows software to login, upload
 files, create and execute processes, monitor their execution and then download the corresponding results. Additional functionality is available directly via the
 API, and this is defined within the corresponding OpenAPI 3.0 specification, which can be obtained via a support request.
 
-(c) Digital Content Analysis Technology Ltd
-https://www.d-cat.co.uk
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '0.0.41'
-__version_date__ = '2022-03-07T12:55:41Z'
+__version__ = '0.0.42'
+__version_date__ = '2022-03-08T12:35:28Z'
 
-# No "*" imports.
-__all__ = []
+# Exclude certain sub-modules from documentation.
+# @formatter:off
+__pdoc__ = {
+    'base': False,
+    'command': False,
+    'common': False,
+    'documentation': False,
+    'localisations': False,
+    'localise': False,
+    'translations': False
+}
+# @formatter:on
 
 # Logging constant.
 FUSION_PLATFORM_LOGGER = 'fusion_platform'
@@ -68,7 +77,8 @@ def get_log_level():
     """
     Gets the logging level for the SDK.
 
-    :return The current log level, as specified by the logging package.
+    Returns:
+        The current log level, as specified by the logging package.
     """
     logger = logging.getLogger(FUSION_PLATFORM_LOGGER)
 
@@ -77,15 +87,20 @@ def get_log_level():
 
 def login(email=None, user_id=None, password=None, api_url=None):
     """
-    Attempts to log into the Fusion Platform(r) to return a user model for the active session.
+    Attempts to log into the Fusion Platform<sup>&reg;</sup> to return a user model for the active session.
 
-    :param email: The user account email address. Either an email address or a user id must be provided.
-    :param user_id: The user account user id. Either an email address or a user id must be provided.
-    :param password: The password for the user account.
-    :param api_url: The optional custom API URL to use. Defaults to the production Fusion Platform(r).
-    :return: The corresponding user model for the account on successful login.
-    :raises ValueError on incorrect parameters.
-    :raises RequestError on login failure.
+    Args:
+        email: The user account email address. Either an email address or a user id must be provided.
+        user_id: The user account user id. Either an email address or a user id must be provided.
+        password: The password for the user account.
+        api_url: The optional custom API URL to use. Defaults to the production Fusion Platform<sup>&reg;</sup>.
+
+    Returns:
+        The corresponding user model for the account on successful login.
+
+    Raises:
+        ValueError: on incorrect parameters.
+        RequestError: on login failure.
     """
     # Create the session and attempt to login.
     session = Session()
@@ -99,7 +114,8 @@ def set_log_level(level):
     """
     Sets the logging level for the SDK.
 
-    :param level: The required log level, as specified by the logging package. For example,
+    Args:
+        level: The required log level, as specified by the logging package. For example,
     """
     logger = logging.getLogger(FUSION_PLATFORM_LOGGER)
     logger.setLevel(level)

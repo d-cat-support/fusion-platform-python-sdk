@@ -1,10 +1,10 @@
-#
-# Service model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Service model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from marshmallow import Schema, EXCLUDE
 
@@ -155,18 +155,22 @@ class ServiceValidationSchema(Schema):
 
 class ServiceSchema(Schema):
     """
-    Schema class for service model. Abridged from API to provide only key fields.
+    Schema class for service model.
+
+    Each service model has the following fields (and nested fields):
+
+    .. include::service.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    organisation_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    organisation_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     ssd_id = fields.UUID(required=True)
 
-    version = fields.Integer(required=True, read_only=True)  # Changed to prevent this being updated.
-    approval_status = fields.String(required=True, read_only=True)  # Changed to prevent this being updated.
+    version = fields.Integer(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    approval_status = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     # Removed latest.
     featured = fields.String(allow_none=True)
     show_in_latest = fields.Boolean(allow_none=True)  # Changed to optional.

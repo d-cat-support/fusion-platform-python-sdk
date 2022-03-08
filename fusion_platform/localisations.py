@@ -1,10 +1,10 @@
-#
-# Translations generator file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Translations generator file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 import os
 from pathlib import Path
@@ -15,12 +15,15 @@ def get_all_values(nested_dictionary, values=None, hierarchy=None, prefix=None, 
     """
     Recursively builds a dictionary of all the leaves in a nested dictionary.
 
-    :param nested_dictionary: The nested dictionary to traverse.
-    :param values: The current set of extracted leaf values.
-    :param hierarchy: The hierarchy for the keys.
-    :param prefix: Any prefix to add to the keys.
-    :param strip: Any value which should be stripped from the hierarchy.
-    :return: The dictionary of leaf values.
+    Args:
+        nested_dictionary: The nested dictionary to traverse.
+        values: The current set of extracted leaf values.
+        hierarchy: The hierarchy for the keys.
+        prefix: Any prefix to add to the keys.
+        strip: Any value which should be stripped from the hierarchy.
+
+    Returns:
+        The dictionary of leaf values.
     """
     values = {} if values is None else values
     hierarchy = [] if hierarchy is None else hierarchy
@@ -58,13 +61,13 @@ for path in Path('resources/locales').rglob('*.yml'):
 
 # Now output all the translations as a Python file.
 with open('fusion_platform/translations.py', 'w') as file:
-    file.write('#\n')
-    file.write('# Compiled translations.\n')
-    file.write('#\n')
-    file.write('# @author Matthew Casey\n')
-    file.write('#\n')
-    file.write('# (c) Digital Content Analysis Technology Ltd 2022\n')
-    file.write('#\n')
+    file.write('"""\n')
+    file.write('Compiled translations.\n')
+    file.write('\n')
+    file.write('author: Matthew Casey\n')
+    file.write('\n')
+    file.write('&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)\n')
+    file.write('"""\n')
     file.write('\n')
     file.write('# Do not modify this file manually as it is built automatically by the localisations.py script.\n')
     file.write('\n')

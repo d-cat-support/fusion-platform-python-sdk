@@ -1,10 +1,10 @@
-#
-# Session class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Session class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 import i18n
 import json
@@ -39,7 +39,7 @@ class ValueError(SessionError):
 
 class Session(Base):
     """
-    Provides a session for use in interfacing with the Fusion Platform(r) API.
+    Provides a session for use in interfacing with the Fusion Platform<sup>&reg;</sup> API.
     """
 
     # HTTP methods.
@@ -49,7 +49,7 @@ class Session(Base):
     METHOD_PATCH = 'PATCH'
     METHOD_PUT = 'PUT'
 
-    # Default Fusion Platform(r) API endpoint.
+    # Default Fusion Platform<sup>&reg;</sup> API endpoint.
     API_URL_DEFAULT = 'https://api.thefusionplatform.com'
 
     # Mask keys.
@@ -71,9 +71,10 @@ class Session(Base):
         Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
         arguments which are the URL, destination and the number of bytes downloaded so far.
 
-        :param url: The URL to download as a file.
-        :param destination: The destination file path.
-        :param callback: The optional callback method used to receive download progress.
+        Args:
+            url: The URL to download as a file.
+            destination: The destination file path.
+            callback: The optional callback method used to receive download progress.
         """
         # Make sure the destination directory exists.
         directory = os.path.dirname(destination.strip())
@@ -116,8 +117,11 @@ class Session(Base):
         """
         Recursively filters a nested dictionary to mask out any keys which should be masked.
 
-        :param dictionary: The nested dictionary to mask.
-        :return: The masked nested dictionary.
+        Args:
+            dictionary: The nested dictionary to mask.
+
+        Returns:
+            The masked nested dictionary.
         """
         if (dictionary is not None) and isinstance(dictionary, dict):
             return {key: '*****' if key in Session._MASK_KEYS else self.__filter_nested_dictionary(value) for key, value in dictionary.items()}
@@ -126,15 +130,20 @@ class Session(Base):
 
     def login(self, email=None, user_id=None, password=None, api_url=None):
         """
-        Attempts to log into the Fusion Platform(r) to return a user model for the active session.
+        Attempts to log into the Fusion Platform<sup>&reg;</sup> to return a user model for the active session.
 
-        :param email: The user account email address. Either an email address or a user id must be provided.
-        :param user_id: The user account user id. Either an email address or a user id must be provided.
-        :param password: The password for the user account.
-        :param api_url: The optional custom API URL to use. Defaults to the production Fusion Platform(r).
-        :return: The corresponding user id on successful login.
-        :raises ValueError on incorrect parameters.
-        :raises RequestError on login failure.
+        Args:
+        email: The user account email address. Either an email address or a user id must be provided.
+        user_id: The user account user id. Either an email address or a user id must be provided.
+        password: The password for the user account.
+        api_url: The optional custom API URL to use. Defaults to the production Fusion Platform<sup>&reg;</sup>.
+
+        Returns:
+            The corresponding user id on successful login.
+
+        Raises:
+            ValueError: on incorrect parameters.
+            RequestError: on login failure.
         """
         # Make sure we have all the required parameters.
         if (email is None) and (user_id is None):
@@ -166,15 +175,20 @@ class Session(Base):
 
     def request(self, path='/', query_parameters=None, method=METHOD_GET, body=None):
         """
-        Sends a request to the Fusion Platform(r) using the specified path, method and JSON payload. This method will use the authentication bearer token, if
+        Sends a request to the Fusion Platform<sup>&reg;</sup> using the specified path, method and JSON payload. This method will use the authentication bearer token, if
         available.
 
-        :param path: The optional path. Default '/'.
-        :param query_parameters: The optional query parameters as a dictionary.
-        :param method: The optional RESTful method type. Default GET.
-        :param body: The optional body. Default None.
-        :return: The decoded response body.
-        :raises RequestError if the request failed.
+        Args:
+            path: The optional path. Default '/'.
+            query_parameters: The optional query parameters as a dictionary.
+            method: The optional RESTful method type. Default GET.
+            body: The optional body. Default None.
+
+        Returns:
+            The decoded response body.
+
+        Raises:
+            RequestError: if the request failed.
         """
         # Optionally add the bearer token.
         headers = {'Content-Type': 'application/json'}
@@ -218,8 +232,9 @@ class Session(Base):
         """
         Uploads a file from the source path.
 
-        :param url: The URL to download as a file.
-        :param source: The source file path.
+        Args:
+            url: The URL to download as a file.
+            source: The source file path.
         """
         try:
             # Upload the file as a data stream.
@@ -245,6 +260,7 @@ class Session(Base):
     @property
     def user_id(self):
         """
-        :return: The user id.
+        Returns:
+            The user id.
         """
         return self.__user_id

@@ -1,10 +1,10 @@
-#
-# Organisation model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Organisation model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from functools import partial
 from marshmallow import Schema, EXCLUDE
@@ -37,12 +37,16 @@ class OrganisationUserSchema(Schema):
 
 class OrganisationSchema(Schema):
     """
-    Schema class for organisation model. Abridged from API to provide only key fields.
-    """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    Schema class for organisation model.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    Each organisation model has the following fields (and nested fields):
+
+    .. include::organisation.md
+    """
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     name = fields.String(required=True)
     address_line_1 = fields.String(required=True)
@@ -52,11 +56,11 @@ class OrganisationSchema(Schema):
     address_country = fields.String(required=True)
 
     payment_customer = fields.String(allow_none=True)
-    payment_valid = fields.Boolean(allow_none=True, read_only=True)  # Changed to prevent this being updated and optional.
+    payment_valid = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated and optional.
     # Removed payment_last_checked.
 
     income_customer = fields.String(allow_none=True)
-    income_valid = fields.Boolean(allow_none=True, read_only=True)  # Changed to prevent this being updated and optional.
+    income_valid = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated and optional.
     # Removed income_last_checked.
 
     income_tax_rate = fields.Decimal(allow_none=True)
@@ -64,14 +68,14 @@ class OrganisationSchema(Schema):
 
     currency = fields.String(allow_none=True)  # Changed to optional.
 
-    users = fields.List(fields.Nested(OrganisationUserSchema()), allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    users = fields.List(fields.Nested(OrganisationUserSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    agreed_licenses = fields.List(fields.UUID(required=True), allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    offers = fields.List(fields.UUID(required=True), allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    agreed_licenses = fields.List(fields.UUID(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    offers = fields.List(fields.UUID(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed audit_services.
 
-    maximum_output_storage_period = fields.Integer(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    maximum_output_storage_period = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """
@@ -107,13 +111,18 @@ class Organisation(Model):
         """
         Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
 
-        :param name: The name of the data object.
-        :param file_type: The type of files that the data object will hold.
-        :param files: The list of file paths to be uploaded.
-        :param wait: Optionally wait for the upload and analysis to complete? Default False.
-        :return: The created data object.
-        :raises RequestError if the create fails.
-        :raises ModelError if the model could not be created and validated by the Fusion Platform(r).
+        Args:
+            name: The name of the data object.
+            file_type: The type of files that the data object will hold.
+            files: The list of file paths to be uploaded.
+            wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            The created data object.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
         """
         # Get a new template for the data model.
         data = Data(self._session)
@@ -127,11 +136,12 @@ class Organisation(Model):
     @property
     def credit(self):
         """
-        Returns the organisation's credit model.
+        Returns:
+            The credit model for the organisation.
 
-        :return: The credit model for the organisation.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return Credit._model_from_api_id(self._session, organisation_id=self.id, id=self.id)  # Credit model id is the same as the organisation's id.
 
@@ -140,9 +150,12 @@ class Organisation(Model):
         """
         Provides an iterator through the organisation's uploaded data objects.
 
-        :return: An iterator through the data objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return Data._models_from_api_path(self._session, self._get_path(self.__class__._PATH_DATA))
 
@@ -150,11 +163,16 @@ class Organisation(Model):
         """
         Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.
 
-        :param id: The data id to search for.
-        :param name: The name to search for (case-sensitive).
-        :return: The first found data object, or None if not found, and an iterator through the found data objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            id: The data id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found data object, or None if not found, and an iterator through the found data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Note that name is a key field, and hence we can only search using begins with.
         filter = self.__class__._build_filter(
@@ -168,11 +186,16 @@ class Organisation(Model):
         """
         Searches for the organisation's processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.
 
-        :param id: The process id to search for.
-        :param name: The name to search for (case-sensitive).
-        :return: The first found process object, or None if not found, and an iterator through the found process objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            id: The process id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found process object, or None if not found, and an iterator through the found process objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         filter = self.__class__._build_filter(
             [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_CONTAINS, name)])
@@ -185,13 +208,18 @@ class Organisation(Model):
         """
         Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
 
-        :param id: The service id to search for.
-        :param ssd_id: The SSD id to search for.
-        :param name: The name to search for (case-sensitive).
-        :param keyword: The keyword to search for (case-sensitive).
-        :return: The first found service object, or None if not found, and an iterator through the found service objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            id: The service id to search for.
+            ssd_id: The SSD id to search for.
+            name: The name to search for (case-sensitive).
+            keyword: The keyword to search for (case-sensitive).
+
+        Returns:
+            The first found service object, or None if not found, and an iterator through the found service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Note that name is a key field, and hence we can only search using begins with.
         filter = self.__class__._build_filter(
@@ -205,13 +233,18 @@ class Organisation(Model):
 
     def new_process(self, name, service):
         """
-        Creates a new template process from the service object. This process is not persisted to the Fusion Platform(r).
+        Creates a new template process from the service object. This process is not persisted to the Fusion Platform<sup>&reg;</sup>.
 
-        :param name: The name of the process.
-        :param service: The service for which the process is to be created.
-        :return: The new template process object.
-        :raises RequestError if the new fails.
-        :raises ModelError if the model could not be created and validated by the Fusion Platform(r).
+        Args:
+            name: The name of the process.
+            service: The service for which the process is to be created.
+
+        Returns:
+            The new template process object.
+
+        Raises:
+            RequestError: if the new fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
         """
         # Get a new template for the process model using the service.
         process = Process(self._session)
@@ -224,9 +257,12 @@ class Organisation(Model):
         """
         Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.
 
-        :return: An iterator through the service objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_OWN_SERVICES))
 
@@ -235,9 +271,12 @@ class Organisation(Model):
         """
         Provides an iterator through the organisation's processes.
 
-        :return: An iterator through the process objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the process objects.
+
+        Raises:
+            RequestError if any get fails.
+            ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return Process._models_from_api_path(self._session, self._get_path(self.__class__._PATH_PROCESSES))
 
@@ -246,8 +285,11 @@ class Organisation(Model):
         """
         Provides an iterator through the services available to the organisation for execution.
 
-        :return: An iterator through the service objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_SERVICES))

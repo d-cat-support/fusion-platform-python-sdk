@@ -7,6 +7,15 @@
 #
 
 en:
+  option:
+    constrained_names:
+      title: "Constrained Names"
+      description: "The constrained value names for the option."
+
+    constrained_values:
+      title: "Constrained Values"
+      description: "The constrained values for the option."
+
   no_change_executing: "Process cannot be modified as it is currently executing"
   input_not_specified: "Input number or object must be provided to set input"
   data_not_specified: "Data object must be provided to set input"

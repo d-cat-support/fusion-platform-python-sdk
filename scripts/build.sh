@@ -33,6 +33,12 @@ version=$(echo $version_output | tail -1 | rev | cut -d' ' -f 1 | rev)
 # Make sure the translations are up-to-date.
 PYTHONPATH=$(pwd) python fusion_platform/localisations.py
 
+# Now build the documentation. This assumes that we have the engine translations file locally.
+PYTHONPATH=$(pwd) python fusion_platform/documentation.py "../engine/engine/translations.py"
+
+rm -rf docs/fusion_platform
+pdoc --html --config show_inherited_members=True --output-dir docs --template-dir docs/template fusion_platform
+
 # Delete any existing builds.
 rm -rf build
 rm -rf dist

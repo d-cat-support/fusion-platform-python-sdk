@@ -1,10 +1,10 @@
-#
-# Process model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Process model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from datetime import datetime, timedelta, timezone
 from functools import partial
@@ -128,8 +128,12 @@ class ProcessOptionSchema(Schema):
     title = fields.String(allow_none=True)
     description = fields.String(allow_none=True)
 
-    constrained_names = fields.List(fields.String(required=True), allow_none=True)  # Added this field to gold extracted data.
-    constrained_values = fields.List(fields.String(required=True), allow_none=True)  # Added this field to gold extracted data.
+    constrained_names = fields.List(fields.String(required=True), allow_none=True, metadata={'title': i18n.t('models.process.option.constrained_names.title'),
+                                                                                             'description': i18n.t(
+                                                                                                 'models.process.option.constrained_names.description')})  # Added this field to gold extracted data.
+    constrained_values = fields.List(fields.String(required=True), allow_none=True, metadata={'title': i18n.t('models.process.option.constrained_values.title'),
+                                                                                              'description': i18n.t(
+                                                                                                  'models.process.option.constrained_values.description')})  # Added this field to gold extracted data.
 
     class Meta:
         """
@@ -141,21 +145,25 @@ class ProcessOptionSchema(Schema):
 
 class ProcessSchema(Schema):
     """
-    Schema class for process model. Abridged from API to provide only key fields.
+    Schema class for process model.
+
+    Each process model has the following fields (and nested fields):
+
+    .. include::process.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    organisation_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    ssd_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    service_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    organisation_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    ssd_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    service_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     name = fields.String(required=True)
 
-    inputs = fields.List(fields.Nested(ProcessInputSchema()), allow_none=True, hide=True)  # Changed to hide as an attribute.
-    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, hide=True)  # Changed to hide as an attribute.
-    chains = fields.List(fields.Nested(ProcessChainSchema()), allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    inputs = fields.List(fields.Nested(ProcessInputSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    chains = fields.List(fields.Nested(ProcessChainSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed maximum_bounds.
 
@@ -166,17 +174,17 @@ class ProcessSchema(Schema):
     repeat_gap = fields.RelativeDelta(allow_none=True)
     repeat_offset = fields.TimeDelta(allow_none=True)
 
-    process_status = fields.String(required=True, read_only=True)  # Changed to prevent this being updated.
-    process_status_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    process_status = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    process_status_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     output_storage_period = fields.Integer(allow_none=True)
-    test_run = fields.Boolean(required=True, read_only=True)  # Changed to prevent this being updated.
+    test_run = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed prices.
-    price = fields.Decimal(required=True, read_only=True)  # Changed to prevent this being updated.
+    price = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    deletable = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    executions = fields.Boolean(allow_none=True, hide=True)  # Changed to hide as an attribute.
+    deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    executions = fields.Boolean(allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
 
     # Removed creator.
 
@@ -234,9 +242,12 @@ class Process(Model):
         """
         Attempts to coerce a value into its corresponding data type.
 
-        :param value: The value to coerce.
-        :param data_type: The required data type.
-        :return: The coerced value of the correct data type.
+        Args:
+            value: The value to coerce.
+            data_type: The required data type.
+
+        Returns:
+            The coerced value of the correct data type.
         """
         # Deal with None values.
         if (value is None) or (value == str(None)) or (value == 'null'):
@@ -248,21 +259,25 @@ class Process(Model):
 
     def create(self):
         """
-        Attempts to persist the template process in the Fusion Platform(r) so that it can be executed.
+        Attempts to persist the template process in the Fusion Platform<sup>&reg;</sup> so that it can be executed.
 
-        :raises RequestError if the create fails.
-        :raises ModelError if the model could not be created and validated by the Fusion Platform(r).
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
         """
         # Attempt to issue the create.
         self._create()
 
     def execute(self, wait=False):
         """
-        Attempts to execute the created process in the Fusion Platform(r). Optionally waits for the next execution to start, and then for it to complete.
+        Attempts to execute the created process in the Fusion Platform<sup>&reg;</sup>. Optionally waits for the next execution to start, and then for it to complete.
 
-        :param wait: Optionally wait for the next execution to start and complete? Default False.
-        :raises RequestError if the execute fails.
-        :raises ModelError if the execution fails.
+        Args:
+            wait: Optionally wait for the next execution to start and complete? Default False.
+
+        Raises:
+            RequestError: if the execute fails.
+            ModelError: if the execution fails.
         """
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
@@ -280,9 +295,12 @@ class Process(Model):
         """
         Provides an iterator through the process's executions.
 
-        :return: An iterator through the execution objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the execution objects.
+        
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
 
@@ -291,8 +309,11 @@ class Process(Model):
         """
         Extracts the constrained values from a constrained option validation.
 
-        :param validation: The constrained option validation.
-        :return: A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
+        Args:
+            validation: The constrained option validation.
+
+        Returns:
+            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
         """
         # Extract the elements.
         elements = validation.split(Process._VALIDATION_DELIMITER)
@@ -323,8 +344,11 @@ class Process(Model):
         """
         Extracts the datetime format from a datatime option validation.
 
-        :param validation: The datatime option validation.
-        :return: The datetime format, or None if it cannot be extracted.
+        Args:
+            validation: The datatime option validation.
+
+        Returns:
+            The datetime format, or None if it cannot be extracted.
         """
         # Extract the elements.
         elements = validation.split(Process._VALIDATION_DELIMITER)
@@ -350,11 +374,16 @@ class Process(Model):
         """
         Searches for the process's executions with the specified id and/or group id, returning the first object found and an iterator.
 
-        :param id: The execution id to search for.
-        :param group_id: The execution group id to search for.
-        :return: The first found execution object, or None if not found, and an iterator through the found execution objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            id: The execution id to search for.
+            group_id: The execution group id to search for.
+
+        Returns:
+            The first found execution object, or None if not found, and an iterator through the found execution objects.
+        
+        Raises:
+            RequestError if any get fails.
+            ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         filter = self.__class__._build_filter(
             [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
@@ -368,7 +397,8 @@ class Process(Model):
         """
         Provides an iterator through the process' inputs.
 
-        :return: An iterator through the inputs.
+        Returns:
+            An iterator through the inputs.
         """
         for input in self._model.get(self.__class__._FIELD_INPUTS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
@@ -385,7 +415,8 @@ class Process(Model):
         """
         Provides an iterator through the process' options.
 
-        :return: An iterator through the options.
+        Returns:
+            An iterator through the options.
         """
         for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
@@ -411,13 +442,16 @@ class Process(Model):
         Sets the specified input for the process to the data item. An exception is raised if the process is in the execute status, the input does not exist, is not
         ready to be used or has the wrong file type.
 
-        :param number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided.
-        :param input: The input object for the input to set. Either the number or the input must be provided.
-        :param data: The data object to use for the input.
-        :raises ModelError if the process is the execute status.
-        :raises ModelError if the input does not exist.
-        :raises ModelError if the data object is ready to be used in a process.
-        :raises ModelError if the data object has a different file type to the input.
+        Args:
+            number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided.
+            input: The input object for the input to set. Either the number or the input must be provided.
+            data: The data object to use for the input.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the input does not exist.
+            ModelError: if the data object is ready to be used in a process.
+            ModelError: if the data object has a different file type to the input.
         """
         # Make sure the arguments are provided.
         if (number is None) and (input is None):
@@ -471,11 +505,14 @@ class Process(Model):
         Sets the specified option for the process to the value. An exception is raised if the process is in the execute status, the option does not exist or the
         value has the wrong type.
 
-        :param name: The option name to set. Either the name or the option must be provided.
-        :param option: The option object for the option to set. Either the name or the option must be provided.
-        :param value: The value for the option.
-        :raises ModelError if the process is the execute status.
-        :raises ModelError if the value has a different type to the option.
+        Args:
+            name: The option name to set. Either the name or the option must be provided.
+            option: The option object for the option to set. Either the name or the option must be provided.
+            value: The value for the option.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the value has a different type to the option.
         """
         # Make sure the arguments are provided.
         if (name is None) and (option is None):
@@ -516,7 +553,8 @@ class Process(Model):
         """
         Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.
 
-        :raises RequestError if the stop fails.
+        Raises:
+            RequestError: if the stop fails.
         """
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)
@@ -527,17 +565,20 @@ class Process(Model):
         contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
         of setting inputs and options.
 
-        :param input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
-        :param input: The input object for the input to set. Either the number or the input must be provided when setting an input.
-        :param data: The data object to use for an input.
-        :param option_name: The option name to set. Either the name or the option must be provided when setting an option.
-        :param option: The option object for the option to set. Either the name or the option must be provided when setting an option.
-        :param value: The value for the option.
-        :param kwargs: The model attributes which are to be patched.
-        :raises RequestError if the update fails.
-        :raises ModelError if the process is in the execute state.
-        :raises ModelError if the process has been persisted and changes are requested to an input or option.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
+            input: The input object for the input to set. Either the number or the input must be provided when setting an input.
+            data: The data object to use for an input.
+            option_name: The option name to set. Either the name or the option must be provided when setting an option.
+            option: The option object for the option to set. Either the name or the option must be provided when setting an option.
+            value: The value for the option.
+            kwargs: The model attributes which are to be patched.
+
+        Raises:
+            RequestError: if the update fails.
+            ModelError: if the process is in the execute state.
+            ModelError: if the process has been persisted and changes are requested to an input or option.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Make sure the process is not in the execute state.
         if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
@@ -559,10 +600,13 @@ class Process(Model):
         """
         Converts a Python option value into a string depending upon its data type and validation parameters.
 
-        :param value: The value to convert.
-        :param data_type: The option data type.
-        :param validation: The optional validation for the option.
-        :return: The correct string representation of the option.
+        Args:
+            value: The value to convert.
+            data_type: The option data type.
+            validation: The optional validation for the option.
+
+        Returns:
+            The correct string representation of the option.
         """
         if value is None:
             return None
@@ -578,9 +622,10 @@ class Process(Model):
         Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
         Otherwise, this method will block until the next scheduled execution has started. An exception will be raised if the process is not being executed.
 
-        :raises RequestError if any request fails.
-        :raises ModelError if the process is not being executed.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if the process is not being executed.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Wait until we find the next execution.
         while True:

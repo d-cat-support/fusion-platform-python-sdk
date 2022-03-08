@@ -1,10 +1,10 @@
-#
-# General utilities.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+General utilities.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from datetime import date, datetime, time, timezone
 from decimal import Decimal
@@ -17,10 +17,13 @@ def dict_nested_get(dictionary_or_value, keys, default=None):
 
     For example, for a dictionary dictionary = { "key1": { "key2": 1 } }, use nested_get(dictionary, ["key1", "key2"]) to get the value of "key2".
 
-    :param dictionary_or_value: The dictionary to get the value from or the value itself from this recursive method.
-    :param keys: The list of nested keys.
-    :param default: The default value to return if no value exists. Default is None.
-    :return: The value of the nested key or the default if not found.
+    Args:
+        dictionary_or_value: The dictionary to get the value from or the value itself from this recursive method.
+        keys: The list of nested keys.
+        default: The default value to return if no value exists. Default is None.
+
+    Returns:
+        The value of the nested key or the default if not found.
     """
     if isinstance(dictionary_or_value, dict) and isinstance(keys, list) and (len(keys) > 1):
         key = keys.pop(0)
@@ -37,8 +40,11 @@ def json_default(value):
     """
     Used during JSON serialisation for objects which cannot be serialised. This will attempt to convert the values and otherwise return a string.
 
-    :param value: The value to serialise.
-    :return: The serialised value.
+    Args:
+        value: The value to serialise.
+
+    Returns:
+        The serialised value.
     """
     if isinstance(value, time) or isinstance(value, date) or isinstance(value, datetime):
         # Convert datetimes. Note that if the datetime does not have a timezone, we enforce UTC. See also fields.DateTime#_serialize.
@@ -58,8 +64,11 @@ def string_camel_to_underscore(string):
     """
     Converts a camel case string to underscore case.
 
-    :param string: The string to convert.
-    :return: The converted string.
+    Args:
+        string: The string to convert.
+
+    Returns:
+        The converted string.
     """
 
     return ''.join(['_' + i.lower() if i.isupper() else i for i in string]).lstrip('_').lower() if string is not None else None
@@ -71,8 +80,11 @@ def value_to_read_only(value):
     such as datetimes, but rather makes sure that the references to objects cannot be changed. For example, dictionary values canot be replaced or list items
     removed.
 
-    :param value: The value to make read-only.
-    :return: The read-only value.
+    Args:
+        value: The value to make read-only.
+
+    Returns:
+        The read-only value.
     """
     if isinstance(value, dict):
         return MappingProxyType({inner_key: value_to_read_only(inner_value) for inner_key, inner_value in value.items()})  # Creates an immutable mapping.
@@ -86,8 +98,11 @@ def value_to_string(value):
     """
     Used to convert any value into a useful string representation. For example, datetimes into ISO format. Also handles other type conversions to make them pretty.
 
-    :param value: The value to convert to a string.
-    :return: The corresponding (pretty) string value.
+    Args:
+        value: The value to convert to a string.
+
+    Returns:
+        The corresponding (pretty) string value.
     """
     if isinstance(value, list) or isinstance(value, tuple):
         return f"[{', '.join([value_to_string(inner) for inner in value])}]"

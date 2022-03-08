@@ -1,10 +1,10 @@
-#
-# User model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+User model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from marshmallow import Schema, EXCLUDE
 
@@ -34,14 +34,18 @@ class UserOrganisationSchema(Schema):
 
 class UserSchema(Schema):
     """
-    Schema class for user model. Abridged from API to provide only key fields.
+    Schema class for user model.
+
+    Each user model has the following fields (and nested fields):
+
+    .. include::user.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    email = fields.Email(required=True, read_only=True)  # Changed to prevent this being updated.
+    email = fields.Email(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     # Removed email_verified.
     given_name = fields.String(required=True)
     family_name = fields.String(required=True)
@@ -64,9 +68,9 @@ class UserSchema(Schema):
     notification_new_features = fields.List(fields.String(required=True), allow_none=True)
     notification_contact = fields.List(fields.String(required=True), allow_none=True)
 
-    organisations = fields.List(fields.Nested(UserOrganisationSchema()), allow_none=True, hide=True)  # Changed to hide as an attribute.
+    organisations = fields.List(fields.Nested(UserOrganisationSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
 
-    last_request_at = fields.DateTime(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    last_request_at = fields.DateTime(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """
@@ -99,9 +103,12 @@ class User(Model):
         """
         Changes the user password. The new password must conform to the current password policy.
 
-        :param old: The old password.
-        :param new: The new password.
-        :raises RequestError if the update fails.
+        Args:
+            old: The old password.
+            new: The new password.
+
+        Raises:
+            RequestError: if the update fails.
         """
         body = {self.__class__.__name__: {'old_password': old, 'new_password': new}}
         self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_PASSWORD), method=Session.METHOD_POST, body=body)
@@ -111,9 +118,12 @@ class User(Model):
         """
         Provides an iterator through the organisations which the user belongs to.
 
-        :return: An iterator through the organisations.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the organisations.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return Organisation._models_from_api_ids(self._session, [{self.__class__._FIELD_ID: organisation.get(self.__class__._FIELD_ID)} for organisation in
                                                                  self._model.get('organisations', [])])

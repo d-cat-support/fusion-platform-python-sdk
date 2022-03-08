@@ -1,10 +1,10 @@
-#
-# Process execution model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Process execution model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 import i18n
 from marshmallow import Schema, EXCLUDE
@@ -75,31 +75,35 @@ class ProcessExecutionOptionSchema(Schema):
 
 class ProcessExecutionSchema(Schema):
     """
-    Schema class for process execution model. Abridged from API to provide only key fields.
+    Schema class for process execution model.
+
+    Each process execution model has the following fields (and nested fields):
+
+    .. include::process_execution.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    organisation_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    process_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    group_id = fields.UUID(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    group_index = fields.Integer(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    group_count = fields.Integer(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    organisation_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    process_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    group_id = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    group_index = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    group_count = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     options = fields.List(fields.Nested(ProcessExecutionOptionSchema()), allow_none=True)
     chains = fields.List(fields.Nested(ProcessExecutionChainSchema()), allow_none=True)
     # Removed creator.
 
-    started_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    ended_at = fields.DateTime(allow_none=True, read_only=True)  # Changed to prevent this being updated.
-    abort = fields.Boolean(required=True, read_only=True)  # Changed to prevent this being updated.
-    success = fields.Boolean(required=True, read_only=True)  # Changed to prevent this being updated.
-    progress = fields.Integer(required=True, read_only=True)  # Changed to prevent this being updated.
+    started_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    ended_at = fields.DateTime(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    abort = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    success = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    progress = fields.Integer(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     delete_expiry = fields.DateTime(required=True)
-    delete_warning_status = fields.String(required=True, read_only=True)  # Changed to prevent this being updated.
-    deletable = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    delete_warning_status = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """
@@ -135,11 +139,16 @@ class ProcessExecution(Model):
         """
         Checks whether the execution has completed. Optionally waits for the execution to complete.
 
-        :param wait: Optionally wait for the execution to complete? Default False.
-        :return: True if the execution is complete.
-        :raises RequestError if any request fails.
-        :raises ModelError if the execution failed.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            wait: Optionally wait for the execution to complete? Default False.
+
+        Returns:
+            True if the execution is complete.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if the execution failed.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         complete = False
 
@@ -172,8 +181,11 @@ class ProcessExecution(Model):
         """
         Provides an iterator through the process execution's components.
 
-        :return: An iterator through the component objects.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Returns:
+            An iterator through the component objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return ProcessServiceExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_COMPONENTS))

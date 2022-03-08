@@ -1,10 +1,10 @@
-#
-# Model base class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Model base class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 import copy
 import i18n
@@ -104,8 +104,9 @@ class Model(Base):
         """
         Initialises the object.
 
-        :param session: The linked session object for interfacing with the Fusion Platform(r).
-        :param schema: The optional schema to use instead of the schema defined by the class.
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
+            schema: The optional schema to use instead of the schema defined by the class.
         """
         super(Model, self).__init__()
 
@@ -122,7 +123,8 @@ class Model(Base):
     @property
     def attributes(self):
         """
-        :return: The model attributes as a dictionary.
+        Returns:
+            The model attributes as a dictionary.
         """
         schema = self.__get_schema()
         attributes = {}
@@ -139,8 +141,11 @@ class Model(Base):
         """
         Builds a request body suitable for sending to the API. All current model attributes are included, with the keywords arguments overridding their value.
 
-        :param kwargs: The model attributes which override those already in the template.
-        :return: The built body.
+        Args:
+            kwargs: The model attributes which override those already in the template.
+
+        Returns:
+            The built body.
         """
         model_name = self.__class__.__name__
         schema = self.__get_schema()
@@ -164,8 +169,11 @@ class Model(Base):
         Builds a filter parameter suitable for #_models_from_api_path. Each of the parameters is a tuple specifying the field name, modifier and value. If a value
         is None, the filter is ignored.
 
-        :param parameters: A list of tuples specifying the field name, modifier and value
-        :return: The resulting filter dictionary.
+        Args:
+            parameters: A list of tuples specifying the field name, modifier and value
+
+        Returns:
+            The resulting filter dictionary.
         """
         filter = {}
 
@@ -180,9 +188,12 @@ class Model(Base):
         Attempts to create the model object with the given values. This assumes the model template has been loaded first using the _new method, and that the model
         is then created using a POST RESTful request. This assumes that the post body contains key names which include the name of the model class.
 
-        :param kwargs: The model attributes which override those already in the template.
-        :raises RequestError if the create fails.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            kwargs: The model attributes which override those already in the template.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Make sure the model is not already persisted.
         if self.__persisted:
@@ -205,7 +216,8 @@ class Model(Base):
         """
         Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request.
 
-        :raises RequestError if the delete fails.
+        Raises:
+            RequestError: if the delete fails.
         """
         # Make sure the model is already persisted.
         if not self.__persisted:
@@ -223,8 +235,11 @@ class Model(Base):
 
         Note that since a model object is mutable, there is no corresponding hash method.
 
-        :param other: The other object to compare against.
-        :return: True if the object's attributes are equal.
+        Args:
+            other: The other object to compare against.
+
+        Returns:
+            True if the object's attributes are equal.
         """
         if isinstance(other, Model):
             return self.attributes == other.attributes
@@ -237,10 +252,15 @@ class Model(Base):
         Executes the partial generator to return the first returned model and a generator through all models (including the first). The partial generator is
         assumed to take an extra keyword argument used to limit the results.
 
-        :param partial_generator: The partial generator used to obtain the results.
-        :return: The first found model, or None if not found, and an iterator through all the models.
-        :raises RequestError if any get fails.
-        :raises ModelError if a model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            partial_generator: The partial generator used to obtain the results.
+
+        Returns:
+            The first found model, or None if not found, and an iterator through all the models.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # We want to return the first model if available, plus the iterator through the rest. We therefore issue the query first with an items per request of 1 to
         # obtain the first model in a single request. The partial is then used to return a generator for them all.
@@ -251,14 +271,17 @@ class Model(Base):
 
     def get(self, **kwargs):
         """
-        Gets the model object by loading it from the Fusion Platform(r). Uses the model's current id and base model id for the get unless explicit values are
+        Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless explicit values are
         provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected dictionary
         key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading it into
         the model as a set of read-only attributes.
 
-        :param kwargs: Any explicit ids to be used.
-        :raises RequestError if the get fails.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            kwargs: Any explicit ids to be used.
+
+        Raises:
+            RequestError: if the get fails.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_GET, **kwargs))
@@ -271,8 +294,11 @@ class Model(Base):
         """
         Generates the key name for the specified class' id attribute.
 
-        :param The class name to generate the key for.
-        :return: The key name for the class id attribute.
+        Args:
+            The class name to generate the key for.
+
+        Returns:
+            The key name for the class id attribute.
         """
         return Model._FIELD_ID_NAME.format(name=string_camel_to_underscore(class_name))
 
@@ -282,8 +308,11 @@ class Model(Base):
         and any corresponding base model id. Each id is named using the associated class name and suffix (in underscore format). Each id may be overridden by a
         keyword argument.
 
-        :param kwargs: Any explicit ids to be used.
-        :return: A dictionary of the relevant model ids.
+        Args:
+            kwargs: Any explicit ids to be used.
+
+        Returns:
+            A dictionary of the relevant model ids.
         """
         model_id_name = Model._get_id_name(self.__class__.__name__)
         result = {model_id_name: self.id if hasattr(self, Model._FIELD_ID) else None}
@@ -307,9 +336,12 @@ class Model(Base):
         Converts a list of ids into a list of dictionaries containing the correct id parameters. Additional id parameters cna be added to each element via the
         keyword arguments.
 
-        :param id_list: The list of ids to convert.
-        :param kwargs: The additional ids as keyword arguments.
-        :return: The list of dictionary ids.
+        Args:
+            id_list: The list of ids to convert.
+            kwargs: The additional ids as keyword arguments.
+
+        Returns:
+            The list of dictionary ids.
         """
         ids = []
 
@@ -322,10 +354,15 @@ class Model(Base):
         """
         Gets the RESTful path for the model using the template. The model's current ids are used, unless any explicit values are provided via keyword arguments.
 
-        :param template: The template path.
-        :param kwargs: Any explicit ids to be used.
-        :return: The constructed path.
-        :raises NotImplementedError if the template does not exist.
+        Args:
+            template: The template path.
+            kwargs: Any explicit ids to be used.
+
+        Returns:
+            The constructed path.
+
+        Raises:
+            NotImplementedError: if the template does not exist.
         """
         if template is None:
             raise NotImplementedError
@@ -334,8 +371,11 @@ class Model(Base):
 
     def __get_schema(self):
         """
-        :return: The model schema object.
-        :raises NotImplementedError if the schema does not exist.
+        Returns:
+            The model schema object.
+
+        Raises:
+            NotImplementedError: if the schema does not exist.
         """
         if self.__schema is None:
             raise NotImplementedError
@@ -347,20 +387,26 @@ class Model(Base):
         """
         Protected getter for the model so that subclasses can access the model fields directly, but without the ability to change any value.
 
-        :return: The protected model object.
+        Returns:
+            The protected model object.
         """
         return value_to_read_only(self.__model)
 
     @classmethod
     def _model_from_api_id(cls, session, **kwargs):
         """
-        Loads a model object with the given ids as keyword arguments from the Fusion Platform(r).
+        Loads a model object with the given ids as keyword arguments from the Fusion Platform<sup>&reg;</sup>.
 
-        :param session: The linked session object for interfacing with the Fusion Platform(r).
-        :param kwargs: Any explicit ids to be used.
-        :return The created user model.
-        :raises RequestError if the get fails.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
+            kwargs: Any explicit ids to be used.
+
+        Returns:
+            The created user model.
+
+        Raises:
+            RequestError: if the get fails.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Initialise a new object.
         model = cls(session)
@@ -375,11 +421,16 @@ class Model(Base):
         """
         Generates an iterator through a series of models using their ids. Each model is loaded using an id.
 
-        :param session: The linked session object for interfacing with the Fusion Platform(r).
-        :param ids: A list of dictionaries containing the ids to iterate through.
-        :return: A generator to iterate through the models retrieved via the model GET.
-        :raises RequestError if the get fails.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
+            ids: A list of dictionaries containing the ids to iterate through.
+
+        Returns:
+            A generator to iterate through the models retrieved via the model GET.
+
+        Raises:
+            RequestError: if the get fails.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return (cls._model_from_api_id(session, **id) for id in ids)
 
@@ -414,15 +465,20 @@ class Model(Base):
 
         All string filtering is case-sensitive.
 
-        :param session: The linked session object for interfacing with the Fusion Platform(r).
-        :param path: The path used to retrieve the list of objects.
-        :param items_per_request: The optional maximum number of items to retrieve at each request. Default 24.
-        :param reverse: Whether the list should be reversed or not. Default False.
-        :param filter: The optional filter to be applied to the results. Default is no filter.
-        :param kwargs: Any additional attributes which are to be set on each model which are not provided in each item from the path.
-        :return: A generator to iterate through the models retrieved via the path.
-        :raises RequestError if the get fails.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
+            path: The path used to retrieve the list of objects.
+            items_per_request: The optional maximum number of items to retrieve at each request. Default 24.
+            reverse: Whether the list should be reversed or not. Default False.
+            filter: The optional filter to be applied to the results. Default is no filter.
+            kwargs: Any additional attributes which are to be set on each model which are not provided in each item from the path.
+
+        Returns:
+            A generator to iterate through the models retrieved via the path.
+
+        Raises:
+            RequestError: if the get fails.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Modify the filter keys so that they match the API requirement.
         filter = {} if filter is None else filter
@@ -454,15 +510,18 @@ class Model(Base):
 
     def _new(self, query_parameters=None, **kwargs):
         """
-        Gets a new template model object by loading it from the Fusion Platform(r). The explicit base model id value should be provided via a keyword argument. This
+        Gets a new template model object by loading it from the Fusion Platform<sup>&reg;</sup>. The explicit base model id value should be provided via a keyword argument. This
         assumes the model is obtained using a GET RESTful request from the corresponding path, and that the model data is held with the expected dictionary key
         within the response. The template model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading
         it into the model as a set of read-only attributes.
 
-        :param query_parameters: The optional query parameters as a dictionary.
-        :param kwargs: Should include the base model id, if needed.
-        :raises RequestError if the new fails.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            query_parameters: The optional query parameters as a dictionary.
+            kwargs: Should include the base model id, if needed.
+
+        Raises:
+            RequestError: if the new fails.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Get the data.
         response = self._session.request(path=self._get_path(self.__class__._PATH_NEW, **kwargs), query_parameters=query_parameters)
@@ -488,7 +547,8 @@ class Model(Base):
         """
         Protected getter for the persisted flag so that subclasses can find out if the model has already been persisted.
 
-        :return: The persisted flag.
+        Returns:
+            The persisted flag.
         """
         return self.__persisted
 
@@ -496,10 +556,11 @@ class Model(Base):
         """
         Sends the body to the path using the method and then loads the resulting model.
 
-        :param path: The path to send the request to.
-        :param method: The optional RESTful method for sending. Default is GET.
-        :param body: The optional body to send. Default is None.
-        :param key: The optional key to load the model from the response. Default is RESPONSE_KEY_MODEL.
+        Args:
+            path: The path to send the request to.
+            method: The optional RESTful method for sending. Default is GET.
+            body: The optional body to send. Default is None.
+            key: The optional key to load the model from the response. Default is RESPONSE_KEY_MODEL.
         """
         # Send the request.
         response = self._session.request(path=path, method=method, body=body)
@@ -515,9 +576,12 @@ class Model(Base):
         """
         Prevents any model properties from being changed directly.
 
-        :param key: The property key.
-        :param value: The property value.
-        :raises ModelError to prevent modification.
+        Args:
+            key: The property key.
+            value: The property value.
+
+        Raises:
+            ModelError: to prevent modification.
         """
         # Prevent properties which are not protected or private from being set.
         if not key.startswith('_'):
@@ -530,8 +594,9 @@ class Model(Base):
         """
         Sets the hierarchical field value. This modifies the underlying model.
 
-        :param keys: The hierarchical list of keys from top to bottom.
-        :param value: The value to set.
+        Args:
+            keys: The hierarchical list of keys from top to bottom.
+            value: The value to set.
         """
         # Step through the hierarchy to find the bottom key.
         top_key = keys[0]
@@ -563,7 +628,8 @@ class Model(Base):
         """
         Sets the underlying model for the object.
 
-        :param model: The model dictionary which this model object will represent.
+        Args:
+            model: The model dictionary which this model object will represent.
         """
         # Convert the model dictionary into read-only properties. We use a deep copy of the dictionary to prevent later external changes.
         self.__model = copy.deepcopy(model)
@@ -586,11 +652,14 @@ class Model(Base):
         Obtains the model from the response using the supplied schema to obtain the corresponding Python representation of it, before
         loading it into the model as a set of read-only attributes.
 
-        :param response: The response containing the model attributes.
-        :param schema: The schema used to load and validate the model.
-        :param partial: Skip validation of required fields which are missing? Default False.
-        :param kwargs: Any additional attributes which are to be set on the model which are not provided in the response.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            response: The response containing the model attributes.
+            schema: The schema used to load and validate the model.
+            partial: Skip validation of required fields which are missing? Default False.
+            kwargs: Any additional attributes which are to be set on the model which are not provided in the response.
+
+        Raises:
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Load the model in using the schema, and then use it to set the attributes of the model.
         try:
@@ -610,7 +679,8 @@ class Model(Base):
 
     def __str__(self):
         """
-        :return: A string representation of the object.
+        Returns:
+            A string representation of the object.
         """
         return f"{self.__class__.__name__}{self.attributes}"
 
@@ -618,8 +688,11 @@ class Model(Base):
         """
         Converts the model attributes into a CSV string.
 
-        :param exclude: A list of attribute names which should be excluded from the CSV.
-        :return: The attribute names as a CSV header string and the model attributes as a CSV string.
+        Args:
+            exclude: A list of attribute names which should be excluded from the CSV.
+
+        Returns:
+            The attribute names as a CSV header string and the model attributes as a CSV string.
         """
         exclude = exclude if exclude is not None else []
         header = []
@@ -635,12 +708,15 @@ class Model(Base):
     def update(self, **kwargs):
         """
         Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without validation,
-        which will occur when the model is persisted. For models which have been persisted, the update is made via the Fusion Platform(r). All current model
-        attributes are sent to the Fusion Platform(r) which will automatically ignore any which are not allowed or are read-only.
+        which will occur when the model is persisted. For models which have been persisted, the update is made via the Fusion Platform<sup>&reg;</sup>. All current model
+        attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatically ignore any which are not allowed or are read-only.
 
-        :param kwargs: The model attributes which are to be patched.
-        :raises RequestError if the update fails.
-        :raises ModelError if the model could not be loaded or validated from the Fusion Platform(r).
+        Args:
+            kwargs: The model attributes which are to be patched.
+
+        Raises:
+            RequestError: if the update fails.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         if self.__persisted:
             # Form the patch body dictionary from the keyword arguments.

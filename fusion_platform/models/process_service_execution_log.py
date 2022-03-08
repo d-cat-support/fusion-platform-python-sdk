@@ -1,10 +1,10 @@
-#
-# Process service execution log model class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Process service execution log model class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from marshmallow import Schema, EXCLUDE
 
@@ -16,16 +16,20 @@ from fusion_platform.models.model import Model
 
 class ProcessServiceExecutionLogSchema(Schema):
     """
-    Schema class for process execution log model. Abridged from API to provide only key fields.
+    Schema class for process service execution log model.
+
+    Each process service execution log model has the following fields (and nested fields):
+
+    .. include::process_service_execution_log.md
     """
-    id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
+    id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    created_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
+    created_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
-    process_service_execution_id = fields.UUID(required=True, read_only=True)  # Changed to prevent this being updated.
-    logged_at = fields.DateTime(required=True, read_only=True)  # Changed to prevent this being updated.
-    message = fields.String(allow_none=True, read_only=True)  # Changed to prevent this being updated.
+    process_service_execution_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    logged_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    message = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """

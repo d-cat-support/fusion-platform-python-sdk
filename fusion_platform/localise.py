@@ -1,10 +1,10 @@
-#
-# Utilities to localise the application.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Utilities to localise the application.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 import i18n
 
@@ -39,6 +39,7 @@ class Localise:
         """
         Sets the current locale.
 
-        :param user_locale: The locale to be used.
+        Args:
+            user_locale: The locale to be used.
         """
         i18n.set('locale', user_locale)

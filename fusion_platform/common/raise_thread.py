@@ -1,10 +1,10 @@
-#
-# Raise thread class file.
-#
-# @author Matthew Casey
-#
-# (c) Digital Content Analysis Technology Ltd 2022
-#
+"""
+Raise thread class file.
+
+author: Matthew Casey
+
+&copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+"""
 
 from threading import Thread
 
@@ -19,7 +19,8 @@ class RaiseThread(Thread):
         """
         Wait until the thread terminates or the timeout occurs.
 
-        :param timeout: The amount of time to wait until the thread has terminated. Using None will bock indefinitely.
+        Args:
+            timeout: The amount of time to wait until the thread has terminated. Using None will bock indefinitely.
         """
         super(RaiseThread, self).join(timeout)
 
