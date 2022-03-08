@@ -27,8 +27,9 @@ version_output=$(scripts/version.sh patch)
 echo $version_output
 version=$(echo $version_output | tail -1 | rev | cut -d' ' -f 1 | rev)
 
-# Update the version in the setup file.
+# Update the version in the setup file and documentation header file.
 "${sedi[@]}" "s/version=.*,/version='$version',/g" setup.py
+"${sedi[@]}" "s/Version:.*/Version: $version/g" docs/template/logo.mako
 
 # Make sure the translations are up-to-date.
 PYTHONPATH=$(pwd) python fusion_platform/localisations.py
@@ -36,8 +37,9 @@ PYTHONPATH=$(pwd) python fusion_platform/localisations.py
 # Now build the documentation. This assumes that we have the engine translations file locally.
 PYTHONPATH=$(pwd) python fusion_platform/documentation.py "../engine/engine/translations.py"
 
-rm -rf docs/fusion_platform
-pdoc --html --config show_inherited_members=True --output-dir docs --template-dir docs/template fusion_platform
+rm -rf docs/fusion_platform/*.html
+rm -rf docs/fusion_platform/models
+pdoc --html --config show_inherited_members=True --output-dir docs --template-dir docs/template --force fusion_platform
 
 # Delete any existing builds.
 rm -rf build
