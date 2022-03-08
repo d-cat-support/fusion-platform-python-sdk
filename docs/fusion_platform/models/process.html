@@ -1,0 +1,2088 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fusion_platform.models.process API documentation</title>
+<meta name="description" content="Process model class file …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fusion_platform.models.process</code></h1>
+</header>
+<section id="section-intro">
+<p>Process model class file.</p>
+<p>author: Matthew Casey</p>
+<p>&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Process model class file.
+
+author: Matthew Casey
+
+&amp;copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+&#34;&#34;&#34;
+
+from datetime import datetime, timedelta, timezone
+from functools import partial
+import i18n
+from marshmallow import Schema, EXCLUDE
+from time import sleep
+
+import fusion_platform
+from fusion_platform.models import fields
+from fusion_platform.models.data import Data
+from fusion_platform.models.model import Model, ModelError
+from fusion_platform.models.process_execution import ProcessExecution
+from fusion_platform.session import Session
+
+
+# Define a schema class used to coerce option values. See #__coerce_value.
+
+class OptionDataTypeSchema(Schema):
+    &#34;&#34;&#34;
+    Defines a Marshmallow schema which can be used to coerce any option value into its underlying Python data type.
+    &#34;&#34;&#34;
+
+    # List out all the allowed field types using their corresponding data type names.
+    numeric = fields.Float(allow_none=True)
+    currency = fields.Decimal(allow_none=True)
+    boolean = fields.Boolean(allow_none=True)
+    datetime = fields.DateTime(allow_none=True)
+    string = fields.String(allow_none=True)
+    constrained = fields.String(allow_none=True)
+
+
+# Define the model schema classes. These are maintained from the API definitions.
+
+class ProcessChainOptionSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for SSD chain option.
+    &#34;&#34;&#34;
+    name = fields.String(required=True)
+    value = fields.String(allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class ProcessChainSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for SSD chain.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    service_id = fields.UUID(required=True)
+    inputs = fields.List(fields.UUID(allow_none=True), allow_none=True)
+    outputs = fields.List(fields.UUID(required=True), allow_none=True)
+    options = fields.List(fields.Nested(ProcessChainOptionSchema()), allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class ProcessSelectorSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for selector, category, data type, unit and format.
+    &#34;&#34;&#34;
+    selector = fields.String(required=True)
+    category = fields.String(required=True)
+    data_type = fields.String(required=True)
+    unit = fields.String(allow_none=True)
+    validation = fields.String(allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class ProcessInputSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for the processes inputs.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    input = fields.Integer(required=True)
+    file_type = fields.String(required=True)
+    resolution = fields.Integer(allow_none=True)
+    selectors = fields.List(fields.Nested(ProcessSelectorSchema()), allow_none=True)
+    id = fields.UUID(required=True)
+    model = fields.String(required=True)
+    change_trigger = fields.Boolean(required=True)
+    change_hash = fields.String(allow_none=True)
+    title = fields.String(allow_none=True)
+    description = fields.String(allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class ProcessOptionSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for options which are provided to the SSD images when run.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    name = fields.String(required=True)
+    value = fields.String(allow_none=True)
+    required = fields.Boolean(required=True)
+    data_type = fields.String(required=True)
+    validation = fields.String(allow_none=True)
+    mutually_exclusive = fields.String(allow_none=True)
+    advanced = fields.Boolean(allow_none=True)
+    title = fields.String(allow_none=True)
+    description = fields.String(allow_none=True)
+
+    constrained_names = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_names.title&#39;),
+                                                                                             &#39;description&#39;: i18n.t(
+                                                                                                 &#39;models.process.option.constrained_names.description&#39;)})  # Added this field to gold extracted data.
+    constrained_values = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_values.title&#39;),
+                                                                                              &#39;description&#39;: i18n.t(
+                                                                                                  &#39;models.process.option.constrained_values.description&#39;)})  # Added this field to gold extracted data.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class ProcessSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for process model.
+
+    Each process model has the following fields (and nested fields):
+
+    .. include::process.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    organisation_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    ssd_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    service_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    name = fields.String(required=True)
+
+    inputs = fields.List(fields.Nested(ProcessInputSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    chains = fields.List(fields.Nested(ProcessChainSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed maximum_bounds.
+
+    run_type = fields.String(required=True)
+    repeat_count = fields.Integer(required=True)
+    repeat_start = fields.DateTime(required=True)
+    repeat_end = fields.DateTime(allow_none=True)
+    repeat_gap = fields.RelativeDelta(allow_none=True)
+    repeat_offset = fields.TimeDelta(allow_none=True)
+
+    process_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    process_status_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    output_storage_period = fields.Integer(allow_none=True)
+    test_run = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed prices.
+    price = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    executions = fields.Boolean(allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+
+    # Removed creator.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class Process(Model):
+    &#34;&#34;&#34;
+    Process model class providing attributes and methods to manipulate process item details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = ProcessSchema()
+
+    # Override the base model class name.
+    _BASE_MODEL_CLASS_NAME = &#39;Organisation&#39;  # A string to prevent circular imports.
+
+    # Base path.
+    _PATH_ROOT = &#39;/organisations/{organisation_id}/processes&#39;
+    _PATH_BASE = f&#34;{_PATH_ROOT}/{{process_id}}&#34;
+
+    # Override the standard model paths.
+    _PATH_CREATE = _PATH_ROOT
+    _PATH_DELETE = _PATH_BASE
+    _PATH_GET = _PATH_BASE
+    _PATH_NEW = f&#34;{_PATH_ROOT}/new&#34;
+    _PATH_PATCH = _PATH_BASE
+
+    # Add in the custom model paths.
+    _PATH_EXECUTE = f&#34;{_PATH_BASE}/execute&#34;
+    _PATH_EXECUTIONS = f&#34;{_PATH_BASE}/executions&#34;
+    _PATH_STOP = f&#34;{_PATH_BASE}/stop&#34;
+
+    # Process status values.
+    _PROCESS_STATUS_EXECUTE = &#39;execute&#39;
+
+    # The maximum number of seconds to wait after an execution was meant to start.
+    _EXECUTE_WAIT_TOLERANCE = 60
+
+    # Validation parsing for constrained values.
+    _VALIDATION_DELIMITER = &#39;;&#39;
+    _VALIDATION_EQUALS = &#39;=&#39;
+    _VALIDATION_FORMAT = &#39;format&#39;
+    _VALIDATION_ITEM_DELIMITER = &#39;,&#39;
+    _VALIDATION_NAMES = &#39;names&#39;
+    _VALIDATION_VALUES = &#39;values&#39;
+
+    @classmethod
+    def __coerce_value(cls, value, data_type):
+        &#34;&#34;&#34;
+        Attempts to coerce a value into its corresponding data type.
+
+        Args:
+            value: The value to coerce.
+            data_type: The required data type.
+
+        Returns:
+            The coerced value of the correct data type.
+        &#34;&#34;&#34;
+        # Deal with None values.
+        if (value is None) or (value == str(None)) or (value == &#39;null&#39;):
+            return None
+        else:
+            # Use the option schema to attempt to load the value using its data type as a name.
+            model = OptionDataTypeSchema().load({data_type: value})
+            return model.get(data_type)
+
+    def create(self):
+        &#34;&#34;&#34;
+        Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Attempt to issue the create.
+        self._create()
+
+    def execute(self, wait=False):
+        &#34;&#34;&#34;
+        Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
+
+        Args:
+            wait: Optionally wait for the next execution to start and complete? Default False.
+
+        Raises:
+            RequestError: if the execute fails.
+            ModelError: if the execution fails.
+        &#34;&#34;&#34;
+        # Send the request and load the resulting model.
+        self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
+
+        if wait:
+            # If we are waiting for the execution to complete, wait for the next execution to start...
+            self.wait_for_next_execution()
+
+            # ...and for all the executions to complete.
+            for execution in self.executions:
+                execution.check_complete(wait=wait)
+
+    @property
+    def executions(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39;s executions.
+
+        Returns:
+            An iterator through the execution objects.
+        
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
+
+    @classmethod
+    def __extract_constrained_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the constrained values from a constrained option validation.
+
+        Args:
+            validation: The constrained option validation.
+
+        Returns:
+            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Process._VALIDATION_DELIMITER)
+        constrained_names = None
+        constrained_values = None
+
+        if len(elements) &lt;= 2:
+            for element in elements:
+                values = element.split(Process._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Process._VALIDATION_VALUES:
+                            constrained_values = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
+
+                        if lhs == Process._VALIDATION_NAMES:
+                            constrained_names = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
+                    except:
+                        pass  # Cannot be parsed.
+
+        return constrained_names, constrained_values
+
+    @classmethod
+    def __extract_datetime_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the datetime format from a datatime option validation.
+
+        Args:
+            validation: The datatime option validation.
+
+        Returns:
+            The datetime format, or None if it cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Process._VALIDATION_DELIMITER)
+        format = None
+
+        if len(elements) &lt;= 3:
+            for element in elements:
+                values = element.split(Process._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Process._VALIDATION_FORMAT:
+                            format = rhs
+                    except:
+                        pass  # Cannot be parsed.
+
+        return format
+
+    def find_executions(self, id=None, group_id=None):
+        &#34;&#34;&#34;
+        Searches for the process&#39;s executions with the specified id and/or group id, returning the first object found and an iterator.
+
+        Args:
+            id: The execution id to search for.
+            group_id: The execution group id to search for.
+
+        Returns:
+            The first found execution object, or None if not found, and an iterator through the found execution objects.
+        
+        Raises:
+            RequestError if any get fails.
+            ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
+
+        # Build the partial find generator and execute it.
+        find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    @property
+    def inputs(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; inputs.
+
+        Returns:
+            An iterator through the inputs.
+        &#34;&#34;&#34;
+        for input in self._model.get(self.__class__._FIELD_INPUTS, []):
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+            input = dict(input)
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Model(None, schema=ProcessInputSchema())
+            model._set_model(input)
+
+            yield model
+
+    @property
+    def options(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; options.
+
+        Returns:
+            An iterator through the options.
+        &#34;&#34;&#34;
+        for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+            option = dict(option)
+
+            # If the option is a constrained data type, then add in the constrained names and values from the validation.
+            if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
+                option[self.__class__._FIELD_CONSTRAINED_NAMES], option[self.__class__._FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
+                    option.get(self.__class__._FIELD_VALIDATION, &#39;&#39;))
+
+            # Coerce the value to be of the correct data type.
+            option[self.__class__._FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__._FIELD_VALUE),
+                                                                                option.get(self.__class__._FIELD_DATA_TYPE))
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Model(None, schema=ProcessOptionSchema())
+            model._set_model(option)
+
+            yield model
+
+    def __set_input(self, number=None, input=None, data=None):
+        &#34;&#34;&#34;
+        Sets the specified input for the process to the data item. An exception is raised if the process is in the execute status, the input does not exist, is not
+        ready to be used or has the wrong file type.
+
+        Args:
+            number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided.
+            input: The input object for the input to set. Either the number or the input must be provided.
+            data: The data object to use for the input.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the input does not exist.
+            ModelError: if the data object is ready to be used in a process.
+            ModelError: if the data object has a different file type to the input.
+        &#34;&#34;&#34;
+        # Make sure the arguments are provided.
+        if (number is None) and (input is None):
+            raise ModelError(i18n.t(&#39;models.process.input_not_specified&#39;))
+
+        if (data is None) or (not isinstance(data, Data)):
+            raise ModelError(i18n.t(&#39;models.process.data_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding input.
+        index = None
+        found_input = None
+
+        for index, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
+            found = (number is not None) and (number == item.get(self.__class__._FIELD_INPUT))
+            found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
+                    input.input == item.get(self.__class__._FIELD_INPUT)) if not found else found
+
+            if found:
+                found_input = item
+                break
+
+        if found_input is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_input&#39;))
+
+        # Check that all the files in the data object are ready to be used. Along the way, pick out the first file type.
+        found_file_type = None
+        ready = True
+
+        for file in data.files:
+            found_file_type = file.file_type if found_file_type is None else found_file_type
+
+            if not hasattr(file, self.__class__._FIELD_PUBLISHABLE):
+                ready = False
+
+        if not ready:
+            raise ModelError(i18n.t(&#39;models.process.data_not_ready&#39;))
+
+        # Check the file type.
+        if found_input.get(self.__class__._FIELD_FILE_TYPE) != found_file_type:
+            raise ModelError(i18n.t(&#39;models.process.wrong_file_type&#39;, expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
+
+        # We can now update the input.
+        self._set_field([self.__class__._FIELD_INPUTS, index, self.__class__._FIELD_ID], data.id)
+
+    def __set_option(self, name=None, option=None, value=None):
+        &#34;&#34;&#34;
+        Sets the specified option for the process to the value. An exception is raised if the process is in the execute status, the option does not exist or the
+        value has the wrong type.
+
+        Args:
+            name: The option name to set. Either the name or the option must be provided.
+            option: The option object for the option to set. Either the name or the option must be provided.
+            value: The value for the option.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the value has a different type to the option.
+        &#34;&#34;&#34;
+        # Make sure the arguments are provided.
+        if (name is None) and (option is None):
+            raise ModelError(i18n.t(&#39;models.process.option_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding option.
+        index = None
+        found_option = None
+
+        for index, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
+            found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME))
+            found = (option is not None) and (str(option.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
+                    option.name == item.get(self.__class__._FIELD_NAME)) if not found else found
+
+            if found:
+                found_option = item
+                break
+
+        if found_option is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
+
+        # Check that the option has the same data type as the value. We cannot check this if either value is None.
+        data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
+        existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
+
+        if (value is not None) and (existing_value is not None) and (not isinstance(value, existing_value.__class__)):
+            raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
+
+        # We can now update the option. All options are expressed as strings with the correct format.
+        validation = found_option.get(self.__class__._FIELD_VALIDATION)
+        self._set_field([self.__class__._FIELD_OPTIONS, index, self.__class__._FIELD_VALUE], self.__class__.__value_to_option(value, data_type, validation))
+
+    def stop(self):
+        &#34;&#34;&#34;
+        Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.
+
+        Raises:
+            RequestError: if the stop fails.
+        &#34;&#34;&#34;
+        # Send the request and load the resulting model.
+        self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)
+
+    def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, **kwargs):
+        &#34;&#34;&#34;
+        Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
+        contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
+        of setting inputs and options.
+
+        Args:
+            input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
+            input: The input object for the input to set. Either the number or the input must be provided when setting an input.
+            data: The data object to use for an input.
+            option_name: The option name to set. Either the name or the option must be provided when setting an option.
+            option: The option object for the option to set. Either the name or the option must be provided when setting an option.
+            value: The value for the option.
+            kwargs: The model attributes which are to be patched.
+
+        Raises:
+            RequestError: if the update fails.
+            ModelError: if the process is in the execute state.
+            ModelError: if the process has been persisted and changes are requested to an input or option.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Deal with the special case of inputs.
+        if (input_number is not None) or (input is not None):
+            self.__set_input(number=input_number, input=input, data=data)
+
+        # Deal with the special case of options.
+        if (option_name is not None) or (option is not None):
+            self.__set_option(name=option_name, option=option, value=value)
+
+        # Now update the model, persisting as needed.
+        super(Process, self).update(**kwargs)
+
+    @classmethod
+    def __value_to_option(cls, value, data_type, validation):
+        &#34;&#34;&#34;
+        Converts a Python option value into a string depending upon its data type and validation parameters.
+
+        Args:
+            value: The value to convert.
+            data_type: The option data type.
+            validation: The optional validation for the option.
+
+        Returns:
+            The correct string representation of the option.
+        &#34;&#34;&#34;
+        if value is None:
+            return None
+        elif isinstance(value, bool):
+            return str(value).lower()
+        if data_type == fusion_platform.DATA_TYPE_DATETIME:
+            return datetime.strftime(value, cls.__extract_datetime_validation(validation))
+        else:
+            return str(value)
+
+    def wait_for_next_execution(self):
+        &#34;&#34;&#34;
+        Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
+        Otherwise, this method will block until the next scheduled execution has started. An exception will be raised if the process is not being executed.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if the process is not being executed.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Wait until we find the next execution.
+        while True:
+            # Load in the most recent version of the model.
+            self.get(organisation_id=self.organisation_id)
+
+            # Make sure the process is executable.
+            if self.process_status != Process._PROCESS_STATUS_EXECUTE:
+                raise ModelError(i18n.t(&#39;models.process.not_executable&#39;))
+
+            # Get the most recent execution for the process. This assumes that the executions are returned with the most recent first.
+            self._logger.debug(&#39;checking for next execution&#39;)
+            executions = ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), items_per_request=1, reverse=True)
+            execution = next(executions, None)
+
+            # Ignore any execution older than when the next execution is expected. This assumes that the process repeat start is maintained correctly, and that it
+            # is set after any corresponding executions have been created for the current repeat start.
+            execution = None if (execution is not None) and (execution.created_at &lt; self.repeat_start) else execution
+
+            # Stop if we have an execution which is beyond the repeat start date.
+            if execution is not None:
+                self._logger.debug(&#39;execution %s found&#39;, execution.id)
+                break
+
+            # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.
+            if (execution is None) and (self.repeat_start + timedelta(seconds=Process._EXECUTE_WAIT_TOLERANCE)) &lt; datetime.now(timezone.utc):
+                raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
+
+            # We are waiting, so block for a short while.
+            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fusion_platform.models.process.OptionDataTypeSchema"><code class="flex name class">
+<span>class <span class="ident">OptionDataTypeSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a Marshmallow schema which can be used to coerce any option value into its underlying Python data type.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OptionDataTypeSchema(Schema):
+    &#34;&#34;&#34;
+    Defines a Marshmallow schema which can be used to coerce any option value into its underlying Python data type.
+    &#34;&#34;&#34;
+
+    # List out all the allowed field types using their corresponding data type names.
+    numeric = fields.Float(allow_none=True)
+    currency = fields.Decimal(allow_none=True)
+    boolean = fields.Boolean(allow_none=True)
+    datetime = fields.DateTime(allow_none=True)
+    string = fields.String(allow_none=True)
+    constrained = fields.String(allow_none=True)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.OptionDataTypeSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.Process"><code class="flex name class">
+<span>class <span class="ident">Process</span></span>
+<span>(</span><span>session, schema=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Process model class providing attributes and methods to manipulate process item details.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Process(Model):
+    &#34;&#34;&#34;
+    Process model class providing attributes and methods to manipulate process item details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = ProcessSchema()
+
+    # Override the base model class name.
+    _BASE_MODEL_CLASS_NAME = &#39;Organisation&#39;  # A string to prevent circular imports.
+
+    # Base path.
+    _PATH_ROOT = &#39;/organisations/{organisation_id}/processes&#39;
+    _PATH_BASE = f&#34;{_PATH_ROOT}/{{process_id}}&#34;
+
+    # Override the standard model paths.
+    _PATH_CREATE = _PATH_ROOT
+    _PATH_DELETE = _PATH_BASE
+    _PATH_GET = _PATH_BASE
+    _PATH_NEW = f&#34;{_PATH_ROOT}/new&#34;
+    _PATH_PATCH = _PATH_BASE
+
+    # Add in the custom model paths.
+    _PATH_EXECUTE = f&#34;{_PATH_BASE}/execute&#34;
+    _PATH_EXECUTIONS = f&#34;{_PATH_BASE}/executions&#34;
+    _PATH_STOP = f&#34;{_PATH_BASE}/stop&#34;
+
+    # Process status values.
+    _PROCESS_STATUS_EXECUTE = &#39;execute&#39;
+
+    # The maximum number of seconds to wait after an execution was meant to start.
+    _EXECUTE_WAIT_TOLERANCE = 60
+
+    # Validation parsing for constrained values.
+    _VALIDATION_DELIMITER = &#39;;&#39;
+    _VALIDATION_EQUALS = &#39;=&#39;
+    _VALIDATION_FORMAT = &#39;format&#39;
+    _VALIDATION_ITEM_DELIMITER = &#39;,&#39;
+    _VALIDATION_NAMES = &#39;names&#39;
+    _VALIDATION_VALUES = &#39;values&#39;
+
+    @classmethod
+    def __coerce_value(cls, value, data_type):
+        &#34;&#34;&#34;
+        Attempts to coerce a value into its corresponding data type.
+
+        Args:
+            value: The value to coerce.
+            data_type: The required data type.
+
+        Returns:
+            The coerced value of the correct data type.
+        &#34;&#34;&#34;
+        # Deal with None values.
+        if (value is None) or (value == str(None)) or (value == &#39;null&#39;):
+            return None
+        else:
+            # Use the option schema to attempt to load the value using its data type as a name.
+            model = OptionDataTypeSchema().load({data_type: value})
+            return model.get(data_type)
+
+    def create(self):
+        &#34;&#34;&#34;
+        Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Attempt to issue the create.
+        self._create()
+
+    def execute(self, wait=False):
+        &#34;&#34;&#34;
+        Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
+
+        Args:
+            wait: Optionally wait for the next execution to start and complete? Default False.
+
+        Raises:
+            RequestError: if the execute fails.
+            ModelError: if the execution fails.
+        &#34;&#34;&#34;
+        # Send the request and load the resulting model.
+        self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
+
+        if wait:
+            # If we are waiting for the execution to complete, wait for the next execution to start...
+            self.wait_for_next_execution()
+
+            # ...and for all the executions to complete.
+            for execution in self.executions:
+                execution.check_complete(wait=wait)
+
+    @property
+    def executions(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39;s executions.
+
+        Returns:
+            An iterator through the execution objects.
+        
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
+
+    @classmethod
+    def __extract_constrained_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the constrained values from a constrained option validation.
+
+        Args:
+            validation: The constrained option validation.
+
+        Returns:
+            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Process._VALIDATION_DELIMITER)
+        constrained_names = None
+        constrained_values = None
+
+        if len(elements) &lt;= 2:
+            for element in elements:
+                values = element.split(Process._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Process._VALIDATION_VALUES:
+                            constrained_values = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
+
+                        if lhs == Process._VALIDATION_NAMES:
+                            constrained_names = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
+                    except:
+                        pass  # Cannot be parsed.
+
+        return constrained_names, constrained_values
+
+    @classmethod
+    def __extract_datetime_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the datetime format from a datatime option validation.
+
+        Args:
+            validation: The datatime option validation.
+
+        Returns:
+            The datetime format, or None if it cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Process._VALIDATION_DELIMITER)
+        format = None
+
+        if len(elements) &lt;= 3:
+            for element in elements:
+                values = element.split(Process._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Process._VALIDATION_FORMAT:
+                            format = rhs
+                    except:
+                        pass  # Cannot be parsed.
+
+        return format
+
+    def find_executions(self, id=None, group_id=None):
+        &#34;&#34;&#34;
+        Searches for the process&#39;s executions with the specified id and/or group id, returning the first object found and an iterator.
+
+        Args:
+            id: The execution id to search for.
+            group_id: The execution group id to search for.
+
+        Returns:
+            The first found execution object, or None if not found, and an iterator through the found execution objects.
+        
+        Raises:
+            RequestError if any get fails.
+            ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
+
+        # Build the partial find generator and execute it.
+        find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    @property
+    def inputs(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; inputs.
+
+        Returns:
+            An iterator through the inputs.
+        &#34;&#34;&#34;
+        for input in self._model.get(self.__class__._FIELD_INPUTS, []):
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+            input = dict(input)
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Model(None, schema=ProcessInputSchema())
+            model._set_model(input)
+
+            yield model
+
+    @property
+    def options(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; options.
+
+        Returns:
+            An iterator through the options.
+        &#34;&#34;&#34;
+        for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+            option = dict(option)
+
+            # If the option is a constrained data type, then add in the constrained names and values from the validation.
+            if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
+                option[self.__class__._FIELD_CONSTRAINED_NAMES], option[self.__class__._FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
+                    option.get(self.__class__._FIELD_VALIDATION, &#39;&#39;))
+
+            # Coerce the value to be of the correct data type.
+            option[self.__class__._FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__._FIELD_VALUE),
+                                                                                option.get(self.__class__._FIELD_DATA_TYPE))
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Model(None, schema=ProcessOptionSchema())
+            model._set_model(option)
+
+            yield model
+
+    def __set_input(self, number=None, input=None, data=None):
+        &#34;&#34;&#34;
+        Sets the specified input for the process to the data item. An exception is raised if the process is in the execute status, the input does not exist, is not
+        ready to be used or has the wrong file type.
+
+        Args:
+            number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided.
+            input: The input object for the input to set. Either the number or the input must be provided.
+            data: The data object to use for the input.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the input does not exist.
+            ModelError: if the data object is ready to be used in a process.
+            ModelError: if the data object has a different file type to the input.
+        &#34;&#34;&#34;
+        # Make sure the arguments are provided.
+        if (number is None) and (input is None):
+            raise ModelError(i18n.t(&#39;models.process.input_not_specified&#39;))
+
+        if (data is None) or (not isinstance(data, Data)):
+            raise ModelError(i18n.t(&#39;models.process.data_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding input.
+        index = None
+        found_input = None
+
+        for index, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
+            found = (number is not None) and (number == item.get(self.__class__._FIELD_INPUT))
+            found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
+                    input.input == item.get(self.__class__._FIELD_INPUT)) if not found else found
+
+            if found:
+                found_input = item
+                break
+
+        if found_input is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_input&#39;))
+
+        # Check that all the files in the data object are ready to be used. Along the way, pick out the first file type.
+        found_file_type = None
+        ready = True
+
+        for file in data.files:
+            found_file_type = file.file_type if found_file_type is None else found_file_type
+
+            if not hasattr(file, self.__class__._FIELD_PUBLISHABLE):
+                ready = False
+
+        if not ready:
+            raise ModelError(i18n.t(&#39;models.process.data_not_ready&#39;))
+
+        # Check the file type.
+        if found_input.get(self.__class__._FIELD_FILE_TYPE) != found_file_type:
+            raise ModelError(i18n.t(&#39;models.process.wrong_file_type&#39;, expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
+
+        # We can now update the input.
+        self._set_field([self.__class__._FIELD_INPUTS, index, self.__class__._FIELD_ID], data.id)
+
+    def __set_option(self, name=None, option=None, value=None):
+        &#34;&#34;&#34;
+        Sets the specified option for the process to the value. An exception is raised if the process is in the execute status, the option does not exist or the
+        value has the wrong type.
+
+        Args:
+            name: The option name to set. Either the name or the option must be provided.
+            option: The option object for the option to set. Either the name or the option must be provided.
+            value: The value for the option.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the value has a different type to the option.
+        &#34;&#34;&#34;
+        # Make sure the arguments are provided.
+        if (name is None) and (option is None):
+            raise ModelError(i18n.t(&#39;models.process.option_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding option.
+        index = None
+        found_option = None
+
+        for index, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
+            found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME))
+            found = (option is not None) and (str(option.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
+                    option.name == item.get(self.__class__._FIELD_NAME)) if not found else found
+
+            if found:
+                found_option = item
+                break
+
+        if found_option is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
+
+        # Check that the option has the same data type as the value. We cannot check this if either value is None.
+        data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
+        existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
+
+        if (value is not None) and (existing_value is not None) and (not isinstance(value, existing_value.__class__)):
+            raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
+
+        # We can now update the option. All options are expressed as strings with the correct format.
+        validation = found_option.get(self.__class__._FIELD_VALIDATION)
+        self._set_field([self.__class__._FIELD_OPTIONS, index, self.__class__._FIELD_VALUE], self.__class__.__value_to_option(value, data_type, validation))
+
+    def stop(self):
+        &#34;&#34;&#34;
+        Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.
+
+        Raises:
+            RequestError: if the stop fails.
+        &#34;&#34;&#34;
+        # Send the request and load the resulting model.
+        self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)
+
+    def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, **kwargs):
+        &#34;&#34;&#34;
+        Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
+        contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
+        of setting inputs and options.
+
+        Args:
+            input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
+            input: The input object for the input to set. Either the number or the input must be provided when setting an input.
+            data: The data object to use for an input.
+            option_name: The option name to set. Either the name or the option must be provided when setting an option.
+            option: The option object for the option to set. Either the name or the option must be provided when setting an option.
+            value: The value for the option.
+            kwargs: The model attributes which are to be patched.
+
+        Raises:
+            RequestError: if the update fails.
+            ModelError: if the process is in the execute state.
+            ModelError: if the process has been persisted and changes are requested to an input or option.
+            ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Deal with the special case of inputs.
+        if (input_number is not None) or (input is not None):
+            self.__set_input(number=input_number, input=input, data=data)
+
+        # Deal with the special case of options.
+        if (option_name is not None) or (option is not None):
+            self.__set_option(name=option_name, option=option, value=value)
+
+        # Now update the model, persisting as needed.
+        super(Process, self).update(**kwargs)
+
+    @classmethod
+    def __value_to_option(cls, value, data_type, validation):
+        &#34;&#34;&#34;
+        Converts a Python option value into a string depending upon its data type and validation parameters.
+
+        Args:
+            value: The value to convert.
+            data_type: The option data type.
+            validation: The optional validation for the option.
+
+        Returns:
+            The correct string representation of the option.
+        &#34;&#34;&#34;
+        if value is None:
+            return None
+        elif isinstance(value, bool):
+            return str(value).lower()
+        if data_type == fusion_platform.DATA_TYPE_DATETIME:
+            return datetime.strftime(value, cls.__extract_datetime_validation(validation))
+        else:
+            return str(value)
+
+    def wait_for_next_execution(self):
+        &#34;&#34;&#34;
+        Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
+        Otherwise, this method will block until the next scheduled execution has started. An exception will be raised if the process is not being executed.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if the process is not being executed.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Wait until we find the next execution.
+        while True:
+            # Load in the most recent version of the model.
+            self.get(organisation_id=self.organisation_id)
+
+            # Make sure the process is executable.
+            if self.process_status != Process._PROCESS_STATUS_EXECUTE:
+                raise ModelError(i18n.t(&#39;models.process.not_executable&#39;))
+
+            # Get the most recent execution for the process. This assumes that the executions are returned with the most recent first.
+            self._logger.debug(&#39;checking for next execution&#39;)
+            executions = ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), items_per_request=1, reverse=True)
+            execution = next(executions, None)
+
+            # Ignore any execution older than when the next execution is expected. This assumes that the process repeat start is maintained correctly, and that it
+            # is set after any corresponding executions have been created for the current repeat start.
+            execution = None if (execution is not None) and (execution.created_at &lt; self.repeat_start) else execution
+
+            # Stop if we have an execution which is beyond the repeat start date.
+            if execution is not None:
+                self._logger.debug(&#39;execution %s found&#39;, execution.id)
+                break
+
+            # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.
+            if (execution is None) and (self.repeat_start + timedelta(seconds=Process._EXECUTE_WAIT_TOLERANCE)) &lt; datetime.now(timezone.utc):
+                raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
+
+            # We are waiting, so block for a short while.
+            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.Process.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
+</p>
+<div class="desc inherited"><h2 id="returns">Returns</h2>
+<p>The model attributes as a dictionary.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Process.executions"><code class="name">var <span class="ident">executions</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the process's executions.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the execution objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def executions(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the process&#39;s executions.
+
+    Returns:
+        An iterator through the execution objects.
+    
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.inputs"><code class="name">var <span class="ident">inputs</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the process' inputs.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the inputs.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def inputs(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the process&#39; inputs.
+
+    Returns:
+        An iterator through the inputs.
+    &#34;&#34;&#34;
+    for input in self._model.get(self.__class__._FIELD_INPUTS, []):
+        # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+        input = dict(input)
+
+        # Encapsulate the dictionary within a model (which does not talk to the API).
+        model = Model(None, schema=ProcessInputSchema())
+        model._set_model(input)
+
+        yield model</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.options"><code class="name">var <span class="ident">options</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the process' options.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the options.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def options(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the process&#39; options.
+
+    Returns:
+        An iterator through the options.
+    &#34;&#34;&#34;
+    for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
+        # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+        option = dict(option)
+
+        # If the option is a constrained data type, then add in the constrained names and values from the validation.
+        if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
+            option[self.__class__._FIELD_CONSTRAINED_NAMES], option[self.__class__._FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
+                option.get(self.__class__._FIELD_VALIDATION, &#39;&#39;))
+
+        # Coerce the value to be of the correct data type.
+        option[self.__class__._FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__._FIELD_VALUE),
+                                                                            option.get(self.__class__._FIELD_DATA_TYPE))
+
+        # Encapsulate the dictionary within a model (which does not talk to the API).
+        model = Model(None, schema=ProcessOptionSchema())
+        model._set_model(option)
+
+        yield model</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.process.Process.create"><code class="name flex">
+<span>def <span class="ident">create</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Attempts to persist the template process in the Fusion Platform<sup>&reg;</sup> so that it can be executed.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the create fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create(self):
+    &#34;&#34;&#34;
+    Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
+
+    Raises:
+        RequestError: if the create fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Attempt to issue the create.
+    self._create()</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Process.execute"><code class="name flex">
+<span>def <span class="ident">execute</span></span>(<span>self, wait=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Attempts to execute the created process in the Fusion Platform<sup>&reg;</sup>. Optionally waits for the next execution to start, and then for it to complete.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>wait</code></strong></dt>
+<dd>Optionally wait for the next execution to start and complete? Default False.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the execute fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the execution fails.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute(self, wait=False):
+    &#34;&#34;&#34;
+    Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
+
+    Args:
+        wait: Optionally wait for the next execution to start and complete? Default False.
+
+    Raises:
+        RequestError: if the execute fails.
+        ModelError: if the execution fails.
+    &#34;&#34;&#34;
+    # Send the request and load the resulting model.
+    self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
+
+    if wait:
+        # If we are waiting for the execution to complete, wait for the next execution to start...
+        self.wait_for_next_execution()
+
+        # ...and for all the executions to complete.
+        for execution in self.executions:
+            execution.check_complete(wait=wait)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.find_executions"><code class="name flex">
+<span>def <span class="ident">find_executions</span></span>(<span>self, id=None, group_id=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Searches for the process's executions with the specified id and/or group id, returning the first object found and an iterator.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>The execution id to search for.</dd>
+<dt><strong><code>group_id</code></strong></dt>
+<dd>The execution group id to search for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The first found execution object, or None if not found, and an iterator through the found execution objects.</p>
+<h2 id="raises">Raises</h2>
+<p>RequestError if any get fails.
+ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_executions(self, id=None, group_id=None):
+    &#34;&#34;&#34;
+    Searches for the process&#39;s executions with the specified id and/or group id, returning the first object found and an iterator.
+
+    Args:
+        id: The execution id to search for.
+        group_id: The execution group id to search for.
+
+    Returns:
+        The first found execution object, or None if not found, and an iterator through the found execution objects.
+    
+    Raises:
+        RequestError if any get fails.
+        ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    filter = self.__class__._build_filter(
+        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
+
+    # Build the partial find generator and execute it.
+    find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
+    return self.__class__._first_and_generator(find)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.get" href="model.html#fusion_platform.models.model.Model.get">get</a></code>
+</p>
+<div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Process.stop"><code class="name flex">
+<span>def <span class="ident">stop</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the stop fails.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop(self):
+    &#34;&#34;&#34;
+    Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.
+
+    Raises:
+        RequestError: if the stop fails.
+    &#34;&#34;&#34;
+    # Send the request and load the resulting model.
+    self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.to_csv"><code class="name flex">
+<span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.to_csv" href="model.html#fusion_platform.models.model.Model.to_csv">to_csv</a></code>
+</p>
+<div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Process.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
+contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
+of setting inputs and options.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_number</code></strong></dt>
+<dd>The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.</dd>
+<dt><strong><code>input</code></strong></dt>
+<dd>The input object for the input to set. Either the number or the input must be provided when setting an input.</dd>
+<dt><strong><code>data</code></strong></dt>
+<dd>The data object to use for an input.</dd>
+<dt><strong><code>option_name</code></strong></dt>
+<dd>The option name to set. Either the name or the option must be provided when setting an option.</dd>
+<dt><strong><code>option</code></strong></dt>
+<dd>The option object for the option to set. Either the name or the option must be provided when setting an option.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>The value for the option.</dd>
+<dt><strong><code>kwargs</code></strong></dt>
+<dd>The model attributes which are to be patched.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the update fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the process is in the execute state.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the process has been persisted and changes are requested to an input or option.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, **kwargs):
+    &#34;&#34;&#34;
+    Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
+    contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
+    of setting inputs and options.
+
+    Args:
+        input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
+        input: The input object for the input to set. Either the number or the input must be provided when setting an input.
+        data: The data object to use for an input.
+        option_name: The option name to set. Either the name or the option must be provided when setting an option.
+        option: The option object for the option to set. Either the name or the option must be provided when setting an option.
+        value: The value for the option.
+        kwargs: The model attributes which are to be patched.
+
+    Raises:
+        RequestError: if the update fails.
+        ModelError: if the process is in the execute state.
+        ModelError: if the process has been persisted and changes are requested to an input or option.
+        ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Make sure the process is not in the execute state.
+    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+    # Deal with the special case of inputs.
+    if (input_number is not None) or (input is not None):
+        self.__set_input(number=input_number, input=input, data=data)
+
+    # Deal with the special case of options.
+    if (option_name is not None) or (option is not None):
+        self.__set_option(name=option_name, option=option, value=value)
+
+    # Now update the model, persisting as needed.
+    super(Process, self).update(**kwargs)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.wait_for_next_execution"><code class="name flex">
+<span>def <span class="ident">wait_for_next_execution</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
+Otherwise, this method will block until the next scheduled execution has started. An exception will be raised if the process is not being executed.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any request fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the process is not being executed.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_for_next_execution(self):
+    &#34;&#34;&#34;
+    Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
+    Otherwise, this method will block until the next scheduled execution has started. An exception will be raised if the process is not being executed.
+
+    Raises:
+        RequestError: if any request fails.
+        ModelError: if the process is not being executed.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Wait until we find the next execution.
+    while True:
+        # Load in the most recent version of the model.
+        self.get(organisation_id=self.organisation_id)
+
+        # Make sure the process is executable.
+        if self.process_status != Process._PROCESS_STATUS_EXECUTE:
+            raise ModelError(i18n.t(&#39;models.process.not_executable&#39;))
+
+        # Get the most recent execution for the process. This assumes that the executions are returned with the most recent first.
+        self._logger.debug(&#39;checking for next execution&#39;)
+        executions = ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), items_per_request=1, reverse=True)
+        execution = next(executions, None)
+
+        # Ignore any execution older than when the next execution is expected. This assumes that the process repeat start is maintained correctly, and that it
+        # is set after any corresponding executions have been created for the current repeat start.
+        execution = None if (execution is not None) and (execution.created_at &lt; self.repeat_start) else execution
+
+        # Stop if we have an execution which is beyond the repeat start date.
+        if execution is not None:
+            self._logger.debug(&#39;execution %s found&#39;, execution.id)
+            break
+
+        # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.
+        if (execution is None) and (self.repeat_start + timedelta(seconds=Process._EXECUTE_WAIT_TOLERANCE)) &lt; datetime.now(timezone.utc):
+            raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
+
+        # We are waiting, so block for a short while.
+        sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.ProcessChainOptionSchema"><code class="flex name class">
+<span>class <span class="ident">ProcessChainOptionSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for SSD chain option.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProcessChainOptionSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for SSD chain option.
+    &#34;&#34;&#34;
+    name = fields.String(required=True)
+    value = fields.String(allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessChainOptionSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessChainOptionSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.ProcessChainSchema"><code class="flex name class">
+<span>class <span class="ident">ProcessChainSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for SSD chain.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProcessChainSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for SSD chain.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    service_id = fields.UUID(required=True)
+    inputs = fields.List(fields.UUID(allow_none=True), allow_none=True)
+    outputs = fields.List(fields.UUID(required=True), allow_none=True)
+    options = fields.List(fields.Nested(ProcessChainOptionSchema()), allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessChainSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessChainSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.ProcessInputSchema"><code class="flex name class">
+<span>class <span class="ident">ProcessInputSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for the processes inputs.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProcessInputSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for the processes inputs.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    input = fields.Integer(required=True)
+    file_type = fields.String(required=True)
+    resolution = fields.Integer(allow_none=True)
+    selectors = fields.List(fields.Nested(ProcessSelectorSchema()), allow_none=True)
+    id = fields.UUID(required=True)
+    model = fields.String(required=True)
+    change_trigger = fields.Boolean(required=True)
+    change_hash = fields.String(allow_none=True)
+    title = fields.String(allow_none=True)
+    description = fields.String(allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessInputSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessInputSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.ProcessOptionSchema"><code class="flex name class">
+<span>class <span class="ident">ProcessOptionSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for options which are provided to the SSD images when run.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProcessOptionSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for options which are provided to the SSD images when run.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    name = fields.String(required=True)
+    value = fields.String(allow_none=True)
+    required = fields.Boolean(required=True)
+    data_type = fields.String(required=True)
+    validation = fields.String(allow_none=True)
+    mutually_exclusive = fields.String(allow_none=True)
+    advanced = fields.Boolean(allow_none=True)
+    title = fields.String(allow_none=True)
+    description = fields.String(allow_none=True)
+
+    constrained_names = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_names.title&#39;),
+                                                                                             &#39;description&#39;: i18n.t(
+                                                                                                 &#39;models.process.option.constrained_names.description&#39;)})  # Added this field to gold extracted data.
+    constrained_values = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_values.title&#39;),
+                                                                                              &#39;description&#39;: i18n.t(
+                                                                                                  &#39;models.process.option.constrained_values.description&#39;)})  # Added this field to gold extracted data.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessOptionSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessOptionSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.ProcessSchema"><code class="flex name class">
+<span>class <span class="ident">ProcessSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Schema class for process model.</p>
+<p>Each process model has the following fields (and nested fields):</p>
+<ul>
+<li><strong>id</strong>: The unique identifier for the record.</li>
+<li><strong>created_at</strong>: When was the record created?</li>
+<li><strong>updated_at</strong>: When was the record last updated?</li>
+<li><strong>organisation_id</strong>: The owning organisation.</li>
+<li><strong>ssd_id</strong>: The SSD for which this process.</li>
+<li><strong>service_id</strong>: The specific version of the SSD linked to this process.</li>
+<li><strong>name</strong>: The name of the process.</li>
+<li><strong>chains</strong>: The processing chain of SSDs which will be executed for this process.<ul>
+<li><strong>ssd_id</strong>: The SSD for this part of the chain.</li>
+<li><strong>service_id</strong>: The corresponding specific version of the SSD.</li>
+<li><strong>inputs</strong>: The inputs to the service.</li>
+<li><strong>outputs</strong>: The outputs from the service.</li>
+<li><strong>options</strong>: The options from the service.<ul>
+<li><strong>name</strong>: The name of the option.</li>
+<li><strong>value</strong>: The value for the option.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>run_type</strong>: How will the process be executed?</li>
+<li><strong>repeat_count</strong>: How many more repetitions of the process will there be?</li>
+<li><strong>repeat_start</strong>: When will the process repetitions next occur?</li>
+<li><strong>repeat_end</strong>: When will the process repetitions stop?</li>
+<li><strong>repeat_gap</strong>: How much time is there between repeated processes?</li>
+<li><strong>repeat_offset</strong>: At what offset from the repeat start will the process run?</li>
+<li><strong>process_status</strong>: The process status.</li>
+<li><strong>process_status_at</strong>: When was the process status changed?</li>
+<li><strong>output_storage_period</strong>: The number of days that outputs should be stored after execution before they are automatically deleted.</li>
+<li><strong>test_run</strong>: Is this a test run of a service?</li>
+<li><strong>price</strong>: The price in FPUs to execute this process given its inputs and options.</li>
+<li><strong>deletable</strong>: Is this process scheduled for deletion?</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProcessSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for process model.
+
+    Each process model has the following fields (and nested fields):
+
+    .. include::process.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    organisation_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    ssd_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    service_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    name = fields.String(required=True)
+
+    inputs = fields.List(fields.Nested(ProcessInputSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    chains = fields.List(fields.Nested(ProcessChainSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed maximum_bounds.
+
+    run_type = fields.String(required=True)
+    repeat_count = fields.Integer(required=True)
+    repeat_start = fields.DateTime(required=True)
+    repeat_end = fields.DateTime(allow_none=True)
+    repeat_gap = fields.RelativeDelta(allow_none=True)
+    repeat_offset = fields.TimeDelta(allow_none=True)
+
+    process_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    process_status_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    output_storage_period = fields.Integer(allow_none=True)
+    test_run = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed prices.
+    price = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    executions = fields.Boolean(allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+
+    # Removed creator.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.ProcessSelectorSchema"><code class="flex name class">
+<span>class <span class="ident">ProcessSelectorSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for selector, category, data type, unit and format.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProcessSelectorSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for selector, category, data type, unit and format.
+    &#34;&#34;&#34;
+    selector = fields.String(required=True)
+    category = fields.String(required=True)
+    data_type = fields.String(required=True)
+    unit = fields.String(allow_none=True)
+    validation = fields.String(allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessSelectorSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessSelectorSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<header>
+<img src="https://raw.githubusercontent.com/d-cat-support/fusion-platform-python-sdk/master/docs/logo.png" alt="D-CAT">
+<h2>
+Fusion Platform<sup>&reg;</sup> Python SDK
+</h2>
+<p>
+&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
+<p>
+</header>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fusion_platform.models" href="index.html">fusion_platform.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fusion_platform.models.process.OptionDataTypeSchema" href="#fusion_platform.models.process.OptionDataTypeSchema">OptionDataTypeSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.OptionDataTypeSchema.opts" href="#fusion_platform.models.process.OptionDataTypeSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.Process" href="#fusion_platform.models.process.Process">Process</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.Process.attributes" href="model.html#fusion_platform.models.process.Process.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.create" href="#fusion_platform.models.process.Process.create">create</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.delete" href="model.html#fusion_platform.models.process.Process.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.execute" href="#fusion_platform.models.process.Process.execute">execute</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.executions" href="#fusion_platform.models.process.Process.executions">executions</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.find_executions" href="#fusion_platform.models.process.Process.find_executions">find_executions</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.get" href="model.html#fusion_platform.models.process.Process.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.inputs" href="#fusion_platform.models.process.Process.inputs">inputs</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.options" href="#fusion_platform.models.process.Process.options">options</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.stop" href="#fusion_platform.models.process.Process.stop">stop</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.to_csv" href="model.html#fusion_platform.models.process.Process.to_csv">to_csv</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.update" href="#fusion_platform.models.process.Process.update">update</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.wait_for_next_execution" href="#fusion_platform.models.process.Process.wait_for_next_execution">wait_for_next_execution</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.ProcessChainOptionSchema" href="#fusion_platform.models.process.ProcessChainOptionSchema">ProcessChainOptionSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessChainOptionSchema.Meta" href="#fusion_platform.models.process.ProcessChainOptionSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessChainOptionSchema.opts" href="#fusion_platform.models.process.ProcessChainOptionSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.ProcessChainSchema" href="#fusion_platform.models.process.ProcessChainSchema">ProcessChainSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessChainSchema.Meta" href="#fusion_platform.models.process.ProcessChainSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessChainSchema.opts" href="#fusion_platform.models.process.ProcessChainSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.ProcessInputSchema" href="#fusion_platform.models.process.ProcessInputSchema">ProcessInputSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessInputSchema.Meta" href="#fusion_platform.models.process.ProcessInputSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessInputSchema.opts" href="#fusion_platform.models.process.ProcessInputSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.ProcessOptionSchema" href="#fusion_platform.models.process.ProcessOptionSchema">ProcessOptionSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessOptionSchema.Meta" href="#fusion_platform.models.process.ProcessOptionSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessOptionSchema.opts" href="#fusion_platform.models.process.ProcessOptionSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.ProcessSchema" href="#fusion_platform.models.process.ProcessSchema">ProcessSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessSchema.Meta" href="#fusion_platform.models.process.ProcessSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessSchema.opts" href="#fusion_platform.models.process.ProcessSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.ProcessSelectorSchema" href="#fusion_platform.models.process.ProcessSelectorSchema">ProcessSelectorSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessSelectorSchema.Meta" href="#fusion_platform.models.process.ProcessSelectorSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessSelectorSchema.opts" href="#fusion_platform.models.process.ProcessSelectorSchema.opts">opts</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

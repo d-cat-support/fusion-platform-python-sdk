@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fusion_platform.session API documentation</title>
+<meta name="description" content="Session class file …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fusion_platform.session</code></h1>
+</header>
+<section id="section-intro">
+<p>Session class file.</p>
+<p>author: Matthew Casey</p>
+<p>&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Session class file.
+
+author: Matthew Casey
+
+&amp;copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+&#34;&#34;&#34;
+
+import i18n
+import json
+import jwt
+import os
+import requests
+
+from fusion_platform.base import Base
+from fusion_platform.common.utilities import json_default
+
+
+class SessionError(Exception):
+    &#34;&#34;&#34;
+    Base exception raised on request failure.
+    &#34;&#34;&#34;
+    pass
+
+
+class RequestError(SessionError):
+    &#34;&#34;&#34;
+    Exception raised on request failure.
+    &#34;&#34;&#34;
+    pass
+
+
+class ValueError(SessionError):
+    &#34;&#34;&#34;
+    Exception raised on login failure.
+    &#34;&#34;&#34;
+    pass
+
+
+class Session(Base):
+    &#34;&#34;&#34;
+    Provides a session for use in interfacing with the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; API.
+    &#34;&#34;&#34;
+
+    # HTTP methods.
+    METHOD_DELETE = &#39;DELETE&#39;
+    METHOD_GET = &#39;GET&#39;
+    METHOD_POST = &#39;POST&#39;
+    METHOD_PATCH = &#39;PATCH&#39;
+    METHOD_PUT = &#39;PUT&#39;
+
+    # Default Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; API endpoint.
+    API_URL_DEFAULT = &#39;https://api.thefusionplatform.com&#39;
+
+    # Mask keys.
+    _MASK_KEYS = [&#39;password&#39;, &#39;old_password&#39;, &#39;new_password&#39;, &#39;access_token&#39;, &#39;id_token&#39;, &#39;refresh_token&#39;]
+
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initialises the object.
+        &#34;&#34;&#34;
+        super(Session, self).__init__()
+
+        # Initialise the private fields.
+        self.__user_id = None
+        self.__bearer_token = None
+        self.__api_url = Session.API_URL_DEFAULT
+
+    def download_file(self, url, destination, callback=None):
+        &#34;&#34;&#34;
+        Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
+        arguments which are the URL, destination and the number of bytes downloaded so far.
+
+        Args:
+            url: The URL to download as a file.
+            destination: The destination file path.
+            callback: The optional callback method used to receive download progress.
+        &#34;&#34;&#34;
+        # Make sure the destination directory exists.
+        directory = os.path.dirname(destination.strip())
+
+        if len(directory) &gt; 0:
+            os.makedirs(directory, exist_ok=True)
+
+        try:
+            # Download the file in chunks.
+            self._logger.info(&#39;downloading %s -&gt; %s&#39;, url, destination)
+            response = requests.get(url, stream=True)
+
+            # Raise any errors.
+            if not response:
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+            # Download the content to file as a series of chunks.
+            download_size = 0
+
+            with open(destination, &#39;wb&#39;) as file:
+                for chunk in response.iter_content(chunk_size=8192):
+                    file.write(chunk)
+                    download_size += len(chunk)
+                    self._logger.debug(&#39;downloaded %d bytes&#39;, download_size)
+
+                    if callback is not None:
+                        callback(url, destination, download_size)
+
+            self._logger.info(&#39;downloaded %s&#39;, destination)
+
+        except RequestError:
+            raise
+
+        except Exception as e:
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    def __filter_nested_dictionary(self, dictionary):
+        &#34;&#34;&#34;
+        Recursively filters a nested dictionary to mask out any keys which should be masked.
+
+        Args:
+            dictionary: The nested dictionary to mask.
+
+        Returns:
+            The masked nested dictionary.
+        &#34;&#34;&#34;
+        if (dictionary is not None) and isinstance(dictionary, dict):
+            return {key: &#39;*****&#39; if key in Session._MASK_KEYS else self.__filter_nested_dictionary(value) for key, value in dictionary.items()}
+        else:
+            return dictionary
+
+    def login(self, email=None, user_id=None, password=None, api_url=None):
+        &#34;&#34;&#34;
+        Attempts to log into the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; to return a user model for the active session.
+
+        Args:
+        email: The user account email address. Either an email address or a user id must be provided.
+        user_id: The user account user id. Either an email address or a user id must be provided.
+        password: The password for the user account.
+        api_url: The optional custom API URL to use. Defaults to the production Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+        Returns:
+            The corresponding user id on successful login.
+
+        Raises:
+            ValueError: on incorrect parameters.
+            RequestError: on login failure.
+        &#34;&#34;&#34;
+        # Make sure we have all the required parameters.
+        if (email is None) and (user_id is None):
+            raise ValueError(i18n.t(&#39;session.missing_email_user_id&#39;))
+
+        if password is None:
+            raise ValueError(i18n.t(&#39;session.missing_password&#39;))
+
+        # Set any custom API URL.
+        if api_url is not None:
+            self.__api_url = api_url
+
+        # Login.
+        self._logger.debug(&#39;logging in...&#39;)
+        body = {&#39;User&#39;: {&#39;email&#39;: email, &#39;user_id&#39;: user_id, &#39;password&#39;: password}}
+        response = self.request(path=&#39;/users/login&#39;, method=Session.METHOD_POST, body=body)
+
+        id_token = response.get(&#39;id_token&#39;)
+
+        if id_token is not None:
+            self.__user_id = jwt.decode(id_token, options={&#39;verify_signature&#39;: False}).get(&#39;sub&#39;)
+
+        self.__bearer_token = response.get(&#39;access_token&#39;)
+
+        if (self.__user_id is None) or (self.__bearer_token is None):
+            raise RequestError(i18n.t(&#39;session.login_failed&#39;))
+
+        self._logger.debug(&#39;logged in&#39;)
+
+    def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
+        &#34;&#34;&#34;
+        Sends a request to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; using the specified path, method and JSON payload. This method will use the authentication bearer token, if
+        available.
+
+        Args:
+            path: The optional path. Default &#39;/&#39;.
+            query_parameters: The optional query parameters as a dictionary.
+            method: The optional RESTful method type. Default GET.
+            body: The optional body. Default None.
+
+        Returns:
+            The decoded response body.
+
+        Raises:
+            RequestError: if the request failed.
+        &#34;&#34;&#34;
+        # Optionally add the bearer token.
+        headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
+
+        if self.__bearer_token is not None:
+            headers[&#39;Authorization&#39;] = f&#34;Bearer {self.__bearer_token}&#34;
+
+        try:
+            # Issue the request.
+            self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
+            json_body = json.dumps(body, default=json_default) if body is not None else None
+            response = requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers)
+
+            # Raise any errors.
+            if not response:
+                message = str(response.status_code)
+
+                try:
+                    message = response.json().get(&#39;error_message&#39;)
+                    self._logger.error(message)
+                except:
+                    pass  # Ignore the inability to extract the error message.
+
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
+
+        except RequestError:
+            raise
+
+        except Exception as e:
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+        # Return the payload.
+        payload = response.json()
+        self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
+
+        return payload
+
+    def upload_file(self, url, source):
+        &#34;&#34;&#34;
+        Uploads a file from the source path.
+
+        Args:
+            url: The URL to download as a file.
+            source: The source file path.
+        &#34;&#34;&#34;
+        try:
+            # Upload the file as a data stream.
+            self._logger.info(&#39;uploading %s -&gt; %s&#39;, url, source)
+
+            with open(source, &#39;rb&#39;) as file:
+                response = requests.put(url, data=file)
+
+                # Raise any errors.
+                if not response:
+                    raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+            self._logger.info(&#39;uploaded %s&#39;, source)
+
+        except RequestError:
+            raise
+
+        except Exception as e:
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    @property
+    def user_id(self):
+        &#34;&#34;&#34;
+        Returns:
+            The user id.
+        &#34;&#34;&#34;
+        return self.__user_id</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fusion_platform.session.RequestError"><code class="flex name class">
+<span>class <span class="ident">RequestError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised on request failure.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RequestError(SessionError):
+    &#34;&#34;&#34;
+    Exception raised on request failure.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+<dt id="fusion_platform.session.Session"><code class="flex name class">
+<span>class <span class="ident">Session</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Provides a session for use in interfacing with the Fusion Platform<sup>&reg;</sup> API.</p>
+<p>Initialises the object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Session(Base):
+    &#34;&#34;&#34;
+    Provides a session for use in interfacing with the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; API.
+    &#34;&#34;&#34;
+
+    # HTTP methods.
+    METHOD_DELETE = &#39;DELETE&#39;
+    METHOD_GET = &#39;GET&#39;
+    METHOD_POST = &#39;POST&#39;
+    METHOD_PATCH = &#39;PATCH&#39;
+    METHOD_PUT = &#39;PUT&#39;
+
+    # Default Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; API endpoint.
+    API_URL_DEFAULT = &#39;https://api.thefusionplatform.com&#39;
+
+    # Mask keys.
+    _MASK_KEYS = [&#39;password&#39;, &#39;old_password&#39;, &#39;new_password&#39;, &#39;access_token&#39;, &#39;id_token&#39;, &#39;refresh_token&#39;]
+
+    def __init__(self):
+        &#34;&#34;&#34;
+        Initialises the object.
+        &#34;&#34;&#34;
+        super(Session, self).__init__()
+
+        # Initialise the private fields.
+        self.__user_id = None
+        self.__bearer_token = None
+        self.__api_url = Session.API_URL_DEFAULT
+
+    def download_file(self, url, destination, callback=None):
+        &#34;&#34;&#34;
+        Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
+        arguments which are the URL, destination and the number of bytes downloaded so far.
+
+        Args:
+            url: The URL to download as a file.
+            destination: The destination file path.
+            callback: The optional callback method used to receive download progress.
+        &#34;&#34;&#34;
+        # Make sure the destination directory exists.
+        directory = os.path.dirname(destination.strip())
+
+        if len(directory) &gt; 0:
+            os.makedirs(directory, exist_ok=True)
+
+        try:
+            # Download the file in chunks.
+            self._logger.info(&#39;downloading %s -&gt; %s&#39;, url, destination)
+            response = requests.get(url, stream=True)
+
+            # Raise any errors.
+            if not response:
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+            # Download the content to file as a series of chunks.
+            download_size = 0
+
+            with open(destination, &#39;wb&#39;) as file:
+                for chunk in response.iter_content(chunk_size=8192):
+                    file.write(chunk)
+                    download_size += len(chunk)
+                    self._logger.debug(&#39;downloaded %d bytes&#39;, download_size)
+
+                    if callback is not None:
+                        callback(url, destination, download_size)
+
+            self._logger.info(&#39;downloaded %s&#39;, destination)
+
+        except RequestError:
+            raise
+
+        except Exception as e:
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    def __filter_nested_dictionary(self, dictionary):
+        &#34;&#34;&#34;
+        Recursively filters a nested dictionary to mask out any keys which should be masked.
+
+        Args:
+            dictionary: The nested dictionary to mask.
+
+        Returns:
+            The masked nested dictionary.
+        &#34;&#34;&#34;
+        if (dictionary is not None) and isinstance(dictionary, dict):
+            return {key: &#39;*****&#39; if key in Session._MASK_KEYS else self.__filter_nested_dictionary(value) for key, value in dictionary.items()}
+        else:
+            return dictionary
+
+    def login(self, email=None, user_id=None, password=None, api_url=None):
+        &#34;&#34;&#34;
+        Attempts to log into the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; to return a user model for the active session.
+
+        Args:
+        email: The user account email address. Either an email address or a user id must be provided.
+        user_id: The user account user id. Either an email address or a user id must be provided.
+        password: The password for the user account.
+        api_url: The optional custom API URL to use. Defaults to the production Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+        Returns:
+            The corresponding user id on successful login.
+
+        Raises:
+            ValueError: on incorrect parameters.
+            RequestError: on login failure.
+        &#34;&#34;&#34;
+        # Make sure we have all the required parameters.
+        if (email is None) and (user_id is None):
+            raise ValueError(i18n.t(&#39;session.missing_email_user_id&#39;))
+
+        if password is None:
+            raise ValueError(i18n.t(&#39;session.missing_password&#39;))
+
+        # Set any custom API URL.
+        if api_url is not None:
+            self.__api_url = api_url
+
+        # Login.
+        self._logger.debug(&#39;logging in...&#39;)
+        body = {&#39;User&#39;: {&#39;email&#39;: email, &#39;user_id&#39;: user_id, &#39;password&#39;: password}}
+        response = self.request(path=&#39;/users/login&#39;, method=Session.METHOD_POST, body=body)
+
+        id_token = response.get(&#39;id_token&#39;)
+
+        if id_token is not None:
+            self.__user_id = jwt.decode(id_token, options={&#39;verify_signature&#39;: False}).get(&#39;sub&#39;)
+
+        self.__bearer_token = response.get(&#39;access_token&#39;)
+
+        if (self.__user_id is None) or (self.__bearer_token is None):
+            raise RequestError(i18n.t(&#39;session.login_failed&#39;))
+
+        self._logger.debug(&#39;logged in&#39;)
+
+    def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
+        &#34;&#34;&#34;
+        Sends a request to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; using the specified path, method and JSON payload. This method will use the authentication bearer token, if
+        available.
+
+        Args:
+            path: The optional path. Default &#39;/&#39;.
+            query_parameters: The optional query parameters as a dictionary.
+            method: The optional RESTful method type. Default GET.
+            body: The optional body. Default None.
+
+        Returns:
+            The decoded response body.
+
+        Raises:
+            RequestError: if the request failed.
+        &#34;&#34;&#34;
+        # Optionally add the bearer token.
+        headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
+
+        if self.__bearer_token is not None:
+            headers[&#39;Authorization&#39;] = f&#34;Bearer {self.__bearer_token}&#34;
+
+        try:
+            # Issue the request.
+            self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
+            json_body = json.dumps(body, default=json_default) if body is not None else None
+            response = requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers)
+
+            # Raise any errors.
+            if not response:
+                message = str(response.status_code)
+
+                try:
+                    message = response.json().get(&#39;error_message&#39;)
+                    self._logger.error(message)
+                except:
+                    pass  # Ignore the inability to extract the error message.
+
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
+
+        except RequestError:
+            raise
+
+        except Exception as e:
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+        # Return the payload.
+        payload = response.json()
+        self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
+
+        return payload
+
+    def upload_file(self, url, source):
+        &#34;&#34;&#34;
+        Uploads a file from the source path.
+
+        Args:
+            url: The URL to download as a file.
+            source: The source file path.
+        &#34;&#34;&#34;
+        try:
+            # Upload the file as a data stream.
+            self._logger.info(&#39;uploading %s -&gt; %s&#39;, url, source)
+
+            with open(source, &#39;rb&#39;) as file:
+                response = requests.put(url, data=file)
+
+                # Raise any errors.
+                if not response:
+                    raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+            self._logger.info(&#39;uploaded %s&#39;, source)
+
+        except RequestError:
+            raise
+
+        except Exception as e:
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    @property
+    def user_id(self):
+        &#34;&#34;&#34;
+        Returns:
+            The user id.
+        &#34;&#34;&#34;
+        return self.__user_id</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.session.Session.API_URL_DEFAULT"><code class="name">var <span class="ident">API_URL_DEFAULT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.session.Session.METHOD_DELETE"><code class="name">var <span class="ident">METHOD_DELETE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.session.Session.METHOD_GET"><code class="name">var <span class="ident">METHOD_GET</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.session.Session.METHOD_PATCH"><code class="name">var <span class="ident">METHOD_PATCH</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.session.Session.METHOD_POST"><code class="name">var <span class="ident">METHOD_POST</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.session.Session.METHOD_PUT"><code class="name">var <span class="ident">METHOD_PUT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.session.Session.user_id"><code class="name">var <span class="ident">user_id</span></code></dt>
+<dd>
+<div class="desc"><h2 id="returns">Returns</h2>
+<p>The user id.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_id(self):
+    &#34;&#34;&#34;
+    Returns:
+        The user id.
+    &#34;&#34;&#34;
+    return self.__user_id</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.session.Session.download_file"><code class="name flex">
+<span>def <span class="ident">download_file</span></span>(<span>self, url, destination, callback=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
+arguments which are the URL, destination and the number of bytes downloaded so far.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>url</code></strong></dt>
+<dd>The URL to download as a file.</dd>
+<dt><strong><code>destination</code></strong></dt>
+<dd>The destination file path.</dd>
+<dt><strong><code>callback</code></strong></dt>
+<dd>The optional callback method used to receive download progress.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_file(self, url, destination, callback=None):
+    &#34;&#34;&#34;
+    Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
+    arguments which are the URL, destination and the number of bytes downloaded so far.
+
+    Args:
+        url: The URL to download as a file.
+        destination: The destination file path.
+        callback: The optional callback method used to receive download progress.
+    &#34;&#34;&#34;
+    # Make sure the destination directory exists.
+    directory = os.path.dirname(destination.strip())
+
+    if len(directory) &gt; 0:
+        os.makedirs(directory, exist_ok=True)
+
+    try:
+        # Download the file in chunks.
+        self._logger.info(&#39;downloading %s -&gt; %s&#39;, url, destination)
+        response = requests.get(url, stream=True)
+
+        # Raise any errors.
+        if not response:
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+        # Download the content to file as a series of chunks.
+        download_size = 0
+
+        with open(destination, &#39;wb&#39;) as file:
+            for chunk in response.iter_content(chunk_size=8192):
+                file.write(chunk)
+                download_size += len(chunk)
+                self._logger.debug(&#39;downloaded %d bytes&#39;, download_size)
+
+                if callback is not None:
+                    callback(url, destination, download_size)
+
+        self._logger.info(&#39;downloaded %s&#39;, destination)
+
+    except RequestError:
+        raise
+
+    except Exception as e:
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.session.Session.login"><code class="name flex">
+<span>def <span class="ident">login</span></span>(<span>self, email=None, user_id=None, password=None, api_url=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Attempts to log into the Fusion Platform<sup>&reg;</sup> to return a user model for the active session.</p>
+<p>Args:
+email: The user account email address. Either an email address or a user id must be provided.
+user_id: The user account user id. Either an email address or a user id must be provided.
+password: The password for the user account.
+api_url: The optional custom API URL to use. Defaults to the production Fusion Platform<sup>&reg;</sup>.</p>
+<h2 id="returns">Returns</h2>
+<p>The corresponding user id on successful login.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="fusion_platform.session.ValueError" href="#fusion_platform.session.ValueError">ValueError</a></code></dt>
+<dd>on incorrect parameters.</dd>
+<dt><code><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></code></dt>
+<dd>on login failure.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def login(self, email=None, user_id=None, password=None, api_url=None):
+    &#34;&#34;&#34;
+    Attempts to log into the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; to return a user model for the active session.
+
+    Args:
+    email: The user account email address. Either an email address or a user id must be provided.
+    user_id: The user account user id. Either an email address or a user id must be provided.
+    password: The password for the user account.
+    api_url: The optional custom API URL to use. Defaults to the production Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+    Returns:
+        The corresponding user id on successful login.
+
+    Raises:
+        ValueError: on incorrect parameters.
+        RequestError: on login failure.
+    &#34;&#34;&#34;
+    # Make sure we have all the required parameters.
+    if (email is None) and (user_id is None):
+        raise ValueError(i18n.t(&#39;session.missing_email_user_id&#39;))
+
+    if password is None:
+        raise ValueError(i18n.t(&#39;session.missing_password&#39;))
+
+    # Set any custom API URL.
+    if api_url is not None:
+        self.__api_url = api_url
+
+    # Login.
+    self._logger.debug(&#39;logging in...&#39;)
+    body = {&#39;User&#39;: {&#39;email&#39;: email, &#39;user_id&#39;: user_id, &#39;password&#39;: password}}
+    response = self.request(path=&#39;/users/login&#39;, method=Session.METHOD_POST, body=body)
+
+    id_token = response.get(&#39;id_token&#39;)
+
+    if id_token is not None:
+        self.__user_id = jwt.decode(id_token, options={&#39;verify_signature&#39;: False}).get(&#39;sub&#39;)
+
+    self.__bearer_token = response.get(&#39;access_token&#39;)
+
+    if (self.__user_id is None) or (self.__bearer_token is None):
+        raise RequestError(i18n.t(&#39;session.login_failed&#39;))
+
+    self._logger.debug(&#39;logged in&#39;)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.session.Session.request"><code class="name flex">
+<span>def <span class="ident">request</span></span>(<span>self, path='/', query_parameters=None, method='GET', body=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Sends a request to the Fusion Platform<sup>&reg;</sup> using the specified path, method and JSON payload. This method will use the authentication bearer token, if
+available.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>The optional path. Default '/'.</dd>
+<dt><strong><code>query_parameters</code></strong></dt>
+<dd>The optional query parameters as a dictionary.</dd>
+<dt><strong><code>method</code></strong></dt>
+<dd>The optional RESTful method type. Default GET.</dd>
+<dt><strong><code>body</code></strong></dt>
+<dd>The optional body. Default None.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The decoded response body.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></code></dt>
+<dd>if the request failed.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
+    &#34;&#34;&#34;
+    Sends a request to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; using the specified path, method and JSON payload. This method will use the authentication bearer token, if
+    available.
+
+    Args:
+        path: The optional path. Default &#39;/&#39;.
+        query_parameters: The optional query parameters as a dictionary.
+        method: The optional RESTful method type. Default GET.
+        body: The optional body. Default None.
+
+    Returns:
+        The decoded response body.
+
+    Raises:
+        RequestError: if the request failed.
+    &#34;&#34;&#34;
+    # Optionally add the bearer token.
+    headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
+
+    if self.__bearer_token is not None:
+        headers[&#39;Authorization&#39;] = f&#34;Bearer {self.__bearer_token}&#34;
+
+    try:
+        # Issue the request.
+        self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
+        json_body = json.dumps(body, default=json_default) if body is not None else None
+        response = requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers)
+
+        # Raise any errors.
+        if not response:
+            message = str(response.status_code)
+
+            try:
+                message = response.json().get(&#39;error_message&#39;)
+                self._logger.error(message)
+            except:
+                pass  # Ignore the inability to extract the error message.
+
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
+
+    except RequestError:
+        raise
+
+    except Exception as e:
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    # Return the payload.
+    payload = response.json()
+    self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
+
+    return payload</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.session.Session.upload_file"><code class="name flex">
+<span>def <span class="ident">upload_file</span></span>(<span>self, url, source)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Uploads a file from the source path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>url</code></strong></dt>
+<dd>The URL to download as a file.</dd>
+<dt><strong><code>source</code></strong></dt>
+<dd>The source file path.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def upload_file(self, url, source):
+    &#34;&#34;&#34;
+    Uploads a file from the source path.
+
+    Args:
+        url: The URL to download as a file.
+        source: The source file path.
+    &#34;&#34;&#34;
+    try:
+        # Upload the file as a data stream.
+        self._logger.info(&#39;uploading %s -&gt; %s&#39;, url, source)
+
+        with open(source, &#39;rb&#39;) as file:
+            response = requests.put(url, data=file)
+
+            # Raise any errors.
+            if not response:
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+        self._logger.info(&#39;uploaded %s&#39;, source)
+
+    except RequestError:
+        raise
+
+    except Exception as e:
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.session.SessionError"><code class="flex name class">
+<span>class <span class="ident">SessionError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Base exception raised on request failure.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SessionError(Exception):
+    &#34;&#34;&#34;
+    Base exception raised on request failure.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></li>
+<li><a title="fusion_platform.session.ValueError" href="#fusion_platform.session.ValueError">ValueError</a></li>
+</ul>
+</dd>
+<dt id="fusion_platform.session.ValueError"><code class="flex name class">
+<span>class <span class="ident">ValueError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised on login failure.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ValueError(SessionError):
+    &#34;&#34;&#34;
+    Exception raised on login failure.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<header>
+<img src="https://raw.githubusercontent.com/d-cat-support/fusion-platform-python-sdk/master/docs/logo.png" alt="D-CAT">
+<h2>
+Fusion Platform<sup>&reg;</sup> Python SDK
+</h2>
+<p>
+&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
+<p>
+</header>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fusion_platform" href="index.html">fusion_platform</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="fusion_platform.session.Session" href="#fusion_platform.session.Session">Session</a></code></h4>
+<ul class="two-column">
+<li><code><a title="fusion_platform.session.Session.API_URL_DEFAULT" href="#fusion_platform.session.Session.API_URL_DEFAULT">API_URL_DEFAULT</a></code></li>
+<li><code><a title="fusion_platform.session.Session.METHOD_DELETE" href="#fusion_platform.session.Session.METHOD_DELETE">METHOD_DELETE</a></code></li>
+<li><code><a title="fusion_platform.session.Session.METHOD_GET" href="#fusion_platform.session.Session.METHOD_GET">METHOD_GET</a></code></li>
+<li><code><a title="fusion_platform.session.Session.METHOD_PATCH" href="#fusion_platform.session.Session.METHOD_PATCH">METHOD_PATCH</a></code></li>
+<li><code><a title="fusion_platform.session.Session.METHOD_POST" href="#fusion_platform.session.Session.METHOD_POST">METHOD_POST</a></code></li>
+<li><code><a title="fusion_platform.session.Session.METHOD_PUT" href="#fusion_platform.session.Session.METHOD_PUT">METHOD_PUT</a></code></li>
+<li><code><a title="fusion_platform.session.Session.download_file" href="#fusion_platform.session.Session.download_file">download_file</a></code></li>
+<li><code><a title="fusion_platform.session.Session.login" href="#fusion_platform.session.Session.login">login</a></code></li>
+<li><code><a title="fusion_platform.session.Session.request" href="#fusion_platform.session.Session.request">request</a></code></li>
+<li><code><a title="fusion_platform.session.Session.upload_file" href="#fusion_platform.session.Session.upload_file">upload_file</a></code></li>
+<li><code><a title="fusion_platform.session.Session.user_id" href="#fusion_platform.session.Session.user_id">user_id</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="fusion_platform.session.ValueError" href="#fusion_platform.session.ValueError">ValueError</a></code></h4>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

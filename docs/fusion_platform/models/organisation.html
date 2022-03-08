@@ -1,0 +1,1245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fusion_platform.models.organisation API documentation</title>
+<meta name="description" content="Organisation model class file …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fusion_platform.models.organisation</code></h1>
+</header>
+<section id="section-intro">
+<p>Organisation model class file.</p>
+<p>author: Matthew Casey</p>
+<p>&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Organisation model class file.
+
+author: Matthew Casey
+
+&amp;copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+&#34;&#34;&#34;
+
+from functools import partial
+from marshmallow import Schema, EXCLUDE
+
+from fusion_platform.models import fields
+from fusion_platform.models.credit import Credit
+from fusion_platform.models.data import Data
+from fusion_platform.models.model import Model
+from fusion_platform.models.process import Process
+from fusion_platform.models.service import Service
+
+
+# Define the model schema classes. These are maintained from the API definitions.
+
+class OrganisationUserSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for users.
+    &#34;&#34;&#34;
+    id = fields.UUID(allow_none=True)
+    email = fields.Email(allow_none=True)
+    roles = fields.List(fields.String(required=True))
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class OrganisationSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for organisation model.
+
+    Each organisation model has the following fields (and nested fields):
+
+    .. include::organisation.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    name = fields.String(required=True)
+    address_line_1 = fields.String(required=True)
+    address_line_2 = fields.String(allow_none=True)
+    address_town_city = fields.String(required=True)
+    address_post_zip_code = fields.String(required=True)
+    address_country = fields.String(required=True)
+
+    payment_customer = fields.String(allow_none=True)
+    payment_valid = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated and optional.
+    # Removed payment_last_checked.
+
+    income_customer = fields.String(allow_none=True)
+    income_valid = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated and optional.
+    # Removed income_last_checked.
+
+    income_tax_rate = fields.Decimal(allow_none=True)
+    income_tax_reference = fields.String(allow_none=True)
+
+    currency = fields.String(allow_none=True)  # Changed to optional.
+
+    users = fields.List(fields.Nested(OrganisationUserSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    agreed_licenses = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    offers = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed audit_services.
+
+    maximum_output_storage_period = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class Organisation(Model):
+    &#34;&#34;&#34;
+    Organisation model class providing attributes and methods to manipulate organisation details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = OrganisationSchema()
+
+    # Base path.
+    _PATH_BASE = &#39;/organisations/{organisation_id}&#39;
+
+    # Override the standard model paths.
+    _PATH_DELETE = _PATH_BASE
+    _PATH_GET = _PATH_BASE
+    _PATH_PATCH = _PATH_BASE
+
+    # Add in the custom model paths.
+    _PATH_DATA = f&#34;{_PATH_BASE}/data/uploaded&#34;
+    _PATH_OWN_SERVICES = f&#34;{_PATH_BASE}/services&#34;
+    _PATH_PROCESSES = f&#34;{_PATH_BASE}/processes&#34;
+    _PATH_SERVICES = f&#34;{_PATH_BASE}/services/latest&#34;
+
+    def create_data(self, name, file_type, files, wait=False):
+        &#34;&#34;&#34;
+        Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
+
+        Args:
+            name: The name of the data object.
+            file_type: The type of files that the data object will hold.
+            files: The list of file paths to be uploaded.
+            wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            The created data object.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Get a new template for the data model.
+        data = Data(self._session)
+        data._new(organisation_id=self.id)
+
+        # Now attempt to create the data item.
+        data._create(name, file_type, files, wait)
+
+        return data
+
+    @property
+    def credit(self):
+        &#34;&#34;&#34;
+        Returns:
+            The credit model for the organisation.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Credit._model_from_api_id(self._session, organisation_id=self.id, id=self.id)  # Credit model id is the same as the organisation&#39;s id.
+
+    @property
+    def data(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the organisation&#39;s uploaded data objects.
+
+        Returns:
+            An iterator through the data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Data._models_from_api_path(self._session, self._get_path(self.__class__._PATH_DATA))
+
+    def find_data(self, id=None, name=None):
+        &#34;&#34;&#34;
+        Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+        Args:
+            id: The data id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found data object, or None if not found, and an iterator through the found data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Note that name is a key field, and hence we can only search using begins with.
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name)])
+
+        # Build the partial find generator and execute it.
+        find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    def find_processes(self, id=None, name=None):
+        &#34;&#34;&#34;
+        Searches for the organisation&#39;s processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+        Args:
+            id: The process id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found process object, or None if not found, and an iterator through the found process objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_CONTAINS, name)])
+
+        # Build the partial find generator and execute it.
+        find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    def find_services(self, id=None, ssd_id=None, name=None, keyword=None):
+        &#34;&#34;&#34;
+        Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
+
+        Args:
+            id: The service id to search for.
+            ssd_id: The SSD id to search for.
+            name: The name to search for (case-sensitive).
+            keyword: The keyword to search for (case-sensitive).
+
+        Returns:
+            The first found service object, or None if not found, and an iterator through the found service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Note that name is a key field, and hence we can only search using begins with.
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_SSD_ID, self.__class__._FILTER_MODIFIER_EQ, ssd_id),
+             (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name),
+             (self.__class__._FIELD_KEYWORDS, self.__class__._FILTER_MODIFIER_CONTAINS, keyword)])
+
+        # Build the partial find generator and execute it.
+        find = partial(Service._models_from_api_path, self._session, self._get_path(self.__class__._PATH_SERVICES), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    def new_process(self, name, service):
+        &#34;&#34;&#34;
+        Creates a new template process from the service object. This process is not persisted to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+        Args:
+            name: The name of the process.
+            service: The service for which the process is to be created.
+
+        Returns:
+            The new template process object.
+
+        Raises:
+            RequestError: if the new fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Get a new template for the process model using the service.
+        process = Process(self._session)
+        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id}, organisation_id=self.id, name=name)
+
+        return process
+
+    @property
+    def own_services(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.
+
+        Returns:
+            An iterator through the service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_OWN_SERVICES))
+
+    @property
+    def processes(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the organisation&#39;s processes.
+
+        Returns:
+            An iterator through the process objects.
+
+        Raises:
+            RequestError if any get fails.
+            ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Process._models_from_api_path(self._session, self._get_path(self.__class__._PATH_PROCESSES))
+
+    @property
+    def services(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the services available to the organisation for execution.
+
+        Returns:
+            An iterator through the service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_SERVICES))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fusion_platform.models.organisation.Organisation"><code class="flex name class">
+<span>class <span class="ident">Organisation</span></span>
+<span>(</span><span>session, schema=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Organisation model class providing attributes and methods to manipulate organisation details.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Organisation(Model):
+    &#34;&#34;&#34;
+    Organisation model class providing attributes and methods to manipulate organisation details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = OrganisationSchema()
+
+    # Base path.
+    _PATH_BASE = &#39;/organisations/{organisation_id}&#39;
+
+    # Override the standard model paths.
+    _PATH_DELETE = _PATH_BASE
+    _PATH_GET = _PATH_BASE
+    _PATH_PATCH = _PATH_BASE
+
+    # Add in the custom model paths.
+    _PATH_DATA = f&#34;{_PATH_BASE}/data/uploaded&#34;
+    _PATH_OWN_SERVICES = f&#34;{_PATH_BASE}/services&#34;
+    _PATH_PROCESSES = f&#34;{_PATH_BASE}/processes&#34;
+    _PATH_SERVICES = f&#34;{_PATH_BASE}/services/latest&#34;
+
+    def create_data(self, name, file_type, files, wait=False):
+        &#34;&#34;&#34;
+        Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
+
+        Args:
+            name: The name of the data object.
+            file_type: The type of files that the data object will hold.
+            files: The list of file paths to be uploaded.
+            wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            The created data object.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Get a new template for the data model.
+        data = Data(self._session)
+        data._new(organisation_id=self.id)
+
+        # Now attempt to create the data item.
+        data._create(name, file_type, files, wait)
+
+        return data
+
+    @property
+    def credit(self):
+        &#34;&#34;&#34;
+        Returns:
+            The credit model for the organisation.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Credit._model_from_api_id(self._session, organisation_id=self.id, id=self.id)  # Credit model id is the same as the organisation&#39;s id.
+
+    @property
+    def data(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the organisation&#39;s uploaded data objects.
+
+        Returns:
+            An iterator through the data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Data._models_from_api_path(self._session, self._get_path(self.__class__._PATH_DATA))
+
+    def find_data(self, id=None, name=None):
+        &#34;&#34;&#34;
+        Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+        Args:
+            id: The data id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found data object, or None if not found, and an iterator through the found data objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Note that name is a key field, and hence we can only search using begins with.
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name)])
+
+        # Build the partial find generator and execute it.
+        find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    def find_processes(self, id=None, name=None):
+        &#34;&#34;&#34;
+        Searches for the organisation&#39;s processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+        Args:
+            id: The process id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found process object, or None if not found, and an iterator through the found process objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_CONTAINS, name)])
+
+        # Build the partial find generator and execute it.
+        find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    def find_services(self, id=None, ssd_id=None, name=None, keyword=None):
+        &#34;&#34;&#34;
+        Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
+
+        Args:
+            id: The service id to search for.
+            ssd_id: The SSD id to search for.
+            name: The name to search for (case-sensitive).
+            keyword: The keyword to search for (case-sensitive).
+
+        Returns:
+            The first found service object, or None if not found, and an iterator through the found service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Note that name is a key field, and hence we can only search using begins with.
+        filter = self.__class__._build_filter(
+            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_SSD_ID, self.__class__._FILTER_MODIFIER_EQ, ssd_id),
+             (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name),
+             (self.__class__._FIELD_KEYWORDS, self.__class__._FILTER_MODIFIER_CONTAINS, keyword)])
+
+        # Build the partial find generator and execute it.
+        find = partial(Service._models_from_api_path, self._session, self._get_path(self.__class__._PATH_SERVICES), filter=filter)
+        return self.__class__._first_and_generator(find)
+
+    def new_process(self, name, service):
+        &#34;&#34;&#34;
+        Creates a new template process from the service object. This process is not persisted to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+        Args:
+            name: The name of the process.
+            service: The service for which the process is to be created.
+
+        Returns:
+            The new template process object.
+
+        Raises:
+            RequestError: if the new fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Get a new template for the process model using the service.
+        process = Process(self._session)
+        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id}, organisation_id=self.id, name=name)
+
+        return process
+
+    @property
+    def own_services(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.
+
+        Returns:
+            An iterator through the service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_OWN_SERVICES))
+
+    @property
+    def processes(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the organisation&#39;s processes.
+
+        Returns:
+            An iterator through the process objects.
+
+        Raises:
+            RequestError if any get fails.
+            ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Process._models_from_api_path(self._session, self._get_path(self.__class__._PATH_PROCESSES))
+
+    @property
+    def services(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the services available to the organisation for execution.
+
+        Returns:
+            An iterator through the service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_SERVICES))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.models.organisation.Organisation.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
+</p>
+<div class="desc inherited"><h2 id="returns">Returns</h2>
+<p>The model attributes as a dictionary.</p></div>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.credit"><code class="name">var <span class="ident">credit</span></code></dt>
+<dd>
+<div class="desc"><h2 id="returns">Returns</h2>
+<p>The credit model for the organisation.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def credit(self):
+    &#34;&#34;&#34;
+    Returns:
+        The credit model for the organisation.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return Credit._model_from_api_id(self._session, organisation_id=self.id, id=self.id)  # Credit model id is the same as the organisation&#39;s id.</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.data"><code class="name">var <span class="ident">data</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the organisation's uploaded data objects.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the data objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def data(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the organisation&#39;s uploaded data objects.
+
+    Returns:
+        An iterator through the data objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return Data._models_from_api_path(self._session, self._get_path(self.__class__._PATH_DATA))</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.own_services"><code class="name">var <span class="ident">own_services</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the service objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def own_services(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.
+
+    Returns:
+        An iterator through the service objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_OWN_SERVICES))</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.processes"><code class="name">var <span class="ident">processes</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the organisation's processes.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the process objects.</p>
+<h2 id="raises">Raises</h2>
+<p>RequestError if any get fails.
+ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def processes(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the organisation&#39;s processes.
+
+    Returns:
+        An iterator through the process objects.
+
+    Raises:
+        RequestError if any get fails.
+        ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return Process._models_from_api_path(self._session, self._get_path(self.__class__._PATH_PROCESSES))</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.services"><code class="name">var <span class="ident">services</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the services available to the organisation for execution.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the service objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def services(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the services available to the organisation for execution.
+
+    Returns:
+        An iterator through the service objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_SERVICES))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.organisation.Organisation.create_data"><code class="name flex">
+<span>def <span class="ident">create_data</span></span>(<span>self, name, file_type, files, wait=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>The name of the data object.</dd>
+<dt><strong><code>file_type</code></strong></dt>
+<dd>The type of files that the data object will hold.</dd>
+<dt><strong><code>files</code></strong></dt>
+<dd>The list of file paths to be uploaded.</dd>
+<dt><strong><code>wait</code></strong></dt>
+<dd>Optionally wait for the upload and analysis to complete? Default False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The created data object.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the create fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_data(self, name, file_type, files, wait=False):
+    &#34;&#34;&#34;
+    Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
+
+    Args:
+        name: The name of the data object.
+        file_type: The type of files that the data object will hold.
+        files: The list of file paths to be uploaded.
+        wait: Optionally wait for the upload and analysis to complete? Default False.
+
+    Returns:
+        The created data object.
+
+    Raises:
+        RequestError: if the create fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Get a new template for the data model.
+    data = Data(self._session)
+    data._new(organisation_id=self.id)
+
+    # Now attempt to create the data item.
+    data._create(name, file_type, files, wait)
+
+    return data</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.find_data"><code class="name flex">
+<span>def <span class="ident">find_data</span></span>(<span>self, id=None, name=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>The data id to search for.</dd>
+<dt><strong><code>name</code></strong></dt>
+<dd>The name to search for (case-sensitive).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The first found data object, or None if not found, and an iterator through the found data objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_data(self, id=None, name=None):
+    &#34;&#34;&#34;
+    Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+    Args:
+        id: The data id to search for.
+        name: The name to search for (case-sensitive).
+
+    Returns:
+        The first found data object, or None if not found, and an iterator through the found data objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Note that name is a key field, and hence we can only search using begins with.
+    filter = self.__class__._build_filter(
+        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name)])
+
+    # Build the partial find generator and execute it.
+    find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter)
+    return self.__class__._first_and_generator(find)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.find_processes"><code class="name flex">
+<span>def <span class="ident">find_processes</span></span>(<span>self, id=None, name=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Searches for the organisation's processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>The process id to search for.</dd>
+<dt><strong><code>name</code></strong></dt>
+<dd>The name to search for (case-sensitive).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The first found process object, or None if not found, and an iterator through the found process objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_processes(self, id=None, name=None):
+    &#34;&#34;&#34;
+    Searches for the organisation&#39;s processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+    Args:
+        id: The process id to search for.
+        name: The name to search for (case-sensitive).
+
+    Returns:
+        The first found process object, or None if not found, and an iterator through the found process objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    filter = self.__class__._build_filter(
+        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_CONTAINS, name)])
+
+    # Build the partial find generator and execute it.
+    find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter)
+    return self.__class__._first_and_generator(find)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.find_services"><code class="name flex">
+<span>def <span class="ident">find_services</span></span>(<span>self, id=None, ssd_id=None, name=None, keyword=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>The service id to search for.</dd>
+<dt><strong><code>ssd_id</code></strong></dt>
+<dd>The SSD id to search for.</dd>
+<dt><strong><code>name</code></strong></dt>
+<dd>The name to search for (case-sensitive).</dd>
+<dt><strong><code>keyword</code></strong></dt>
+<dd>The keyword to search for (case-sensitive).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The first found service object, or None if not found, and an iterator through the found service objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_services(self, id=None, ssd_id=None, name=None, keyword=None):
+    &#34;&#34;&#34;
+    Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
+
+    Args:
+        id: The service id to search for.
+        ssd_id: The SSD id to search for.
+        name: The name to search for (case-sensitive).
+        keyword: The keyword to search for (case-sensitive).
+
+    Returns:
+        The first found service object, or None if not found, and an iterator through the found service objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Note that name is a key field, and hence we can only search using begins with.
+    filter = self.__class__._build_filter(
+        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_SSD_ID, self.__class__._FILTER_MODIFIER_EQ, ssd_id),
+         (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name),
+         (self.__class__._FIELD_KEYWORDS, self.__class__._FILTER_MODIFIER_CONTAINS, keyword)])
+
+    # Build the partial find generator and execute it.
+    find = partial(Service._models_from_api_path, self._session, self._get_path(self.__class__._PATH_SERVICES), filter=filter)
+    return self.__class__._first_and_generator(find)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.get" href="model.html#fusion_platform.models.model.Model.get">get</a></code>
+</p>
+<div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.new_process"><code class="name flex">
+<span>def <span class="ident">new_process</span></span>(<span>self, name, service)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Creates a new template process from the service object. This process is not persisted to the Fusion Platform<sup>&reg;</sup>.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>The name of the process.</dd>
+<dt><strong><code>service</code></strong></dt>
+<dd>The service for which the process is to be created.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The new template process object.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the new fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def new_process(self, name, service):
+    &#34;&#34;&#34;
+    Creates a new template process from the service object. This process is not persisted to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+    Args:
+        name: The name of the process.
+        service: The service for which the process is to be created.
+
+    Returns:
+        The new template process object.
+
+    Raises:
+        RequestError: if the new fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Get a new template for the process model using the service.
+    process = Process(self._session)
+    process._new(query_parameters={Model._get_id_name(Service.__name__): service.id}, organisation_id=self.id, name=name)
+
+    return process</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.to_csv"><code class="name flex">
+<span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.to_csv" href="model.html#fusion_platform.models.model.Model.to_csv">to_csv</a></code>
+</p>
+<div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.update" href="model.html#fusion_platform.models.model.Model.update">update</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without …</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.organisation.OrganisationSchema"><code class="flex name class">
+<span>class <span class="ident">OrganisationSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Schema class for organisation model.</p>
+<p>Each organisation model has the following fields (and nested fields):</p>
+<ul>
+<li><strong>id</strong>: The unique identifier for the record.</li>
+<li><strong>created_at</strong>: When was the record created?</li>
+<li><strong>updated_at</strong>: When was the record last updated?</li>
+<li><strong>name</strong>: The unique name of the organisation</li>
+<li><strong>address_line_1</strong>: The first line of the address.</li>
+<li><strong>address_line_2</strong>: The second line of the address.</li>
+<li><strong>address_town_city</strong>: The town or city.</li>
+<li><strong>address_post_zip_code</strong>: The postal or zip code.</li>
+<li><strong>address_country</strong>: The country.</li>
+<li><strong>payment_customer</strong>: The payment customer reference from the payment service.</li>
+<li><strong>payment_valid</strong>: Are the payment service details valid?</li>
+<li><strong>income_customer</strong>: The income customer reference from the income service.</li>
+<li><strong>income_valid</strong>: Are the income service details valid?</li>
+<li><strong>income_tax_rate</strong>: The percentage tax to be applied to income.</li>
+<li><strong>income_tax_reference</strong>: The income tax reference.</li>
+<li><strong>currency</strong>: The currency to be used for payment and income.</li>
+<li><strong>users</strong>: The list of users linked to this organisation.<ul>
+<li><strong>id</strong>: The user identifier.</li>
+<li><strong>email</strong>: The user's email address.</li>
+<li><strong>roles</strong>: Assigned organisational roles.</li>
+</ul>
+</li>
+<li><strong>agreed_licenses</strong>: The list of licences agreed on behalf of the organisation.</li>
+<li><strong>offers</strong>: The list of offers linked to this organisation.</li>
+<li><strong>maximum_output_storage_period</strong>: The maximum period in days for this organisation for which an output can be stored before it is deleted.</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OrganisationSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for organisation model.
+
+    Each organisation model has the following fields (and nested fields):
+
+    .. include::organisation.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    name = fields.String(required=True)
+    address_line_1 = fields.String(required=True)
+    address_line_2 = fields.String(allow_none=True)
+    address_town_city = fields.String(required=True)
+    address_post_zip_code = fields.String(required=True)
+    address_country = fields.String(required=True)
+
+    payment_customer = fields.String(allow_none=True)
+    payment_valid = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated and optional.
+    # Removed payment_last_checked.
+
+    income_customer = fields.String(allow_none=True)
+    income_valid = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated and optional.
+    # Removed income_last_checked.
+
+    income_tax_rate = fields.Decimal(allow_none=True)
+    income_tax_reference = fields.String(allow_none=True)
+
+    currency = fields.String(allow_none=True)  # Changed to optional.
+
+    users = fields.List(fields.Nested(OrganisationUserSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    agreed_licenses = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    offers = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed audit_services.
+
+    maximum_output_storage_period = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.organisation.OrganisationSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.organisation.OrganisationSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.organisation.OrganisationUserSchema"><code class="flex name class">
+<span>class <span class="ident">OrganisationUserSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for users.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OrganisationUserSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for users.
+    &#34;&#34;&#34;
+    id = fields.UUID(allow_none=True)
+    email = fields.Email(allow_none=True)
+    roles = fields.List(fields.String(required=True))
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.organisation.OrganisationUserSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.organisation.OrganisationUserSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<header>
+<img src="https://raw.githubusercontent.com/d-cat-support/fusion-platform-python-sdk/master/docs/logo.png" alt="D-CAT">
+<h2>
+Fusion Platform<sup>&reg;</sup> Python SDK
+</h2>
+<p>
+&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
+<p>
+</header>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fusion_platform.models" href="index.html">fusion_platform.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fusion_platform.models.organisation.Organisation" href="#fusion_platform.models.organisation.Organisation">Organisation</a></code></h4>
+<ul class="two-column">
+<li><code><a title="fusion_platform.models.organisation.Organisation.attributes" href="model.html#fusion_platform.models.organisation.Organisation.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.create_data" href="#fusion_platform.models.organisation.Organisation.create_data">create_data</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.credit" href="#fusion_platform.models.organisation.Organisation.credit">credit</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.data" href="#fusion_platform.models.organisation.Organisation.data">data</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.delete" href="model.html#fusion_platform.models.organisation.Organisation.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.find_data" href="#fusion_platform.models.organisation.Organisation.find_data">find_data</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.find_processes" href="#fusion_platform.models.organisation.Organisation.find_processes">find_processes</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.find_services" href="#fusion_platform.models.organisation.Organisation.find_services">find_services</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.get" href="model.html#fusion_platform.models.organisation.Organisation.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.new_process" href="#fusion_platform.models.organisation.Organisation.new_process">new_process</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.own_services" href="#fusion_platform.models.organisation.Organisation.own_services">own_services</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.processes" href="#fusion_platform.models.organisation.Organisation.processes">processes</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.services" href="#fusion_platform.models.organisation.Organisation.services">services</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.to_csv" href="model.html#fusion_platform.models.organisation.Organisation.to_csv">to_csv</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.Organisation.update" href="model.html#fusion_platform.models.organisation.Organisation.update">update</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.organisation.OrganisationSchema" href="#fusion_platform.models.organisation.OrganisationSchema">OrganisationSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.organisation.OrganisationSchema.Meta" href="#fusion_platform.models.organisation.OrganisationSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.OrganisationSchema.opts" href="#fusion_platform.models.organisation.OrganisationSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.organisation.OrganisationUserSchema" href="#fusion_platform.models.organisation.OrganisationUserSchema">OrganisationUserSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.organisation.OrganisationUserSchema.Meta" href="#fusion_platform.models.organisation.OrganisationUserSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.OrganisationUserSchema.opts" href="#fusion_platform.models.organisation.OrganisationUserSchema.opts">opts</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

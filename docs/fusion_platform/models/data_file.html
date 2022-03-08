@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fusion_platform.models.data_file API documentation</title>
+<meta name="description" content="Data file model class file …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fusion_platform.models.data_file</code></h1>
+</header>
+<section id="section-intro">
+<p>Data file model class file.</p>
+<p>author: Matthew Casey</p>
+<p>&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Data file model class file.
+
+author: Matthew Casey
+
+&amp;copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+&#34;&#34;&#34;
+
+import i18n
+from marshmallow import Schema, EXCLUDE
+
+from fusion_platform.common.raise_thread import RaiseThread
+from fusion_platform.common.utilities import dict_nested_get
+from fusion_platform.models import fields
+from fusion_platform.models.model import Model, ModelError
+
+
+# Define the model schema classes. These are maintained from the API definitions.
+
+class DataFileSelectorSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for selector, category, data type, unit, format and statistics.
+    &#34;&#34;&#34;
+    selector = fields.String(required=True)
+    category = fields.String(allow_none=True)
+    data_type = fields.String(allow_none=True)
+    unit = fields.String(allow_none=True)
+    validation = fields.String(allow_none=True)
+
+    area = fields.Decimal(allow_none=True)
+
+    initial_values = fields.List(fields.String(required=True), allow_none=True)
+    minimum = fields.Decimal(allow_none=True)
+    maximum = fields.Decimal(allow_none=True)
+    mean = fields.Decimal(allow_none=True)
+    sd = fields.Decimal(allow_none=True)
+
+    histogram_minimum = fields.Decimal(allow_none=True)
+    histogram_maximum = fields.Decimal(allow_none=True)
+    histogram = fields.List(fields.Decimal(required=True), allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class DataFileSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for data file model.
+
+    Each data file model has the following fields (and nested fields):
+
+    .. include::data_file.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True, &#39;title&#39;: i18n.t(&#39;models.data_file.organisation_id.title&#39;), &#39;description&#39;: i18n.t(
+        &#39;models.data_file.organisation_id.description&#39;)})  # Added parameter so that it can be used.
+    data_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    file_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    file_type = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    file_name = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    resolution = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    crs = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    area = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
+                                   metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    size = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    error = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    publishable = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    alternative = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    source = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    title = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    description = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class DataFile(Model):
+    &#34;&#34;&#34;
+    DataFile model class providing attributes and methods to manipulate data file details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = DataFileSchema()
+
+    # Override the base model class name.
+    _BASE_MODEL_CLASS_NAME = &#39;Data&#39;  # A string to prevent circular imports.
+
+    # No standard model paths as data file objects cannot be retrieved directly from the API.
+
+    # Add in the custom model paths.
+    _PATH_DOWNLOAD_FILE = &#39;/organisations/{organisation_id}/data/{data_id}/download_file/{file_id}&#39;
+
+    def __init__(self, session):
+        &#34;&#34;&#34;
+        Initialises the object.
+
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        super(DataFile, self).__init__(session)
+
+        # Initialise the fields.
+        self.__download_progress = None
+        self.__download_thread = None
+
+    def download(self, path, wait=False):
+        &#34;&#34;&#34;
+        Downloads the file to the specified path. Optionally waits for the download to complete.
+
+        Args:
+            path: The local path to download the file to.
+            wait: Optionally wait for the download to complete? Default False.
+
+        Raises:
+            RequestError: if the download fails.
+        &#34;&#34;&#34;
+        # Make sure no download is currently in progress.
+        if self.__download_thread is not None:
+            raise ModelError(i18n.t(&#39;models.data_file.download_already_in_progress&#39;))
+
+        # Obtain the download URL.
+        url = self.download_url()
+
+        # Start the download in a separate thread.
+        self.__download_progress = (url, path, 0)
+        self.__download_thread = RaiseThread(target=self._session.download_file, args=(url, path, self.__download_callback))
+        self.__download_thread.start()
+
+        # Optionally wait for completion.
+        self.download_complete(wait=wait)  # Ignore response.
+
+    def __download_callback(self, url, destination, size):
+        &#34;&#34;&#34;
+        Callback method used to receive progress from download. Updates the download progress.
+
+        Args:
+            url: The URL to download as a file.
+            destination: The destination file path.
+            size: The total size in bytes so far downloaded.
+        &#34;&#34;&#34;
+        self.__download_progress = (url, destination, size)
+
+    def download_complete(self, wait=False):
+        &#34;&#34;&#34;
+        Checks whether the download has completed. If an error has occurred during the download, then this will raise a corresponding exception. Optionally waits
+        for the download to complete.
+
+        Args:
+            wait: Optionally wait for the download to complete? Default False.
+
+        Returns:
+            True if the download is complete.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if no download is in progress.
+        &#34;&#34;&#34;
+        # Make sure a download is in progress.
+        if self.__download_thread is None:
+            raise ModelError(i18n.t(&#39;models.data_file.no_download&#39;))
+
+        # Check the download thread. This will raise an exception if an error has occurred.
+        finished = False
+
+        try:
+            # Join will return immediately because of the timeout, but will raise an exception if something has gone wrong.
+            self.__download_thread.join(timeout=None if wait else 0)
+
+            # Check if the thread is still running after the join.
+            finished = not self.__download_thread.is_alive()
+
+        except:
+            # Something went wrong. Make sure we mark the download as finished and re-raise the error.
+            finished = True
+            raise
+
+        finally:
+            # Make sure we clear the progress and thread if it has finished.
+            if finished:
+                self.__download_progress = None
+                self.__download_thread = None
+
+        return finished
+
+    def download_progress(self):
+        &#34;&#34;&#34;
+        Returns current download progress.
+
+        Returns:
+            A tuple of the URL, destination and total number of bytes downloaded so far.
+
+        Raies:
+            ModelError: if no download is in progress.
+        &#34;&#34;&#34;
+        # Make sure a download is in progress.
+        if self.__download_thread is None:
+            raise ModelError(i18n.t(&#39;models.data_file.no_download&#39;))
+
+        return self.__download_progress
+
+    def download_url(self):
+        &#34;&#34;&#34;
+        Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.
+
+        Raies:
+            RequestError: if the request fails.
+        &#34;&#34;&#34;
+        response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id))
+
+        # Assume that the URL held within the expected key within the resulting dictionary.
+        url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
+
+        if url is None:
+            raise ModelError(i18n.t(&#39;models.data_file.failed_download_url&#39;))
+
+        return url</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fusion_platform.models.data_file.DataFile"><code class="flex name class">
+<span>class <span class="ident">DataFile</span></span>
+<span>(</span><span>session)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>DataFile model class providing attributes and methods to manipulate data file details.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataFile(Model):
+    &#34;&#34;&#34;
+    DataFile model class providing attributes and methods to manipulate data file details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = DataFileSchema()
+
+    # Override the base model class name.
+    _BASE_MODEL_CLASS_NAME = &#39;Data&#39;  # A string to prevent circular imports.
+
+    # No standard model paths as data file objects cannot be retrieved directly from the API.
+
+    # Add in the custom model paths.
+    _PATH_DOWNLOAD_FILE = &#39;/organisations/{organisation_id}/data/{data_id}/download_file/{file_id}&#39;
+
+    def __init__(self, session):
+        &#34;&#34;&#34;
+        Initialises the object.
+
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        super(DataFile, self).__init__(session)
+
+        # Initialise the fields.
+        self.__download_progress = None
+        self.__download_thread = None
+
+    def download(self, path, wait=False):
+        &#34;&#34;&#34;
+        Downloads the file to the specified path. Optionally waits for the download to complete.
+
+        Args:
+            path: The local path to download the file to.
+            wait: Optionally wait for the download to complete? Default False.
+
+        Raises:
+            RequestError: if the download fails.
+        &#34;&#34;&#34;
+        # Make sure no download is currently in progress.
+        if self.__download_thread is not None:
+            raise ModelError(i18n.t(&#39;models.data_file.download_already_in_progress&#39;))
+
+        # Obtain the download URL.
+        url = self.download_url()
+
+        # Start the download in a separate thread.
+        self.__download_progress = (url, path, 0)
+        self.__download_thread = RaiseThread(target=self._session.download_file, args=(url, path, self.__download_callback))
+        self.__download_thread.start()
+
+        # Optionally wait for completion.
+        self.download_complete(wait=wait)  # Ignore response.
+
+    def __download_callback(self, url, destination, size):
+        &#34;&#34;&#34;
+        Callback method used to receive progress from download. Updates the download progress.
+
+        Args:
+            url: The URL to download as a file.
+            destination: The destination file path.
+            size: The total size in bytes so far downloaded.
+        &#34;&#34;&#34;
+        self.__download_progress = (url, destination, size)
+
+    def download_complete(self, wait=False):
+        &#34;&#34;&#34;
+        Checks whether the download has completed. If an error has occurred during the download, then this will raise a corresponding exception. Optionally waits
+        for the download to complete.
+
+        Args:
+            wait: Optionally wait for the download to complete? Default False.
+
+        Returns:
+            True if the download is complete.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if no download is in progress.
+        &#34;&#34;&#34;
+        # Make sure a download is in progress.
+        if self.__download_thread is None:
+            raise ModelError(i18n.t(&#39;models.data_file.no_download&#39;))
+
+        # Check the download thread. This will raise an exception if an error has occurred.
+        finished = False
+
+        try:
+            # Join will return immediately because of the timeout, but will raise an exception if something has gone wrong.
+            self.__download_thread.join(timeout=None if wait else 0)
+
+            # Check if the thread is still running after the join.
+            finished = not self.__download_thread.is_alive()
+
+        except:
+            # Something went wrong. Make sure we mark the download as finished and re-raise the error.
+            finished = True
+            raise
+
+        finally:
+            # Make sure we clear the progress and thread if it has finished.
+            if finished:
+                self.__download_progress = None
+                self.__download_thread = None
+
+        return finished
+
+    def download_progress(self):
+        &#34;&#34;&#34;
+        Returns current download progress.
+
+        Returns:
+            A tuple of the URL, destination and total number of bytes downloaded so far.
+
+        Raies:
+            ModelError: if no download is in progress.
+        &#34;&#34;&#34;
+        # Make sure a download is in progress.
+        if self.__download_thread is None:
+            raise ModelError(i18n.t(&#39;models.data_file.no_download&#39;))
+
+        return self.__download_progress
+
+    def download_url(self):
+        &#34;&#34;&#34;
+        Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.
+
+        Raies:
+            RequestError: if the request fails.
+        &#34;&#34;&#34;
+        response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id))
+
+        # Assume that the URL held within the expected key within the resulting dictionary.
+        url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
+
+        if url is None:
+            raise ModelError(i18n.t(&#39;models.data_file.failed_download_url&#39;))
+
+        return url</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.models.data_file.DataFile.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
+</p>
+<div class="desc inherited"><h2 id="returns">Returns</h2>
+<p>The model attributes as a dictionary.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.data_file.DataFile.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFile.download"><code class="name flex">
+<span>def <span class="ident">download</span></span>(<span>self, path, wait=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Downloads the file to the specified path. Optionally waits for the download to complete.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>path</code></strong></dt>
+<dd>The local path to download the file to.</dd>
+<dt><strong><code>wait</code></strong></dt>
+<dd>Optionally wait for the download to complete? Default False.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the download fails.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download(self, path, wait=False):
+    &#34;&#34;&#34;
+    Downloads the file to the specified path. Optionally waits for the download to complete.
+
+    Args:
+        path: The local path to download the file to.
+        wait: Optionally wait for the download to complete? Default False.
+
+    Raises:
+        RequestError: if the download fails.
+    &#34;&#34;&#34;
+    # Make sure no download is currently in progress.
+    if self.__download_thread is not None:
+        raise ModelError(i18n.t(&#39;models.data_file.download_already_in_progress&#39;))
+
+    # Obtain the download URL.
+    url = self.download_url()
+
+    # Start the download in a separate thread.
+    self.__download_progress = (url, path, 0)
+    self.__download_thread = RaiseThread(target=self._session.download_file, args=(url, path, self.__download_callback))
+    self.__download_thread.start()
+
+    # Optionally wait for completion.
+    self.download_complete(wait=wait)  # Ignore response.</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFile.download_complete"><code class="name flex">
+<span>def <span class="ident">download_complete</span></span>(<span>self, wait=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks whether the download has completed. If an error has occurred during the download, then this will raise a corresponding exception. Optionally waits
+for the download to complete.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>wait</code></strong></dt>
+<dd>Optionally wait for the download to complete? Default False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>True if the download is complete.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any request fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if no download is in progress.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_complete(self, wait=False):
+    &#34;&#34;&#34;
+    Checks whether the download has completed. If an error has occurred during the download, then this will raise a corresponding exception. Optionally waits
+    for the download to complete.
+
+    Args:
+        wait: Optionally wait for the download to complete? Default False.
+
+    Returns:
+        True if the download is complete.
+
+    Raises:
+        RequestError: if any request fails.
+        ModelError: if no download is in progress.
+    &#34;&#34;&#34;
+    # Make sure a download is in progress.
+    if self.__download_thread is None:
+        raise ModelError(i18n.t(&#39;models.data_file.no_download&#39;))
+
+    # Check the download thread. This will raise an exception if an error has occurred.
+    finished = False
+
+    try:
+        # Join will return immediately because of the timeout, but will raise an exception if something has gone wrong.
+        self.__download_thread.join(timeout=None if wait else 0)
+
+        # Check if the thread is still running after the join.
+        finished = not self.__download_thread.is_alive()
+
+    except:
+        # Something went wrong. Make sure we mark the download as finished and re-raise the error.
+        finished = True
+        raise
+
+    finally:
+        # Make sure we clear the progress and thread if it has finished.
+        if finished:
+            self.__download_progress = None
+            self.__download_thread = None
+
+    return finished</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFile.download_progress"><code class="name flex">
+<span>def <span class="ident">download_progress</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns current download progress.</p>
+<h2 id="returns">Returns</h2>
+<p>A tuple of the URL, destination and total number of bytes downloaded so far.</p>
+<h2 id="raies">Raies</h2>
+<p>ModelError: if no download is in progress.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_progress(self):
+    &#34;&#34;&#34;
+    Returns current download progress.
+
+    Returns:
+        A tuple of the URL, destination and total number of bytes downloaded so far.
+
+    Raies:
+        ModelError: if no download is in progress.
+    &#34;&#34;&#34;
+    # Make sure a download is in progress.
+    if self.__download_thread is None:
+        raise ModelError(i18n.t(&#39;models.data_file.no_download&#39;))
+
+    return self.__download_progress</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFile.download_url"><code class="name flex">
+<span>def <span class="ident">download_url</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.</p>
+<h2 id="raies">Raies</h2>
+<p>RequestError: if the request fails.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_url(self):
+    &#34;&#34;&#34;
+    Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.
+
+    Raies:
+        RequestError: if the request fails.
+    &#34;&#34;&#34;
+    response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id))
+
+    # Assume that the URL held within the expected key within the resulting dictionary.
+    url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
+
+    if url is None:
+        raise ModelError(i18n.t(&#39;models.data_file.failed_download_url&#39;))
+
+    return url</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFile.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.get" href="model.html#fusion_platform.models.model.Model.get">get</a></code>
+</p>
+<div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFile.to_csv"><code class="name flex">
+<span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.to_csv" href="model.html#fusion_platform.models.model.Model.to_csv">to_csv</a></code>
+</p>
+<div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFile.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.update" href="model.html#fusion_platform.models.model.Model.update">update</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without …</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFileSchema"><code class="flex name class">
+<span>class <span class="ident">DataFileSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Schema class for data file model.</p>
+<p>Each data file model has the following fields (and nested fields):</p>
+<ul>
+<li><strong>id</strong>: The unique identifier for the record.</li>
+<li><strong>created_at</strong>: When was the record created?</li>
+<li><strong>updated_at</strong>: When was the record last updated?</li>
+<li><strong>organisation_id</strong>: The owning organisation.</li>
+<li><strong>data_id</strong>: The data item linked to this file record.</li>
+<li><strong>file_id</strong>: The file associated with this data item.</li>
+<li><strong>file_type</strong>: The type of file.</li>
+<li><strong>file_name</strong>: The name of the file.</li>
+<li><strong>resolution</strong>: For raster files, the resolution in metres.</li>
+<li><strong>crs</strong>: The optional coordinate reference system for the file.</li>
+<li><strong>bounds</strong>: The longitude and latitude bounds for the file (west, south, east, north).</li>
+<li><strong>area</strong>: The optional total area covered by the file content in metres squared.</li>
+<li><strong>mgrs_cells</strong>: The optional list of MGRS cells which are covered by the file content.</li>
+<li><strong>sinusoidal_cells</strong>: The optional list of sinusoidal cells which are covered by the file content.</li>
+<li><strong>size</strong>: The size of the file in bytes.</li>
+<li><strong>error</strong>: Was there an error encountered during analysis of the file?</li>
+<li><strong>publishable</strong>: Is the file suitable for publishing as it is without optimisation?</li>
+<li><strong>alternative</strong>: The alternative file to use if this file is not publishable.</li>
+<li><strong>source</strong>: If this file is an alternative created from a non-publishable file, then this specifies the source file.</li>
+<li><strong>selectors</strong>: The selectors for the file.<ul>
+<li><strong>selector</strong>: The selector to be applied to the file, such as the required raster band or data field.</li>
+<li><strong>category</strong>: The category associated with the selector.</li>
+<li><strong>data_type</strong>: The data type associated with the selector.</li>
+<li><strong>unit</strong>: The optional unit associated with the selector.</li>
+<li><strong>validation</strong>: The optional validation for the selector. This must be supplied for date/time and constrained values.</li>
+<li><strong>area</strong>: The optional area for the selector in metres squared.</li>
+<li><strong>initial_values</strong>: The first initial values associated with the selector.</li>
+<li><strong>minimum</strong>: The minimum value associated with the selector values.</li>
+<li><strong>maximum</strong>: The maximum value associated with the selector values.</li>
+<li><strong>mean</strong>: The mean value associated with the selector values.</li>
+<li><strong>sd</strong>: The standard deviation associated with the selector values.</li>
+<li><strong>histogram_minimum</strong>: The histogram maximum value associated with the selector values.</li>
+<li><strong>histogram_maximum</strong>: The histogram maximum value associated with the selector values.</li>
+<li><strong>histogram</strong>: The histogram associated with the selector values.</li>
+</ul>
+</li>
+<li><strong>title</strong>: The title for the selector.</li>
+<li><strong>description</strong>: The description of the selector.</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataFileSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for data file model.
+
+    Each data file model has the following fields (and nested fields):
+
+    .. include::data_file.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True, &#39;title&#39;: i18n.t(&#39;models.data_file.organisation_id.title&#39;), &#39;description&#39;: i18n.t(
+        &#39;models.data_file.organisation_id.description&#39;)})  # Added parameter so that it can be used.
+    data_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    file_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    file_type = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    file_name = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    resolution = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    crs = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    area = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
+                                   metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    size = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    error = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    publishable = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    alternative = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    source = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    title = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    description = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.data_file.DataFileSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFileSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFileSelectorSchema"><code class="flex name class">
+<span>class <span class="ident">DataFileSelectorSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for selector, category, data type, unit, format and statistics.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataFileSelectorSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for selector, category, data type, unit, format and statistics.
+    &#34;&#34;&#34;
+    selector = fields.String(required=True)
+    category = fields.String(allow_none=True)
+    data_type = fields.String(allow_none=True)
+    unit = fields.String(allow_none=True)
+    validation = fields.String(allow_none=True)
+
+    area = fields.Decimal(allow_none=True)
+
+    initial_values = fields.List(fields.String(required=True), allow_none=True)
+    minimum = fields.Decimal(allow_none=True)
+    maximum = fields.Decimal(allow_none=True)
+    mean = fields.Decimal(allow_none=True)
+    sd = fields.Decimal(allow_none=True)
+
+    histogram_minimum = fields.Decimal(allow_none=True)
+    histogram_maximum = fields.Decimal(allow_none=True)
+    histogram = fields.List(fields.Decimal(required=True), allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.data_file.DataFileSelectorSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.data_file.DataFileSelectorSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<header>
+<img src="https://raw.githubusercontent.com/d-cat-support/fusion-platform-python-sdk/master/docs/logo.png" alt="D-CAT">
+<h2>
+Fusion Platform<sup>&reg;</sup> Python SDK
+</h2>
+<p>
+&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
+<p>
+</header>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fusion_platform.models" href="index.html">fusion_platform.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fusion_platform.models.data_file.DataFile" href="#fusion_platform.models.data_file.DataFile">DataFile</a></code></h4>
+<ul class="two-column">
+<li><code><a title="fusion_platform.models.data_file.DataFile.attributes" href="model.html#fusion_platform.models.data_file.DataFile.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.delete" href="model.html#fusion_platform.models.data_file.DataFile.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.download" href="#fusion_platform.models.data_file.DataFile.download">download</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.download_complete" href="#fusion_platform.models.data_file.DataFile.download_complete">download_complete</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.download_progress" href="#fusion_platform.models.data_file.DataFile.download_progress">download_progress</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.download_url" href="#fusion_platform.models.data_file.DataFile.download_url">download_url</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.get" href="model.html#fusion_platform.models.data_file.DataFile.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.to_csv" href="model.html#fusion_platform.models.data_file.DataFile.to_csv">to_csv</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFile.update" href="model.html#fusion_platform.models.data_file.DataFile.update">update</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.data_file.DataFileSchema" href="#fusion_platform.models.data_file.DataFileSchema">DataFileSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.data_file.DataFileSchema.Meta" href="#fusion_platform.models.data_file.DataFileSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFileSchema.opts" href="#fusion_platform.models.data_file.DataFileSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.data_file.DataFileSelectorSchema" href="#fusion_platform.models.data_file.DataFileSelectorSchema">DataFileSelectorSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.data_file.DataFileSelectorSchema.Meta" href="#fusion_platform.models.data_file.DataFileSelectorSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.data_file.DataFileSelectorSchema.opts" href="#fusion_platform.models.data_file.DataFileSelectorSchema.opts">opts</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

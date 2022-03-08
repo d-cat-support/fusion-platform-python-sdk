@@ -1,0 +1,1014 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fusion_platform.models.data API documentation</title>
+<meta name="description" content="Data model class file …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fusion_platform.models.data</code></h1>
+</header>
+<section id="section-intro">
+<p>Data model class file.</p>
+<p>author: Matthew Casey</p>
+<p>&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Data model class file.
+
+author: Matthew Casey
+
+&amp;copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+&#34;&#34;&#34;
+
+import i18n
+from marshmallow import Schema, EXCLUDE
+import os
+from time import sleep
+
+from fusion_platform.common.raise_thread import RaiseThread
+from fusion_platform.common.utilities import dict_nested_get
+from fusion_platform.models import fields
+from fusion_platform.models.data_file import DataFile
+from fusion_platform.models.model import Model, ModelError
+from fusion_platform.session import Session
+
+
+# Define the model schema classes. These are maintained from the API definitions.
+
+class DataIngesterSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for ingesters.
+    &#34;&#34;&#34;
+    ingester_id = fields.UUID(required=True)
+    dates = fields.List(fields.DateTime(required=True), required=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class DataSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for data model.
+
+    Each data has the following fields (and nested fields):
+
+    .. include::data.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    organisation_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    name = fields.String(required=True)
+
+    # Removed lock.
+    unlinked = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    ingester_availability = fields.List(fields.Nested(DataIngesterSchema()), allow_none=True,
+                                        metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed link_id.
+    # Removed link_model.
+    # Removed link_hash.
+
+    uploaded = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed creator.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
+class Data(Model):
+    &#34;&#34;&#34;
+    Data model class providing attributes and methods to manipulate data item details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = DataSchema()
+
+    # Override the base model class name.
+    _BASE_MODEL_CLASS_NAME = &#39;Organisation&#39;  # A string to prevent circular imports.
+
+    # Base path.
+    _PATH_ROOT = &#39;/organisations/{organisation_id}/data&#39;
+    _PATH_BASE = f&#34;{_PATH_ROOT}/{{data_id}}&#34;
+
+    # Override the standard model paths.
+    _PATH_CREATE = _PATH_ROOT
+    _PATH_DELETE = _PATH_BASE
+    _PATH_GET = _PATH_BASE
+    _PATH_NEW = f&#34;{_PATH_ROOT}/new&#34;
+    _PATH_PATCH = _PATH_BASE
+
+    # Add in the custom model paths.
+    _PATH_ADD_FILE = f&#34;{_PATH_BASE}/add_file&#34;
+    _PATH_FILES = f&#34;{_PATH_BASE}/files&#34;
+
+    # Response keys.
+    _RESPONSE_KEY_FILE = &#39;file&#39;
+
+    def __init__(self, session):
+        &#34;&#34;&#34;
+        Initialises the object.
+
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        super(Data, self).__init__(session)
+
+        # Initialise the fields.
+        self.__upload_threads = {}
+
+    def __add_file(self, file_type, file):
+        &#34;&#34;&#34;
+        Attempts to add a file to the data object and then starts its upload. The file is uploaded using a thread.
+
+        Args:
+            file_type: The type of file to add.
+            file: The path to the file to add.
+
+        Raises:
+            RequestError: if the add fails.
+        &#34;&#34;&#34;
+        # Add the file to the data model.
+        body = {self.__class__.__name__: {&#39;name&#39;: os.path.basename(file), &#39;file_type&#39;: file_type}}
+        response = self._session.request(path=self._get_path(self.__class__._PATH_ADD_FILE), method=Session.METHOD_POST, body=body)
+
+        # Assume that the file id is held within the expected key within the resulting dictionary.
+        file_id = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_FILE])
+
+        if file_id is None:
+            raise ModelError(i18n.t(&#39;models.data.failed_add_file_id&#39;))
+
+        # Assume that the URL held within the expected key within the resulting dictionary.
+        url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
+
+        if url is None:
+            raise ModelError(i18n.t(&#39;models.data.failed_add_file_url&#39;))
+
+        # Make sure the file is unique so that we can keep track of it.
+        if file_id in self.__upload_threads:
+            raise ModelError(i18n.t(&#39;models.data.failed_add_file_not_unique&#39;))
+
+        # Create and start a thread for the upload.
+        thread = None
+
+        try:
+            thread = RaiseThread(target=self._session.upload_file, args=(url, file))
+            thread.start()
+
+        finally:
+            # Make sure we record the thread so we can monitor it, even if it fails.
+            self.__upload_threads[file_id] = thread
+
+    def __check_analysis_complete(self):
+        &#34;&#34;&#34;
+        Checks that the analysis of all files associated with this data object is complete.
+
+        Returns:
+            True if the analysis is complete for all files.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        complete = True
+
+        # Load in each of the file models and check that every file has been uploaded, and has a publishable or error  field to indicate that the analysis is
+        # complete.
+        for file in self.files:
+            has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                    hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
+
+            if not has_fields:
+                self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
+                complete = False
+                break
+
+        return complete
+
+    def _create(self, name, file_type, files, wait=False):
+        &#34;&#34;&#34;
+        Attempts to create the model object with the given values. This assumes the model template has been loaded first using the _new method, and that the model
+        is then created using a POST RESTful request. This assumes that the post body contains key names which include the name of the model class.
+
+        This method is overridden to also upload the corresponding files and optionally wait for the upload and analysis to complete.
+
+        Args:
+        name: The name of the data object.
+        file_type: The type of files that the data object will hold.
+        files: The list of file paths to be uploaded.
+        wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            The created data object.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Use the super method to create the data item with the correct attributes. This will raise an exception if anything fails.
+        super(Data, self)._create(name=name)
+
+        # Add each of the files, assuming that each is of the same file type, and start its upload in a thread.
+        try:
+            for file in files:
+                self.__add_file(file_type, file)
+
+        finally:
+            # Optionally wait for completion. We must complete this even if an exception has occurred because there may be multiple files. However, we only do this
+            # if any threads were started.
+            if len(self.__upload_threads) &gt; 0:
+                self.create_complete(wait=wait)  # Ignore response.
+
+    def create_complete(self, wait=False):
+        &#34;&#34;&#34;
+        Checks whether the data object file(s) upload and analysis have completed. If an error has occurred during the upload and analysis, then this will raise
+        a corresponding exception. Optionally waits for the upload and analysis to complete.
+
+        Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
+        until all upload and analysis (or errored) has completed and this method returns True.
+
+        Args:
+            wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            True if the upload and analysis are complete for all files.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if the upload or analysis failed.
+        &#34;&#34;&#34;
+        # Make sure a create is in progress.
+        if len(self.__upload_threads) &lt;= 0:
+            raise ModelError(i18n.t(&#39;models.data.no_create&#39;))
+
+        # Check the upload threads. This will raise an exception if an error has occurred.
+        first_error = None
+
+        for file_id, thread in self.__upload_threads.items():
+            if thread is not None:
+                thread_finished = False
+
+                try:
+                    # Join will return immediately because of the timeout, but will raise an exception if something has gone wrong.
+                    thread.join(timeout=None if wait else 0)
+
+                    # Check if the thread is still running after the join.
+                    thread_finished = not thread.is_alive()
+
+                except Exception as e:
+                    # Something went wrong. Make sure we mark the upload as finished.
+                    thread_finished = True
+
+                    # If we are waiting for everything to complete, then we must not re-raise the error here so that everything else can be completed first.
+                    # Instead, we save the error off and raise it later.
+                    if wait:
+                        first_error = e if first_error is None else first_error
+                    else:
+                        raise
+
+                finally:
+                    # Make sure we clear the thread if it has finished.
+                    if thread_finished:
+                        self.__upload_threads[file_id] = None
+
+        # Have all the uploads finished?
+        uploads_finished = all([value is None for value in self.__upload_threads.values()])
+
+        # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. if an
+        # error occurs, then we assume that the analysis is complete to prevent indefinitely waiting.
+        complete = False
+
+        try:
+            while uploads_finished:
+                complete = self.__check_analysis_complete()
+
+                # Break the loop if we are not waiting or are complete.
+                if (not wait) or complete:
+                    break
+
+                # We are waiting, so block for a short while.
+                sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+
+        except Exception as e:
+            # An error occurred, make sure we treat this as complete to prevent an indefinite loop.
+            complete = True
+
+            # If we already have an error to raise, make sure we do not overwrite it.
+            first_error = e if first_error is None else first_error
+
+        finally:
+            if complete:
+                # Tidy up any finished threads. This will allow us to indicate that everything is complete.
+                self.__upload_threads = {file_id: thread for file_id, thread in self.__upload_threads.items() if thread is not None}
+
+        # If we encountered an error, make sure we raise it.
+        if first_error is not None:
+            raise first_error
+
+        return len(self.__upload_threads) &lt;= 0
+
+    @property
+    def files(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the data object&#39;s files.
+
+        Returns:
+            An iterator through the data object&#39;s files.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fusion_platform.models.data.Data"><code class="flex name class">
+<span>class <span class="ident">Data</span></span>
+<span>(</span><span>session)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Data model class providing attributes and methods to manipulate data item details.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Data(Model):
+    &#34;&#34;&#34;
+    Data model class providing attributes and methods to manipulate data item details.
+    &#34;&#34;&#34;
+
+    # Override the schema.
+    _SCHEMA = DataSchema()
+
+    # Override the base model class name.
+    _BASE_MODEL_CLASS_NAME = &#39;Organisation&#39;  # A string to prevent circular imports.
+
+    # Base path.
+    _PATH_ROOT = &#39;/organisations/{organisation_id}/data&#39;
+    _PATH_BASE = f&#34;{_PATH_ROOT}/{{data_id}}&#34;
+
+    # Override the standard model paths.
+    _PATH_CREATE = _PATH_ROOT
+    _PATH_DELETE = _PATH_BASE
+    _PATH_GET = _PATH_BASE
+    _PATH_NEW = f&#34;{_PATH_ROOT}/new&#34;
+    _PATH_PATCH = _PATH_BASE
+
+    # Add in the custom model paths.
+    _PATH_ADD_FILE = f&#34;{_PATH_BASE}/add_file&#34;
+    _PATH_FILES = f&#34;{_PATH_BASE}/files&#34;
+
+    # Response keys.
+    _RESPONSE_KEY_FILE = &#39;file&#39;
+
+    def __init__(self, session):
+        &#34;&#34;&#34;
+        Initialises the object.
+
+        Args:
+            session: The linked session object for interfacing with the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        super(Data, self).__init__(session)
+
+        # Initialise the fields.
+        self.__upload_threads = {}
+
+    def __add_file(self, file_type, file):
+        &#34;&#34;&#34;
+        Attempts to add a file to the data object and then starts its upload. The file is uploaded using a thread.
+
+        Args:
+            file_type: The type of file to add.
+            file: The path to the file to add.
+
+        Raises:
+            RequestError: if the add fails.
+        &#34;&#34;&#34;
+        # Add the file to the data model.
+        body = {self.__class__.__name__: {&#39;name&#39;: os.path.basename(file), &#39;file_type&#39;: file_type}}
+        response = self._session.request(path=self._get_path(self.__class__._PATH_ADD_FILE), method=Session.METHOD_POST, body=body)
+
+        # Assume that the file id is held within the expected key within the resulting dictionary.
+        file_id = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_FILE])
+
+        if file_id is None:
+            raise ModelError(i18n.t(&#39;models.data.failed_add_file_id&#39;))
+
+        # Assume that the URL held within the expected key within the resulting dictionary.
+        url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
+
+        if url is None:
+            raise ModelError(i18n.t(&#39;models.data.failed_add_file_url&#39;))
+
+        # Make sure the file is unique so that we can keep track of it.
+        if file_id in self.__upload_threads:
+            raise ModelError(i18n.t(&#39;models.data.failed_add_file_not_unique&#39;))
+
+        # Create and start a thread for the upload.
+        thread = None
+
+        try:
+            thread = RaiseThread(target=self._session.upload_file, args=(url, file))
+            thread.start()
+
+        finally:
+            # Make sure we record the thread so we can monitor it, even if it fails.
+            self.__upload_threads[file_id] = thread
+
+    def __check_analysis_complete(self):
+        &#34;&#34;&#34;
+        Checks that the analysis of all files associated with this data object is complete.
+
+        Returns:
+            True if the analysis is complete for all files.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        complete = True
+
+        # Load in each of the file models and check that every file has been uploaded, and has a publishable or error  field to indicate that the analysis is
+        # complete.
+        for file in self.files:
+            has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                    hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
+
+            if not has_fields:
+                self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
+                complete = False
+                break
+
+        return complete
+
+    def _create(self, name, file_type, files, wait=False):
+        &#34;&#34;&#34;
+        Attempts to create the model object with the given values. This assumes the model template has been loaded first using the _new method, and that the model
+        is then created using a POST RESTful request. This assumes that the post body contains key names which include the name of the model class.
+
+        This method is overridden to also upload the corresponding files and optionally wait for the upload and analysis to complete.
+
+        Args:
+        name: The name of the data object.
+        file_type: The type of files that the data object will hold.
+        files: The list of file paths to be uploaded.
+        wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            The created data object.
+
+        Raises:
+            RequestError: if the create fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Use the super method to create the data item with the correct attributes. This will raise an exception if anything fails.
+        super(Data, self)._create(name=name)
+
+        # Add each of the files, assuming that each is of the same file type, and start its upload in a thread.
+        try:
+            for file in files:
+                self.__add_file(file_type, file)
+
+        finally:
+            # Optionally wait for completion. We must complete this even if an exception has occurred because there may be multiple files. However, we only do this
+            # if any threads were started.
+            if len(self.__upload_threads) &gt; 0:
+                self.create_complete(wait=wait)  # Ignore response.
+
+    def create_complete(self, wait=False):
+        &#34;&#34;&#34;
+        Checks whether the data object file(s) upload and analysis have completed. If an error has occurred during the upload and analysis, then this will raise
+        a corresponding exception. Optionally waits for the upload and analysis to complete.
+
+        Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
+        until all upload and analysis (or errored) has completed and this method returns True.
+
+        Args:
+            wait: Optionally wait for the upload and analysis to complete? Default False.
+
+        Returns:
+            True if the upload and analysis are complete for all files.
+
+        Raises:
+            RequestError: if any request fails.
+            ModelError: if the upload or analysis failed.
+        &#34;&#34;&#34;
+        # Make sure a create is in progress.
+        if len(self.__upload_threads) &lt;= 0:
+            raise ModelError(i18n.t(&#39;models.data.no_create&#39;))
+
+        # Check the upload threads. This will raise an exception if an error has occurred.
+        first_error = None
+
+        for file_id, thread in self.__upload_threads.items():
+            if thread is not None:
+                thread_finished = False
+
+                try:
+                    # Join will return immediately because of the timeout, but will raise an exception if something has gone wrong.
+                    thread.join(timeout=None if wait else 0)
+
+                    # Check if the thread is still running after the join.
+                    thread_finished = not thread.is_alive()
+
+                except Exception as e:
+                    # Something went wrong. Make sure we mark the upload as finished.
+                    thread_finished = True
+
+                    # If we are waiting for everything to complete, then we must not re-raise the error here so that everything else can be completed first.
+                    # Instead, we save the error off and raise it later.
+                    if wait:
+                        first_error = e if first_error is None else first_error
+                    else:
+                        raise
+
+                finally:
+                    # Make sure we clear the thread if it has finished.
+                    if thread_finished:
+                        self.__upload_threads[file_id] = None
+
+        # Have all the uploads finished?
+        uploads_finished = all([value is None for value in self.__upload_threads.values()])
+
+        # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. if an
+        # error occurs, then we assume that the analysis is complete to prevent indefinitely waiting.
+        complete = False
+
+        try:
+            while uploads_finished:
+                complete = self.__check_analysis_complete()
+
+                # Break the loop if we are not waiting or are complete.
+                if (not wait) or complete:
+                    break
+
+                # We are waiting, so block for a short while.
+                sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+
+        except Exception as e:
+            # An error occurred, make sure we treat this as complete to prevent an indefinite loop.
+            complete = True
+
+            # If we already have an error to raise, make sure we do not overwrite it.
+            first_error = e if first_error is None else first_error
+
+        finally:
+            if complete:
+                # Tidy up any finished threads. This will allow us to indicate that everything is complete.
+                self.__upload_threads = {file_id: thread for file_id, thread in self.__upload_threads.items() if thread is not None}
+
+        # If we encountered an error, make sure we raise it.
+        if first_error is not None:
+            raise first_error
+
+        return len(self.__upload_threads) &lt;= 0
+
+    @property
+    def files(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the data object&#39;s files.
+
+        Returns:
+            An iterator through the data object&#39;s files.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.models.data.Data.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
+</p>
+<div class="desc inherited"><h2 id="returns">Returns</h2>
+<p>The model attributes as a dictionary.</p></div>
+</dd>
+<dt id="fusion_platform.models.data.Data.files"><code class="name">var <span class="ident">files</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the data object's files.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the data object's files.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def files(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the data object&#39;s files.
+
+    Returns:
+        An iterator through the data object&#39;s files.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.data.Data.create_complete"><code class="name flex">
+<span>def <span class="ident">create_complete</span></span>(<span>self, wait=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks whether the data object file(s) upload and analysis have completed. If an error has occurred during the upload and analysis, then this will raise
+a corresponding exception. Optionally waits for the upload and analysis to complete.</p>
+<p>Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
+until all upload and analysis (or errored) has completed and this method returns True.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>wait</code></strong></dt>
+<dd>Optionally wait for the upload and analysis to complete? Default False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>True if the upload and analysis are complete for all files.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any request fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the upload or analysis failed.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_complete(self, wait=False):
+    &#34;&#34;&#34;
+    Checks whether the data object file(s) upload and analysis have completed. If an error has occurred during the upload and analysis, then this will raise
+    a corresponding exception. Optionally waits for the upload and analysis to complete.
+
+    Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
+    until all upload and analysis (or errored) has completed and this method returns True.
+
+    Args:
+        wait: Optionally wait for the upload and analysis to complete? Default False.
+
+    Returns:
+        True if the upload and analysis are complete for all files.
+
+    Raises:
+        RequestError: if any request fails.
+        ModelError: if the upload or analysis failed.
+    &#34;&#34;&#34;
+    # Make sure a create is in progress.
+    if len(self.__upload_threads) &lt;= 0:
+        raise ModelError(i18n.t(&#39;models.data.no_create&#39;))
+
+    # Check the upload threads. This will raise an exception if an error has occurred.
+    first_error = None
+
+    for file_id, thread in self.__upload_threads.items():
+        if thread is not None:
+            thread_finished = False
+
+            try:
+                # Join will return immediately because of the timeout, but will raise an exception if something has gone wrong.
+                thread.join(timeout=None if wait else 0)
+
+                # Check if the thread is still running after the join.
+                thread_finished = not thread.is_alive()
+
+            except Exception as e:
+                # Something went wrong. Make sure we mark the upload as finished.
+                thread_finished = True
+
+                # If we are waiting for everything to complete, then we must not re-raise the error here so that everything else can be completed first.
+                # Instead, we save the error off and raise it later.
+                if wait:
+                    first_error = e if first_error is None else first_error
+                else:
+                    raise
+
+            finally:
+                # Make sure we clear the thread if it has finished.
+                if thread_finished:
+                    self.__upload_threads[file_id] = None
+
+    # Have all the uploads finished?
+    uploads_finished = all([value is None for value in self.__upload_threads.values()])
+
+    # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. if an
+    # error occurs, then we assume that the analysis is complete to prevent indefinitely waiting.
+    complete = False
+
+    try:
+        while uploads_finished:
+            complete = self.__check_analysis_complete()
+
+            # Break the loop if we are not waiting or are complete.
+            if (not wait) or complete:
+                break
+
+            # We are waiting, so block for a short while.
+            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+
+    except Exception as e:
+        # An error occurred, make sure we treat this as complete to prevent an indefinite loop.
+        complete = True
+
+        # If we already have an error to raise, make sure we do not overwrite it.
+        first_error = e if first_error is None else first_error
+
+    finally:
+        if complete:
+            # Tidy up any finished threads. This will allow us to indicate that everything is complete.
+            self.__upload_threads = {file_id: thread for file_id, thread in self.__upload_threads.items() if thread is not None}
+
+    # If we encountered an error, make sure we raise it.
+    if first_error is not None:
+        raise first_error
+
+    return len(self.__upload_threads) &lt;= 0</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.data.Data.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.data.Data.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.get" href="model.html#fusion_platform.models.model.Model.get">get</a></code>
+</p>
+<div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
+</dd>
+<dt id="fusion_platform.models.data.Data.to_csv"><code class="name flex">
+<span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.to_csv" href="model.html#fusion_platform.models.model.Model.to_csv">to_csv</a></code>
+</p>
+<div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
+</dd>
+<dt id="fusion_platform.models.data.Data.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.update" href="model.html#fusion_platform.models.model.Model.update">update</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without …</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.data.DataIngesterSchema"><code class="flex name class">
+<span>class <span class="ident">DataIngesterSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for ingesters.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataIngesterSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for ingesters.
+    &#34;&#34;&#34;
+    ingester_id = fields.UUID(required=True)
+    dates = fields.List(fields.DateTime(required=True), required=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.data.DataIngesterSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.data.DataIngesterSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.data.DataSchema"><code class="flex name class">
+<span>class <span class="ident">DataSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Schema class for data model.</p>
+<p>Each data has the following fields (and nested fields):</p>
+<ul>
+<li><strong>id</strong>: The unique identifier for the record.</li>
+<li><strong>created_at</strong>: When was the record created?</li>
+<li><strong>updated_at</strong>: When was the record last updated?</li>
+<li><strong>organisation_id</strong>: The owning organisation.</li>
+<li><strong>name</strong>: The name of the data item.</li>
+<li><strong>unlinked</strong>: Is the file unlinked from any other model and therefore not in use?</li>
+<li><strong>ingester_availability</strong>: The optionally list of ingesters which can use this data item, and the associated dates for which data is available.<ul>
+<li><strong>ingester_id</strong>: The ingester which can provide input for this data item.</li>
+<li><strong>dates</strong>: The list of dates for which data is available from this ingester.</li>
+</ul>
+</li>
+<li><strong>uploaded</strong>: Was the data item uploaded?</li>
+<li><strong>deletable</strong>: Is this data model scheduled for deletion?</li>
+</ul></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataSchema(Schema):
+    &#34;&#34;&#34;
+    Schema class for data model.
+
+    Each data has the following fields (and nested fields):
+
+    .. include::data.md
+    &#34;&#34;&#34;
+    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    organisation_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    name = fields.String(required=True)
+
+    # Removed lock.
+    unlinked = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    ingester_availability = fields.List(fields.Nested(DataIngesterSchema()), allow_none=True,
+                                        metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed link_id.
+    # Removed link_model.
+    # Removed link_hash.
+
+    uploaded = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    # Removed creator.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.data.DataSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.data.DataSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<header>
+<img src="https://raw.githubusercontent.com/d-cat-support/fusion-platform-python-sdk/master/docs/logo.png" alt="D-CAT">
+<h2>
+Fusion Platform<sup>&reg;</sup> Python SDK
+</h2>
+<p>
+&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
+<p>
+</header>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fusion_platform.models" href="index.html">fusion_platform.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fusion_platform.models.data.Data" href="#fusion_platform.models.data.Data">Data</a></code></h4>
+<ul class="two-column">
+<li><code><a title="fusion_platform.models.data.Data.attributes" href="model.html#fusion_platform.models.data.Data.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.create_complete" href="#fusion_platform.models.data.Data.create_complete">create_complete</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.delete" href="model.html#fusion_platform.models.data.Data.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.files" href="#fusion_platform.models.data.Data.files">files</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.get" href="model.html#fusion_platform.models.data.Data.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.to_csv" href="model.html#fusion_platform.models.data.Data.to_csv">to_csv</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.update" href="model.html#fusion_platform.models.data.Data.update">update</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.data.DataIngesterSchema" href="#fusion_platform.models.data.DataIngesterSchema">DataIngesterSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.data.DataIngesterSchema.Meta" href="#fusion_platform.models.data.DataIngesterSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.data.DataIngesterSchema.opts" href="#fusion_platform.models.data.DataIngesterSchema.opts">opts</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.data.DataSchema" href="#fusion_platform.models.data.DataSchema">DataSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.data.DataSchema.Meta" href="#fusion_platform.models.data.DataSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.data.DataSchema.opts" href="#fusion_platform.models.data.DataSchema.opts">opts</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

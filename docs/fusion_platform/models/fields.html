@@ -1,0 +1,1279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>fusion_platform.models.fields API documentation</title>
+<meta name="description" content="Fields classes …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>fusion_platform.models.fields</code></h1>
+</header>
+<section id="section-intro">
+<p>Fields classes.</p>
+<p>author: Matthew Casey</p>
+<p>&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Fields classes.
+
+author: Matthew Casey
+
+&amp;copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
+&#34;&#34;&#34;
+
+from datetime import datetime, timedelta, timezone
+from dateutil.relativedelta import relativedelta
+import i18n
+import json
+from marshmallow import fields
+import typing
+
+
+#
+# Groups together all the bespoke field types used by models so that they can be serialised appropriately to JSON and so that the validation errors are localised.
+# All fields descend from Marshmallow fields.
+#
+
+class Boolean(fields.Boolean):
+    &#34;&#34;&#34;
+    Defines a Boolean.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.boolean.invalid&#39;)}
+
+
+class DateTime(fields.DateTime):
+    &#34;&#34;&#34;
+    Defines a datetime.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.datetime.invalid&#39;), &#39;invalid_awareness&#39;: i18n.t(&#39;models.fields.datetime.invalid_awareness&#39;),
+                              &#39;format&#39;: i18n.t(&#39;models.fields.datetime.format&#39;), }
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        &#34;&#34;&#34;
+        Overrides the serialization. This is because when a nested model is validated, it may be passed as a string already (from an update), instead of a datetime.
+
+        Args:
+            value: The value to serialize.
+            attr: The attribute/key in `data` to deserialize.
+            obj: The associated object.
+            kwargs: Field-specific keyword arguments.
+
+        Returns:
+            The serialised datetime.
+        &#34;&#34;&#34;
+
+        if isinstance(value, str):
+            return value
+
+        # Note that if the datetime does not have a timezone, we enforce UTC. See also utilities#json_default.
+        value = value.astimezone(timezone.utc) if isinstance(value, datetime) and (value.tzinfo is None) else value
+        return super(DateTime, self)._serialize(value, attr, obj, **kwargs)
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        &#34;&#34;&#34;
+        Overrides the deserialization. This is because when a model is validated, it uses deserialization to validate the values. However,
+        because the datetime is native, and not a string, the validation fails. We therefore pass the validation if the value is already a
+        datetime.
+
+        Args:
+            value: The value to deserialize.
+            attr: The attribute/key in `data` to deserialize.
+            data: The raw input data passed to `Schema.load`.
+            kwargs: Field-specific keyword arguments.
+
+        Raises:
+            ValidationError: If an invalid value is passed or if a required value is missing.
+        &#34;&#34;&#34;
+        if not value:
+            return None
+
+        if value and isinstance(value, datetime):
+            return value
+
+        return super(DateTime, self)._deserialize(value, attr, data, **kwargs)
+
+
+class Decimal(fields.Decimal):
+    &#34;&#34;&#34;
+    Defines a decimal value.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.decimal.invalid&#39;), &#39;too_large&#39;: i18n.t(&#39;models.fields.decimal.too_large&#39;),
+                              &#39;special&#39;: i18n.t(&#39;models.fields.decimal.special&#39;)}
+
+
+class Dict(fields.Dict):
+    &#34;&#34;&#34;
+    Defines a dictionary.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.dict.invalid&#39;)}
+
+
+class Email(fields.Email):
+    &#34;&#34;&#34;
+    Defines an email.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.email.invalid&#39;)}
+
+
+class Float(fields.Float):
+    &#34;&#34;&#34;
+    Defines a float.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.float.invalid&#39;), &#39;too_large&#39;: i18n.t(&#39;models.fields.float.too_large&#39;),
+                              &#39;special&#39;: i18n.t(&#39;models.fields.float.special&#39;)}
+
+
+class Integer(fields.Integer):
+    &#34;&#34;&#34;
+    Defines an integer.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.integer.invalid&#39;), &#39;too_large&#39;: i18n.t(&#39;models.fields.integer.too_large&#39;)}
+
+
+class IP(fields.IP):
+    &#34;&#34;&#34;
+    Defines an IP address.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid_ip&#39;: i18n.t(&#39;models.fields.ip.invalid_ip&#39;)}
+
+
+class List(fields.List):
+    &#34;&#34;&#34;
+    Defines a list of other fields.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.list.invalid&#39;)}
+
+
+class Nested(fields.Nested):
+    &#34;&#34;&#34;
+    Defines a nested field with its own schema.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;type&#39;: i18n.t(&#39;models.fields.nested.type&#39;)}
+
+
+class RelativeDelta(fields.Field):
+    &#34;&#34;&#34;
+    A relative delta field. Represents a relative datetime.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.relativedelta.invalid&#39;)}
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        &#34;&#34;&#34;
+        Deserializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            data: The data. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if not value:
+            return None
+
+        if value and isinstance(value, relativedelta):
+            return value
+
+        if not isinstance(value, (str, bytes)):
+            raise self.make_error(&#39;invalid&#39;)
+
+        # Attempt to parse the string.
+        try:
+            dictionary = json.loads(value)
+            years = dictionary.get(&#39;years&#39;, 0) if dictionary.get(&#39;years&#39;, 0) is not None else 0
+            months = dictionary.get(&#39;months&#39;, 0) if dictionary.get(&#39;months&#39;, 0) is not None else 0
+            days = dictionary.get(&#39;days&#39;, 0) if dictionary.get(&#39;days&#39;, 0) is not None else 0
+            leapdays = dictionary.get(&#39;leapdays&#39;, 0) if dictionary.get(&#39;leapdays&#39;, 0) is not None else 0
+            weeks = dictionary.get(&#39;weeks&#39;, 0) if dictionary.get(&#39;weeks&#39;, 0) is not None else 0
+            hours = dictionary.get(&#39;hours&#39;, 0) if dictionary.get(&#39;hours&#39;, 0) is not None else 0
+            minutes = dictionary.get(&#39;minutes&#39;, 0) if dictionary.get(&#39;minutes&#39;, 0) is not None else 0
+            seconds = dictionary.get(&#39;seconds&#39;, 0) if dictionary.get(&#39;seconds&#39;, 0) is not None else 0
+            microseconds = dictionary.get(&#39;microseconds&#39;, 0) if dictionary.get(&#39;microseconds&#39;, 0) is not None else 0
+
+            return relativedelta(years=years, months=months, days=days, leapdays=leapdays, weeks=weeks, hours=hours, minutes=minutes, seconds=seconds,
+                                 microseconds=microseconds, year=dictionary.get(&#39;year&#39;), month=dictionary.get(&#39;month&#39;), day=dictionary.get(&#39;day&#39;),
+                                 weekday=dictionary.get(&#39;weekday&#39;), hour=dictionary.get(&#39;hour&#39;), minute=dictionary.get(&#39;minute&#39;), second=dictionary.get(&#39;second&#39;),
+                                 microsecond=dictionary.get(&#39;microsecond&#39;))
+
+        except Exception as error:
+            raise self.make_error(&#39;invalid&#39;) from error
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        &#34;&#34;&#34;
+        Serializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            obj: The object. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if value is None:
+            return None
+
+        # Create a string representation of the relativedelta which can be parsed.
+        dictionary = {&#39;years&#39;: value.years, &#39;months&#39;: value.months, &#39;days&#39;: value.days, &#39;leapdays&#39;: value.leapdays, &#39;weeks&#39;: value.weeks, &#39;hours&#39;: value.hours,
+                      &#39;minutes&#39;: value.minutes, &#39;seconds&#39;: value.seconds, &#39;microseconds&#39;: value.microseconds, &#39;year&#39;: value.year, &#39;month&#39;: value.month,
+                      &#39;day&#39;: value.day, &#39;weekday&#39;: value.weekday, &#39;hour&#39;: value.hour, &#39;minute&#39;: value.minute, &#39;second&#39;: value.second,
+                      &#39;microsecond&#39;: value.microsecond}
+
+        return json.dumps(dictionary)
+
+
+class String(fields.String):
+    &#34;&#34;&#34;
+    Defines a String.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.string.invalid&#39;), &#39;invalid_utf8&#39;: i18n.t(&#39;models.fields.string.invalid_utf8&#39;)}
+
+    def deserialize(self, value: typing.Any, attr: str = None, data: typing.Mapping[str, typing.Any] = None, **kwargs):
+        &#34;&#34;&#34;
+        Deserializes a value. This method is overridden to replace empty strings with None when allowed.
+
+        Args:
+            value: The value to deserialize.
+            attr: The attribute/key in `data` to deserialize.
+            data: The raw input data passed to `Schema.load`.
+            kwargs: Field-specific keyword arguments.
+
+        Raises:
+            ValidationError: If an invalid value is passed or if a required value is missing.
+        &#34;&#34;&#34;
+        if (value is not None) and isinstance(value, str) and (len(value) &lt;= 0) and self.allow_none:
+            value = None
+
+        return super(String, self).deserialize(value, attr, data, **kwargs)
+
+
+class TimeDelta(fields.Field):
+    &#34;&#34;&#34;
+    Defines a time delta. Note that we do not use the base TimeDelta class as it assumes seconds as a precision and does not allow any flexibility.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.timedelta.invalid&#39;)}
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        &#34;&#34;&#34;
+        Deserializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            data: The data. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if not value:
+            return None
+
+        if value and isinstance(value, timedelta):
+            return value
+
+        if not isinstance(value, (str, bytes)):
+            raise self.make_error(&#39;invalid&#39;)
+
+        # Attempt to parse the string.
+        try:
+            dictionary = json.loads(value)
+            days = dictionary.get(&#39;days&#39;, 0) if dictionary.get(&#39;days&#39;, 0) is not None else 0
+            seconds = dictionary.get(&#39;seconds&#39;, 0) if dictionary.get(&#39;seconds&#39;, 0) is not None else 0
+            microseconds = dictionary.get(&#39;microseconds&#39;, 0) if dictionary.get(&#39;microseconds&#39;, 0) is not None else 0
+
+            return timedelta(days=days, seconds=seconds, microseconds=microseconds)
+
+        except Exception as error:
+            raise self.make_error(&#39;invalid&#39;) from error
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        &#34;&#34;&#34;
+        Serializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            obj: The object. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if value is None:
+            return None
+
+        # Create a string representation of the timedelta which can be parsed.
+        dictionary = {&#39;days&#39;: value.days, &#39;seconds&#39;: value.seconds, &#39;microseconds&#39;: value.microseconds}
+
+        return json.dumps(dictionary)
+
+
+class Tuple(fields.Tuple):
+    &#34;&#34;&#34;
+    Defines a tuple of other fields.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.tuple.invalid&#39;)}
+
+
+class Url(fields.Url):
+    &#34;&#34;&#34;
+    Defines a URL by enhancing the Marshmallow URL field.
+    &#34;&#34;&#34;
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.url.invalid_url&#39;)}
+
+
+class UUID(fields.UUID):
+    &#34;&#34;&#34;
+    Defines a UUID by enhancing the Marshmallow UUID field.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid_uuid&#39;: i18n.t(&#39;models.fields.uuid.invalid_uuid&#39;)}</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="fusion_platform.models.fields.Boolean"><code class="flex name class">
+<span>class <span class="ident">Boolean</span></span>
+<span>(</span><span>*, truthy: Optional[Set] = None, falsy: Optional[Set] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a Boolean.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Boolean(fields.Boolean):
+    &#34;&#34;&#34;
+    Defines a Boolean.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.boolean.invalid&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Boolean</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Boolean.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.DateTime"><code class="flex name class">
+<span>class <span class="ident">DateTime</span></span>
+<span>(</span><span>format: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a datetime.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DateTime(fields.DateTime):
+    &#34;&#34;&#34;
+    Defines a datetime.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.datetime.invalid&#39;), &#39;invalid_awareness&#39;: i18n.t(&#39;models.fields.datetime.invalid_awareness&#39;),
+                              &#39;format&#39;: i18n.t(&#39;models.fields.datetime.format&#39;), }
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        &#34;&#34;&#34;
+        Overrides the serialization. This is because when a nested model is validated, it may be passed as a string already (from an update), instead of a datetime.
+
+        Args:
+            value: The value to serialize.
+            attr: The attribute/key in `data` to deserialize.
+            obj: The associated object.
+            kwargs: Field-specific keyword arguments.
+
+        Returns:
+            The serialised datetime.
+        &#34;&#34;&#34;
+
+        if isinstance(value, str):
+            return value
+
+        # Note that if the datetime does not have a timezone, we enforce UTC. See also utilities#json_default.
+        value = value.astimezone(timezone.utc) if isinstance(value, datetime) and (value.tzinfo is None) else value
+        return super(DateTime, self)._serialize(value, attr, obj, **kwargs)
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        &#34;&#34;&#34;
+        Overrides the deserialization. This is because when a model is validated, it uses deserialization to validate the values. However,
+        because the datetime is native, and not a string, the validation fails. We therefore pass the validation if the value is already a
+        datetime.
+
+        Args:
+            value: The value to deserialize.
+            attr: The attribute/key in `data` to deserialize.
+            data: The raw input data passed to `Schema.load`.
+            kwargs: Field-specific keyword arguments.
+
+        Raises:
+            ValidationError: If an invalid value is passed or if a required value is missing.
+        &#34;&#34;&#34;
+        if not value:
+            return None
+
+        if value and isinstance(value, datetime):
+            return value
+
+        return super(DateTime, self)._deserialize(value, attr, data, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.DateTime</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.DateTime.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Decimal"><code class="flex name class">
+<span>class <span class="ident">Decimal</span></span>
+<span>(</span><span>places: Optional[int] = None, rounding: Optional[str] = None, *, allow_nan: bool = False, as_string: bool = False, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a decimal value.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Decimal(fields.Decimal):
+    &#34;&#34;&#34;
+    Defines a decimal value.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.decimal.invalid&#39;), &#39;too_large&#39;: i18n.t(&#39;models.fields.decimal.too_large&#39;),
+                              &#39;special&#39;: i18n.t(&#39;models.fields.decimal.special&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Decimal</li>
+<li>marshmallow.fields.Number</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Decimal.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Dict"><code class="flex name class">
+<span>class <span class="ident">Dict</span></span>
+<span>(</span><span>keys: Union[marshmallow.fields.Field, type, ForwardRef(None)] = None, values: Union[marshmallow.fields.Field, type, ForwardRef(None)] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a dictionary.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Dict(fields.Dict):
+    &#34;&#34;&#34;
+    Defines a dictionary.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.dict.invalid&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Dict</li>
+<li>marshmallow.fields.Mapping</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Dict.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Email"><code class="flex name class">
+<span>class <span class="ident">Email</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines an email.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Email(fields.Email):
+    &#34;&#34;&#34;
+    Defines an email.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.email.invalid&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Email</li>
+<li>marshmallow.fields.String</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Email.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Float"><code class="flex name class">
+<span>class <span class="ident">Float</span></span>
+<span>(</span><span>*, allow_nan: bool = False, as_string: bool = False, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a float.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Float(fields.Float):
+    &#34;&#34;&#34;
+    Defines a float.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.float.invalid&#39;), &#39;too_large&#39;: i18n.t(&#39;models.fields.float.too_large&#39;),
+                              &#39;special&#39;: i18n.t(&#39;models.fields.float.special&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Float</li>
+<li>marshmallow.fields.Number</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Float.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.IP"><code class="flex name class">
+<span>class <span class="ident">IP</span></span>
+<span>(</span><span>*args, exploded=False, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines an IP address.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IP(fields.IP):
+    &#34;&#34;&#34;
+    Defines an IP address.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid_ip&#39;: i18n.t(&#39;models.fields.ip.invalid_ip&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.IP</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.IP.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Integer"><code class="flex name class">
+<span>class <span class="ident">Integer</span></span>
+<span>(</span><span>*, strict: bool = False, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines an integer.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Integer(fields.Integer):
+    &#34;&#34;&#34;
+    Defines an integer.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.integer.invalid&#39;), &#39;too_large&#39;: i18n.t(&#39;models.fields.integer.too_large&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Integer</li>
+<li>marshmallow.fields.Number</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Integer.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.List"><code class="flex name class">
+<span>class <span class="ident">List</span></span>
+<span>(</span><span>cls_or_instance: Union[marshmallow.fields.Field, type], **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a list of other fields.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class List(fields.List):
+    &#34;&#34;&#34;
+    Defines a list of other fields.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.list.invalid&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.List</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.List.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Nested"><code class="flex name class">
+<span>class <span class="ident">Nested</span></span>
+<span>(</span><span>nested: Union[marshmallow.base.SchemaABC, type, str, Callable[[], marshmallow.base.SchemaABC]], *, dump_default: Any = &lt;marshmallow.missing&gt;, default: Any = &lt;marshmallow.missing&gt;, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, unknown: Optional[str] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a nested field with its own schema.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Nested(fields.Nested):
+    &#34;&#34;&#34;
+    Defines a nested field with its own schema.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;type&#39;: i18n.t(&#39;models.fields.nested.type&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Nested</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Nested.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.RelativeDelta"><code class="flex name class">
+<span>class <span class="ident">RelativeDelta</span></span>
+<span>(</span><span>*, load_default: Any = &lt;marshmallow.missing&gt;, missing: Any = &lt;marshmallow.missing&gt;, dump_default: Any = &lt;marshmallow.missing&gt;, default: Any = &lt;marshmallow.missing&gt;, data_key: Optional[str] = None, attribute: Optional[str] = None, validate: Union[Callable[[Any], Any], Iterable[Callable[[Any], Any]], ForwardRef(None)] = None, required: bool = False, allow_none: Optional[bool] = None, load_only: bool = False, dump_only: bool = False, error_messages: Optional[<a title="fusion_platform.models.fields.Dict" href="#fusion_platform.models.fields.Dict">Dict</a>[str, str]] = None, metadata: Optional[Mapping[str, Any]] = None, **additional_metadata)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A relative delta field. Represents a relative datetime.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RelativeDelta(fields.Field):
+    &#34;&#34;&#34;
+    A relative delta field. Represents a relative datetime.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.relativedelta.invalid&#39;)}
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        &#34;&#34;&#34;
+        Deserializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            data: The data. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if not value:
+            return None
+
+        if value and isinstance(value, relativedelta):
+            return value
+
+        if not isinstance(value, (str, bytes)):
+            raise self.make_error(&#39;invalid&#39;)
+
+        # Attempt to parse the string.
+        try:
+            dictionary = json.loads(value)
+            years = dictionary.get(&#39;years&#39;, 0) if dictionary.get(&#39;years&#39;, 0) is not None else 0
+            months = dictionary.get(&#39;months&#39;, 0) if dictionary.get(&#39;months&#39;, 0) is not None else 0
+            days = dictionary.get(&#39;days&#39;, 0) if dictionary.get(&#39;days&#39;, 0) is not None else 0
+            leapdays = dictionary.get(&#39;leapdays&#39;, 0) if dictionary.get(&#39;leapdays&#39;, 0) is not None else 0
+            weeks = dictionary.get(&#39;weeks&#39;, 0) if dictionary.get(&#39;weeks&#39;, 0) is not None else 0
+            hours = dictionary.get(&#39;hours&#39;, 0) if dictionary.get(&#39;hours&#39;, 0) is not None else 0
+            minutes = dictionary.get(&#39;minutes&#39;, 0) if dictionary.get(&#39;minutes&#39;, 0) is not None else 0
+            seconds = dictionary.get(&#39;seconds&#39;, 0) if dictionary.get(&#39;seconds&#39;, 0) is not None else 0
+            microseconds = dictionary.get(&#39;microseconds&#39;, 0) if dictionary.get(&#39;microseconds&#39;, 0) is not None else 0
+
+            return relativedelta(years=years, months=months, days=days, leapdays=leapdays, weeks=weeks, hours=hours, minutes=minutes, seconds=seconds,
+                                 microseconds=microseconds, year=dictionary.get(&#39;year&#39;), month=dictionary.get(&#39;month&#39;), day=dictionary.get(&#39;day&#39;),
+                                 weekday=dictionary.get(&#39;weekday&#39;), hour=dictionary.get(&#39;hour&#39;), minute=dictionary.get(&#39;minute&#39;), second=dictionary.get(&#39;second&#39;),
+                                 microsecond=dictionary.get(&#39;microsecond&#39;))
+
+        except Exception as error:
+            raise self.make_error(&#39;invalid&#39;) from error
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        &#34;&#34;&#34;
+        Serializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            obj: The object. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if value is None:
+            return None
+
+        # Create a string representation of the relativedelta which can be parsed.
+        dictionary = {&#39;years&#39;: value.years, &#39;months&#39;: value.months, &#39;days&#39;: value.days, &#39;leapdays&#39;: value.leapdays, &#39;weeks&#39;: value.weeks, &#39;hours&#39;: value.hours,
+                      &#39;minutes&#39;: value.minutes, &#39;seconds&#39;: value.seconds, &#39;microseconds&#39;: value.microseconds, &#39;year&#39;: value.year, &#39;month&#39;: value.month,
+                      &#39;day&#39;: value.day, &#39;weekday&#39;: value.weekday, &#39;hour&#39;: value.hour, &#39;minute&#39;: value.minute, &#39;second&#39;: value.second,
+                      &#39;microsecond&#39;: value.microsecond}
+
+        return json.dumps(dictionary)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.RelativeDelta.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.String"><code class="flex name class">
+<span>class <span class="ident">String</span></span>
+<span>(</span><span>*, load_default: Any = &lt;marshmallow.missing&gt;, missing: Any = &lt;marshmallow.missing&gt;, dump_default: Any = &lt;marshmallow.missing&gt;, default: Any = &lt;marshmallow.missing&gt;, data_key: Optional[str] = None, attribute: Optional[str] = None, validate: Union[Callable[[Any], Any], Iterable[Callable[[Any], Any]], ForwardRef(None)] = None, required: bool = False, allow_none: Optional[bool] = None, load_only: bool = False, dump_only: bool = False, error_messages: Optional[<a title="fusion_platform.models.fields.Dict" href="#fusion_platform.models.fields.Dict">Dict</a>[str, str]] = None, metadata: Optional[Mapping[str, Any]] = None, **additional_metadata)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a String.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class String(fields.String):
+    &#34;&#34;&#34;
+    Defines a String.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.string.invalid&#39;), &#39;invalid_utf8&#39;: i18n.t(&#39;models.fields.string.invalid_utf8&#39;)}
+
+    def deserialize(self, value: typing.Any, attr: str = None, data: typing.Mapping[str, typing.Any] = None, **kwargs):
+        &#34;&#34;&#34;
+        Deserializes a value. This method is overridden to replace empty strings with None when allowed.
+
+        Args:
+            value: The value to deserialize.
+            attr: The attribute/key in `data` to deserialize.
+            data: The raw input data passed to `Schema.load`.
+            kwargs: Field-specific keyword arguments.
+
+        Raises:
+            ValidationError: If an invalid value is passed or if a required value is missing.
+        &#34;&#34;&#34;
+        if (value is not None) and isinstance(value, str) and (len(value) &lt;= 0) and self.allow_none:
+            value = None
+
+        return super(String, self).deserialize(value, attr, data, **kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.String</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.String.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.fields.String.deserialize"><code class="name flex">
+<span>def <span class="ident">deserialize</span></span>(<span>self, value: Any, attr: str = None, data: Mapping[str, Any] = None, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Deserializes a value. This method is overridden to replace empty strings with None when allowed.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong></dt>
+<dd>The value to deserialize.</dd>
+<dt><strong><code>attr</code></strong></dt>
+<dd>The attribute/key in <code>data</code> to deserialize.</dd>
+<dt><strong><code>data</code></strong></dt>
+<dd>The raw input data passed to <code>Schema.load</code>.</dd>
+<dt><strong><code>kwargs</code></strong></dt>
+<dd>Field-specific keyword arguments.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValidationError</code></dt>
+<dd>If an invalid value is passed or if a required value is missing.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def deserialize(self, value: typing.Any, attr: str = None, data: typing.Mapping[str, typing.Any] = None, **kwargs):
+    &#34;&#34;&#34;
+    Deserializes a value. This method is overridden to replace empty strings with None when allowed.
+
+    Args:
+        value: The value to deserialize.
+        attr: The attribute/key in `data` to deserialize.
+        data: The raw input data passed to `Schema.load`.
+        kwargs: Field-specific keyword arguments.
+
+    Raises:
+        ValidationError: If an invalid value is passed or if a required value is missing.
+    &#34;&#34;&#34;
+    if (value is not None) and isinstance(value, str) and (len(value) &lt;= 0) and self.allow_none:
+        value = None
+
+    return super(String, self).deserialize(value, attr, data, **kwargs)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.TimeDelta"><code class="flex name class">
+<span>class <span class="ident">TimeDelta</span></span>
+<span>(</span><span>*, load_default: Any = &lt;marshmallow.missing&gt;, missing: Any = &lt;marshmallow.missing&gt;, dump_default: Any = &lt;marshmallow.missing&gt;, default: Any = &lt;marshmallow.missing&gt;, data_key: Optional[str] = None, attribute: Optional[str] = None, validate: Union[Callable[[Any], Any], Iterable[Callable[[Any], Any]], ForwardRef(None)] = None, required: bool = False, allow_none: Optional[bool] = None, load_only: bool = False, dump_only: bool = False, error_messages: Optional[<a title="fusion_platform.models.fields.Dict" href="#fusion_platform.models.fields.Dict">Dict</a>[str, str]] = None, metadata: Optional[Mapping[str, Any]] = None, **additional_metadata)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a time delta. Note that we do not use the base TimeDelta class as it assumes seconds as a precision and does not allow any flexibility.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TimeDelta(fields.Field):
+    &#34;&#34;&#34;
+    Defines a time delta. Note that we do not use the base TimeDelta class as it assumes seconds as a precision and does not allow any flexibility.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.timedelta.invalid&#39;)}
+
+    def _deserialize(self, value, attr, data, **kwargs):
+        &#34;&#34;&#34;
+        Deserializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            data: The data. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if not value:
+            return None
+
+        if value and isinstance(value, timedelta):
+            return value
+
+        if not isinstance(value, (str, bytes)):
+            raise self.make_error(&#39;invalid&#39;)
+
+        # Attempt to parse the string.
+        try:
+            dictionary = json.loads(value)
+            days = dictionary.get(&#39;days&#39;, 0) if dictionary.get(&#39;days&#39;, 0) is not None else 0
+            seconds = dictionary.get(&#39;seconds&#39;, 0) if dictionary.get(&#39;seconds&#39;, 0) is not None else 0
+            microseconds = dictionary.get(&#39;microseconds&#39;, 0) if dictionary.get(&#39;microseconds&#39;, 0) is not None else 0
+
+            return timedelta(days=days, seconds=seconds, microseconds=microseconds)
+
+        except Exception as error:
+            raise self.make_error(&#39;invalid&#39;) from error
+
+    def _serialize(self, value, attr, obj, **kwargs):
+        &#34;&#34;&#34;
+        Serializes the field.
+
+        Args:
+            value: The value of the field.
+            attr: The attribute. Not used.
+            obj: The object. Not used.
+            kwargs: The additional keyword arguments. Not used.
+
+        Returns:
+            The serialized value or None if the value is None.
+        &#34;&#34;&#34;
+
+        if value is None:
+            return None
+
+        # Create a string representation of the timedelta which can be parsed.
+        dictionary = {&#39;days&#39;: value.days, &#39;seconds&#39;: value.seconds, &#39;microseconds&#39;: value.microseconds}
+
+        return json.dumps(dictionary)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.TimeDelta.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Tuple"><code class="flex name class">
+<span>class <span class="ident">Tuple</span></span>
+<span>(</span><span>tuple_fields, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a tuple of other fields.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Tuple(fields.Tuple):
+    &#34;&#34;&#34;
+    Defines a tuple of other fields.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.tuple.invalid&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Tuple</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Tuple.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.UUID"><code class="flex name class">
+<span>class <span class="ident">UUID</span></span>
+<span>(</span><span>*, load_default: Any = &lt;marshmallow.missing&gt;, missing: Any = &lt;marshmallow.missing&gt;, dump_default: Any = &lt;marshmallow.missing&gt;, default: Any = &lt;marshmallow.missing&gt;, data_key: Optional[str] = None, attribute: Optional[str] = None, validate: Union[Callable[[Any], Any], Iterable[Callable[[Any], Any]], ForwardRef(None)] = None, required: bool = False, allow_none: Optional[bool] = None, load_only: bool = False, dump_only: bool = False, error_messages: Optional[<a title="fusion_platform.models.fields.Dict" href="#fusion_platform.models.fields.Dict">Dict</a>[str, str]] = None, metadata: Optional[Mapping[str, Any]] = None, **additional_metadata)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a UUID by enhancing the Marshmallow UUID field.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UUID(fields.UUID):
+    &#34;&#34;&#34;
+    Defines a UUID by enhancing the Marshmallow UUID field.
+    &#34;&#34;&#34;
+
+    # Localised validation errors.
+    default_error_messages = {&#39;invalid_uuid&#39;: i18n.t(&#39;models.fields.uuid.invalid_uuid&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.UUID</li>
+<li>marshmallow.fields.String</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.UUID.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.fields.Url"><code class="flex name class">
+<span>class <span class="ident">Url</span></span>
+<span>(</span><span>*, relative: bool = False, schemes: Union[Sequence[str], Set[str], ForwardRef(None)] = None, require_tld: bool = True, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines a URL by enhancing the Marshmallow URL field.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Url(fields.Url):
+    &#34;&#34;&#34;
+    Defines a URL by enhancing the Marshmallow URL field.
+    &#34;&#34;&#34;
+    default_error_messages = {&#39;invalid&#39;: i18n.t(&#39;models.fields.url.invalid_url&#39;)}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.fields.Url</li>
+<li>marshmallow.fields.String</li>
+<li>marshmallow.fields.Field</li>
+<li>marshmallow.base.FieldABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.fields.Url.default_error_messages"><code class="name">var <span class="ident">default_error_messages</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<header>
+<img src="https://raw.githubusercontent.com/d-cat-support/fusion-platform-python-sdk/master/docs/logo.png" alt="D-CAT">
+<h2>
+Fusion Platform<sup>&reg;</sup> Python SDK
+</h2>
+<p>
+&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
+<p>
+</header>
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="fusion_platform.models" href="index.html">fusion_platform.models</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Boolean" href="#fusion_platform.models.fields.Boolean">Boolean</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Boolean.default_error_messages" href="#fusion_platform.models.fields.Boolean.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.DateTime" href="#fusion_platform.models.fields.DateTime">DateTime</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.DateTime.default_error_messages" href="#fusion_platform.models.fields.DateTime.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Decimal" href="#fusion_platform.models.fields.Decimal">Decimal</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Decimal.default_error_messages" href="#fusion_platform.models.fields.Decimal.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Dict" href="#fusion_platform.models.fields.Dict">Dict</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Dict.default_error_messages" href="#fusion_platform.models.fields.Dict.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Email" href="#fusion_platform.models.fields.Email">Email</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Email.default_error_messages" href="#fusion_platform.models.fields.Email.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Float" href="#fusion_platform.models.fields.Float">Float</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Float.default_error_messages" href="#fusion_platform.models.fields.Float.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.IP" href="#fusion_platform.models.fields.IP">IP</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.IP.default_error_messages" href="#fusion_platform.models.fields.IP.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Integer" href="#fusion_platform.models.fields.Integer">Integer</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Integer.default_error_messages" href="#fusion_platform.models.fields.Integer.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.List" href="#fusion_platform.models.fields.List">List</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.List.default_error_messages" href="#fusion_platform.models.fields.List.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Nested" href="#fusion_platform.models.fields.Nested">Nested</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Nested.default_error_messages" href="#fusion_platform.models.fields.Nested.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.RelativeDelta" href="#fusion_platform.models.fields.RelativeDelta">RelativeDelta</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.RelativeDelta.default_error_messages" href="#fusion_platform.models.fields.RelativeDelta.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.String" href="#fusion_platform.models.fields.String">String</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.String.default_error_messages" href="#fusion_platform.models.fields.String.default_error_messages">default_error_messages</a></code></li>
+<li><code><a title="fusion_platform.models.fields.String.deserialize" href="#fusion_platform.models.fields.String.deserialize">deserialize</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.TimeDelta" href="#fusion_platform.models.fields.TimeDelta">TimeDelta</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.TimeDelta.default_error_messages" href="#fusion_platform.models.fields.TimeDelta.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Tuple" href="#fusion_platform.models.fields.Tuple">Tuple</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Tuple.default_error_messages" href="#fusion_platform.models.fields.Tuple.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.UUID" href="#fusion_platform.models.fields.UUID">UUID</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.UUID.default_error_messages" href="#fusion_platform.models.fields.UUID.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.fields.Url" href="#fusion_platform.models.fields.Url">Url</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.fields.Url.default_error_messages" href="#fusion_platform.models.fields.Url.default_error_messages">default_error_messages</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

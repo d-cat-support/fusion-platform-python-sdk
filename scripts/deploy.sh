@@ -27,7 +27,7 @@ if [ "$1" == "" ]; then
 
   # Update the version with the latest release.
   mkdir -p /tmp/fusion-platform-python-sdk/docs/
-  cp -r ./fusion_platform/ /tmp/fusion-platform-python-sdk/docs/
+  cp -r ./docs/ /tmp/fusion-platform-python-sdk/docs/
 
   mkdir -p /tmp/fusion-platform-python-sdk/fusion_platform/
   cp -r ./fusion_platform/ /tmp/fusion-platform-python-sdk/fusion_platform/
