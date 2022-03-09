@@ -51,8 +51,8 @@ organisation = next(user.organisations)
 # Create a data item for the Glasgow region of interest:
 glasgow = organisation.create_data(name='Glasgow', file_type=fusion_platform.FILE_TYPE_GEOJSON, files=[fusion_platform.EXAMPLE_GLASGOW_FILE], wait=True)
 
-# Find the spectral indices service using its name.
-service, _ = organisation.find_services(name='Spectral Indices')
+# Find the elevation service using its name.
+service, _ = organisation.find_services(keyword='Elevation')
 
 # Create a template process from the service.
 process = organisation.new_process(name='Example', service=service)
@@ -60,7 +60,6 @@ process = organisation.new_process(name='Example', service=service)
 # Configure the process to use Glasgow as the region of interest.
 process.update(input_number=1, data=glasgow)
 
-# The process defaults to run once using the most recent data.
 # Create the process, which will validate its options and inputs.
 process.create()
 
@@ -85,18 +84,15 @@ for component in execution.components:
         for file in output.files:
             file.download(path=os.path.join(dir, file.file_name))
 
-# Now tidy everything up by deleting the process.
+# Now tidy everything up by deleting the process and the region.
 process.delete()
-
-# After a delay to delete the process and its executions,
-# delete the uploaded file. This will fail until the executions
-# have been deleted.
 glasgow.delete()
 ```
 
 ## Documentation
 
-Details of the methods and attributes available from objects used within the SDK can be found [https://www.d-cat.co.uk/public/fusion_platform_python_sdk/](https://www.d-cat.co.uk/public/fusion_platform_python_sdk/).
+Details of the methods and attributes available from objects used within the SDK can be
+found [https://www.d-cat.co.uk/public/fusion_platform_python_sdk/](https://www.d-cat.co.uk/public/fusion_platform_python_sdk/).
 
 Full documentation can be found in [fusion_platform_sdk.pdf](fusion_platform/fusion_platform_sdk.pdf).
 

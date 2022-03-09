@@ -1,12 +1,12 @@
 <header>
-    <img src="logo.png" alt="D-CAT">
+    <img src="https://www.d-cat.co.uk/public/fusion_platform_python_sdk/logo.png" alt="D-CAT">
 
     <h2>
         Fusion Platform<sup>&reg;</sup> Python SDK
     </h2>
 
     <p>
-        Version: 0.0.45
+        Version: 1.0.1
     </p>
 
     <p>

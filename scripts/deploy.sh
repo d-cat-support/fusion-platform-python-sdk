@@ -69,6 +69,14 @@ if [ "$1" == "" ]; then
   rm -rf /tmp/fusion-platform-python-sdk
 fi
 
+# Update the GitHub repository with the current version.
+if [ "$1" == "" ]; then
+  # Update the static web pages. This assumes the location of the web source code locally.
+  rm -rf ../../web/public/fusion-platform-python-sdk
+  mkdir -p ../../web/public/fusion-platform-python-sdk
+  cp -r ./docs/fusion_platform/ ../../web/vendor/fusion_platform_python_sdk/
+fi
+
 deployment_command=(twine upload)
 
 # Check the input arguments and build the deployment command options.

@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '0.0.45'
-__version_date__ = '2022-03-08T14:18:15Z'
+__version__ = '1.0.1'
+__version_date__ = '2022-03-09T10:12:40Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -23,7 +23,53 @@ __pdoc__ = {
     'documentation': False,
     'localisations': False,
     'localise': False,
-    'translations': False
+    'translations': False,
+    'models.credit.CreditSchema.Meta': False,
+    'models.credit.CreditSchema.opts': False,
+    'models.credit.CreditSsdsSchema': False,
+    'models.data.DataSchema.Meta': False,
+    'models.data.DataSchema.opts': False,
+    'models.data.DataIngesterSchema': False,
+    'models.data_file.DataFileSchema.Meta': False,
+    'models.data_file.DataFileSchema.opts': False,
+    'models.data_file.DataFileSelectorSchema': False,
+    'models.fields': False,
+    'models.organisation.OrganisationSchema.Meta': False,
+    'models.organisation.OrganisationSchema.opts': False,
+    'models.organisation.OrganisationUserSchema': False,
+    'models.process.ProcessSchema.Meta': False,
+    'models.process.ProcessSchema.opts': False,
+    'models.process.OptionDataTypeSchema': False,
+    'models.process.ProcessChainOptionSchema': False,
+    'models.process.ProcessChainSchema': False,
+    'models.process.ProcessInputSchema': False,
+    'models.process.ProcessOptionSchema': False,
+    'models.process.ProcessSelectorSchema': False,
+    'models.process_execution.ProcessExecutionSchema.Meta': False,
+    'models.process_execution.ProcessExecutionSchema.opts': False,
+    'models.process_execution.ProcessExecutionChainOptionSchema': False,
+    'models.process_execution.ProcessExecutionChainSchema': False,
+    'models.process_execution.ProcessExecutionOptionSchema': False,
+    'models.process_service_execution.ProcessServiceExecutionSchema.Meta': False,
+    'models.process_service_execution.ProcessServiceExecutionSchema.opts': False,
+    'models.process_service_execution.ProcessServiceExecutionActionSchema': False,
+    'models.process_service_execution.ProcessServiceExecutionActionValueSchema': False,
+    'models.process_service_execution.ProcessServiceExecutionActionsSchema': False,
+    'models.process_service_execution.ProcessServiceExecutionOptionSchema': False,
+    'models.process_service_execution_log.ProcessServiceExecutionLogSchema.Meta': False,
+    'models.process_service_execution_log.ProcessServiceExecutionLogSchema.opts': False,
+    'models.service.ServiceSchema.Meta': False,
+    'models.service.ServiceSchema.opts': False,
+    'models.service.ServiceActionSchema': False,
+    'models.service.ServiceActionValueSchema': False,
+    'models.service.ServiceDefinitionLinkageSchema': False,
+    'models.service.ServiceDefinitionSchema': False,
+    'models.service.ServiceInputExpressionSchema': False,
+    'models.service.ServiceOptionExpressionSchema': False,
+    'models.service.ServiceValidationSchema': False,
+    'models.user.UserSchema.Meta': False,
+    'models.user.UserSchema.opts': False,
+    'models.user.UserOrganisationSchema': False,
 }
 # @formatter:on
 

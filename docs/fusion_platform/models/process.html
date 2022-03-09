@@ -698,42 +698,6 @@ class Process(Model):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="fusion_platform.models.process.OptionDataTypeSchema"><code class="flex name class">
-<span>class <span class="ident">OptionDataTypeSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Defines a Marshmallow schema which can be used to coerce any option value into its underlying Python data type.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class OptionDataTypeSchema(Schema):
-    &#34;&#34;&#34;
-    Defines a Marshmallow schema which can be used to coerce any option value into its underlying Python data type.
-    &#34;&#34;&#34;
-
-    # List out all the allowed field types using their corresponding data type names.
-    numeric = fields.Float(allow_none=True)
-    currency = fields.Decimal(allow_none=True)
-    boolean = fields.Boolean(allow_none=True)
-    datetime = fields.DateTime(allow_none=True)
-    string = fields.String(allow_none=True)
-    constrained = fields.String(allow_none=True)</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.process.OptionDataTypeSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
 <dt id="fusion_platform.models.process.Process"><code class="flex name class">
 <span>class <span class="ident">Process</span></span>
 <span>(</span><span>session, schema=None)</span>
@@ -1637,197 +1601,6 @@ Otherwise, this method will block until the next scheduled execution has started
 </dd>
 </dl>
 </dd>
-<dt id="fusion_platform.models.process.ProcessChainOptionSchema"><code class="flex name class">
-<span>class <span class="ident">ProcessChainOptionSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Nested schema class for SSD chain option.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ProcessChainOptionSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for SSD chain option.
-    &#34;&#34;&#34;
-    name = fields.String(required=True)
-    value = fields.String(allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.process.ProcessChainOptionSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
-<dd>
-<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
-</dd>
-<dt id="fusion_platform.models.process.ProcessChainOptionSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="fusion_platform.models.process.ProcessChainSchema"><code class="flex name class">
-<span>class <span class="ident">ProcessChainSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Nested schema class for SSD chain.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ProcessChainSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for SSD chain.
-    &#34;&#34;&#34;
-    ssd_id = fields.UUID(required=True)
-    service_id = fields.UUID(required=True)
-    inputs = fields.List(fields.UUID(allow_none=True), allow_none=True)
-    outputs = fields.List(fields.UUID(required=True), allow_none=True)
-    options = fields.List(fields.Nested(ProcessChainOptionSchema()), allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.process.ProcessChainSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
-<dd>
-<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
-</dd>
-<dt id="fusion_platform.models.process.ProcessChainSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="fusion_platform.models.process.ProcessInputSchema"><code class="flex name class">
-<span>class <span class="ident">ProcessInputSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Nested schema class for the processes inputs.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ProcessInputSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for the processes inputs.
-    &#34;&#34;&#34;
-    ssd_id = fields.UUID(required=True)
-    input = fields.Integer(required=True)
-    file_type = fields.String(required=True)
-    resolution = fields.Integer(allow_none=True)
-    selectors = fields.List(fields.Nested(ProcessSelectorSchema()), allow_none=True)
-    id = fields.UUID(required=True)
-    model = fields.String(required=True)
-    change_trigger = fields.Boolean(required=True)
-    change_hash = fields.String(allow_none=True)
-    title = fields.String(allow_none=True)
-    description = fields.String(allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.process.ProcessInputSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
-<dd>
-<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
-</dd>
-<dt id="fusion_platform.models.process.ProcessInputSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="fusion_platform.models.process.ProcessOptionSchema"><code class="flex name class">
-<span>class <span class="ident">ProcessOptionSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Nested schema class for options which are provided to the SSD images when run.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ProcessOptionSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for options which are provided to the SSD images when run.
-    &#34;&#34;&#34;
-    ssd_id = fields.UUID(required=True)
-    name = fields.String(required=True)
-    value = fields.String(allow_none=True)
-    required = fields.Boolean(required=True)
-    data_type = fields.String(required=True)
-    validation = fields.String(allow_none=True)
-    mutually_exclusive = fields.String(allow_none=True)
-    advanced = fields.Boolean(allow_none=True)
-    title = fields.String(allow_none=True)
-    description = fields.String(allow_none=True)
-
-    constrained_names = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_names.title&#39;),
-                                                                                             &#39;description&#39;: i18n.t(
-                                                                                                 &#39;models.process.option.constrained_names.description&#39;)})  # Added this field to gold extracted data.
-    constrained_values = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_values.title&#39;),
-                                                                                              &#39;description&#39;: i18n.t(
-                                                                                                  &#39;models.process.option.constrained_values.description&#39;)})  # Added this field to gold extracted data.
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.process.ProcessOptionSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
-<dd>
-<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
-</dd>
-<dt id="fusion_platform.models.process.ProcessOptionSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
 <dt id="fusion_platform.models.process.ProcessSchema"><code class="flex name class">
 <span>class <span class="ident">ProcessSchema</span></span>
 <span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
@@ -1929,73 +1702,18 @@ Otherwise, this method will block until the next scheduled execution has started
 <li>marshmallow.schema.Schema</li>
 <li>marshmallow.base.SchemaABC</li>
 </ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.process.ProcessSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
-<dd>
-<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
-</dd>
-<dt id="fusion_platform.models.process.ProcessSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="fusion_platform.models.process.ProcessSelectorSchema"><code class="flex name class">
-<span>class <span class="ident">ProcessSelectorSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Nested schema class for selector, category, data type, unit and format.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ProcessSelectorSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for selector, category, data type, unit and format.
-    &#34;&#34;&#34;
-    selector = fields.String(required=True)
-    category = fields.String(required=True)
-    data_type = fields.String(required=True)
-    unit = fields.String(allow_none=True)
-    validation = fields.String(allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.process.ProcessSelectorSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
-<dd>
-<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
-</dd>
-<dt id="fusion_platform.models.process.ProcessSelectorSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
 </dd>
 </dl>
 </section>
 </article>
 <nav id="sidebar">
 <header>
-<img src="logo.png" alt="D-CAT">
+<img src="https://www.d-cat.co.uk/public/fusion_platform_python_sdk/logo.png" alt="D-CAT">
 <h2>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 0.0.45
+Version: 1.0.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -2013,12 +1731,6 @@ Version: 0.0.45
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li>
-<h4><code><a title="fusion_platform.models.process.OptionDataTypeSchema" href="#fusion_platform.models.process.OptionDataTypeSchema">OptionDataTypeSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.process.OptionDataTypeSchema.opts" href="#fusion_platform.models.process.OptionDataTypeSchema.opts">opts</a></code></li>
-</ul>
-</li>
 <li>
 <h4><code><a title="fusion_platform.models.process.Process" href="#fusion_platform.models.process.Process">Process</a></code></h4>
 <ul class="">
@@ -2038,46 +1750,7 @@ Version: 0.0.45
 </ul>
 </li>
 <li>
-<h4><code><a title="fusion_platform.models.process.ProcessChainOptionSchema" href="#fusion_platform.models.process.ProcessChainOptionSchema">ProcessChainOptionSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.process.ProcessChainOptionSchema.Meta" href="#fusion_platform.models.process.ProcessChainOptionSchema.Meta">Meta</a></code></li>
-<li><code><a title="fusion_platform.models.process.ProcessChainOptionSchema.opts" href="#fusion_platform.models.process.ProcessChainOptionSchema.opts">opts</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="fusion_platform.models.process.ProcessChainSchema" href="#fusion_platform.models.process.ProcessChainSchema">ProcessChainSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.process.ProcessChainSchema.Meta" href="#fusion_platform.models.process.ProcessChainSchema.Meta">Meta</a></code></li>
-<li><code><a title="fusion_platform.models.process.ProcessChainSchema.opts" href="#fusion_platform.models.process.ProcessChainSchema.opts">opts</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="fusion_platform.models.process.ProcessInputSchema" href="#fusion_platform.models.process.ProcessInputSchema">ProcessInputSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.process.ProcessInputSchema.Meta" href="#fusion_platform.models.process.ProcessInputSchema.Meta">Meta</a></code></li>
-<li><code><a title="fusion_platform.models.process.ProcessInputSchema.opts" href="#fusion_platform.models.process.ProcessInputSchema.opts">opts</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="fusion_platform.models.process.ProcessOptionSchema" href="#fusion_platform.models.process.ProcessOptionSchema">ProcessOptionSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.process.ProcessOptionSchema.Meta" href="#fusion_platform.models.process.ProcessOptionSchema.Meta">Meta</a></code></li>
-<li><code><a title="fusion_platform.models.process.ProcessOptionSchema.opts" href="#fusion_platform.models.process.ProcessOptionSchema.opts">opts</a></code></li>
-</ul>
-</li>
-<li>
 <h4><code><a title="fusion_platform.models.process.ProcessSchema" href="#fusion_platform.models.process.ProcessSchema">ProcessSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.process.ProcessSchema.Meta" href="#fusion_platform.models.process.ProcessSchema.Meta">Meta</a></code></li>
-<li><code><a title="fusion_platform.models.process.ProcessSchema.opts" href="#fusion_platform.models.process.ProcessSchema.opts">opts</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="fusion_platform.models.process.ProcessSelectorSchema" href="#fusion_platform.models.process.ProcessSelectorSchema">ProcessSelectorSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.process.ProcessSelectorSchema.Meta" href="#fusion_platform.models.process.ProcessSelectorSchema.Meta">Meta</a></code></li>
-<li><code><a title="fusion_platform.models.process.ProcessSelectorSchema.opts" href="#fusion_platform.models.process.ProcessSelectorSchema.opts">opts</a></code></li>
-</ul>
 </li>
 </ul>
 </li>
