@@ -81,6 +81,29 @@ class ProcessServiceExecutionActionsSchema(Schema):
         ordered = True
 
 
+class ProcessServiceExecutionMetricSchema(Schema):
+    """
+    Nested schema class for metrics which are recorded during execution.
+    """
+    date = fields.DateTime(allow_none=True)
+    memory_total_bytes = fields.Integer(allow_none=True)
+    memory_free_bytes = fields.Integer(allow_none=True)
+    swap_total_bytes = fields.Integer(allow_none=True)
+    swap_free_bytes = fields.Integer(allow_none=True)
+    tmp_total_bytes = fields.Integer(allow_none=True)
+    tmp_free_bytes = fields.Integer(allow_none=True)
+    s3_transfer_bytes = fields.Integer(allow_none=True)
+    external_transfer_bytes = fields.Integer(allow_none=True)
+    comment = fields.String(allow_none=True)
+
+    class Meta:
+        """
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        """
+        unknown = EXCLUDE
+        ordered = True
+
+
 class ProcessServiceExecutionOptionSchema(Schema):
     """
     Nested schema class for options which are used during execution.
@@ -133,6 +156,9 @@ class ProcessServiceExecutionSchema(Schema):
     # Removed access_point_ids.
     # Removed security_group_id.
     success = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
+    metrics = fields.List(fields.Nested(ProcessServiceExecutionMetricSchema()), allow_none=True,
+                          metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """

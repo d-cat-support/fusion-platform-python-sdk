@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '1.0.1'
-__version_date__ = '2022-03-09T10:12:40Z'
+__version__ = '1.0.2'
+__version_date__ = '2022-03-14T11:31:49Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -55,6 +55,7 @@ __pdoc__ = {
     'models.process_service_execution.ProcessServiceExecutionActionSchema': False,
     'models.process_service_execution.ProcessServiceExecutionActionValueSchema': False,
     'models.process_service_execution.ProcessServiceExecutionActionsSchema': False,
+    'models.process_service_execution.ProcessServiceExecutionMetricSchema': False,
     'models.process_service_execution.ProcessServiceExecutionOptionSchema': False,
     'models.process_service_execution_log.ProcessServiceExecutionLogSchema.Meta': False,
     'models.process_service_execution_log.ProcessServiceExecutionLogSchema.opts': False,

@@ -112,6 +112,29 @@ class ProcessServiceExecutionActionsSchema(Schema):
         ordered = True
 
 
+class ProcessServiceExecutionMetricSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for metrics which are recorded during execution.
+    &#34;&#34;&#34;
+    date = fields.DateTime(allow_none=True)
+    memory_total_bytes = fields.Integer(allow_none=True)
+    memory_free_bytes = fields.Integer(allow_none=True)
+    swap_total_bytes = fields.Integer(allow_none=True)
+    swap_free_bytes = fields.Integer(allow_none=True)
+    tmp_total_bytes = fields.Integer(allow_none=True)
+    tmp_free_bytes = fields.Integer(allow_none=True)
+    s3_transfer_bytes = fields.Integer(allow_none=True)
+    external_transfer_bytes = fields.Integer(allow_none=True)
+    comment = fields.String(allow_none=True)
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
 class ProcessServiceExecutionOptionSchema(Schema):
     &#34;&#34;&#34;
     Nested schema class for options which are used during execution.
@@ -164,6 +187,9 @@ class ProcessServiceExecutionSchema(Schema):
     # Removed access_point_ids.
     # Removed security_group_id.
     success = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
+    metrics = fields.List(fields.Nested(ProcessServiceExecutionMetricSchema()), allow_none=True,
+                          metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     class Meta:
         &#34;&#34;&#34;
@@ -602,6 +628,19 @@ def outputs(self):
 </ul>
 </li>
 <li><strong>success</strong>: Has the execution completed successfully?</li>
+<li><strong>metrics</strong>: Metrics recorded during the execution.<ul>
+<li><strong>date</strong>: When was the metric recorded?</li>
+<li><strong>memory_total_bytes</strong>: The total memory in bytes.</li>
+<li><strong>memory_free_bytes</strong>: The free memory in bytes.</li>
+<li><strong>swap_total_bytes</strong>: The total swap space in bytes.</li>
+<li><strong>swap_free_bytes</strong>: The free swap space in bytes.</li>
+<li><strong>tmp_total_bytes</strong>: The total temporary disk space in bytes.</li>
+<li><strong>tmp_free_bytes</strong>: The free temporary disk space in bytes.</li>
+<li><strong>s3_transfer_bytes</strong>: The number of bytes transferred in from S3.</li>
+<li><strong>external_transfer_bytes</strong>: The number of bytes transferred in externally, excluding S3.</li>
+<li><strong>comment</strong>: Any comment recorded with the metric.</li>
+</ul>
+</li>
 </ul></div>
 <details class="source">
 <summary>
@@ -645,6 +684,9 @@ def outputs(self):
     # Removed security_group_id.
     success = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
+    metrics = fields.List(fields.Nested(ProcessServiceExecutionMetricSchema()), allow_none=True,
+                          metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
     class Meta:
         &#34;&#34;&#34;
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
@@ -668,7 +710,7 @@ def outputs(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.1
+Version: 1.0.2
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

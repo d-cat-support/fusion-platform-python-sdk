@@ -38,3 +38,14 @@
     * **name**: The name of the option.
     * **value**: The value for the option.
 * **success**: Has the execution completed successfully?
+* **metrics**: Metrics recorded during the execution.
+    * **date**: When was the metric recorded?
+    * **memory_total_bytes**: The total memory in bytes.
+    * **memory_free_bytes**: The free memory in bytes.
+    * **swap_total_bytes**: The total swap space in bytes.
+    * **swap_free_bytes**: The free swap space in bytes.
+    * **tmp_total_bytes**: The total temporary disk space in bytes.
+    * **tmp_free_bytes**: The free temporary disk space in bytes.
+    * **s3_transfer_bytes**: The number of bytes transferred in from S3.
+    * **external_transfer_bytes**: The number of bytes transferred in externally, excluding S3.
+    * **comment**: Any comment recorded with the metric.

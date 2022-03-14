@@ -84,5 +84,19 @@
     "0e27196b-9e6f-4ec2-83a0-abd288a2d645",
     "8a2c6f00-2334-4a1a-9b59-fe8796011e3d"
   ],
-  "success": true
+  "success": true,
+  "metrics": [
+    {
+      "date": "2022-02-15T10:27:00.752697+00:00",
+      "memory_total_bytes": 1073741824,
+      "memory_free_bytes": 73741824,
+      "swap_total_bytes": 1073741824,
+      "swap_free_bytes": 3741824,
+      "tmp_total_bytes": 1073741824,
+      "tmp_free_bytes": 741824,
+      "s3_transfer_bytes": 1073741824,
+      "external_transfer_bytes": 2147483648,
+      "comment": "Test"
+    }
+  ]
 }
