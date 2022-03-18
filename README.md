@@ -94,7 +94,7 @@ glasgow.delete()
 Details of the methods and attributes available from objects used within the SDK can be
 found [https://www.d-cat.co.uk/public/fusion_platform_python_sdk/](https://www.d-cat.co.uk/public/fusion_platform_python_sdk/).
 
-Full documentation can be found in [fusion_platform_sdk.pdf](fusion_platform/fusion_platform_sdk.pdf).
+Full documentation can be found in [fusion_platform_sdk.pdf](https://github.com/d-cat-support/fusion-platform-python-sdk/blob/master/fusion_platform/fusion_platform_sdk.pdf).
 
 ## Support
 
