@@ -189,9 +189,12 @@ class Data(Model):
             # Make sure we record the thread so we can monitor it, even if it fails.
             self.__upload_threads[file_id] = thread
 
-    def __check_analysis_complete(self):
+    def check_analysis_complete(self, wait=False):
         &#34;&#34;&#34;
-        Checks that the analysis of all files associated with this data object is complete.
+        Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete.
+
+        Args:
+            wait: Optionally wait for the analysis to complete? Default False.
 
         Returns:
             True if the analysis is complete for all files.
@@ -202,16 +205,24 @@ class Data(Model):
         &#34;&#34;&#34;
         complete = True
 
-        # Load in each of the file models and check that every file has been uploaded, and has a publishable or error  field to indicate that the analysis is
-        # complete.
-        for file in self.files:
-            has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
-                    hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
+        while True:
+            # Load in each of the file models and check that every file has been uploaded, and has a publishable or error field to indicate that the analysis is
+            # complete.
+            for file in self.files:
+                has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                        hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
 
-            if not has_fields:
-                self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
-                complete = False
+                if not has_fields:
+                    self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
+                    complete = False
+                    break
+
+            # Break the loop if we are not waiting or are complete.
+            if (not wait) or complete:
                 break
+
+            # We are waiting, so block for a short while.
+            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
 
         return complete
 
@@ -304,20 +315,13 @@ class Data(Model):
         # Have all the uploads finished?
         uploads_finished = all([value is None for value in self.__upload_threads.values()])
 
-        # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. if an
+        # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. If an
         # error occurs, then we assume that the analysis is complete to prevent indefinitely waiting.
         complete = False
 
         try:
-            while uploads_finished:
-                complete = self.__check_analysis_complete()
-
-                # Break the loop if we are not waiting or are complete.
-                if (not wait) or complete:
-                    break
-
-                # We are waiting, so block for a short while.
-                sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+            if uploads_finished:
+                complete = self.check_analysis_complete(wait=wait)
 
         except Exception as e:
             # An error occurred, make sure we treat this as complete to prevent an indefinite loop.
@@ -460,9 +464,12 @@ class Data(Model):
             # Make sure we record the thread so we can monitor it, even if it fails.
             self.__upload_threads[file_id] = thread
 
-    def __check_analysis_complete(self):
+    def check_analysis_complete(self, wait=False):
         &#34;&#34;&#34;
-        Checks that the analysis of all files associated with this data object is complete.
+        Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete.
+
+        Args:
+            wait: Optionally wait for the analysis to complete? Default False.
 
         Returns:
             True if the analysis is complete for all files.
@@ -473,16 +480,24 @@ class Data(Model):
         &#34;&#34;&#34;
         complete = True
 
-        # Load in each of the file models and check that every file has been uploaded, and has a publishable or error  field to indicate that the analysis is
-        # complete.
-        for file in self.files:
-            has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
-                    hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
+        while True:
+            # Load in each of the file models and check that every file has been uploaded, and has a publishable or error field to indicate that the analysis is
+            # complete.
+            for file in self.files:
+                has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                        hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
 
-            if not has_fields:
-                self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
-                complete = False
+                if not has_fields:
+                    self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
+                    complete = False
+                    break
+
+            # Break the loop if we are not waiting or are complete.
+            if (not wait) or complete:
                 break
+
+            # We are waiting, so block for a short while.
+            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
 
         return complete
 
@@ -575,20 +590,13 @@ class Data(Model):
         # Have all the uploads finished?
         uploads_finished = all([value is None for value in self.__upload_threads.values()])
 
-        # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. if an
+        # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. If an
         # error occurs, then we assume that the analysis is complete to prevent indefinitely waiting.
         complete = False
 
         try:
-            while uploads_finished:
-                complete = self.__check_analysis_complete()
-
-                # Break the loop if we are not waiting or are complete.
-                if (not wait) or complete:
-                    break
-
-                # We are waiting, so block for a short while.
-                sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+            if uploads_finished:
+                complete = self.check_analysis_complete(wait=wait)
 
         except Exception as e:
             # An error occurred, make sure we treat this as complete to prevent an indefinite loop.
@@ -672,6 +680,67 @@ def files(self):
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="fusion_platform.models.data.Data.check_analysis_complete"><code class="name flex">
+<span>def <span class="ident">check_analysis_complete</span></span>(<span>self, wait=False)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>wait</code></strong></dt>
+<dd>Optionally wait for the analysis to complete? Default False.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>True if the analysis is complete for all files.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_analysis_complete(self, wait=False):
+    &#34;&#34;&#34;
+    Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete.
+
+    Args:
+        wait: Optionally wait for the analysis to complete? Default False.
+
+    Returns:
+        True if the analysis is complete for all files.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    complete = True
+
+    while True:
+        # Load in each of the file models and check that every file has been uploaded, and has a publishable or error field to indicate that the analysis is
+        # complete.
+        for file in self.files:
+            has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                    hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
+
+            if not has_fields:
+                self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
+                complete = False
+                break
+
+        # Break the loop if we are not waiting or are complete.
+        if (not wait) or complete:
+            break
+
+        # We are waiting, so block for a short while.
+        sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+
+    return complete</code></pre>
+</details>
+</dd>
 <dt id="fusion_platform.models.data.Data.create_complete"><code class="name flex">
 <span>def <span class="ident">create_complete</span></span>(<span>self, wait=False)</span>
 </code></dt>
@@ -753,20 +822,13 @@ until all upload and analysis (or errored) has completed and this method returns
     # Have all the uploads finished?
     uploads_finished = all([value is None for value in self.__upload_threads.values()])
 
-    # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. if an
+    # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. If an
     # error occurs, then we assume that the analysis is complete to prevent indefinitely waiting.
     complete = False
 
     try:
-        while uploads_finished:
-            complete = self.__check_analysis_complete()
-
-            # Break the loop if we are not waiting or are complete.
-            if (not wait) or complete:
-                break
-
-            # We are waiting, so block for a short while.
-            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+        if uploads_finished:
+            complete = self.check_analysis_complete(wait=wait)
 
     except Exception as e:
         # An error occurred, make sure we treat this as complete to prevent an indefinite loop.
@@ -909,7 +971,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.3
+Version: 1.0.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -929,8 +991,9 @@ Version: 1.0.3
 <ul>
 <li>
 <h4><code><a title="fusion_platform.models.data.Data" href="#fusion_platform.models.data.Data">Data</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="fusion_platform.models.data.Data.attributes" href="model.html#fusion_platform.models.data.Data.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.check_analysis_complete" href="#fusion_platform.models.data.Data.check_analysis_complete">check_analysis_complete</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.create_complete" href="#fusion_platform.models.data.Data.create_complete">create_complete</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.delete" href="model.html#fusion_platform.models.data.Data.delete">delete</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.files" href="#fusion_platform.models.data.Data.files">files</a></code></li>

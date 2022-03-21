@@ -15,6 +15,18 @@ class RaiseThread(Thread):
     https://www.geeksforgeeks.org/handling-a-threads-exception-in-the-caller-thread-in-python/
     """
 
+    def __init__(self, *args, **kwargs):
+        """
+        Initialises the object.
+
+        :param args: Positional arguments.
+        :param kwargs: Keyword arguments.
+        """
+        super(RaiseThread, self).__init__(*args, **kwargs)
+
+        # Make sure the error field is defined.
+        self.__error = None
+
     def join(self, timeout=None):
         """
         Wait until the thread terminates or the timeout occurs.
@@ -32,8 +44,6 @@ class RaiseThread(Thread):
         """
         Runs the thread operation, but catches any error so that it can be re-raised on join.
         """
-        self.__error = None
-
         try:
             super(RaiseThread, self).run()
         except Exception as e:

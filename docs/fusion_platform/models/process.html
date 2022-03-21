@@ -268,6 +268,24 @@ class Process(Model):
     _VALIDATION_NAMES = &#39;names&#39;
     _VALIDATION_VALUES = &#39;values&#39;
 
+    # Allowed file type substitutions.
+    # @formatter:off
+    _FILE_TYPE_SUBSTITUTIONS = {
+        fusion_platform.FILE_TYPE_GEOTIFF: [fusion_platform.FILE_TYPE_GEOTIFF, fusion_platform.FILE_TYPE_DEM, fusion_platform.FILE_TYPE_JPEG2000],
+        fusion_platform.FILE_TYPE_JPEG2000: [fusion_platform.FILE_TYPE_JPEG2000],
+        fusion_platform.FILE_TYPE_DEM: [fusion_platform.FILE_TYPE_DEM],
+        fusion_platform.FILE_TYPE_GEOJSON: [fusion_platform.FILE_TYPE_GEOJSON, fusion_platform.FILE_TYPE_KML, fusion_platform.FILE_TYPE_KMZ,
+                                            fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
+        fusion_platform.FILE_TYPE_KML: [fusion_platform.FILE_TYPE_KML],
+        fusion_platform.FILE_TYPE_KMZ: [fusion_platform.FILE_TYPE_KMZ],
+        fusion_platform.FILE_TYPE_CSV: [fusion_platform.FILE_TYPE_CSV],
+        fusion_platform.FILE_TYPE_ESRI_SHAPEFILE: [fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
+        fusion_platform.FILE_TYPE_JPEG: [fusion_platform.FILE_TYPE_JPEG],
+        fusion_platform.FILE_TYPE_PNG: [fusion_platform.FILE_TYPE_PNG],
+        fusion_platform.FILE_TYPE_OTHER: [fusion_platform.FILE_TYPE_OTHER],
+    }
+    # @formatter:on
+
     @classmethod
     def __coerce_value(cls, value, data_type):
         &#34;&#34;&#34;
@@ -524,8 +542,8 @@ class Process(Model):
         if not ready:
             raise ModelError(i18n.t(&#39;models.process.data_not_ready&#39;))
 
-        # Check the file type.
-        if found_input.get(self.__class__._FIELD_FILE_TYPE) != found_file_type:
+        # Check the file type against the allowed list of substitutions.
+        if found_file_type not in Process._FILE_TYPE_SUBSTITUTIONS.get(found_input.get(self.__class__._FIELD_FILE_TYPE), []):
             raise ModelError(i18n.t(&#39;models.process.wrong_file_type&#39;, expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
 
         # We can now update the input.
@@ -757,6 +775,24 @@ class Process(Model):
     _VALIDATION_NAMES = &#39;names&#39;
     _VALIDATION_VALUES = &#39;values&#39;
 
+    # Allowed file type substitutions.
+    # @formatter:off
+    _FILE_TYPE_SUBSTITUTIONS = {
+        fusion_platform.FILE_TYPE_GEOTIFF: [fusion_platform.FILE_TYPE_GEOTIFF, fusion_platform.FILE_TYPE_DEM, fusion_platform.FILE_TYPE_JPEG2000],
+        fusion_platform.FILE_TYPE_JPEG2000: [fusion_platform.FILE_TYPE_JPEG2000],
+        fusion_platform.FILE_TYPE_DEM: [fusion_platform.FILE_TYPE_DEM],
+        fusion_platform.FILE_TYPE_GEOJSON: [fusion_platform.FILE_TYPE_GEOJSON, fusion_platform.FILE_TYPE_KML, fusion_platform.FILE_TYPE_KMZ,
+                                            fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
+        fusion_platform.FILE_TYPE_KML: [fusion_platform.FILE_TYPE_KML],
+        fusion_platform.FILE_TYPE_KMZ: [fusion_platform.FILE_TYPE_KMZ],
+        fusion_platform.FILE_TYPE_CSV: [fusion_platform.FILE_TYPE_CSV],
+        fusion_platform.FILE_TYPE_ESRI_SHAPEFILE: [fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
+        fusion_platform.FILE_TYPE_JPEG: [fusion_platform.FILE_TYPE_JPEG],
+        fusion_platform.FILE_TYPE_PNG: [fusion_platform.FILE_TYPE_PNG],
+        fusion_platform.FILE_TYPE_OTHER: [fusion_platform.FILE_TYPE_OTHER],
+    }
+    # @formatter:on
+
     @classmethod
     def __coerce_value(cls, value, data_type):
         &#34;&#34;&#34;
@@ -1013,8 +1049,8 @@ class Process(Model):
         if not ready:
             raise ModelError(i18n.t(&#39;models.process.data_not_ready&#39;))
 
-        # Check the file type.
-        if found_input.get(self.__class__._FIELD_FILE_TYPE) != found_file_type:
+        # Check the file type against the allowed list of substitutions.
+        if found_file_type not in Process._FILE_TYPE_SUBSTITUTIONS.get(found_input.get(self.__class__._FIELD_FILE_TYPE), []):
             raise ModelError(i18n.t(&#39;models.process.wrong_file_type&#39;, expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
 
         # We can now update the input.
@@ -1713,7 +1749,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.3
+Version: 1.0.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

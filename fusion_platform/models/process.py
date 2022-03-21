@@ -237,6 +237,24 @@ class Process(Model):
     _VALIDATION_NAMES = 'names'
     _VALIDATION_VALUES = 'values'
 
+    # Allowed file type substitutions.
+    # @formatter:off
+    _FILE_TYPE_SUBSTITUTIONS = {
+        fusion_platform.FILE_TYPE_GEOTIFF: [fusion_platform.FILE_TYPE_GEOTIFF, fusion_platform.FILE_TYPE_DEM, fusion_platform.FILE_TYPE_JPEG2000],
+        fusion_platform.FILE_TYPE_JPEG2000: [fusion_platform.FILE_TYPE_JPEG2000],
+        fusion_platform.FILE_TYPE_DEM: [fusion_platform.FILE_TYPE_DEM],
+        fusion_platform.FILE_TYPE_GEOJSON: [fusion_platform.FILE_TYPE_GEOJSON, fusion_platform.FILE_TYPE_KML, fusion_platform.FILE_TYPE_KMZ,
+                                            fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
+        fusion_platform.FILE_TYPE_KML: [fusion_platform.FILE_TYPE_KML],
+        fusion_platform.FILE_TYPE_KMZ: [fusion_platform.FILE_TYPE_KMZ],
+        fusion_platform.FILE_TYPE_CSV: [fusion_platform.FILE_TYPE_CSV],
+        fusion_platform.FILE_TYPE_ESRI_SHAPEFILE: [fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
+        fusion_platform.FILE_TYPE_JPEG: [fusion_platform.FILE_TYPE_JPEG],
+        fusion_platform.FILE_TYPE_PNG: [fusion_platform.FILE_TYPE_PNG],
+        fusion_platform.FILE_TYPE_OTHER: [fusion_platform.FILE_TYPE_OTHER],
+    }
+    # @formatter:on
+
     @classmethod
     def __coerce_value(cls, value, data_type):
         """
@@ -493,8 +511,8 @@ class Process(Model):
         if not ready:
             raise ModelError(i18n.t('models.process.data_not_ready'))
 
-        # Check the file type.
-        if found_input.get(self.__class__._FIELD_FILE_TYPE) != found_file_type:
+        # Check the file type against the allowed list of substitutions.
+        if found_file_type not in Process._FILE_TYPE_SUBSTITUTIONS.get(found_input.get(self.__class__._FIELD_FILE_TYPE), []):
             raise ModelError(i18n.t('models.process.wrong_file_type', expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
 
         # We can now update the input.

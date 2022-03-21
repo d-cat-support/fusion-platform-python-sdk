@@ -12,6 +12,7 @@ import requests
 import requests_mock
 import uuid
 
+import fusion_platform
 from tests.custom_test_case import CustomTestCase
 
 from fusion_platform.common.utilities import json_default
@@ -708,9 +709,11 @@ class TestProcess(CustomTestCase):
             mock.get(f"{Session.API_URL_DEFAULT}{files_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content]}))
 
             with pytest.raises(ModelError):
-                process.update(input=input, data=data)
+                file_content['file_type'] = fusion_platform.FILE_TYPE_GEOTIFF
+                mock.get(f"{Session.API_URL_DEFAULT}{files_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content]}))
+                process.update(input_number=1, data=data)
 
-            file_content['file_type'] = 'GeoJSON'
+            file_content['file_type'] = fusion_platform.FILE_TYPE_ESRI_SHAPEFILE
             mock.get(f"{Session.API_URL_DEFAULT}{files_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content]}))
 
             self.assertEqual(str(process_content['inputs'][0]['id']), str(next(process.inputs).id))

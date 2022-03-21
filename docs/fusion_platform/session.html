@@ -221,6 +221,8 @@ class Session(Base):
         Raises:
             RequestError: if the request failed.
         &#34;&#34;&#34;
+        payload = None
+
         # Optionally add the bearer token.
         headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
 
@@ -231,19 +233,23 @@ class Session(Base):
             # Issue the request.
             self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
             json_body = json.dumps(body, default=json_default) if body is not None else None
-            response = requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers)
+            with requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers) as response:
+                print(response.headers)
+                print(response.elapsed)
+                # Raise any errors.
+                if not response:
+                    message = str(response.status_code)
 
-            # Raise any errors.
-            if not response:
-                message = str(response.status_code)
+                    try:
+                        message = response.json().get(&#39;error_message&#39;)
+                        self._logger.error(message)
+                    except:
+                        pass  # Ignore the inability to extract the error message.
 
-                try:
-                    message = response.json().get(&#39;error_message&#39;)
-                    self._logger.error(message)
-                except:
-                    pass  # Ignore the inability to extract the error message.
+                    raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
 
-                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
+                payload = response.json()
+                self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
 
         except RequestError:
             raise
@@ -254,9 +260,6 @@ class Session(Base):
             raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
 
         # Return the payload.
-        payload = response.json()
-        self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
-
         return payload
 
     def upload_file(self, url, source):
@@ -492,6 +495,8 @@ class Session(Base):
         Raises:
             RequestError: if the request failed.
         &#34;&#34;&#34;
+        payload = None
+
         # Optionally add the bearer token.
         headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
 
@@ -502,19 +507,23 @@ class Session(Base):
             # Issue the request.
             self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
             json_body = json.dumps(body, default=json_default) if body is not None else None
-            response = requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers)
+            with requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers) as response:
+                print(response.headers)
+                print(response.elapsed)
+                # Raise any errors.
+                if not response:
+                    message = str(response.status_code)
 
-            # Raise any errors.
-            if not response:
-                message = str(response.status_code)
+                    try:
+                        message = response.json().get(&#39;error_message&#39;)
+                        self._logger.error(message)
+                    except:
+                        pass  # Ignore the inability to extract the error message.
 
-                try:
-                    message = response.json().get(&#39;error_message&#39;)
-                    self._logger.error(message)
-                except:
-                    pass  # Ignore the inability to extract the error message.
+                    raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
 
-                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
+                payload = response.json()
+                self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
 
         except RequestError:
             raise
@@ -525,9 +534,6 @@ class Session(Base):
             raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
 
         # Return the payload.
-        payload = response.json()
-        self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
-
         return payload
 
     def upload_file(self, url, source):
@@ -801,6 +807,8 @@ available.</p>
     Raises:
         RequestError: if the request failed.
     &#34;&#34;&#34;
+    payload = None
+
     # Optionally add the bearer token.
     headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
 
@@ -811,19 +819,23 @@ available.</p>
         # Issue the request.
         self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
         json_body = json.dumps(body, default=json_default) if body is not None else None
-        response = requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers)
+        with requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers) as response:
+            print(response.headers)
+            print(response.elapsed)
+            # Raise any errors.
+            if not response:
+                message = str(response.status_code)
 
-        # Raise any errors.
-        if not response:
-            message = str(response.status_code)
+                try:
+                    message = response.json().get(&#39;error_message&#39;)
+                    self._logger.error(message)
+                except:
+                    pass  # Ignore the inability to extract the error message.
 
-            try:
-                message = response.json().get(&#39;error_message&#39;)
-                self._logger.error(message)
-            except:
-                pass  # Ignore the inability to extract the error message.
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
 
-            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
+            payload = response.json()
+            self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
 
     except RequestError:
         raise
@@ -834,9 +846,6 @@ available.</p>
         raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
 
     # Return the payload.
-    payload = response.json()
-    self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
-
     return payload</code></pre>
 </details>
 </dd>
@@ -948,7 +957,7 @@ available.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.3
+Version: 1.0.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
