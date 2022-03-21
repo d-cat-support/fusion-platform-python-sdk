@@ -203,8 +203,6 @@ class Session(Base):
             self._logger.info('request %s: %s%s(%s) -> %s', method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
             json_body = json.dumps(body, default=json_default) if body is not None else None
             with requests.request(method, f"{self.__api_url}{path}", params=query_parameters, data=json_body, headers=headers) as response:
-                print(response.headers)
-                print(response.elapsed)
                 # Raise any errors.
                 if not response:
                     message = str(response.status_code)

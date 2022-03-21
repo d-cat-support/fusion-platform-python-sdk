@@ -234,8 +234,6 @@ class Session(Base):
             self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
             json_body = json.dumps(body, default=json_default) if body is not None else None
             with requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers) as response:
-                print(response.headers)
-                print(response.elapsed)
                 # Raise any errors.
                 if not response:
                     message = str(response.status_code)
@@ -508,8 +506,6 @@ class Session(Base):
             self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
             json_body = json.dumps(body, default=json_default) if body is not None else None
             with requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers) as response:
-                print(response.headers)
-                print(response.elapsed)
                 # Raise any errors.
                 if not response:
                     message = str(response.status_code)
@@ -820,8 +816,6 @@ available.</p>
         self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
         json_body = json.dumps(body, default=json_default) if body is not None else None
         with requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers) as response:
-            print(response.headers)
-            print(response.elapsed)
             # Raise any errors.
             if not response:
                 message = str(response.status_code)
@@ -957,7 +951,7 @@ available.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.4
+Version: 1.0.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
