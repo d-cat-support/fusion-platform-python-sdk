@@ -76,10 +76,10 @@ execution = next(process.executions)
 # Now download all the outputs.
 for component in execution.components:
     print(f"Downloading {component.name}")
-    component_dir = component.name
+    component_dir = component.name[:60]
 
     for output in component.outputs:
-        dir = os.path.join(component_dir, output.name)
+        dir = os.path.join(component_dir, output.name[:60])
 
         for file in output.files:
             file.download(path=os.path.join(dir, file.file_name))
@@ -94,7 +94,8 @@ glasgow.delete()
 Details of the methods and attributes available from objects used within the SDK can be
 found [https://www.d-cat.co.uk/public/fusion_platform_python_sdk/](https://www.d-cat.co.uk/public/fusion_platform_python_sdk/).
 
-Full documentation can be found in [fusion_platform_sdk.pdf](https://github.com/d-cat-support/fusion-platform-python-sdk/blob/master/fusion_platform/fusion_platform_sdk.pdf).
+Full documentation can be found
+in [fusion_platform_sdk.pdf](https://github.com/d-cat-support/fusion-platform-python-sdk/blob/master/fusion_platform/fusion_platform_sdk.pdf).
 
 ## Support
 

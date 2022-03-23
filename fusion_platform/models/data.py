@@ -172,12 +172,14 @@ class Data(Model):
             RequestError: if any get fails.
             ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
-        complete = True
-
         while True:
+            complete = True
+
             # Load in each of the file models and check that every file has been uploaded, and has a publishable or error field to indicate that the analysis is
             # complete.
             for file in self.files:
+                self._logger.debug('file %s: %s', file.file_name, file.attributes)
+
                 has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
                         hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
 
