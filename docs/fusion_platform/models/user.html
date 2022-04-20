@@ -144,6 +144,31 @@ class User(Model):
         body = {self.__class__.__name__: {&#39;old_password&#39;: old, &#39;new_password&#39;: new}}
         self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_PASSWORD), method=Session.METHOD_POST, body=body)
 
+    def find_organisations(self, id=None, name=None):
+        &#34;&#34;&#34;
+        Searches for organisations with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+        Args:
+            id: The organisation id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found organisation object, or None if not found, and an iterator through the found organisation objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Search for the id and/or name.
+        organisation = None
+
+        for item in self.organisations:
+            if ((id is not None) and (str(id) == str(item.id))) or ((name is not None) and (item.name.startswith(name))):
+                organisation = item
+                break
+
+        return organisation, self.organisations
+
     @property
     def organisations(self):
         &#34;&#34;&#34;
@@ -219,6 +244,31 @@ class User(Model):
         &#34;&#34;&#34;
         body = {self.__class__.__name__: {&#39;old_password&#39;: old, &#39;new_password&#39;: new}}
         self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_PASSWORD), method=Session.METHOD_POST, body=body)
+
+    def find_organisations(self, id=None, name=None):
+        &#34;&#34;&#34;
+        Searches for organisations with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+        Args:
+            id: The organisation id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found organisation object, or None if not found, and an iterator through the found organisation objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Search for the id and/or name.
+        organisation = None
+
+        for item in self.organisations:
+            if ((id is not None) and (str(id) == str(item.id))) or ((name is not None) and (item.name.startswith(name))):
+                organisation = item
+                break
+
+        return organisation, self.organisations
 
     @property
     def organisations(self):
@@ -331,6 +381,57 @@ def organisations(self):
 <code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
 </p>
 <div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.user.User.find_organisations"><code class="name flex">
+<span>def <span class="ident">find_organisations</span></span>(<span>self, id=None, name=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Searches for organisations with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>id</code></strong></dt>
+<dd>The organisation id to search for.</dd>
+<dt><strong><code>name</code></strong></dt>
+<dd>The name to search for (case-sensitive).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The first found organisation object, or None if not found, and an iterator through the found organisation objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_organisations(self, id=None, name=None):
+    &#34;&#34;&#34;
+    Searches for organisations with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+    Args:
+        id: The organisation id to search for.
+        name: The name to search for (case-sensitive).
+
+    Returns:
+        The first found organisation object, or None if not found, and an iterator through the found organisation objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Search for the id and/or name.
+    organisation = None
+
+    for item in self.organisations:
+        if ((id is not None) and (str(id) == str(item.id))) or ((name is not None) and (item.name.startswith(name))):
+            organisation = item
+            break
+
+    return organisation, self.organisations</code></pre>
+</details>
 </dd>
 <dt id="fusion_platform.models.user.User.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
@@ -458,7 +559,7 @@ def organisations(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.6
+Version: 1.0.7
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -482,6 +583,7 @@ Version: 1.0.6
 <li><code><a title="fusion_platform.models.user.User.attributes" href="model.html#fusion_platform.models.user.User.attributes">attributes</a></code></li>
 <li><code><a title="fusion_platform.models.user.User.change_password" href="#fusion_platform.models.user.User.change_password">change_password</a></code></li>
 <li><code><a title="fusion_platform.models.user.User.delete" href="model.html#fusion_platform.models.user.User.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.user.User.find_organisations" href="#fusion_platform.models.user.User.find_organisations">find_organisations</a></code></li>
 <li><code><a title="fusion_platform.models.user.User.get" href="model.html#fusion_platform.models.user.User.get">get</a></code></li>
 <li><code><a title="fusion_platform.models.user.User.organisations" href="#fusion_platform.models.user.User.organisations">organisations</a></code></li>
 <li><code><a title="fusion_platform.models.user.User.to_csv" href="model.html#fusion_platform.models.user.User.to_csv">to_csv</a></code></li>

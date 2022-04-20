@@ -98,6 +98,67 @@ class TestUser(CustomTestCase):
             mock.delete(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
             user.delete()
 
+    def test_find_organisations(self):
+        """
+        Tests the finding of organisations.
+        """
+        with open(self.fixture_path('user.json'), 'r') as file:
+            user_content = json.loads(file.read())
+
+        session = Session()
+        organisation_ids = [organisation.get(Model._FIELD_ID) for organisation in user_content.get('organisations')]
+        user_id = user_content.get(Model._FIELD_ID)
+
+        user = User(session)
+        self.assertIsNotNone(user)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{User._PATH_GET.format(user_id=user_id)}", text=json.dumps({Model._RESPONSE_KEY_MODEL: user_content}))
+            user.get(id=user_id)
+            self.assertIsNotNone(user)
+            self.assertEqual(str(user_id), str(user.id))
+
+            for index, organisation_id in enumerate(organisation_ids):
+                with pytest.raises(RequestError):
+                    mock.get(f"{Session.API_URL_DEFAULT}{Organisation._PATH_GET.format(organisation_id=organisation_id)}", exc=requests.exceptions.ConnectTimeout)
+                    user.find_organisations()
+
+                with pytest.raises(RequestError):
+                    mock.get(f"{Session.API_URL_DEFAULT}{Organisation._PATH_GET.format(organisation_id=organisation_id)}", status_code=400)
+                    user.find_organisations()
+
+            organisation_names = []
+
+            for index, organisation_id in enumerate(organisation_ids):
+                with open(self.fixture_path(f"organisation{index + 1}.json"), 'r') as file:
+                    organisation_content = json.loads(file.read())
+
+                mock.get(f"{Session.API_URL_DEFAULT}{Organisation._PATH_GET.format(organisation_id=organisation_id)}",
+                         text=json.dumps({Model._RESPONSE_KEY_MODEL: organisation_content}))
+
+                organisation_names.append(organisation_content.get('name'))
+
+            organisation, organisations = user.find_organisations()
+            self.assertIsNone(organisation)
+            self.assertIsNotNone(organisations)
+
+            for index, organisation_id in enumerate(organisation_ids):
+                organisation, organisations = user.find_organisations(id=organisation_id)
+                self.assertIsNotNone(organisation)
+                self.assertEqual(str(organisation_id), str(organisation.id))
+                self.assertIsNotNone(organisations)
+
+                organisation, organisations = user.find_organisations(name=organisation_names[index])
+                self.assertIsNotNone(organisation)
+                self.assertEqual(organisation_names[index], organisation.name)
+                self.assertIsNotNone(organisations)
+
+                organisation, organisations = user.find_organisations(id=organisation_id, name=organisation_names[index])
+                self.assertIsNotNone(organisation)
+                self.assertEqual(str(organisation_id), str(organisation.id))
+                self.assertEqual(organisation_names[index], organisation.name)
+                self.assertIsNotNone(organisations)
+
     def test_get(self):
         """
         Tests that an object can be retrieved from the API.

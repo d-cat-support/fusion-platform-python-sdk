@@ -113,6 +113,31 @@ class User(Model):
         body = {self.__class__.__name__: {'old_password': old, 'new_password': new}}
         self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_PASSWORD), method=Session.METHOD_POST, body=body)
 
+    def find_organisations(self, id=None, name=None):
+        """
+        Searches for organisations with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+        Args:
+            id: The organisation id to search for.
+            name: The name to search for (case-sensitive).
+
+        Returns:
+            The first found organisation object, or None if not found, and an iterator through the found organisation objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
+        """
+        # Search for the id and/or name.
+        organisation = None
+
+        for item in self.organisations:
+            if ((id is not None) and (str(id) == str(item.id))) or ((name is not None) and (item.name.startswith(name))):
+                organisation = item
+                break
+
+        return organisation, self.organisations
+
     @property
     def organisations(self):
         """
