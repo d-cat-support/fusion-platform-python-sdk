@@ -158,6 +158,10 @@ class Data(Model):
         Raises:
             RequestError: if the add fails.
         &#34;&#34;&#34;
+        # Make sure the file exists.
+        if not os.path.exists(file):
+            raise ModelError(i18n.t(&#39;models.data.failed_add_missing_file&#39;, file=file))
+
         # Add the file to the data model.
         body = {self.__class__.__name__: {&#39;name&#39;: os.path.basename(file), &#39;file_type&#39;: file_type}}
         response = self._session.request(path=self._get_path(self.__class__._PATH_ADD_FILE), method=Session.METHOD_POST, body=body)
@@ -435,6 +439,10 @@ class Data(Model):
         Raises:
             RequestError: if the add fails.
         &#34;&#34;&#34;
+        # Make sure the file exists.
+        if not os.path.exists(file):
+            raise ModelError(i18n.t(&#39;models.data.failed_add_missing_file&#39;, file=file))
+
         # Add the file to the data model.
         body = {self.__class__.__name__: {&#39;name&#39;: os.path.basename(file), &#39;file_type&#39;: file_type}}
         response = self._session.request(path=self._get_path(self.__class__._PATH_ADD_FILE), method=Session.METHOD_POST, body=body)
@@ -977,7 +985,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.8
+Version: 1.0.9
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

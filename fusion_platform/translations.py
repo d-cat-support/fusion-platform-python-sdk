@@ -25,6 +25,7 @@ i18n.add_translation('models.data_file.download_already_in_progress', 'Cannot do
 i18n.add_translation('models.data_file.organisation_id.description', 'The owning organisation.', 'en')
 i18n.add_translation('models.data_file.organisation_id.title', 'Organisation', 'en')
 i18n.add_translation('models.data.no_create', 'No create is in progress', 'en')
+i18n.add_translation('models.data.failed_add_missing_file', 'Failed to add file as the file does not exist: %{file}', 'en')
 i18n.add_translation('models.data.failed_add_file_not_unique', 'Failed to add file as the id is not unique', 'en')
 i18n.add_translation('models.data.failed_add_file_url', 'Failed to get URL from add file response', 'en')
 i18n.add_translation('models.data.failed_add_file_id', 'Failed to get id from add file response', 'en')

@@ -127,6 +127,10 @@ class Data(Model):
         Raises:
             RequestError: if the add fails.
         """
+        # Make sure the file exists.
+        if not os.path.exists(file):
+            raise ModelError(i18n.t('models.data.failed_add_missing_file', file=file))
+
         # Add the file to the data model.
         body = {self.__class__.__name__: {'name': os.path.basename(file), 'file_type': file_type}}
         response = self._session.request(path=self._get_path(self.__class__._PATH_ADD_FILE), method=Session.METHOD_POST, body=body)

@@ -80,6 +80,9 @@ class TestData(CustomTestCase):
 
             mock.post(f"{Session.API_URL_DEFAULT}{create_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
 
+            with pytest.raises(ModelError):
+                data._create(name, file_type, ['does_not_exist'], wait=True)
+
             with pytest.raises(RequestError):
                 mock.post(f"{Session.API_URL_DEFAULT}{add_file_path}", exc=requests.exceptions.ConnectTimeout)
                 data._Model__persisted = False
