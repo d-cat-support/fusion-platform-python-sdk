@@ -587,11 +587,15 @@ class Process(Model):
         if found_option is None:
             raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
 
-        # Check that the option has the same data type as the value. We cannot check this if either value is None.
+        # Check that the option has the same data type as the value. We cannot check this if either value is None. Note that supplied ints can be used for floats.
         data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
         existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
+        class_matches = isinstance(value, existing_value.__class__)
 
-        if (value is not None) and (existing_value is not None) and (not isinstance(value, existing_value.__class__)):
+        if isinstance(value, int) and isinstance(existing_value, float):
+            class_matches = True
+
+        if (value is not None) and (existing_value is not None) and (not class_matches):
             raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
 
         # We can now update the option. All options are expressed as strings with the correct format.
@@ -1094,11 +1098,15 @@ class Process(Model):
         if found_option is None:
             raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
 
-        # Check that the option has the same data type as the value. We cannot check this if either value is None.
+        # Check that the option has the same data type as the value. We cannot check this if either value is None. Note that supplied ints can be used for floats.
         data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
         existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
+        class_matches = isinstance(value, existing_value.__class__)
 
-        if (value is not None) and (existing_value is not None) and (not isinstance(value, existing_value.__class__)):
+        if isinstance(value, int) and isinstance(existing_value, float):
+            class_matches = True
+
+        if (value is not None) and (existing_value is not None) and (not class_matches):
             raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
 
         # We can now update the option. All options are expressed as strings with the correct format.
@@ -1749,7 +1757,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.0.9
+Version: 1.1.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

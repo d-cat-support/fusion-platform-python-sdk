@@ -57,7 +57,7 @@ service, _ = organisation.find_services(keyword='Elevation')
 # Create a template process from the service.
 process = organisation.new_process(name='Example', service=service)
 
-# Configure the process to use Glasgow as the region of interest.
+# Configure the process to use Glasgow as the region.
 process.update(input_number=1, data=glasgow)
 
 # Create the process, which will validate its options and inputs.
@@ -78,9 +78,8 @@ for component in execution.components:
     print(f"Downloading {component.name}")
     component_dir = component.name[:60]
 
-    for output in component.outputs:
-        dir = os.path.join(component_dir, output.name[:60])
-
+    for i, output in enumerate(component.outputs):
+        dir = os.path.join(component_dir, str(i))
         for file in output.files:
             file.download(path=os.path.join(dir, file.file_name))
 
