@@ -27,6 +27,7 @@
         * **value**: The value for the option.
 * **started_at**: When did the execution start?
 * **ended_at**: When did the execution end?
+* **abort_reason**: The reason for any abort of the execution.
 * **abort**: Has the execution been aborted?
 * **success**: Has the execution completed successfully?
 * **progress**: Percentage progress of the execution.

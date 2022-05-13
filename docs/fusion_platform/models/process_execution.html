@@ -129,6 +129,7 @@ class ProcessExecutionSchema(Schema):
 
     started_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     ended_at = fields.DateTime(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    abort_reason = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     abort = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     success = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     progress = fields.Integer(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -528,6 +529,7 @@ def components(self):
 </li>
 <li><strong>started_at</strong>: When did the execution start?</li>
 <li><strong>ended_at</strong>: When did the execution end?</li>
+<li><strong>abort_reason</strong>: The reason for any abort of the execution.</li>
 <li><strong>abort</strong>: Has the execution been aborted?</li>
 <li><strong>success</strong>: Has the execution completed successfully?</li>
 <li><strong>progress</strong>: Percentage progress of the execution.</li>
@@ -564,6 +566,7 @@ def components(self):
 
     started_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     ended_at = fields.DateTime(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    abort_reason = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     abort = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     success = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     progress = fields.Integer(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -594,7 +597,7 @@ def components(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.1.1
+Version: 1.1.2
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

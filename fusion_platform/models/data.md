@@ -7,5 +7,5 @@
 * **ingester_availability**: The optionally list of ingesters which can use this data item, and the associated dates for which data is available.
     * **ingester_id**: The ingester which can provide input for this data item.
     * **dates**: The list of dates for which data is available from this ingester.
-* **uploaded**: 
+* **uploaded_organisation_id**: Was the data item uploaded?
 * **deletable**: Is this data model scheduled for deletion?
