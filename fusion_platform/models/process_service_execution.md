@@ -37,6 +37,7 @@
 * **options**: The options used by this execution.
     * **name**: The name of the option.
     * **value**: The value for the option.
+* **intermediate**: Is this an intermediate service?
 * **success**: Has the execution completed successfully?
 * **metrics**: Metrics recorded during the execution.
     * **date**: When was the metric recorded?

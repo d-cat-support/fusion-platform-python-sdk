@@ -182,6 +182,7 @@ class ProcessServiceExecutionSchema(Schema):
                           metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     inputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     outputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
     # Removed task_definition_id.
     # Removed access_point_ids.
@@ -627,6 +628,7 @@ def outputs(self):
 <li><strong>value</strong>: The value for the option.</li>
 </ul>
 </li>
+<li><strong>intermediate</strong>: Is this an intermediate service?</li>
 <li><strong>success</strong>: Has the execution completed successfully?</li>
 <li><strong>metrics</strong>: Metrics recorded during the execution.<ul>
 <li><strong>date</strong>: When was the metric recorded?</li>
@@ -678,6 +680,7 @@ def outputs(self):
                           metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     inputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     outputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
     # Removed task_definition_id.
     # Removed access_point_ids.
@@ -710,7 +713,7 @@ def outputs(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.1.2
+Version: 1.1.3
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

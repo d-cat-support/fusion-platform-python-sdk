@@ -21,3 +21,4 @@
 * **agreed_licenses**: The list of licences agreed on behalf of the organisation.
 * **offers**: The list of offers linked to this organisation.
 * **maximum_output_storage_period**: The maximum period in days for this organisation for which an output can be stored before it is deleted.
+* **maximum_file_downloads**: The maximum number of time any file can be downloaded for this organisation.

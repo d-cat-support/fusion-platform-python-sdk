@@ -76,6 +76,7 @@ class OrganisationSchema(Schema):
     # Removed audit_services.
 
     maximum_output_storage_period = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    maximum_file_downloads = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """

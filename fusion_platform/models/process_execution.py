@@ -41,6 +41,7 @@ class ProcessExecutionChainSchema(Schema):
     inputs = fields.List(fields.UUID(allow_none=True), allow_none=True)
     outputs = fields.List(fields.UUID(required=True), allow_none=True)
     options = fields.List(fields.Nested(ProcessExecutionChainOptionSchema()), allow_none=True)
+    intermediate = fields.Boolean(allow_none=True)
 
     class Meta:
         """

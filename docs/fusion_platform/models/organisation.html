@@ -107,6 +107,7 @@ class OrganisationSchema(Schema):
     # Removed audit_services.
 
     maximum_output_storage_period = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    maximum_file_downloads = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     class Meta:
         &#34;&#34;&#34;
@@ -1061,6 +1062,7 @@ def services(self):
 <li><strong>agreed_licenses</strong>: The list of licences agreed on behalf of the organisation.</li>
 <li><strong>offers</strong>: The list of offers linked to this organisation.</li>
 <li><strong>maximum_output_storage_period</strong>: The maximum period in days for this organisation for which an output can be stored before it is deleted.</li>
+<li><strong>maximum_file_downloads</strong>: The maximum number of time any file can be downloaded for this organisation.</li>
 </ul></div>
 <details class="source">
 <summary>
@@ -1107,6 +1109,7 @@ def services(self):
     # Removed audit_services.
 
     maximum_output_storage_period = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    maximum_file_downloads = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     class Meta:
         &#34;&#34;&#34;
@@ -1131,7 +1134,7 @@ def services(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.1.2
+Version: 1.1.3
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

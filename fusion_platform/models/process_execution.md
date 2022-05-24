@@ -25,6 +25,7 @@
     * **options**: The options from the service.
         * **name**: The name of the option.
         * **value**: The value for the option.
+    * **intermediate**: Is this an intermediate service within the chain?
 * **started_at**: When did the execution start?
 * **ended_at**: When did the execution end?
 * **abort_reason**: The reason for any abort of the execution.

@@ -32,5 +32,6 @@
     * **histogram_minimum**: The histogram maximum value associated with the selector values.
     * **histogram_maximum**: The histogram maximum value associated with the selector values.
     * **histogram**: The histogram associated with the selector values.
+* **downloads**: How many times has the file been downloaded?
 * **title**: The title for the selector.
 * **description**: The description of the selector.
