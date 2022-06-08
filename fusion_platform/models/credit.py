@@ -14,6 +14,21 @@ from fusion_platform.models.model import Model
 
 # Define the model schema classes. These are maintained from the API definitions.
 
+class CreditMonthlySpendSchema(Schema):
+    """
+    Nested schema class for spend.
+    """
+    month = fields.DateTime(required=True)
+    credits = fields.Decimal(required=True)
+
+    class Meta:
+        """
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        """
+        unknown = EXCLUDE
+        ordered = True
+
+
 class CreditSsdsSchema(Schema):
     """
     Nested schema class for runtime SSDs.
@@ -50,6 +65,8 @@ class CreditSchema(Schema):
     registry_storage_credits = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     runtime_any_credits = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     runtime_ssds = fields.List(fields.Nested(CreditSsdsSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
+    spend = fields.List(fields.Nested(CreditMonthlySpendSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """

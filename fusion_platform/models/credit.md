@@ -9,3 +9,6 @@
 * **runtime_ssds**: Specifies the credits available for specific SSDs.
     * **ssds**: The list of SSDs for which the corresponding credits apply.
     * **credits**: How many credits does the organisation have which can be used just for the corresponding list of credits?
+* **spend**: The historic monthly spend of credits.
+    * **month**: The month associated with the spend.
+    * **credits**: How many credits were spent in this month?

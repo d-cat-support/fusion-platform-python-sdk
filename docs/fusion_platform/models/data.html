@@ -93,6 +93,8 @@ class DataSchema(Schema):
     # Removed link_model.
     # Removed link_hash.
 
+    bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
@@ -924,6 +926,7 @@ until all upload and analysis (or errored) has completed and this method returns
 <li><strong>dates</strong>: The list of dates for which data is available from this ingester.</li>
 </ul>
 </li>
+<li><strong>bounds</strong>: The longitude and latitude bounds for the file (west, south, east, north).</li>
 <li><strong>uploaded_organisation_id</strong>: Was the data item uploaded?</li>
 <li><strong>deletable</strong>: Is this data model scheduled for deletion?</li>
 </ul></div>
@@ -957,6 +960,8 @@ until all upload and analysis (or errored) has completed and this method returns
     # Removed link_model.
     # Removed link_hash.
 
+    bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
@@ -985,7 +990,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.1.3
+Version: 1.1.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

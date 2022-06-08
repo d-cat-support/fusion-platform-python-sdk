@@ -72,6 +72,25 @@ class ProcessChainSchema(Schema):
         ordered = True
 
 
+class ProcessExecutionStatusSchema(Schema):
+    """
+    Nested schema class for execution status.
+    """
+    process_execution_id = fields.UUID(required=True)
+    job_status = fields.String(required=True)
+    started_at = fields.DateTime(required=True)
+    ended_at = fields.DateTime(allow_none=True)
+    delete_warning_status = fields.String(required=True)
+    delete_expiry = fields.DateTime(required=True)
+
+    class Meta:
+        """
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        """
+        unknown = EXCLUDE
+        ordered = True
+
+
 class ProcessSelectorSchema(Schema):
     """
     Nested schema class for selector, category, data type, unit and format.
@@ -185,7 +204,8 @@ class ProcessSchema(Schema):
     price = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
-    executions = fields.Boolean(allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    has_executions = fields.Boolean(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
 
     # Removed creator.
 

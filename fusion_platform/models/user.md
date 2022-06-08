@@ -15,5 +15,4 @@
 * **notification_processing_chain**: How will notifications will be sent for processing chain execution?
 * **notification_new_features**: How will notifications will be sent for new features?
 * **notification_contact**: How will notifications will be sent for contact requests?
-* **user_interface**: Is the user interface enabled for the user?
 * **last_request_at**: The last time a request was made.

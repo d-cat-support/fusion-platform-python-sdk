@@ -313,5 +313,5 @@
   "test_run": false,
   "price": 0,
   "deletable": null,
-  "executions": true
+  "has_executions": true
 }

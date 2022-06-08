@@ -70,7 +70,7 @@ class UserSchema(Schema):
 
     organisations = fields.List(fields.Nested(UserOrganisationSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
 
-    user_interface = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    # Removed various flags.
 
     last_request_at = fields.DateTime(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 

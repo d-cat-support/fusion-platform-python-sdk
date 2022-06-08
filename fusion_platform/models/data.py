@@ -62,6 +62,8 @@ class DataSchema(Schema):
     # Removed link_model.
     # Removed link_hash.
 
+    bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
