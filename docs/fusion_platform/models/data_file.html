@@ -96,6 +96,7 @@ class DataFileSchema(Schema):
     data_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     file_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    preview_file_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     file_type = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     file_name = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
@@ -145,6 +146,9 @@ class DataFile(Model):
     # Add in the custom model paths.
     _PATH_DOWNLOAD_FILE = &#39;/organisations/{organisation_id}/data/{data_id}/download_file/{file_id}&#39;
 
+    # Plus query parameters.
+    _QUERY_PREVIEW = &#39;preview&#39;
+
     def __init__(self, session):
         &#34;&#34;&#34;
         Initialises the object.
@@ -158,12 +162,13 @@ class DataFile(Model):
         self.__download_progress = None
         self.__download_thread = None
 
-    def download(self, path, wait=False):
+    def download(self, path, preview=False, wait=False):
         &#34;&#34;&#34;
         Downloads the file to the specified path. Optionally waits for the download to complete.
 
         Args:
             path: The local path to download the file to.
+            preview: Optionally specify that the preview (PNG) of the file should be downloaded instead of the main file.
             wait: Optionally wait for the download to complete? Default False.
 
         Raises:
@@ -174,7 +179,7 @@ class DataFile(Model):
             raise ModelError(i18n.t(&#39;models.data_file.download_already_in_progress&#39;))
 
         # Obtain the download URL.
-        url = self.download_url()
+        url = self.download_url(preview=preview)
 
         # Start the download in a separate thread.
         self.__download_progress = (url, path, 0)
@@ -244,7 +249,7 @@ class DataFile(Model):
         Returns:
             A tuple of the URL, destination and total number of bytes downloaded so far.
 
-        Raies:
+        Raises:
             ModelError: if no download is in progress.
         &#34;&#34;&#34;
         # Make sure a download is in progress.
@@ -253,14 +258,18 @@ class DataFile(Model):
 
         return self.__download_progress
 
-    def download_url(self):
+    def download_url(self, preview=False):
         &#34;&#34;&#34;
         Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.
 
-        Raies:
+        Args:
+            preview: Optionally specify that the preview (PNG) URL for the file should be obtained instead of the URL for the main file.
+
+        Raises:
             RequestError: if the request fails.
         &#34;&#34;&#34;
-        response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id))
+        response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id),
+                                         query_parameters={DataFile._QUERY_PREVIEW: preview})
 
         # Assume that the URL held within the expected key within the resulting dictionary.
         url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
@@ -312,6 +321,9 @@ class DataFile(Model):
     # Add in the custom model paths.
     _PATH_DOWNLOAD_FILE = &#39;/organisations/{organisation_id}/data/{data_id}/download_file/{file_id}&#39;
 
+    # Plus query parameters.
+    _QUERY_PREVIEW = &#39;preview&#39;
+
     def __init__(self, session):
         &#34;&#34;&#34;
         Initialises the object.
@@ -325,12 +337,13 @@ class DataFile(Model):
         self.__download_progress = None
         self.__download_thread = None
 
-    def download(self, path, wait=False):
+    def download(self, path, preview=False, wait=False):
         &#34;&#34;&#34;
         Downloads the file to the specified path. Optionally waits for the download to complete.
 
         Args:
             path: The local path to download the file to.
+            preview: Optionally specify that the preview (PNG) of the file should be downloaded instead of the main file.
             wait: Optionally wait for the download to complete? Default False.
 
         Raises:
@@ -341,7 +354,7 @@ class DataFile(Model):
             raise ModelError(i18n.t(&#39;models.data_file.download_already_in_progress&#39;))
 
         # Obtain the download URL.
-        url = self.download_url()
+        url = self.download_url(preview=preview)
 
         # Start the download in a separate thread.
         self.__download_progress = (url, path, 0)
@@ -411,7 +424,7 @@ class DataFile(Model):
         Returns:
             A tuple of the URL, destination and total number of bytes downloaded so far.
 
-        Raies:
+        Raises:
             ModelError: if no download is in progress.
         &#34;&#34;&#34;
         # Make sure a download is in progress.
@@ -420,14 +433,18 @@ class DataFile(Model):
 
         return self.__download_progress
 
-    def download_url(self):
+    def download_url(self, preview=False):
         &#34;&#34;&#34;
         Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.
 
-        Raies:
+        Args:
+            preview: Optionally specify that the preview (PNG) URL for the file should be obtained instead of the URL for the main file.
+
+        Raises:
             RequestError: if the request fails.
         &#34;&#34;&#34;
-        response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id))
+        response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id),
+                                         query_parameters={DataFile._QUERY_PREVIEW: preview})
 
         # Assume that the URL held within the expected key within the resulting dictionary.
         url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
@@ -467,7 +484,7 @@ class DataFile(Model):
 <div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
 </dd>
 <dt id="fusion_platform.models.data_file.DataFile.download"><code class="name flex">
-<span>def <span class="ident">download</span></span>(<span>self, path, wait=False)</span>
+<span>def <span class="ident">download</span></span>(<span>self, path, preview=False, wait=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Downloads the file to the specified path. Optionally waits for the download to complete.</p>
@@ -475,6 +492,8 @@ class DataFile(Model):
 <dl>
 <dt><strong><code>path</code></strong></dt>
 <dd>The local path to download the file to.</dd>
+<dt><strong><code>preview</code></strong></dt>
+<dd>Optionally specify that the preview (PNG) of the file should be downloaded instead of the main file.</dd>
 <dt><strong><code>wait</code></strong></dt>
 <dd>Optionally wait for the download to complete? Default False.</dd>
 </dl>
@@ -487,12 +506,13 @@ class DataFile(Model):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def download(self, path, wait=False):
+<pre><code class="python">def download(self, path, preview=False, wait=False):
     &#34;&#34;&#34;
     Downloads the file to the specified path. Optionally waits for the download to complete.
 
     Args:
         path: The local path to download the file to.
+        preview: Optionally specify that the preview (PNG) of the file should be downloaded instead of the main file.
         wait: Optionally wait for the download to complete? Default False.
 
     Raises:
@@ -503,7 +523,7 @@ class DataFile(Model):
         raise ModelError(i18n.t(&#39;models.data_file.download_already_in_progress&#39;))
 
     # Obtain the download URL.
-    url = self.download_url()
+    url = self.download_url(preview=preview)
 
     # Start the download in a separate thread.
     self.__download_progress = (url, path, 0)
@@ -588,8 +608,11 @@ for the download to complete.</p>
 <div class="desc"><p>Returns current download progress.</p>
 <h2 id="returns">Returns</h2>
 <p>A tuple of the URL, destination and total number of bytes downloaded so far.</p>
-<h2 id="raies">Raies</h2>
-<p>ModelError: if no download is in progress.</p></div>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ModelError</code></dt>
+<dd>if no download is in progress.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -601,7 +624,7 @@ for the download to complete.</p>
     Returns:
         A tuple of the URL, destination and total number of bytes downloaded so far.
 
-    Raies:
+    Raises:
         ModelError: if no download is in progress.
     &#34;&#34;&#34;
     # Make sure a download is in progress.
@@ -612,24 +635,36 @@ for the download to complete.</p>
 </details>
 </dd>
 <dt id="fusion_platform.models.data_file.DataFile.download_url"><code class="name flex">
-<span>def <span class="ident">download_url</span></span>(<span>self)</span>
+<span>def <span class="ident">download_url</span></span>(<span>self, preview=False)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.</p>
-<h2 id="raies">Raies</h2>
-<p>RequestError: if the request fails.</p></div>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>preview</code></strong></dt>
+<dd>Optionally specify that the preview (PNG) URL for the file should be obtained instead of the URL for the main file.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the request fails.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def download_url(self):
+<pre><code class="python">def download_url(self, preview=False):
     &#34;&#34;&#34;
     Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.
 
-    Raies:
+    Args:
+        preview: Optionally specify that the preview (PNG) URL for the file should be obtained instead of the URL for the main file.
+
+    Raises:
         RequestError: if the request fails.
     &#34;&#34;&#34;
-    response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id))
+    response = self._session.request(path=self._get_path(self.__class__._PATH_DOWNLOAD_FILE, file_id=self.file_id, organisation_id=self.organisation_id),
+                                     query_parameters={DataFile._QUERY_PREVIEW: preview})
 
     # Assume that the URL held within the expected key within the resulting dictionary.
     url = dict_nested_get(response, [self.__class__._RESPONSE_KEY_EXTRAS, self.__class__._RESPONSE_KEY_URL])
@@ -686,6 +721,7 @@ for the download to complete.</p>
 <li><strong>organisation_id</strong>: The owning organisation.</li>
 <li><strong>data_id</strong>: The data item linked to this file record.</li>
 <li><strong>file_id</strong>: The file associated with this data item.</li>
+<li><strong>preview_file_id</strong>: The preview file associated with this data item.</li>
 <li><strong>file_type</strong>: The type of file.</li>
 <li><strong>file_name</strong>: The name of the file.</li>
 <li><strong>resolution</strong>: For raster files, the resolution in metres.</li>
@@ -742,6 +778,7 @@ for the download to complete.</p>
     data_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     file_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    preview_file_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     file_type = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     file_name = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
@@ -790,7 +827,7 @@ for the download to complete.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.1.4
+Version: 1.2.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

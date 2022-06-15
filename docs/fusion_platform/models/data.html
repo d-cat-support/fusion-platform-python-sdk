@@ -94,6 +94,7 @@ class DataSchema(Schema):
     # Removed link_hash.
 
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    file_with_preview = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -927,6 +928,7 @@ until all upload and analysis (or errored) has completed and this method returns
 </ul>
 </li>
 <li><strong>bounds</strong>: The longitude and latitude bounds for the file (west, south, east, north).</li>
+<li><strong>file_with_preview</strong>: Identifies a file owned by this data item which as a preview.</li>
 <li><strong>uploaded_organisation_id</strong>: Was the data item uploaded?</li>
 <li><strong>deletable</strong>: Is this data model scheduled for deletion?</li>
 </ul></div>
@@ -961,6 +963,7 @@ until all upload and analysis (or errored) has completed and this method returns
     # Removed link_hash.
 
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    file_with_preview = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -990,7 +993,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.1.4
+Version: 1.2.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -4,6 +4,7 @@
 * **organisation_id**: The owning organisation.
 * **data_id**: The data item linked to this file record.
 * **file_id**: The file associated with this data item.
+* **preview_file_id**: The preview file associated with this data item.
 * **file_type**: The type of file.
 * **file_name**: The name of the file.
 * **resolution**: For raster files, the resolution in metres.
