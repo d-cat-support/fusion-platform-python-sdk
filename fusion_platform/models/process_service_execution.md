@@ -37,6 +37,8 @@
 * **options**: The options used by this execution.
     * **name**: The name of the option.
     * **value**: The value for the option.
+    * **data_type**: The data type associated with the option.
+    * **validation**: 
 * **intermediate**: Is this an intermediate service?
 * **success**: Has the execution completed successfully?
 * **metrics**: Metrics recorded during the execution.

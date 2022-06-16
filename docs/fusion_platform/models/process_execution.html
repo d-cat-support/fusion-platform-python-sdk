@@ -54,6 +54,8 @@ class ProcessExecutionChainOptionSchema(Schema):
     &#34;&#34;&#34;
     name = fields.String(required=True)
     value = fields.String(allow_none=True)
+    data_type = fields.String(required=True)
+    validation = fields.String(allow_none=True)
 
     class Meta:
         &#34;&#34;&#34;
@@ -524,6 +526,8 @@ def components(self):
 <li><strong>options</strong>: The options from the service.<ul>
 <li><strong>name</strong>: The name of the option.</li>
 <li><strong>value</strong>: The value for the option.</li>
+<li><strong>data_type</strong>: The data type associated with the option.</li>
+<li><strong>validation</strong>: </li>
 </ul>
 </li>
 <li><strong>intermediate</strong>: Is this an intermediate service within the chain?</li>
@@ -599,7 +603,7 @@ def components(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.2.1
+Version: 1.2.3
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -19,7 +19,7 @@ PACKAGE_DIR = pathlib.Path(__file__).parent
 # @formatter:off
 setup(
     name='fusion-platform-python-sdk',
-    version='1.2.1',
+    version='1.2.3',
     description='Python SDK used to interact with the Fusion Platform(r)',
     long_description=(PACKAGE_DIR / 'README.md').read_text(),
     long_description_content_type='text/markdown',

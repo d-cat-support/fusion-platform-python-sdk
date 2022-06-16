@@ -13,6 +13,8 @@
     * **options**: The options from the service.
         * **name**: The name of the option.
         * **value**: The value for the option.
+        * **data_type**: The data type associated with the option.
+        * **validation**: 
     * **intermediate**: Is this an intermediate service within the chain?
 * **run_type**: How will the process be executed?
 * **repeat_count**: How many more repetitions of the process will there be?

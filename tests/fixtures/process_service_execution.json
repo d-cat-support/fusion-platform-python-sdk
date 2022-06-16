@@ -17,51 +17,63 @@
   "options": [
     {
       "name": "latest_date",
-      "value": "true"
+      "value": "true",
+      "data_type": "datetime"
     },
     {
       "name": "find_nearest",
-      "value": "true"
+      "value": "true",
+      "data_type": "boolean"
     },
     {
       "name": "maximum_scan_days",
-      "value": "5"
+      "value": "5",
+      "data_type": "numeric"
     },
     {
       "name": "merge_image_days",
-      "value": "1"
+      "value": "1",
+      "data_type": "numeric"
     },
     {
       "name": "maximum_cloud",
-      "value": "95"
+      "value": "95",
+      "data_type": "numeric"
     },
     {
       "name": "atmospherically_corrected",
-      "value": "true"
+      "value": "true",
+      "data_type": "boolean"
     },
     {
       "name": "coverage_tolerance",
-      "value": "4"
+      "value": "4",
+      "data_type": "numeric"
     },
     {
       "name": "error_no_image",
-      "value": "false"
+      "value": "false",
+      "data_type": "boolean"
     },
     {
       "name": "mask",
-      "value": "true"
+      "value": "true",
+      "data_type": "boolean"
     },
     {
       "name": "mask_classes",
-      "value": "4,5,6,7"
+      "value": "4,5,6,7",
+      "data_type": "string"
     },
     {
       "name": "generate_preview",
-      "value": "true"
+      "value": "true",
+      "data_type": "boolean"
     },
     {
       "name": "clip",
-      "value": "true"
+      "value": "true",
+      "data_type": "boolean"
     }
   ],
   "inputs": [

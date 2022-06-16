@@ -23,6 +23,8 @@ class ProcessExecutionChainOptionSchema(Schema):
     """
     name = fields.String(required=True)
     value = fields.String(allow_none=True)
+    data_type = fields.String(required=True)
+    validation = fields.String(allow_none=True)
 
     class Meta:
         """
