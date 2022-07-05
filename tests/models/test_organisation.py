@@ -382,6 +382,7 @@ class TestOrganisation(CustomTestCase):
         organisation_id = organisation_content.get(Model._FIELD_ID)
         data_id = data_content.get(Model._FIELD_ID)
         name = data_content.get(Model._FIELD_NAME)
+        search = data_content.get(Model._FIELD_NAME)
         path = Organisation._PATH_DATA.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -409,7 +410,7 @@ class TestOrganisation(CustomTestCase):
                 next(generator)
 
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [data_content]}))
-            first, generator = organisation.find_data(id=data_id, name=name)
+            first, generator = organisation.find_data(id=data_id, name=name, search=search)
             self.assertIsNotNone(first)
 
             for data in generator:
@@ -429,6 +430,7 @@ class TestOrganisation(CustomTestCase):
         organisation_id = organisation_content.get(Model._FIELD_ID)
         process_id = process_content.get(Model._FIELD_ID)
         name = process_content.get(Model._FIELD_NAME)
+        search = process_content.get(Model._FIELD_NAME)
         path = Organisation._PATH_PROCESSES.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -456,7 +458,7 @@ class TestOrganisation(CustomTestCase):
                 next(generator)
 
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content]}))
-            first, generator = organisation.find_processes(id=process_id, name=name)
+            first, generator = organisation.find_processes(id=process_id, name=name, search=search)
             self.assertIsNotNone(first)
 
             for process in generator:
@@ -478,6 +480,7 @@ class TestOrganisation(CustomTestCase):
         ssd_id = service_content.get(Model._FIELD_SSD_ID)
         name = service_content.get(Model._FIELD_NAME)
         keyword = service_content.get(Model._FIELD_KEYWORDS)[0]
+        search = service_content.get(Model._FIELD_NAME)
         path = Organisation._PATH_SERVICES.format(organisation_id=organisation_id)
 
         organisation = Organisation(session)
@@ -505,7 +508,7 @@ class TestOrganisation(CustomTestCase):
                 next(generator)
 
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [service_content]}))
-            first, generator = organisation.find_services(id=service_id, ssd_id=ssd_id, name=name, keyword=keyword)
+            first, generator = organisation.find_services(id=service_id, ssd_id=ssd_id, name=name, keyword=keyword, search=search)
             self.assertIsNotNone(first)
 
             for service in generator:

@@ -229,6 +229,7 @@ class ProcessSchema(Schema):
 
     process_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     process_status_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    process_status_changed_by = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     output_storage_period = fields.Integer(allow_none=True)
     test_run = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -241,6 +242,7 @@ class ProcessSchema(Schema):
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
 
     # Removed creator.
+    # Removed search.
 
     class Meta:
         &#34;&#34;&#34;
@@ -1737,7 +1739,7 @@ Otherwise, this method will block until the next scheduled execution has started
 <li><strong>name</strong>: The name of the option.</li>
 <li><strong>value</strong>: The value for the option.</li>
 <li><strong>data_type</strong>: The data type associated with the option.</li>
-<li><strong>validation</strong>: </li>
+<li><strong>validation</strong>: The optional validation for the option. This must be supplied for date/time and constrained values.</li>
 </ul>
 </li>
 <li><strong>intermediate</strong>: Is this an intermediate service within the chain?</li>
@@ -1751,6 +1753,7 @@ Otherwise, this method will block until the next scheduled execution has started
 <li><strong>repeat_offset</strong>: At what offset from the repeat start will the process run?</li>
 <li><strong>process_status</strong>: The process status.</li>
 <li><strong>process_status_at</strong>: When was the process status changed?</li>
+<li><strong>process_status_changed_by</strong>: Who changed the process status?</li>
 <li><strong>output_storage_period</strong>: The number of days that outputs should be stored after execution before they are automatically deleted.</li>
 <li><strong>test_run</strong>: Is this a test run of a service?</li>
 <li><strong>price</strong>: The price in FPUs to execute this process given its inputs and options.</li>
@@ -1793,6 +1796,7 @@ Otherwise, this method will block until the next scheduled execution has started
 
     process_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     process_status_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    process_status_changed_by = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     output_storage_period = fields.Integer(allow_none=True)
     test_run = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -1805,6 +1809,7 @@ Otherwise, this method will block until the next scheduled execution has started
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
 
     # Removed creator.
+    # Removed search.
 
     class Meta:
         &#34;&#34;&#34;
@@ -1829,7 +1834,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.2.3
+Version: 1.2.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -14,7 +14,7 @@
         * **name**: The name of the option.
         * **value**: The value for the option.
         * **data_type**: The data type associated with the option.
-        * **validation**: 
+        * **validation**: The optional validation for the option. This must be supplied for date/time and constrained values.
     * **intermediate**: Is this an intermediate service within the chain?
 * **run_type**: How will the process be executed?
 * **repeat_count**: How many more repetitions of the process will there be?
@@ -24,6 +24,7 @@
 * **repeat_offset**: At what offset from the repeat start will the process run?
 * **process_status**: The process status.
 * **process_status_at**: When was the process status changed?
+* **process_status_changed_by**: Who changed the process status?
 * **output_storage_period**: The number of days that outputs should be stored after execution before they are automatically deleted.
 * **test_run**: Is this a test run of a service?
 * **price**: The price in FPUs to execute this process given its inputs and options.

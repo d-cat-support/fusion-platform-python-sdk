@@ -198,6 +198,7 @@ class ProcessSchema(Schema):
 
     process_status = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     process_status_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    process_status_changed_by = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     output_storage_period = fields.Integer(allow_none=True)
     test_run = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
@@ -210,6 +211,7 @@ class ProcessSchema(Schema):
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
 
     # Removed creator.
+    # Removed search.
 
     class Meta:
         """

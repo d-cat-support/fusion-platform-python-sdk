@@ -201,6 +201,7 @@ class ServiceSchema(Schema):
 
     # Removed creator.
     # Removed approver.
+    # Removed search.
 
     documentation_summary = fields.String(required=True)
     documentation_description = fields.String(required=True)

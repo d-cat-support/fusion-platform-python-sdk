@@ -74,6 +74,8 @@ class UserSchema(Schema):
 
     last_request_at = fields.DateTime(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
+    # Removed search.
+
     class Meta:
         """
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
@@ -134,7 +136,7 @@ class User(Model):
         organisation = None
 
         for item in self.organisations:
-            if ((id is not None) and (str(id) == str(item.id))) or ((name is not None) and (item.name.startswith(name))):
+            if ((id is not None) and (str(id).lower() == str(item.id).lower())) or ((name is not None) and (item.name.lower().startswith(name.lower()))):
                 organisation = item
                 break
 

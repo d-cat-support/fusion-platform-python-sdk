@@ -38,7 +38,7 @@
     * **name**: The name of the option.
     * **value**: The value for the option.
     * **data_type**: The data type associated with the option.
-    * **validation**: 
+    * **validation**: The optional validation for the option. This must be supplied for date/time and constrained values.
 * **intermediate**: Is this an intermediate service?
 * **success**: Has the execution completed successfully?
 * **metrics**: Metrics recorded during the execution.

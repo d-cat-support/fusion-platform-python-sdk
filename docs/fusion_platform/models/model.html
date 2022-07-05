@@ -116,6 +116,7 @@ class Model(Base):
     _REQUEST_KEY_LIMIT = &#39;limit&#39;
     _REQUEST_KEY_NAME = &#39;{model}[{key}]&#39;
     _REQUEST_KEY_REVERSE = &#39;reverse&#39;
+    _REQUEST_KEY_SEARCH = &#39;search&#39;
 
     # Response keys.
     _RESPONSE_KEY_EXTRAS = &#39;extras&#39;
@@ -466,7 +467,7 @@ class Model(Base):
         return (cls._model_from_api_id(session, **id) for id in ids)
 
     @classmethod
-    def _models_from_api_path(cls, session, path, items_per_request=24, reverse=False, filter=None, **kwargs):
+    def _models_from_api_path(cls, session, path, items_per_request=24, reverse=False, filter=None, search=None, **kwargs):
         &#34;&#34;&#34;
         Generates an iterator through a series of models using a path which returns a list of objects. Each model is loaded from the list. Since API lists are
         paged, the generator takes into account having to get subsequent pages of results.
@@ -502,6 +503,7 @@ class Model(Base):
             items_per_request: The optional maximum number of items to retrieve at each request. Default 24.
             reverse: Whether the list should be reversed or not. Default False.
             filter: The optional filter to be applied to the results. Default is no filter.
+            search: The optional search term to be applied to the results. Default to no search term.
             kwargs: Any additional attributes which are to be set on each model which are not provided in each item from the path.
 
         Returns:
@@ -515,13 +517,17 @@ class Model(Base):
         filter = {} if filter is None else filter
         filter = {f&#34;{Model._REQUEST_KEY_FILTER}[{key}]&#34;: value for key, value in filter.items()}
 
+        # Make sure the search term is lowercase, if provided.
+        search = search.lower() if search is not None else search
+
         # Loop through all required pages.
         finished = False
         last = {}
 
         while not finished:
             # Build the query parameters, including the last index, if available.
-            query_parameters = {Model._REQUEST_KEY_LIMIT: items_per_request, Model._REQUEST_KEY_REVERSE: reverse, **filter, **last}
+            query_parameters = {Model._REQUEST_KEY_LIMIT: items_per_request, Model._REQUEST_KEY_REVERSE: reverse, Model._REQUEST_KEY_SEARCH: search, **filter,
+                                **last}
 
             # Send the request.
             response = session.request(path=path, query_parameters=query_parameters)
@@ -859,6 +865,7 @@ class Model(Base):
     _REQUEST_KEY_LIMIT = &#39;limit&#39;
     _REQUEST_KEY_NAME = &#39;{model}[{key}]&#39;
     _REQUEST_KEY_REVERSE = &#39;reverse&#39;
+    _REQUEST_KEY_SEARCH = &#39;search&#39;
 
     # Response keys.
     _RESPONSE_KEY_EXTRAS = &#39;extras&#39;
@@ -1209,7 +1216,7 @@ class Model(Base):
         return (cls._model_from_api_id(session, **id) for id in ids)
 
     @classmethod
-    def _models_from_api_path(cls, session, path, items_per_request=24, reverse=False, filter=None, **kwargs):
+    def _models_from_api_path(cls, session, path, items_per_request=24, reverse=False, filter=None, search=None, **kwargs):
         &#34;&#34;&#34;
         Generates an iterator through a series of models using a path which returns a list of objects. Each model is loaded from the list. Since API lists are
         paged, the generator takes into account having to get subsequent pages of results.
@@ -1245,6 +1252,7 @@ class Model(Base):
             items_per_request: The optional maximum number of items to retrieve at each request. Default 24.
             reverse: Whether the list should be reversed or not. Default False.
             filter: The optional filter to be applied to the results. Default is no filter.
+            search: The optional search term to be applied to the results. Default to no search term.
             kwargs: Any additional attributes which are to be set on each model which are not provided in each item from the path.
 
         Returns:
@@ -1258,13 +1266,17 @@ class Model(Base):
         filter = {} if filter is None else filter
         filter = {f&#34;{Model._REQUEST_KEY_FILTER}[{key}]&#34;: value for key, value in filter.items()}
 
+        # Make sure the search term is lowercase, if provided.
+        search = search.lower() if search is not None else search
+
         # Loop through all required pages.
         finished = False
         last = {}
 
         while not finished:
             # Build the query parameters, including the last index, if available.
-            query_parameters = {Model._REQUEST_KEY_LIMIT: items_per_request, Model._REQUEST_KEY_REVERSE: reverse, **filter, **last}
+            query_parameters = {Model._REQUEST_KEY_LIMIT: items_per_request, Model._REQUEST_KEY_REVERSE: reverse, Model._REQUEST_KEY_SEARCH: search, **filter,
+                                **last}
 
             # Send the request.
             response = session.request(path=path, query_parameters=query_parameters)
@@ -1762,7 +1774,7 @@ attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatica
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.2.3
+Version: 1.2.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

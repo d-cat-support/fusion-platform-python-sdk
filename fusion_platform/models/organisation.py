@@ -72,11 +72,15 @@ class OrganisationSchema(Schema):
 
     agreed_licenses = fields.List(fields.UUID(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     offers = fields.List(fields.UUID(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    # Removed runtime_stop_charge.
+    # Removed runtime_error_charge.
 
     # Removed audit_services.
 
     maximum_output_storage_period = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     maximum_file_downloads = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
+    # Removed search.
 
     class Meta:
         """
@@ -160,13 +164,14 @@ class Organisation(Model):
         """
         return Data._models_from_api_path(self._session, self._get_path(self.__class__._PATH_DATA))
 
-    def find_data(self, id=None, name=None):
+    def find_data(self, id=None, name=None, search=None):
         """
         Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.
 
         Args:
             id: The data id to search for.
             name: The name to search for (case-sensitive).
+            search: The term to search for (case-insensitive).
 
         Returns:
             The first found data object, or None if not found, and an iterator through the found data objects.
@@ -180,16 +185,17 @@ class Organisation(Model):
             [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name)])
 
         # Build the partial find generator and execute it.
-        find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter)
+        find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter, search=search)
         return self.__class__._first_and_generator(find)
 
-    def find_processes(self, id=None, name=None):
+    def find_processes(self, id=None, name=None, search=None):
         """
         Searches for the organisation's processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.
 
         Args:
             id: The process id to search for.
             name: The name to search for (case-sensitive).
+            search: The term to search for (case-insensitive).
 
         Returns:
             The first found process object, or None if not found, and an iterator through the found process objects.
@@ -202,10 +208,10 @@ class Organisation(Model):
             [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_CONTAINS, name)])
 
         # Build the partial find generator and execute it.
-        find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter)
+        find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter, search=search)
         return self.__class__._first_and_generator(find)
 
-    def find_services(self, id=None, ssd_id=None, name=None, keyword=None):
+    def find_services(self, id=None, ssd_id=None, name=None, keyword=None, search=None):
         """
         Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
 
@@ -214,6 +220,7 @@ class Organisation(Model):
             ssd_id: The SSD id to search for.
             name: The name to search for (case-sensitive).
             keyword: The keyword to search for (case-sensitive).
+            search: The term to search for (case-insensitive).
 
         Returns:
             The first found service object, or None if not found, and an iterator through the found service objects.
@@ -229,7 +236,7 @@ class Organisation(Model):
              (self.__class__._FIELD_KEYWORDS, self.__class__._FILTER_MODIFIER_CONTAINS, keyword)])
 
         # Build the partial find generator and execute it.
-        find = partial(Service._models_from_api_path, self._session, self._get_path(self.__class__._PATH_SERVICES), filter=filter)
+        find = partial(Service._models_from_api_path, self._session, self._get_path(self.__class__._PATH_SERVICES), filter=filter, search=search)
         return self.__class__._first_and_generator(find)
 
     def new_process(self, name, service):

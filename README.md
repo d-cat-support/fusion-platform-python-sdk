@@ -51,7 +51,7 @@ organisation = next(user.organisations)
 # Create a data item for the Glasgow region of interest:
 glasgow = organisation.create_data(name='Glasgow', file_type=fusion_platform.FILE_TYPE_GEOJSON, files=[fusion_platform.EXAMPLE_GLASGOW_FILE], wait=True)
 
-# Find the elevation service using its name.
+# Find the elevation service.
 service, _ = organisation.find_services(keyword='Elevation')
 
 # Create a template process from the service.

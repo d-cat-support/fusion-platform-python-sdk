@@ -34,5 +34,6 @@
     * **histogram_maximum**: The histogram maximum value associated with the selector values.
     * **histogram**: The histogram associated with the selector values.
 * **downloads**: How many times has the file been downloaded?
+* **geojson**: The content of the associated file if it is a GeoJSON file (of limited size).
 * **title**: The title for the selector.
 * **description**: The description of the selector.

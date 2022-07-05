@@ -87,6 +87,7 @@ class DataFileSchema(Schema):
     selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     downloads = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    geojson = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     title = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     description = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.

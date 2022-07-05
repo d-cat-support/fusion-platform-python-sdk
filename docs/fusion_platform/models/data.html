@@ -100,6 +100,7 @@ class DataSchema(Schema):
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     # Removed creator.
+    # Removed search.
 
     class Meta:
         &#34;&#34;&#34;
@@ -969,6 +970,7 @@ until all upload and analysis (or errored) has completed and this method returns
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     # Removed creator.
+    # Removed search.
 
     class Meta:
         &#34;&#34;&#34;
@@ -993,7 +995,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.2.3
+Version: 1.2.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

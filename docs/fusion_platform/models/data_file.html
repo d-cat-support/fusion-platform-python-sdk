@@ -118,6 +118,7 @@ class DataFileSchema(Schema):
     selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     downloads = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    geojson = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     title = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     description = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -753,6 +754,7 @@ for the download to complete.</p>
 </ul>
 </li>
 <li><strong>downloads</strong>: How many times has the file been downloaded?</li>
+<li><strong>geojson</strong>: The content of the associated file if it is a GeoJSON file (of limited size).</li>
 <li><strong>title</strong>: The title for the selector.</li>
 <li><strong>description</strong>: The description of the selector.</li>
 </ul></div>
@@ -800,6 +802,7 @@ for the download to complete.</p>
     selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     downloads = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    geojson = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     title = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     description = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -827,7 +830,7 @@ for the download to complete.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.2.3
+Version: 1.2.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

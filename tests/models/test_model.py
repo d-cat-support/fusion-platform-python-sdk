@@ -347,7 +347,7 @@ class TestModel(CustomTestCase):
         with pytest.raises(ModelError):
             with requests_mock.Mocker() as mock:
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [content]}))
-                iterator = Model._models_from_api_path(Session(), path, items_per_request=10, reverse=True, filter={'test_begins_with': 'Test'})
+                iterator = Model._models_from_api_path(Session(), path, items_per_request=10, reverse=True, filter={'test_begins_with': 'Test'}, search='search')
                 next(iterator)
 
     def test_new_abstract(self):

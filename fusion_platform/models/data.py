@@ -69,6 +69,7 @@ class DataSchema(Schema):
     deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed creator.
+    # Removed search.
 
     class Meta:
         """
