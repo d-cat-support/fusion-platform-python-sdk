@@ -54,6 +54,7 @@ class DataSchema(Schema):
 
     # Removed lock.
     unlinked = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    unfulfilled = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     ingester_availability = fields.List(fields.Nested(DataIngesterSchema()), allow_none=True,
                                         metadata={'read_only': True})  # Changed to prevent this being updated.

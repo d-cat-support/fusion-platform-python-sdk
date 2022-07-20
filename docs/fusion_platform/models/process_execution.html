@@ -71,7 +71,7 @@ class ProcessExecutionChainSchema(Schema):
     &#34;&#34;&#34;
     ssd_id = fields.UUID(required=True)
     service_id = fields.UUID(required=True)
-    inputs = fields.List(fields.UUID(allow_none=True), allow_none=True)
+    inputs = fields.List(fields.List(fields.UUID(allow_none=True), allow_none=True), allow_none=True)
     outputs = fields.List(fields.UUID(required=True), allow_none=True)
     options = fields.List(fields.Nested(ProcessExecutionChainOptionSchema()), allow_none=True)
     intermediate = fields.Boolean(allow_none=True)
@@ -132,8 +132,10 @@ class ProcessExecutionSchema(Schema):
 
     started_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     ended_at = fields.DateTime(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    abort_reason = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    # Removed wait_for_inputs.
+    stopped = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     abort = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    abort_reason = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     success = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     progress = fields.Integer(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     delete_expiry = fields.DateTime(required=True)
@@ -535,8 +537,9 @@ def components(self):
 </li>
 <li><strong>started_at</strong>: When did the execution start?</li>
 <li><strong>ended_at</strong>: When did the execution end?</li>
-<li><strong>abort_reason</strong>: The reason for any abort of the execution.</li>
+<li><strong>stopped</strong>: Has the execution been stopped by a user?</li>
 <li><strong>abort</strong>: Has the execution been aborted?</li>
+<li><strong>abort_reason</strong>: The reason for any abort of the execution.</li>
 <li><strong>success</strong>: Has the execution completed successfully?</li>
 <li><strong>progress</strong>: Percentage progress of the execution.</li>
 <li><strong>delete_expiry</strong>: When will the execution expire and therefore be deleted?</li>
@@ -572,8 +575,10 @@ def components(self):
 
     started_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     ended_at = fields.DateTime(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    abort_reason = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    # Removed wait_for_inputs.
+    stopped = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     abort = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    abort_reason = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     success = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     progress = fields.Integer(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     delete_expiry = fields.DateTime(required=True)
@@ -603,7 +608,7 @@ def components(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.2.4
+Version: 1.2.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

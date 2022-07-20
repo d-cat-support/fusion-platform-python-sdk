@@ -40,7 +40,7 @@ class ProcessExecutionChainSchema(Schema):
     """
     ssd_id = fields.UUID(required=True)
     service_id = fields.UUID(required=True)
-    inputs = fields.List(fields.UUID(allow_none=True), allow_none=True)
+    inputs = fields.List(fields.List(fields.UUID(allow_none=True), allow_none=True), allow_none=True)
     outputs = fields.List(fields.UUID(required=True), allow_none=True)
     options = fields.List(fields.Nested(ProcessExecutionChainOptionSchema()), allow_none=True)
     intermediate = fields.Boolean(allow_none=True)
@@ -101,8 +101,10 @@ class ProcessExecutionSchema(Schema):
 
     started_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     ended_at = fields.DateTime(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
-    abort_reason = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    # Removed wait_for_inputs.
+    stopped = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     abort = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    abort_reason = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     success = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     progress = fields.Integer(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     delete_expiry = fields.DateTime(required=True)

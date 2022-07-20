@@ -30,8 +30,9 @@
     * **intermediate**: Is this an intermediate service within the chain?
 * **started_at**: When did the execution start?
 * **ended_at**: When did the execution end?
-* **abort_reason**: The reason for any abort of the execution.
+* **stopped**: Has the execution been stopped by a user?
 * **abort**: Has the execution been aborted?
+* **abort_reason**: The reason for any abort of the execution.
 * **success**: Has the execution completed successfully?
 * **progress**: Percentage progress of the execution.
 * **delete_expiry**: When will the execution expire and therefore be deleted?

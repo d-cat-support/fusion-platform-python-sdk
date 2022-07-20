@@ -17,6 +17,10 @@
     * **linkages**: The list of linkages which consume the output.
         * **ssd_id**: The SSD which is being linked into this service.
         * **input**: The input to the SSD being linked.
+* **group_aggregators**: The list of aggregators which are run when all executions in a group have completed.
+    * **aggregator_ssd_id**: The SSD executed to aggregate the outputs from a group.
+    * **output_ssd_id**: The SSD whose outputs are used by the aggregator.
+    * **outputs**: The list of outputs from the output SSD used by the aggregator.
 * **actions**: The custom actions associated with the service.
     * **name**: The name of the value.
     * **values**: The values required for the action.

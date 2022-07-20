@@ -11,6 +11,7 @@
 * **crs**: The optional coordinate reference system for the file.
 * **bounds**: The longitude and latitude bounds for the file (west, south, east, north).
 * **area**: The optional total area covered by the file content in metres squared.
+* **length**: The optional total length covered by the file content in metres.
 * **mgrs_cells**: The optional list of MGRS cells which are covered by the file content.
 * **sinusoidal_cells**: The optional list of sinusoidal cells which are covered by the file content.
 * **size**: The size of the file in bytes.
@@ -25,6 +26,7 @@
     * **unit**: The optional unit associated with the selector.
     * **validation**: The optional validation for the selector. This must be supplied for date/time and constrained values.
     * **area**: The optional area for the selector in metres squared.
+    * **length**: The optional length for the selector in metres.
     * **initial_values**: The first initial values associated with the selector.
     * **minimum**: The minimum value associated with the selector values.
     * **maximum**: The maximum value associated with the selector values.

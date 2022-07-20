@@ -191,7 +191,9 @@
       "ssd_id": "819f9e0c-a94e-4477-81f6-467a0f876e77",
       "service_id": "5e98fdd7-77a3-451f-ba49-d67002fc420d",
       "inputs": [
-        "92eb24e5-9639-4207-9f8e-67eebadc97ab"
+        [
+          "92eb24e5-9639-4207-9f8e-67eebadc97ab"
+        ]
       ],
       "outputs": [
         "eabed068-9dd5-411b-b204-bda08daaf7af",
@@ -291,6 +293,7 @@
   ],
   "started_at": "2022-02-15T10:22:53.780425+00:00",
   "ended_at": "2022-02-15T10:27:07.811025+00:00",
+  "stopped": false,
   "abort": false,
   "success": true,
   "progress": 100,

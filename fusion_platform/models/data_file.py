@@ -28,6 +28,7 @@ class DataFileSelectorSchema(Schema):
     validation = fields.String(allow_none=True)
 
     area = fields.Decimal(allow_none=True)
+    length = fields.Decimal(allow_none=True)
 
     initial_values = fields.List(fields.String(required=True), allow_none=True)
     minimum = fields.Decimal(allow_none=True)
@@ -73,6 +74,7 @@ class DataFileSchema(Schema):
     crs = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     area = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    length = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
                                    metadata={'read_only': True})  # Changed to prevent this being updated.

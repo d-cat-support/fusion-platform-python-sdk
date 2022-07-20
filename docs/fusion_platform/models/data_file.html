@@ -59,6 +59,7 @@ class DataFileSelectorSchema(Schema):
     validation = fields.String(allow_none=True)
 
     area = fields.Decimal(allow_none=True)
+    length = fields.Decimal(allow_none=True)
 
     initial_values = fields.List(fields.String(required=True), allow_none=True)
     minimum = fields.Decimal(allow_none=True)
@@ -104,6 +105,7 @@ class DataFileSchema(Schema):
     crs = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     area = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    length = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
                                    metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -729,6 +731,7 @@ for the download to complete.</p>
 <li><strong>crs</strong>: The optional coordinate reference system for the file.</li>
 <li><strong>bounds</strong>: The longitude and latitude bounds for the file (west, south, east, north).</li>
 <li><strong>area</strong>: The optional total area covered by the file content in metres squared.</li>
+<li><strong>length</strong>: The optional total length covered by the file content in metres.</li>
 <li><strong>mgrs_cells</strong>: The optional list of MGRS cells which are covered by the file content.</li>
 <li><strong>sinusoidal_cells</strong>: The optional list of sinusoidal cells which are covered by the file content.</li>
 <li><strong>size</strong>: The size of the file in bytes.</li>
@@ -743,6 +746,7 @@ for the download to complete.</p>
 <li><strong>unit</strong>: The optional unit associated with the selector.</li>
 <li><strong>validation</strong>: The optional validation for the selector. This must be supplied for date/time and constrained values.</li>
 <li><strong>area</strong>: The optional area for the selector in metres squared.</li>
+<li><strong>length</strong>: The optional length for the selector in metres.</li>
 <li><strong>initial_values</strong>: The first initial values associated with the selector.</li>
 <li><strong>minimum</strong>: The minimum value associated with the selector values.</li>
 <li><strong>maximum</strong>: The maximum value associated with the selector values.</li>
@@ -788,6 +792,7 @@ for the download to complete.</p>
     crs = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     area = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    length = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
                                    metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -830,7 +835,7 @@ for the download to complete.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.2.4
+Version: 1.2.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
