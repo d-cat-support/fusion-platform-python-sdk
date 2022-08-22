@@ -102,6 +102,22 @@ class ServiceDefinitionSchema(Schema):
         ordered = True
 
 
+class ServiceGroupAggregatorOptionSchema(Schema):
+    """
+    Nested schema class for group aggregator option.
+    """
+    ssd_id = fields.UUID(required=True)
+    name = fields.String(required=True)
+    value = fields.String(required=True)
+
+    class Meta:
+        """
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        """
+        unknown = EXCLUDE
+        ordered = True
+
+
 class ServiceGroupAggregatorSchema(Schema):
     """
     Nested schema class for group aggregator.
@@ -109,6 +125,7 @@ class ServiceGroupAggregatorSchema(Schema):
     aggregator_ssd_id = fields.UUID(required=True)
     output_ssd_id = fields.UUID(required=True)
     outputs = fields.List(fields.Integer(required=True), required=True)
+    options = fields.List(fields.Nested(ServiceGroupAggregatorOptionSchema()), allow_none=True)
 
     class Meta:
         """
@@ -143,8 +160,6 @@ class ServiceOptionExpressionSchema(Schema):
     lhs_ssd_id = fields.UUID(required=True)
     lhs_name = fields.String(required=True)
     expression = fields.String(required=True)
-    rhs_ssd_id = fields.UUID(required=True)
-    rhs_name = fields.String(required=True)
 
     class Meta:
         """

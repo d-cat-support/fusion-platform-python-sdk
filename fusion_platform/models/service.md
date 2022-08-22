@@ -21,6 +21,10 @@
     * **aggregator_ssd_id**: The SSD executed to aggregate the outputs from a group.
     * **output_ssd_id**: The SSD whose outputs are used by the aggregator.
     * **outputs**: The list of outputs from the output SSD used by the aggregator.
+    * **options**: The options for this aggregator.
+        * **ssd_id**: The SSD for this option.
+        * **name**: The name of the option.
+        * **value**: The value for the option.
 * **actions**: The custom actions associated with the service.
     * **name**: The name of the value.
     * **values**: The values required for the action.
@@ -56,9 +60,7 @@
 * **option_expressions**: The list of expressions which are applied to the options of the service.
     * **lhs_ssd_id**: The SSD associated with the left-hand side of the option expression.
     * **lhs_name**: The option name associated with the left-hand side of the option expression.
-    * **expression**: The expression linking the left- and right-hand sides of the option expression.
-    * **rhs_ssd_id**: The SSD associated with the right-hand side of the option expression.
-    * **rhs_name**: The option name associated with the right-hand side of the option expression.
+    * **expression**: The expression used to calculate the option value.
 * **option_validations**: The list of validation expressions which are applied to the options of the service.
     * **expression**: The expression used for validation.
     * **message**: The message associated with the validation which is used when the validation fails.
