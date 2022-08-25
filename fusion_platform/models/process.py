@@ -512,7 +512,7 @@ class Process(Model):
         found_input = None
 
         for index, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
-            found = (number is not None) and (number == item.get(self.__class__._FIELD_INPUT))
+            found = (number is not None) and (number == (index + 1))
             found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
                     input.input == item.get(self.__class__._FIELD_INPUT)) if not found else found
 
