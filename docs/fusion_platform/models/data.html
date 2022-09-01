@@ -127,6 +127,7 @@ class Data(Model):
     _PATH_BASE = f&#34;{_PATH_ROOT}/{{data_id}}&#34;
 
     # Override the standard model paths.
+    _PATH_COPY = f&#34;{_PATH_BASE}/copy&#34;
     _PATH_CREATE = _PATH_ROOT
     _PATH_DELETE = _PATH_BASE
     _PATH_GET = _PATH_BASE
@@ -236,6 +237,34 @@ class Data(Model):
             sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
 
         return complete
+
+    def copy(self, name):
+        &#34;&#34;&#34;
+        Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
+        even if the source data object was created by the platform and not uploaded.
+
+        Args:
+            name: The name of the copy.
+
+        Returns:
+            The created copy.
+
+        Raises:
+            RequestError: if the copy fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Copy the data model.
+        body = {self.__class__.__name__: {&#39;name&#39;: name}}
+        response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_POST, body=body)
+
+        # Assume that the copy data id is held within the expected key within the resulting dictionary.
+        copy_data_id = dict_nested_get(response, [self.__class__._RESPONSE_KEY_MODEL, self.__class__._FIELD_ID])
+
+        if copy_data_id is None:
+            raise ModelError(i18n.t(&#39;models.data.failed_copy_id&#39;))
+
+        # Return the copy.
+        return self.__class__._model_from_api_id(self._session, organisation_id=self.organisation_id, id=copy_data_id)
 
     def _create(self, name, file_type, files, wait=False):
         &#34;&#34;&#34;
@@ -408,6 +437,7 @@ class Data(Model):
     _PATH_BASE = f&#34;{_PATH_ROOT}/{{data_id}}&#34;
 
     # Override the standard model paths.
+    _PATH_COPY = f&#34;{_PATH_BASE}/copy&#34;
     _PATH_CREATE = _PATH_ROOT
     _PATH_DELETE = _PATH_BASE
     _PATH_GET = _PATH_BASE
@@ -517,6 +547,34 @@ class Data(Model):
             sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
 
         return complete
+
+    def copy(self, name):
+        &#34;&#34;&#34;
+        Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
+        even if the source data object was created by the platform and not uploaded.
+
+        Args:
+            name: The name of the copy.
+
+        Returns:
+            The created copy.
+
+        Raises:
+            RequestError: if the copy fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Copy the data model.
+        body = {self.__class__.__name__: {&#39;name&#39;: name}}
+        response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_POST, body=body)
+
+        # Assume that the copy data id is held within the expected key within the resulting dictionary.
+        copy_data_id = dict_nested_get(response, [self.__class__._RESPONSE_KEY_MODEL, self.__class__._FIELD_ID])
+
+        if copy_data_id is None:
+            raise ModelError(i18n.t(&#39;models.data.failed_copy_id&#39;))
+
+        # Return the copy.
+        return self.__class__._model_from_api_id(self._session, organisation_id=self.organisation_id, id=copy_data_id)
 
     def _create(self, name, file_type, files, wait=False):
         &#34;&#34;&#34;
@@ -760,6 +818,59 @@ def files(self):
     return complete</code></pre>
 </details>
 </dd>
+<dt id="fusion_platform.models.data.Data.copy"><code class="name flex">
+<span>def <span class="ident">copy</span></span>(<span>self, name)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
+even if the source data object was created by the platform and not uploaded.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong></dt>
+<dd>The name of the copy.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The created copy.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the copy fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def copy(self, name):
+    &#34;&#34;&#34;
+    Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
+    even if the source data object was created by the platform and not uploaded.
+
+    Args:
+        name: The name of the copy.
+
+    Returns:
+        The created copy.
+
+    Raises:
+        RequestError: if the copy fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Copy the data model.
+    body = {self.__class__.__name__: {&#39;name&#39;: name}}
+    response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_POST, body=body)
+
+    # Assume that the copy data id is held within the expected key within the resulting dictionary.
+    copy_data_id = dict_nested_get(response, [self.__class__._RESPONSE_KEY_MODEL, self.__class__._FIELD_ID])
+
+    if copy_data_id is None:
+        raise ModelError(i18n.t(&#39;models.data.failed_copy_id&#39;))
+
+    # Return the copy.
+    return self.__class__._model_from_api_id(self._session, organisation_id=self.organisation_id, id=copy_data_id)</code></pre>
+</details>
+</dd>
 <dt id="fusion_platform.models.data.Data.create_complete"><code class="name flex">
 <span>def <span class="ident">create_complete</span></span>(<span>self, wait=False)</span>
 </code></dt>
@@ -998,7 +1109,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.3.3
+Version: 1.4.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -1021,6 +1132,7 @@ Version: 1.3.3
 <ul class="">
 <li><code><a title="fusion_platform.models.data.Data.attributes" href="model.html#fusion_platform.models.data.Data.attributes">attributes</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.check_analysis_complete" href="#fusion_platform.models.data.Data.check_analysis_complete">check_analysis_complete</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.copy" href="#fusion_platform.models.data.Data.copy">copy</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.create_complete" href="#fusion_platform.models.data.Data.create_complete">create_complete</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.delete" href="model.html#fusion_platform.models.data.Data.delete">delete</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.files" href="#fusion_platform.models.data.Data.files">files</a></code></li>

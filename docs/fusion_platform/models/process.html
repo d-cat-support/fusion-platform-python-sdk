@@ -67,6 +67,30 @@ class OptionDataTypeSchema(Schema):
     constrained = fields.String(allow_none=True)
 
 
+# Define a model class for an option which overrides the representation to display more relevant information.
+
+class Option(Model):
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            A string representation of the object.
+        &#34;&#34;&#34;
+        return f&#34;{self.title} (&#39;{self.name}&#39;, {self.data_type}{&#39;, required&#39; if self.required else &#39;&#39;}) = {self.value}: {self.description}&#34;
+
+
+# Define a model class for an input which overrides the representation to display more relevant information.
+
+class Input(Model):
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            A string representation of the object.
+        &#34;&#34;&#34;
+        return f&#34;{self.title} ({self.file_type}) = {self.name + &#39; (&#39; + str(self.id) + &#39;)&#39; if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}&#34;
+
+
 # Define the model schema classes. These are maintained from the API definitions.
 
 class ProcessChainOptionSchema(Schema):
@@ -157,6 +181,8 @@ class ProcessInputSchema(Schema):
     change_hash = fields.String(allow_none=True)
     title = fields.String(allow_none=True)
     description = fields.String(allow_none=True)
+
+    name = fields.String(allow_none=True)  # Changed to add this field for displaying the input name.
 
     class Meta:
         &#34;&#34;&#34;
@@ -478,8 +504,13 @@ class Process(Model):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
             input = dict(input)
 
+            # See if we can find the associated model.
+            if input.get(self.__class__._FIELD_ID) is not None:
+                data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, id=input.get(self.__class__._FIELD_ID))
+                input[self.__class__._FIELD_NAME] = data.name
+
             # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Model(None, schema=ProcessInputSchema())
+            model = Input(None, schema=ProcessInputSchema())
             model._set_model(input)
 
             yield model
@@ -506,7 +537,7 @@ class Process(Model):
                                                                                 option.get(self.__class__._FIELD_DATA_TYPE))
 
             # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Model(None, schema=ProcessOptionSchema())
+            model = Option(None, schema=ProcessOptionSchema())
             model._set_model(option)
 
             yield model
@@ -745,6 +776,182 @@ class Process(Model):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="fusion_platform.models.process.Input"><code class="flex name class">
+<span>class <span class="ident">Input</span></span>
+<span>(</span><span>session, schema=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Model base class providing attributes and methods to manipulate models.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Input(Model):
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            A string representation of the object.
+        &#34;&#34;&#34;
+        return f&#34;{self.title} ({self.file_type}) = {self.name + &#39; (&#39; + str(self.id) + &#39;)&#39; if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.Input.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
+</p>
+<div class="desc inherited"><h2 id="returns">Returns</h2>
+<p>The model attributes as a dictionary.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.process.Input.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Input.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.get" href="model.html#fusion_platform.models.model.Model.get">get</a></code>
+</p>
+<div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Input.to_csv"><code class="name flex">
+<span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.to_csv" href="model.html#fusion_platform.models.model.Model.to_csv">to_csv</a></code>
+</p>
+<div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Input.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.update" href="model.html#fusion_platform.models.model.Model.update">update</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without …</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.Option"><code class="flex name class">
+<span>class <span class="ident">Option</span></span>
+<span>(</span><span>session, schema=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Model base class providing attributes and methods to manipulate models.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Option(Model):
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            A string representation of the object.
+        &#34;&#34;&#34;
+        return f&#34;{self.title} (&#39;{self.name}&#39;, {self.data_type}{&#39;, required&#39; if self.required else &#39;&#39;}) = {self.value}: {self.description}&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.Option.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
+</p>
+<div class="desc inherited"><h2 id="returns">Returns</h2>
+<p>The model attributes as a dictionary.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.process.Option.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Option.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.get" href="model.html#fusion_platform.models.model.Model.get">get</a></code>
+</p>
+<div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Option.to_csv"><code class="name flex">
+<span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.to_csv" href="model.html#fusion_platform.models.model.Model.to_csv">to_csv</a></code>
+</p>
+<div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Option.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.update" href="model.html#fusion_platform.models.model.Model.update">update</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without …</p></div>
+</dd>
+</dl>
+</dd>
 <dt id="fusion_platform.models.process.Process"><code class="flex name class">
 <span>class <span class="ident">Process</span></span>
 <span>(</span><span>session, schema=None)</span>
@@ -989,8 +1196,13 @@ class Process(Model):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
             input = dict(input)
 
+            # See if we can find the associated model.
+            if input.get(self.__class__._FIELD_ID) is not None:
+                data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, id=input.get(self.__class__._FIELD_ID))
+                input[self.__class__._FIELD_NAME] = data.name
+
             # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Model(None, schema=ProcessInputSchema())
+            model = Input(None, schema=ProcessInputSchema())
             model._set_model(input)
 
             yield model
@@ -1017,7 +1229,7 @@ class Process(Model):
                                                                                 option.get(self.__class__._FIELD_DATA_TYPE))
 
             # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Model(None, schema=ProcessOptionSchema())
+            model = Option(None, schema=ProcessOptionSchema())
             model._set_model(option)
 
             yield model
@@ -1314,8 +1526,13 @@ def inputs(self):
         # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
         input = dict(input)
 
+        # See if we can find the associated model.
+        if input.get(self.__class__._FIELD_ID) is not None:
+            data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, id=input.get(self.__class__._FIELD_ID))
+            input[self.__class__._FIELD_NAME] = data.name
+
         # Encapsulate the dictionary within a model (which does not talk to the API).
-        model = Model(None, schema=ProcessInputSchema())
+        model = Input(None, schema=ProcessInputSchema())
         model._set_model(input)
 
         yield model</code></pre>
@@ -1352,7 +1569,7 @@ def options(self):
                                                                             option.get(self.__class__._FIELD_DATA_TYPE))
 
         # Encapsulate the dictionary within a model (which does not talk to the API).
-        model = Model(None, schema=ProcessOptionSchema())
+        model = Option(None, schema=ProcessOptionSchema())
         model._set_model(option)
 
         yield model</code></pre>
@@ -1834,7 +2051,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.3.3
+Version: 1.4.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -1852,6 +2069,26 @@ Version: 1.3.3
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="fusion_platform.models.process.Input" href="#fusion_platform.models.process.Input">Input</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.Input.attributes" href="model.html#fusion_platform.models.process.Input.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.process.Input.delete" href="model.html#fusion_platform.models.process.Input.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.process.Input.get" href="model.html#fusion_platform.models.process.Input.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.process.Input.to_csv" href="model.html#fusion_platform.models.process.Input.to_csv">to_csv</a></code></li>
+<li><code><a title="fusion_platform.models.process.Input.update" href="model.html#fusion_platform.models.process.Input.update">update</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.Option" href="#fusion_platform.models.process.Option">Option</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.Option.attributes" href="model.html#fusion_platform.models.process.Option.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.process.Option.delete" href="model.html#fusion_platform.models.process.Option.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.process.Option.get" href="model.html#fusion_platform.models.process.Option.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.process.Option.to_csv" href="model.html#fusion_platform.models.process.Option.to_csv">to_csv</a></code></li>
+<li><code><a title="fusion_platform.models.process.Option.update" href="model.html#fusion_platform.models.process.Option.update">update</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="fusion_platform.models.process.Process" href="#fusion_platform.models.process.Process">Process</a></code></h4>
 <ul class="">

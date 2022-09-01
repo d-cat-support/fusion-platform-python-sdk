@@ -36,6 +36,30 @@ class OptionDataTypeSchema(Schema):
     constrained = fields.String(allow_none=True)
 
 
+# Define a model class for an option which overrides the representation to display more relevant information.
+
+class Option(Model):
+
+    def __repr__(self):
+        """
+        Returns:
+            A string representation of the object.
+        """
+        return f"{self.title} ('{self.name}', {self.data_type}{', required' if self.required else ''}) = {self.value}: {self.description}"
+
+
+# Define a model class for an input which overrides the representation to display more relevant information.
+
+class Input(Model):
+
+    def __repr__(self):
+        """
+        Returns:
+            A string representation of the object.
+        """
+        return f"{self.title} ({self.file_type}) = {self.name + ' (' + str(self.id) + ')' if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}"
+
+
 # Define the model schema classes. These are maintained from the API definitions.
 
 class ProcessChainOptionSchema(Schema):
@@ -126,6 +150,8 @@ class ProcessInputSchema(Schema):
     change_hash = fields.String(allow_none=True)
     title = fields.String(allow_none=True)
     description = fields.String(allow_none=True)
+
+    name = fields.String(allow_none=True)  # Changed to add this field for displaying the input name.
 
     class Meta:
         """
@@ -447,8 +473,13 @@ class Process(Model):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
             input = dict(input)
 
+            # See if we can find the associated model.
+            if input.get(self.__class__._FIELD_ID) is not None:
+                data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, id=input.get(self.__class__._FIELD_ID))
+                input[self.__class__._FIELD_NAME] = data.name
+
             # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Model(None, schema=ProcessInputSchema())
+            model = Input(None, schema=ProcessInputSchema())
             model._set_model(input)
 
             yield model
@@ -475,7 +506,7 @@ class Process(Model):
                                                                                 option.get(self.__class__._FIELD_DATA_TYPE))
 
             # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Model(None, schema=ProcessOptionSchema())
+            model = Option(None, schema=ProcessOptionSchema())
             model._set_model(option)
 
             yield model

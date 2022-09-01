@@ -96,6 +96,7 @@ class Data(Model):
     _PATH_BASE = f"{_PATH_ROOT}/{{data_id}}"
 
     # Override the standard model paths.
+    _PATH_COPY = f"{_PATH_BASE}/copy"
     _PATH_CREATE = _PATH_ROOT
     _PATH_DELETE = _PATH_BASE
     _PATH_GET = _PATH_BASE
@@ -205,6 +206,34 @@ class Data(Model):
             sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
 
         return complete
+
+    def copy(self, name):
+        """
+        Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
+        even if the source data object was created by the platform and not uploaded.
+
+        Args:
+            name: The name of the copy.
+
+        Returns:
+            The created copy.
+
+        Raises:
+            RequestError: if the copy fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
+        """
+        # Copy the data model.
+        body = {self.__class__.__name__: {'name': name}}
+        response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_POST, body=body)
+
+        # Assume that the copy data id is held within the expected key within the resulting dictionary.
+        copy_data_id = dict_nested_get(response, [self.__class__._RESPONSE_KEY_MODEL, self.__class__._FIELD_ID])
+
+        if copy_data_id is None:
+            raise ModelError(i18n.t('models.data.failed_copy_id'))
+
+        # Return the copy.
+        return self.__class__._model_from_api_id(self._session, organisation_id=self.organisation_id, id=copy_data_id)
 
     def _create(self, name, file_type, files, wait=False):
         """

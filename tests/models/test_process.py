@@ -375,21 +375,28 @@ class TestProcess(CustomTestCase):
         Tests that the inputs can be obtained from a process model.
         """
         with open(self.fixture_path('process.json'), 'r') as file:
-            content = json.loads(file.read())
+            process_content = json.loads(file.read())
+
+        with open(self.fixture_path('data.json'), 'r') as file:
+            data_content = json.loads(file.read())
 
         session = Session()
-        organisation_id = content.get('organisation_id')
-        process_id = content.get(Model._FIELD_ID)
+        organisation_id = process_content.get('organisation_id')
+        process_id = process_content.get(Model._FIELD_ID)
+        data_id = data_content.get(Model._FIELD_ID)
         path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
 
         process = Process(session)
         self.assertIsNotNone(process)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
+
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_GET.format(organisation_id=organisation_id, data_id=data_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
 
             inputs = process.inputs
             self.assertIsNotNone(inputs)
@@ -664,6 +671,7 @@ class TestProcess(CustomTestCase):
         session = Session()
         organisation_id = process_content.get('organisation_id')
         data_id = uuid.uuid4()
+        input_id = process_content.get('inputs')[0].get('id')
         get_path = Process._PATH_NEW.format(organisation_id=organisation_id)
         files_path = Data._PATH_FILES.format(organisation_id=organisation_id, data_id=data_id)
 
@@ -675,6 +683,12 @@ class TestProcess(CustomTestCase):
         data._set_model(data_content)
 
         with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_GET.format(organisation_id=organisation_id, data_id=input_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}, default=str))
+
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_GET.format(organisation_id=organisation_id, data_id=data_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}, default=str))
+
             with pytest.raises(ModelError):
                 process.update(input_number=1, data=None)
 

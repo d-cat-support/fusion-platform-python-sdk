@@ -303,10 +303,10 @@ class Model(Base):
 
     def get(self, **kwargs):
         &#34;&#34;&#34;
-        Gets the model object by loading it from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Uses the model&#39;s current id and base model id for the get unless explicit values are
-        provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected dictionary
-        key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading it into
-        the model as a set of read-only attributes.
+        Gets the model object by loading it from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Uses the model&#39;s current id and base model id for the get unless explicit
+        values are provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected
+        dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before
+        loading it into the model as a set of read-only attributes.
 
         Args:
             kwargs: Any explicit ids to be used.
@@ -714,7 +714,7 @@ class Model(Base):
             message = str(e)
             raise ModelError(i18n.t(&#39;models.model.failed_model_validation&#39;, message=message)) from e
 
-    def __str__(self):
+    def __repr__(self):
         &#34;&#34;&#34;
         Returns:
             A string representation of the object.
@@ -1052,10 +1052,10 @@ class Model(Base):
 
     def get(self, **kwargs):
         &#34;&#34;&#34;
-        Gets the model object by loading it from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Uses the model&#39;s current id and base model id for the get unless explicit values are
-        provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected dictionary
-        key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading it into
-        the model as a set of read-only attributes.
+        Gets the model object by loading it from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Uses the model&#39;s current id and base model id for the get unless explicit
+        values are provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected
+        dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before
+        loading it into the model as a set of read-only attributes.
 
         Args:
             kwargs: Any explicit ids to be used.
@@ -1463,7 +1463,7 @@ class Model(Base):
             message = str(e)
             raise ModelError(i18n.t(&#39;models.model.failed_model_validation&#39;, message=message)) from e
 
-    def __str__(self):
+    def __repr__(self):
         &#34;&#34;&#34;
         Returns:
             A string representation of the object.
@@ -1532,6 +1532,8 @@ class Model(Base):
 <li><a title="fusion_platform.models.data.Data" href="data.html#fusion_platform.models.data.Data">Data</a></li>
 <li><a title="fusion_platform.models.data_file.DataFile" href="data_file.html#fusion_platform.models.data_file.DataFile">DataFile</a></li>
 <li><a title="fusion_platform.models.organisation.Organisation" href="organisation.html#fusion_platform.models.organisation.Organisation">Organisation</a></li>
+<li><a title="fusion_platform.models.process.Input" href="process.html#fusion_platform.models.process.Input">Input</a></li>
+<li><a title="fusion_platform.models.process.Option" href="process.html#fusion_platform.models.process.Option">Option</a></li>
 <li><a title="fusion_platform.models.process.Process" href="process.html#fusion_platform.models.process.Process">Process</a></li>
 <li><a title="fusion_platform.models.process_execution.ProcessExecution" href="process_execution.html#fusion_platform.models.process_execution.ProcessExecution">ProcessExecution</a></li>
 <li><a title="fusion_platform.models.process_service_execution.ProcessServiceExecution" href="process_service_execution.html#fusion_platform.models.process_service_execution.ProcessServiceExecution">ProcessServiceExecution</a></li>
@@ -1606,10 +1608,10 @@ def attributes(self):
 <span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless explicit values are
-provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected dictionary
-key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading it into
-the model as a set of read-only attributes.</p>
+<div class="desc"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless explicit
+values are provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected
+dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before
+loading it into the model as a set of read-only attributes.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>kwargs</code></strong></dt>
@@ -1628,10 +1630,10 @@ the model as a set of read-only attributes.</p>
 </summary>
 <pre><code class="python">def get(self, **kwargs):
     &#34;&#34;&#34;
-    Gets the model object by loading it from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Uses the model&#39;s current id and base model id for the get unless explicit values are
-    provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected dictionary
-    key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading it into
-    the model as a set of read-only attributes.
+    Gets the model object by loading it from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Uses the model&#39;s current id and base model id for the get unless explicit
+    values are provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected
+    dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before
+    loading it into the model as a set of read-only attributes.
 
     Args:
         kwargs: Any explicit ids to be used.
@@ -1774,7 +1776,7 @@ attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatica
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.3.3
+Version: 1.4.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

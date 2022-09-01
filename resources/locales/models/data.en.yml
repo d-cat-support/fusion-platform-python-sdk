@@ -7,6 +7,7 @@
 #
 
 en:
+  failed_copy_id: "Failed to get data id from copy response"
   failed_add_file_id: "Failed to get id from add file response"
   failed_add_file_url: "Failed to get URL from add file response"
   failed_add_file_not_unique: "Failed to add file as the id is not unique"

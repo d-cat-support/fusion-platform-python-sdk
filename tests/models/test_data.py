@@ -34,6 +34,54 @@ class TestData(CustomTestCase):
         data = Data(Session())
         self.assertIsNotNone(data)
 
+    def test_copy(self):
+        """
+        Tests that a data item can be copied.
+        """
+        with open(self.fixture_path('data.json'), 'r') as file:
+            content = json.loads(file.read())
+
+        session = Session()
+        organisation_id = content.get('organisation_id')
+        data_id = content.get(Model._FIELD_ID)
+        path = Data._PATH_COPY.format(organisation_id=organisation_id, data_id=data_id)
+        name = 'Test'
+        copy_data_id = uuid.uuid4()
+
+        data = Data(session)
+        self.assertIsNotNone(data)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_GET.format(organisation_id=organisation_id, data_id=data_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            data.get(organisation_id=organisation_id, data_id=data_id)
+            self.assertIsNotNone(data)
+            self.assertEqual(str(data_id), str(data.id))
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{path}", exc=requests.exceptions.ConnectTimeout)
+                data.copy(name=name)
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{path}", status_code=400)
+                data.copy(name=name)
+
+            with pytest.raises(ModelError):
+                mock.post(f"{Session.API_URL_DEFAULT}{path}", text='{}')
+                data.copy(name=name)
+
+            self.assertNotEqual(name, data.name)
+
+            content['id'] = str(copy_data_id)
+            content['name'] = name
+            mock.post(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: {Model._FIELD_ID: str(copy_data_id)}}))
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_GET.format(organisation_id=organisation_id, data_id=copy_data_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            copy_data = data.copy(name=name)
+
+            self.assertEqual(copy_data_id, copy_data.id)
+            self.assertEqual(name, copy_data.name)
+
     def test_create_wait(self):
         """
         Tests that a data item can be created with waiting for the upload and analysis to complete.

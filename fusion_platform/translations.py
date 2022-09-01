@@ -29,6 +29,7 @@ i18n.add_translation('models.data.failed_add_missing_file', 'Failed to add file 
 i18n.add_translation('models.data.failed_add_file_not_unique', 'Failed to add file as the id is not unique', 'en')
 i18n.add_translation('models.data.failed_add_file_url', 'Failed to get URL from add file response', 'en')
 i18n.add_translation('models.data.failed_add_file_id', 'Failed to get id from add file response', 'en')
+i18n.add_translation('models.data.failed_copy_id', 'Failed to get data id from copy response', 'en')
 i18n.add_translation('models.process_execution.execution_failed', 'Execution has failed', 'en')
 i18n.add_translation('models.fields.uuid.invalid_uuid', 'Not a valid utf-8 string', 'en')
 i18n.add_translation('models.fields.url.invalid_url', 'Not a valid URL', 'en')

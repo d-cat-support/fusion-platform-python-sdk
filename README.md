@@ -74,12 +74,12 @@ process.execute(wait=True)
 execution = next(process.executions)
 
 # Now download all the outputs.
-for component in execution.components:
+for i, component in enumerate(execution.components):
     print(f"Downloading {component.name}")
-    component_dir = component.name[:60]
+    component_dir = f"component_{str(i)}"
 
-    for i, output in enumerate(component.outputs):
-        dir = os.path.join(component_dir, str(i))
+    for j, output in enumerate(component.outputs):
+        dir = os.path.join(component_dir, str(j))
         for file in output.files:
             file.download(path=os.path.join(dir, file.file_name))
 

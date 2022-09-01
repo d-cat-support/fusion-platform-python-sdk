@@ -272,10 +272,10 @@ class Model(Base):
 
     def get(self, **kwargs):
         """
-        Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless explicit values are
-        provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected dictionary
-        key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading it into
-        the model as a set of read-only attributes.
+        Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless explicit
+        values are provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected
+        dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before
+        loading it into the model as a set of read-only attributes.
 
         Args:
             kwargs: Any explicit ids to be used.
@@ -683,7 +683,7 @@ class Model(Base):
             message = str(e)
             raise ModelError(i18n.t('models.model.failed_model_validation', message=message)) from e
 
-    def __str__(self):
+    def __repr__(self):
         """
         Returns:
             A string representation of the object.
