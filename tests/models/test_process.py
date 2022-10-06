@@ -704,7 +704,7 @@ class TestProcess(CustomTestCase):
             process._new(organisation_id=organisation_id)
 
             with pytest.raises(ModelError):
-                process.update(input_number=2, data=data)
+                process.update(input_number=3, data=data)
 
             with pytest.raises(ModelError):
                 input_content['input'] = 2

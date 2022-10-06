@@ -18,7 +18,26 @@
       "change_trigger": false,
       "change_hash": null,
       "title": "Area",
-      "description": "The area of interest for which data is to be ingested."
+      "description": "The region of interest for which data is to be ingested."
+    },
+    {
+      "ssd_id": "221efac4-9ca4-4b21-9cef-a79498172e86",
+      "input": 2,
+      "file_type": "GeoTIFF",
+      "resolution": 10,
+      "selectors": [
+        {
+          "selector": "1",
+          "category": "Other",
+          "data_type": "numeric"
+        }
+      ],
+      "id": "92eb24e5-9639-4207-9f8e-67eebadc97ab",
+      "model": "Data",
+      "change_trigger": false,
+      "change_hash": null,
+      "title": "Land Classification",
+      "description": "The land classification for the region: no_data (0), other (1), dark pixels (2), trees (3), vegetation (4), non-vegetation (5), water (6) and buildings (7)."
     }
   ],
   "options": [

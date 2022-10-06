@@ -74,10 +74,29 @@ def string_camel_to_underscore(string):
     return ''.join(['_' + i.lower() if i.isupper() else i for i in string]).lstrip('_').lower() if string is not None else None
 
 
+def value_from_read_only(value):
+    """
+    Takes a value and makes it writable. This recursive method will deal with dictionaries and lists. Here, dictionaries are assumed to be mapping proxies, while
+    tuples are assumed to be lists.
+
+    Args:
+        value: The value to make read-only.
+
+    Returns:
+        The read-only value.
+    """
+    if isinstance(value, MappingProxyType):
+        return dict({inner_key: value_from_read_only(inner_value) for inner_key, inner_value in value.items()})  # Creates a mutable mapping.
+    elif isinstance(value, tuple):  # This assumes that tuples are really lists.
+        return list([value_from_read_only(inner_value) for inner_value in value])  # Creates a mutable list.
+    else:
+        return value
+
+
 def value_to_read_only(value):
     """
     Takes a value and makes it read-only. This recursive method will deal with dictionaries and lists. This method will not deal with objects that are immutable,
-    such as datetimes, but rather makes sure that the references to objects cannot be changed. For example, dictionary values canot be replaced or list items
+    such as datetimes, but rather makes sure that the references to objects cannot be changed. For example, dictionary values cannot be replaced or list items
     removed.
 
     Args:

@@ -44,6 +44,7 @@ from marshmallow import Schema, EXCLUDE
 from time import sleep
 
 import fusion_platform
+from fusion_platform.common.utilities import value_from_read_only
 from fusion_platform.models import fields
 from fusion_platform.models.data import Data
 from fusion_platform.models.model import Model, ModelError
@@ -502,7 +503,7 @@ class Process(Model):
         &#34;&#34;&#34;
         for input in self._model.get(self.__class__._FIELD_INPUTS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            input = dict(input)
+            input = value_from_read_only(input)
 
             # See if we can find the associated model.
             if input.get(self.__class__._FIELD_ID) is not None:
@@ -525,7 +526,7 @@ class Process(Model):
         &#34;&#34;&#34;
         for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            option = dict(option)
+            option = value_from_read_only(option)
 
             # If the option is a constrained data type, then add in the constrained names and values from the validation.
             if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
@@ -1194,7 +1195,7 @@ class Process(Model):
         &#34;&#34;&#34;
         for input in self._model.get(self.__class__._FIELD_INPUTS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            input = dict(input)
+            input = value_from_read_only(input)
 
             # See if we can find the associated model.
             if input.get(self.__class__._FIELD_ID) is not None:
@@ -1217,7 +1218,7 @@ class Process(Model):
         &#34;&#34;&#34;
         for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            option = dict(option)
+            option = value_from_read_only(option)
 
             # If the option is a constrained data type, then add in the constrained names and values from the validation.
             if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
@@ -1524,7 +1525,7 @@ def inputs(self):
     &#34;&#34;&#34;
     for input in self._model.get(self.__class__._FIELD_INPUTS, []):
         # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-        input = dict(input)
+        input = value_from_read_only(input)
 
         # See if we can find the associated model.
         if input.get(self.__class__._FIELD_ID) is not None:
@@ -1557,7 +1558,7 @@ def options(self):
     &#34;&#34;&#34;
     for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
         # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-        option = dict(option)
+        option = value_from_read_only(option)
 
         # If the option is a constrained data type, then add in the constrained names and values from the validation.
         if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
@@ -2051,7 +2052,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.4.1
+Version: 1.4.2
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

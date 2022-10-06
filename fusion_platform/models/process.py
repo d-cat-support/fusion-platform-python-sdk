@@ -13,6 +13,7 @@ from marshmallow import Schema, EXCLUDE
 from time import sleep
 
 import fusion_platform
+from fusion_platform.common.utilities import value_from_read_only
 from fusion_platform.models import fields
 from fusion_platform.models.data import Data
 from fusion_platform.models.model import Model, ModelError
@@ -471,7 +472,7 @@ class Process(Model):
         """
         for input in self._model.get(self.__class__._FIELD_INPUTS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            input = dict(input)
+            input = value_from_read_only(input)
 
             # See if we can find the associated model.
             if input.get(self.__class__._FIELD_ID) is not None:
@@ -494,7 +495,7 @@ class Process(Model):
         """
         for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
             # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            option = dict(option)
+            option = value_from_read_only(option)
 
             # If the option is a constrained data type, then add in the constrained names and values from the validation.
             if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:

@@ -16,7 +16,7 @@ import pytz
 
 from tests.custom_test_case import CustomTestCase
 
-from fusion_platform.common.utilities import dict_nested_get, json_default, string_camel_to_underscore, value_to_read_only, value_to_string
+from fusion_platform.common.utilities import dict_nested_get, json_default, string_camel_to_underscore, value_from_read_only, value_to_read_only, value_to_string
 
 
 class TestUtilities(CustomTestCase):
@@ -86,6 +86,22 @@ class TestUtilities(CustomTestCase):
         self.assertEqual('', string_camel_to_underscore(''))
         self.assertEqual('test', string_camel_to_underscore('test'))
         self.assertEqual('test_test', string_camel_to_underscore('TestTest'))
+
+    def test_value_from_read_only(self):
+        """
+        Tests value_to_read_only.
+        """
+        value = MappingProxyType({'test': (1, 2, 3)})
+        writable = value_from_read_only(value)
+        self.assertIsNotNone(writable)
+        self.assertEqual({'test': [1, 2, 3]}, writable)
+
+        writable['test'] = [4, 5, 6]
+
+        with pytest.raises(ValueError):
+            writable['test'].remove(1)
+
+        writable['test'].remove(4)
 
     def test_value_to_read_only(self):
         """
