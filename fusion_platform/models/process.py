@@ -234,7 +234,8 @@ class ProcessSchema(Schema):
     price = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
-    has_executions = fields.Boolean(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    has_executions = fields.String(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    has_executions_organisation_id = fields.String(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
 
     # Removed creator.

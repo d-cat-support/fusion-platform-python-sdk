@@ -347,5 +347,6 @@
   "test_run": false,
   "price": 0,
   "deletable": null,
-  "has_executions": true
+  "has_executions": "executions",
+  "has_executions_organisation_id": "b8fe5452-9289-49c4-8110-5209462b2eaf"
 }

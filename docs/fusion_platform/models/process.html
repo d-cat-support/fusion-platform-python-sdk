@@ -265,7 +265,8 @@ class ProcessSchema(Schema):
     price = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    has_executions = fields.Boolean(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    has_executions = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    has_executions_organisation_id = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
 
     # Removed creator.
@@ -2023,7 +2024,8 @@ Otherwise, this method will block until the next scheduled execution has started
     price = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    has_executions = fields.Boolean(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    has_executions = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    has_executions_organisation_id = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
 
     # Removed creator.
@@ -2052,7 +2054,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.4.2
+Version: 1.4.3
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
