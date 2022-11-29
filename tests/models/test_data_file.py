@@ -57,7 +57,7 @@ class TestDataFile(CustomTestCase):
         data_file = DataFile(session)
         self.assertIsNotNone(data_file)
 
-        data_file._Model__set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
+        data_file._set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
         self.assertEqual(str(organisation_id), str(data_file.organisation_id))
         self.assertEqual(str(data_id), str(data_file.data_id))
         self.assertEqual(str(file_id), str(data_file.file_id))
@@ -125,7 +125,7 @@ class TestDataFile(CustomTestCase):
         data_file = DataFile(session)
         self.assertIsNotNone(data_file)
 
-        data_file._Model__set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
+        data_file._set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
         self.assertEqual(str(organisation_id), str(data_file.organisation_id))
         self.assertEqual(str(data_id), str(data_file.data_id))
         self.assertEqual(str(file_id), str(data_file.file_id))
@@ -180,7 +180,7 @@ class TestDataFile(CustomTestCase):
         data_file = DataFile(session)
         self.assertIsNotNone(data_file)
 
-        data_file._Model__set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
+        data_file._set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
         self.assertEqual(str(organisation_id), str(data_file.organisation_id))
         self.assertEqual(str(data_id), str(data_file.data_id))
         self.assertEqual(str(file_id), str(data_file.file_id))
@@ -234,7 +234,7 @@ class TestDataFile(CustomTestCase):
         data_file = DataFile(session)
         self.assertIsNotNone(data_file)
 
-        data_file._Model__set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
+        data_file._set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
         self.assertEqual(str(organisation_id), str(data_file.organisation_id))
         self.assertEqual(str(data_id), str(data_file.data_id))
         self.assertEqual(str(file_id), str(data_file.file_id))
@@ -275,7 +275,7 @@ class TestDataFile(CustomTestCase):
         data_file = DataFile(session)
         self.assertIsNotNone(data_file)
 
-        data_file._Model__set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
+        data_file._set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
         self.assertEqual(str(organisation_id), str(data_file.organisation_id))
         self.assertEqual(str(data_id), str(data_file.data_id))
         self.assertEqual(str(file_id), str(data_file.file_id))

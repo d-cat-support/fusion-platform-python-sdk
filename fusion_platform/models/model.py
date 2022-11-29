@@ -509,7 +509,7 @@ class Model(Base):
             # Build the generator around all of the returned items, which must all have been persisted.
             for item in response.get(Model._RESPONSE_KEY_LIST, []):
                 model = cls(session)
-                model.__set_model_from_response(item, **kwargs)
+                model._set_model_from_response(item, **kwargs)
                 model.__persisted = True
 
                 yield model
@@ -543,7 +543,7 @@ class Model(Base):
             modified_response[key] = value
 
         # Load the response into the model. We ignore missing required fields and those which are None.
-        self.__set_model_from_response(modified_response, partial=True)
+        self._set_model_from_response(modified_response, partial=True)
 
         # The model is not persisted.
         self.__persisted = False
@@ -576,7 +576,7 @@ class Model(Base):
             raise ModelError(i18n.t('models.model.failed_model_send_and_load'))
 
         # Load the response into the model.
-        self.__set_model_from_response(response.get(key, {}))
+        self._set_model_from_response(response.get(key, {}))
 
     def __setattr__(self, key, value):
         """
@@ -653,7 +653,7 @@ class Model(Base):
             if Model._METADATA_HIDE not in schema.fields[key].metadata:
                 self.__dict__[key] = value_to_read_only(self.__model[key])
 
-    def __set_model_from_response(self, response, partial=False, **kwargs):
+    def _set_model_from_response(self, response, partial=False, **kwargs):
         """
         Obtains the model from the response using the supplied schema to obtain the corresponding Python representation of it, before
         loading it into the model as a set of read-only attributes.

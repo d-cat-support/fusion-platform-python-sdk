@@ -10,5 +10,5 @@
     * **dates**: The list of dates for which data is available from this ingester.
 * **bounds**: The longitude and latitude bounds for the file (west, south, east, north).
 * **file_with_preview**: Identifies a file owned by this data item which as a preview.
-* **uploaded_organisation_id**: Was the data item uploaded?
+* **uploaded_organisation_id**: The organisation for an uploaded data item.
 * **deletable**: Is this data model scheduled for deletion?

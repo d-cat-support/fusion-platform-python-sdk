@@ -265,6 +265,7 @@ class Process(Model):
     _PATH_BASE = f"{_PATH_ROOT}/{{process_id}}"
 
     # Override the standard model paths.
+    _PATH_COPY = f"{_PATH_BASE}/copy"
     _PATH_CREATE = _PATH_ROOT
     _PATH_DELETE = _PATH_BASE
     _PATH_GET = _PATH_BASE
@@ -327,6 +328,62 @@ class Process(Model):
             # Use the option schema to attempt to load the value using its data type as a name.
             model = OptionDataTypeSchema().load({data_type: value})
             return model.get(data_type)
+
+    def copy(self, name):
+        """
+        Creates a new template process from an existing process object. This process is not persisted to the Fusion Platform<sup>&reg;</sup>.
+
+        Args:
+            name: The name of the copy.
+
+        Returns:
+            The new template process object.
+
+        Raises:
+            RequestError: if the copy fails.
+            ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
+        """
+        # Get a new template for the process model using the process as the source of the copy.
+        process = Process(self._session)
+
+        # Copy the process model.
+        response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_GET)
+
+        # Assume that the resulting model is held within the expected key within the resulting dictionary.
+        if Model._RESPONSE_KEY_MODEL not in response:
+            raise ModelError(i18n.t('models.process.failed_copy'))
+
+        # Make sure we have an organisation id.
+        modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
+        modified_response['organisation_id'] = self.organisation_id
+
+        # Load the response into the model. We ignore missing required fields and those which are None.
+        process._set_model_from_response(modified_response, partial=True)
+
+        # Update the options because these are not copied across to the new model, even though they are returned in the response.
+        options = modified_response.get('options', [])
+        options = [] if options is None else options
+
+        for option in options:
+            # Set the option value. The value may be a string, rather than the required type, but that will automatically be converted.
+            if (option.get(self.__class__._FIELD_NAME) is not None) and (option.get(self.__class__._FIELD_VALUE) is not None):
+                process.__set_option(name=option.get(self.__class__._FIELD_NAME), value=option.get(self.__class__._FIELD_VALUE), coerce_value=True)
+
+        # And now the same for the inputs. Here we also validate each input by retrieving it.
+        inputs = modified_response.get('inputs', [])
+        inputs = [] if inputs is None else inputs
+
+        for i, input in enumerate(inputs):
+            # See if we can find the associated model.
+            if input.get(self.__class__._FIELD_ID) is not None:
+                data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, data_id=input.get(self.__class__._FIELD_ID))
+                process.__set_input(number=i + 1, data=data)
+
+        # Set the name.
+        process.update(name=name)
+
+        # Return the copy.
+        return process
 
     def create(self):
         """
@@ -576,7 +633,7 @@ class Process(Model):
         # We can now update the input.
         self._set_field([self.__class__._FIELD_INPUTS, index, self.__class__._FIELD_ID], data.id)
 
-    def __set_option(self, name=None, option=None, value=None):
+    def __set_option(self, name=None, option=None, value=None, coerce_value=False):
         """
         Sets the specified option for the process to the value. An exception is raised if the process is in the execute status, the option does not exist or the
         value has the wrong type.
@@ -585,6 +642,7 @@ class Process(Model):
             name: The option name to set. Either the name or the option must be provided.
             option: The option object for the option to set. Either the name or the option must be provided.
             value: The value for the option.
+            coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
 
         Raises:
             ModelError: if the process is the execute status.
@@ -617,6 +675,11 @@ class Process(Model):
         # Check that the option has the same data type as the value. We cannot check this if either value is None. Note that supplied ints can be used for floats.
         data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
         existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
+
+        # Optionally coerce the supplied value, now that we know its data type.
+        if coerce_value:
+            value = self.__class__.__coerce_value(value, data_type)
+
         class_matches = isinstance(value, existing_value.__class__)
 
         if isinstance(value, int) and isinstance(existing_value, float):

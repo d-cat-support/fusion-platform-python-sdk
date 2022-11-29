@@ -35,6 +35,94 @@ class TestProcess(CustomTestCase):
         process = Process(Session())
         self.assertIsNotNone(process)
 
+    def test_copy(self):
+        """
+        Tests that a template copy object can be created from an API endpoint with validation using a Marshmallow schema.
+        """
+        with open(self.fixture_path('process.json'), 'r') as file:
+            content = json.loads(file.read())
+
+        with open(self.fixture_path('data.json'), 'r') as file:
+            data_content = json.loads(file.read())
+
+        with open(self.fixture_path('data_file.json'), 'r') as file:
+            file_content = json.loads(file.read())
+
+        session = Session()
+        organisation_id = content.get('organisation_id')
+        process_id = content.get('id')
+        path = Process._PATH_COPY.format(organisation_id=organisation_id, process_id=process_id)
+        name = 'Test'
+
+        data1_id = uuid.uuid4()
+        data2_id = uuid.uuid4()
+
+        content['inputs'][0]['id'] = str(data1_id)
+        content['inputs'][1]['id'] = str(data2_id)
+
+        process = Process(session)
+        self.assertIsNotNone(process)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            process.get(organisation_id=organisation_id, process_id=process_id)
+
+            data_content['id'] = str(data1_id)
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_GET.format(organisation_id=organisation_id, data_id=data1_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
+            file_content['file_type'] = fusion_platform.FILE_TYPE_GEOJSON
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_FILES.format(organisation_id=organisation_id, data_id=data1_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content]}))
+
+            data_content['id'] = str(data2_id)
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_GET.format(organisation_id=organisation_id, data_id=data2_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
+            file_content['file_type'] = fusion_platform.FILE_TYPE_GEOTIFF
+            mock.get(f"{Session.API_URL_DEFAULT}{Data._PATH_FILES.format(organisation_id=organisation_id, data_id=data2_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content]}))
+
+            content['id'] = str(uuid.uuid4())
+
+            with pytest.raises(RequestError):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", exc=requests.exceptions.ConnectTimeout)
+                process.copy(name=name)
+
+            with pytest.raises(RequestError):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", status_code=400)
+                process.copy(name=name)
+
+            with pytest.raises(ModelError):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
+                process.copy(name=name)
+
+            with pytest.raises(ModelError):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({'rubbish': content}))
+                process.copy(name=name)
+
+            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            process_copy = process.copy(name=name)
+
+            schema = ProcessSchema()
+
+            for key in content:
+                if (Model._METADATA_HIDE not in schema.fields[key].metadata) and (content[key] is not None):
+                    self.assertEqual(json.dumps(content[key], default=json_default), json.dumps(getattr(process_copy, key), default=json_default))
+
+            self.assertNotEqual(process_copy.id, process.id)
+            self.assertEqual(name, process_copy.name)
+
+            for option in content['options']:
+                for item in process_copy.options:
+                    if item.name == option['name']:
+                        if (not isinstance(item.value, bool)) and (isinstance(item.value, int) or isinstance(item.value, float)):
+                            self.assertEqual(float(item.value), float(option['value']))
+                        else:
+                            self.assertEqual(str(item.value).lower(), str(option['value']).lower())
+
+            for input in content['inputs']:
+                self.assertTrue(any([item for item in process_copy.inputs if str(item.id) == str(input['id'])]))
+
     def test_create(self):
         """
         Tests that a process object can be created.
