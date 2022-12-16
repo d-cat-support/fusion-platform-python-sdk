@@ -130,7 +130,7 @@ class Model(Base):
     _METADATA_READ_ONLY = &#39;read_only&#39;
 
     # API job update frequency check.
-    _API_UPDATE_WAIT_PERIOD = 5  # Time in seconds to wait between checking jobs on the API.
+    _API_UPDATE_WAIT_PERIOD = 10  # Time in seconds to wait between checking jobs on the API.
 
     def __init__(self, session, schema=None):
         &#34;&#34;&#34;
@@ -879,7 +879,7 @@ class Model(Base):
     _METADATA_READ_ONLY = &#39;read_only&#39;
 
     # API job update frequency check.
-    _API_UPDATE_WAIT_PERIOD = 5  # Time in seconds to wait between checking jobs on the API.
+    _API_UPDATE_WAIT_PERIOD = 10  # Time in seconds to wait between checking jobs on the API.
 
     def __init__(self, session, schema=None):
         &#34;&#34;&#34;
@@ -1776,7 +1776,7 @@ attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatica
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.5.1
+Version: 1.5.3
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

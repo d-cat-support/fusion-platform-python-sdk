@@ -66,7 +66,6 @@ i18n.add_translation('models.model.not_persisted', 'Model is not persisted in th
 i18n.add_translation('models.model.already_persisted', 'Model is already persisted in the Fusion Platform(r)', 'en')
 i18n.add_translation('models.process.failed_copy', 'Failed to get process from copy response', 'en')
 i18n.add_translation('models.process.execution_should_have_started', 'Process execution should have started by now', 'en')
-i18n.add_translation('models.process.not_executable', 'Process is not executable', 'en')
 i18n.add_translation('models.process.wrong_file_type', 'File type of supplied data object (%{actual}) does not match the file type for the input (%{expected})', 'en')
 i18n.add_translation('models.process.data_not_ready', 'Data object is not ready to be used in a process', 'en')
 i18n.add_translation('models.process.option_wrong_type', 'Option value should be of type %{type}', 'en')

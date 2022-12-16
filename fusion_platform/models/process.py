@@ -281,7 +281,7 @@ class Process(Model):
     _PROCESS_STATUS_EXECUTE = 'execute'
 
     # The maximum number of seconds to wait after an execution was meant to start.
-    _EXECUTE_WAIT_TOLERANCE = 60
+    _EXECUTE_WAIT_TOLERANCE = 300
 
     # Validation parsing for constrained values.
     _VALIDATION_DELIMITER = ';'
@@ -763,21 +763,16 @@ class Process(Model):
     def wait_for_next_execution(self):
         """
         Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
-        Otherwise, this method will block until the next scheduled execution has started. An exception will be raised if the process is not being executed.
+        Otherwise, this method will block until the next scheduled execution has started.
 
         Raises:
             RequestError: if any request fails.
-            ModelError: if the process is not being executed.
             ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         # Wait until we find the next execution.
         while True:
             # Load in the most recent version of the model.
             self.get(organisation_id=self.organisation_id)
-
-            # Make sure the process is executable.
-            if self.process_status != Process._PROCESS_STATUS_EXECUTE:
-                raise ModelError(i18n.t('models.process.not_executable'))
 
             # Get the most recent execution for the process. This assumes that the executions are returned with the most recent first.
             self._logger.debug('checking for next execution')

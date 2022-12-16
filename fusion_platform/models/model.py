@@ -99,7 +99,7 @@ class Model(Base):
     _METADATA_READ_ONLY = 'read_only'
 
     # API job update frequency check.
-    _API_UPDATE_WAIT_PERIOD = 5  # Time in seconds to wait between checking jobs on the API.
+    _API_UPDATE_WAIT_PERIOD = 10  # Time in seconds to wait between checking jobs on the API.
 
     def __init__(self, session, schema=None):
         """
