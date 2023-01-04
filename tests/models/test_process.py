@@ -881,5 +881,9 @@ class TestProcess(CustomTestCase):
             process.update(option=option, value=False)
             self.assertEqual(False, next(process.options).value)
 
+            self.assertEqual(False, next(process.options).value)
+            process.update(option=option, value='true', coerce_value=True)
+            self.assertEqual(True, next(process.options).value)
+
             process.update(option=option, value=None)
             self.assertEqual(None, next(process.options).value)

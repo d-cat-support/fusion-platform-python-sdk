@@ -702,7 +702,7 @@ class Process(Model):
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)
 
-    def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, **kwargs):
+    def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
         """
         Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
         contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
@@ -715,6 +715,7 @@ class Process(Model):
             option_name: The option name to set. Either the name or the option must be provided when setting an option.
             option: The option object for the option to set. Either the name or the option must be provided when setting an option.
             value: The value for the option.
+            coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
             kwargs: The model attributes which are to be patched.
 
         Raises:
@@ -733,7 +734,7 @@ class Process(Model):
 
         # Deal with the special case of options.
         if (option_name is not None) or (option is not None):
-            self.__set_option(name=option_name, option=option, value=value)
+            self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
 
         # Now update the model, persisting as needed.
         super(Process, self).update(**kwargs)
