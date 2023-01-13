@@ -104,11 +104,16 @@ class ProcessExecutionStatusSchema(Schema):
     Nested schema class for execution status.
     """
     process_execution_id = fields.UUID(required=True)
+    group_id = fields.UUID(allow_none=True)
+    group_index = fields.Integer(allow_none=True)
+    group_count = fields.Integer(allow_none=True)
     job_status = fields.String(required=True)
+    abort_reason = fields.String(allow_none=True)
     started_at = fields.DateTime(required=True)
     ended_at = fields.DateTime(allow_none=True)
     delete_warning_status = fields.String(required=True)
     delete_expiry = fields.DateTime(required=True)
+    notified = fields.Boolean(allow_none=True)
 
     class Meta:
         """
@@ -281,7 +286,7 @@ class Process(Model):
     _PROCESS_STATUS_EXECUTE = 'execute'
 
     # The maximum number of seconds to wait after an execution was meant to start.
-    _EXECUTE_WAIT_TOLERANCE = 300
+    _EXECUTE_WAIT_TOLERANCE = 900
 
     # Validation parsing for constrained values.
     _VALIDATION_DELIMITER = ';'
@@ -775,18 +780,28 @@ class Process(Model):
             # Load in the most recent version of the model.
             self.get(organisation_id=self.organisation_id)
 
-            # Get the most recent execution for the process. This assumes that the executions are returned with the most recent first.
+            # Check whether we have the next execution listed in the model. We sort the list to find the most recent.
             self._logger.debug('checking for next execution')
-            executions = ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), items_per_request=1, reverse=True)
-            execution = next(executions, None)
+            executions = []
+
+            if self._model.get(self.__class__._FIELD_HAS_EXECUTIONS, False):
+                executions = [item for item in self._model.get(self.__class__._FIELD_EXECUTIONS, [])]  # Turn the read-only field into a list we can sort.
+                executions = sorted(executions, key=lambda item: item.get(self.__class__._FIELD_STARTED_AT), reverse=True)  # Sort by most recent first.
+
+            execution = executions[0] if len(executions) > 0 else None
+
+            # If the execution is in a group, then make sure that all the executions in the group have started.
+            if (execution is not None) and (execution.get(self.__class__._FIELD_GROUP_ID) is not None):
+                group = [item for item in executions if item.get(self.__class__._FIELD_GROUP_ID) == execution.get(self.__class__._FIELD_GROUP_ID)]
+                execution = None if (len(group) < execution.get(self.__class__._FIELD_GROUP_COUNT)) else execution
 
             # Ignore any execution older than when the next execution is expected. This assumes that the process repeat start is maintained correctly, and that it
             # is set after any corresponding executions have been created for the current repeat start.
-            execution = None if (execution is not None) and (execution.created_at < self.repeat_start) else execution
+            execution = None if (execution is not None) and (execution.get(self.__class__._FIELD_STARTED_AT) < self.repeat_start) else execution
 
             # Stop if we have an execution which is beyond the repeat start date.
             if execution is not None:
-                self._logger.debug('execution %s found', execution.id)
+                self._logger.debug('execution %s found', execution.get(self.__class__._FIELD_ID))
                 break
 
             # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.

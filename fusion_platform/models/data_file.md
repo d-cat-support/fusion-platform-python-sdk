@@ -13,8 +13,6 @@
 * **area**: The optional total area covered by the file content in metres squared.
 * **length**: The optional total length covered by the file content in metres.
 * **points**: The optional total number of points in the file.
-* **mgrs_cells**: The optional list of MGRS cells which are covered by the file content.
-* **sinusoidal_cells**: The optional list of sinusoidal cells which are covered by the file content.
 * **size**: The size of the file in bytes.
 * **error**: Was there an error encountered during analysis of the file?
 * **publishable**: Is the file suitable for publishing as it is without optimisation?

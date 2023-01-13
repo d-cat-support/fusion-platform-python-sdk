@@ -252,21 +252,9 @@ class TestProcess(CustomTestCase):
                 process.wait_for_next_execution()
 
             mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
-
-            with pytest.raises(RequestError):
-                mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", exc=requests.exceptions.ConnectTimeout)
-                process.wait_for_next_execution()
-
-            with pytest.raises(RequestError):
-                mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", status_code=400)
-                process.wait_for_next_execution()
-
-            with pytest.raises(ModelError):
-                mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text='{}')
-                process.wait_for_next_execution()
+            process.wait_for_next_execution()
 
             mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content]}))
-            process.wait_for_next_execution()
 
             for process_execution in process.executions:
                 with pytest.raises(RequestError):
@@ -289,6 +277,53 @@ class TestProcess(CustomTestCase):
         Tests that a process can be executed with waiting.
         """
         with open(self.fixture_path('process.json'), 'r') as file:
+            process_content = json.loads(file.read())
+
+        with open(self.fixture_path('process_execution.json'), 'r') as file:
+            execution_content = json.loads(file.read())
+
+        session = Session()
+        organisation_id = process_content.get('organisation_id')
+        process_id = process_content.get(Model._FIELD_ID)
+        process_execution_id = execution_content.get(Model._FIELD_ID)
+        execute_path = Process._PATH_EXECUTE.format(organisation_id=organisation_id, process_id=process_id)
+        get_path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
+        executions_path = Process._PATH_EXECUTIONS.format(organisation_id=organisation_id, process_id=process_id)
+        execution_path = ProcessExecution._PATH_GET.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
+
+        process = Process(session)
+        self.assertIsNotNone(process)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            process.get(organisation_id=organisation_id, process_id=process_id)
+            self.assertIsNotNone(process)
+            self.assertEqual(str(process_id), str(process.id))
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", exc=requests.exceptions.ConnectTimeout)
+                process.execute(wait=True)
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", status_code=400)
+                process.execute(wait=True)
+
+            with pytest.raises(ModelError):
+                mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text='{}')
+                process.execute(wait=True)
+
+            process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
+            mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content]}))
+            mock.get(f"{Session.API_URL_DEFAULT}{execution_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: execution_content}))
+            process.execute(wait=True)
+
+    def test_execute_wait_group(self):
+        """
+        Tests that a process with a group of executions can be executed with waiting.
+        """
+        with open(self.fixture_path('process_with_group.json'), 'r') as file:
             process_content = json.loads(file.read())
 
         with open(self.fixture_path('process_execution.json'), 'r') as file:

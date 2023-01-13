@@ -77,9 +77,6 @@ class DataFileSchema(Schema):
     area = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     length = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     points = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
-    mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
-    sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
-                                   metadata={'read_only': True})  # Changed to prevent this being updated.
 
     size = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     error = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.

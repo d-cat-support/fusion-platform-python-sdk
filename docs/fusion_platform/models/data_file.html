@@ -108,9 +108,6 @@ class DataFileSchema(Schema):
     area = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     length = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     points = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
-                                   metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     size = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     error = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -735,8 +732,6 @@ for the download to complete.</p>
 <li><strong>area</strong>: The optional total area covered by the file content in metres squared.</li>
 <li><strong>length</strong>: The optional total length covered by the file content in metres.</li>
 <li><strong>points</strong>: The optional total number of points in the file.</li>
-<li><strong>mgrs_cells</strong>: The optional list of MGRS cells which are covered by the file content.</li>
-<li><strong>sinusoidal_cells</strong>: The optional list of sinusoidal cells which are covered by the file content.</li>
 <li><strong>size</strong>: The size of the file in bytes.</li>
 <li><strong>error</strong>: Was there an error encountered during analysis of the file?</li>
 <li><strong>publishable</strong>: Is the file suitable for publishing as it is without optimisation?</li>
@@ -798,9 +793,6 @@ for the download to complete.</p>
     area = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     length = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     points = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    mgrs_cells = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    sinusoidal_cells = fields.List(fields.Tuple((fields.Integer, fields.Integer), required=True), allow_none=True,
-                                   metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     size = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     error = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -840,7 +832,7 @@ for the download to complete.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.5.4
+Version: 1.5.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
