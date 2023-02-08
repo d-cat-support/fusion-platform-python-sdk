@@ -21,21 +21,6 @@ from fusion_platform.session import Session
 
 # Define the model schema classes. These are maintained from the API definitions.
 
-class DataIngesterSchema(Schema):
-    """
-    Nested schema class for ingesters.
-    """
-    ingester_id = fields.UUID(required=True)
-    dates = fields.List(fields.DateTime(required=True), required=True)
-
-    class Meta:
-        """
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        """
-        unknown = EXCLUDE
-        ordered = True
-
-
 class DataSchema(Schema):
     """
     Schema class for data model.
@@ -55,13 +40,6 @@ class DataSchema(Schema):
     # Removed lock.
     unlinked = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     unfulfilled = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
-
-    ingester_availability = fields.List(fields.Nested(DataIngesterSchema()), allow_none=True,
-                                        metadata={'read_only': True})  # Changed to prevent this being updated.
-
-    # Removed link_id.
-    # Removed link_model.
-    # Removed link_hash.
 
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     file_with_preview = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.

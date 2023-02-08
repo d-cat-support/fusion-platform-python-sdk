@@ -14,25 +14,6 @@
     -33.2271235256643
   ],
   "area": 21420824776.176483,
-  "mgrs_cells": [
-    "54HUG",
-    "54HTJ",
-    "54HUJ",
-    "53HQD",
-    "53HPB",
-    "54HTG",
-    "53HPC",
-    "53HQC",
-    "54HUH",
-    "53HQB",
-    "54HTH"
-  ],
-  "sinusoidal_cells": [
-    [
-      29,
-      12
-    ]
-  ],
   "size": 1024,
   "publishable": false,
   "alternative": "6db1b72f-3de1-409c-b897-a0c29e7c7240",

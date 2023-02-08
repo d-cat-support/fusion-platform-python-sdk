@@ -312,6 +312,13 @@ class TestProcess(CustomTestCase):
                 mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text='{}')
                 process.execute(wait=True)
 
+            process_content['process_status'] = Process._PROCESS_STATUS_STOP
+            mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+
+            with pytest.raises(ModelError):
+                process.execute(wait=True)
+
             process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
             mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
             mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))

@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '1.5.6'
-__version_date__ = '2023-01-19T11:02:11Z'
+__version__ = '1.6.1'
+__version_date__ = '2023-02-03T07:18:21Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -29,7 +29,6 @@ __pdoc__ = {
     'models.credit.CreditSsdsSchema': False,
     'models.data.DataSchema.Meta': False,
     'models.data.DataSchema.opts': False,
-    'models.data.DataIngesterSchema': False,
     'models.data_file.DataFileSchema.Meta': False,
     'models.data_file.DataFileSchema.opts': False,
     'models.data_file.DataFileSelectorSchema': False,

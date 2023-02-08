@@ -284,6 +284,7 @@ class Process(Model):
 
     # Process status values.
     _PROCESS_STATUS_EXECUTE = 'execute'
+    _PROCESS_STATUS_STOP = 'stop'
 
     # The maximum number of seconds to wait after an execution was meant to start.
     _EXECUTE_WAIT_TOLERANCE = 900
@@ -779,6 +780,10 @@ class Process(Model):
         while True:
             # Load in the most recent version of the model.
             self.get(organisation_id=self.organisation_id)
+
+            # Check that the model is executing. It may have stopped on error.
+            if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_STOP):
+                raise ModelError(i18n.t('models.process.execution_stopped'))
 
             # Check whether we have the next execution listed in the model. We sort the list to find the most recent.
             self._logger.debug('checking for next execution')

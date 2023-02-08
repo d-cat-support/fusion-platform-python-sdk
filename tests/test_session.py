@@ -6,7 +6,6 @@
 # (c) Digital Content Analysis Technology Ltd 2022
 #
 
-from datetime import datetime, timezone
 import json
 import jwt
 import os
