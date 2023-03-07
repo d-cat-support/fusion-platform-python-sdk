@@ -9,9 +9,12 @@ author: Matthew Casey
 import i18n
 import json
 import jwt
+import logging
 import os
 import requests
+from tenacity import before_sleep_log, retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
 
+import fusion_platform
 from fusion_platform.base import Base
 from fusion_platform.common.utilities import json_default
 
@@ -26,6 +29,13 @@ class SessionError(Exception):
 class RequestError(SessionError):
     """
     Exception raised on request failure.
+    """
+    pass
+
+
+class RetryableRequestError(RequestError):
+    """
+    Exception raised on request failure which is retryable.
     """
     pass
 
@@ -173,6 +183,9 @@ class Session(Base):
 
         self._logger.debug('logged in')
 
+    @retry(wait=wait_random_exponential(multiplier=1, min=1, max=5), stop=stop_after_attempt(10), reraise=True,
+           retry=retry_if_exception_type(RetryableRequestError),
+           before_sleep=before_sleep_log(logging.getLogger(fusion_platform.FUSION_PLATFORM_LOGGER), logging.INFO))
     def request(self, path='/', query_parameters=None, method=METHOD_GET, body=None):
         """
         Sends a request to the Fusion Platform<sup>&reg;</sup> using the specified path, method and JSON payload. This method will use the authentication bearer token, if
@@ -220,10 +233,15 @@ class Session(Base):
                 payload = response.json()
                 self._logger.debug('response: %s', self.__filter_nested_dictionary(payload))
 
-        except RequestError:
+        except RequestError:  # Suggests a fatal error which cannot be retried.
             raise
 
-        except Exception as e:
+        except (requests.ConnectionError, requests.Timeout) as e:  # Suggests an intermittent error which can be retried.
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) <= 0) else message
+            raise RetryableRequestError(i18n.t('session.request_failed', message=message)) from e
+
+        except Exception as e:  # Suggests a fatal error which cannot be retried.
             message = str(e)
             message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) <= 0) else message
             raise RequestError(i18n.t('session.request_failed', message=message)) from e

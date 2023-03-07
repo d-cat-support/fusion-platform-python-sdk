@@ -40,9 +40,12 @@ author: Matthew Casey
 import i18n
 import json
 import jwt
+import logging
 import os
 import requests
+from tenacity import before_sleep_log, retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
 
+import fusion_platform
 from fusion_platform.base import Base
 from fusion_platform.common.utilities import json_default
 
@@ -57,6 +60,13 @@ class SessionError(Exception):
 class RequestError(SessionError):
     &#34;&#34;&#34;
     Exception raised on request failure.
+    &#34;&#34;&#34;
+    pass
+
+
+class RetryableRequestError(RequestError):
+    &#34;&#34;&#34;
+    Exception raised on request failure which is retryable.
     &#34;&#34;&#34;
     pass
 
@@ -204,6 +214,9 @@ class Session(Base):
 
         self._logger.debug(&#39;logged in&#39;)
 
+    @retry(wait=wait_random_exponential(multiplier=1, min=1, max=5), stop=stop_after_attempt(10), reraise=True,
+           retry=retry_if_exception_type(RetryableRequestError),
+           before_sleep=before_sleep_log(logging.getLogger(fusion_platform.FUSION_PLATFORM_LOGGER), logging.INFO))
     def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
         &#34;&#34;&#34;
         Sends a request to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; using the specified path, method and JSON payload. This method will use the authentication bearer token, if
@@ -251,10 +264,15 @@ class Session(Base):
                 payload = response.json()
                 self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
 
-        except RequestError:
+        except RequestError:  # Suggests a fatal error which cannot be retried.
             raise
 
-        except Exception as e:
+        except (requests.ConnectionError, requests.Timeout) as e:  # Suggests an intermittent error which can be retried.
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RetryableRequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+        except Exception as e:  # Suggests a fatal error which cannot be retried.
             message = str(e)
             message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
             raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
@@ -327,6 +345,34 @@ class Session(Base):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></li>
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.session.RetryableRequestError" href="#fusion_platform.session.RetryableRequestError">RetryableRequestError</a></li>
+</ul>
+</dd>
+<dt id="fusion_platform.session.RetryableRequestError"><code class="flex name class">
+<span>class <span class="ident">RetryableRequestError</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Exception raised on request failure which is retryable.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RetryableRequestError(RequestError):
+    &#34;&#34;&#34;
+    Exception raised on request failure which is retryable.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></li>
 <li><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></li>
 <li>builtins.Exception</li>
 <li>builtins.BaseException</li>
@@ -478,6 +524,9 @@ class Session(Base):
 
         self._logger.debug(&#39;logged in&#39;)
 
+    @retry(wait=wait_random_exponential(multiplier=1, min=1, max=5), stop=stop_after_attempt(10), reraise=True,
+           retry=retry_if_exception_type(RetryableRequestError),
+           before_sleep=before_sleep_log(logging.getLogger(fusion_platform.FUSION_PLATFORM_LOGGER), logging.INFO))
     def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
         &#34;&#34;&#34;
         Sends a request to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; using the specified path, method and JSON payload. This method will use the authentication bearer token, if
@@ -525,10 +574,15 @@ class Session(Base):
                 payload = response.json()
                 self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
 
-        except RequestError:
+        except RequestError:  # Suggests a fatal error which cannot be retried.
             raise
 
-        except Exception as e:
+        except (requests.ConnectionError, requests.Timeout) as e:  # Suggests an intermittent error which can be retried.
+            message = str(e)
+            message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+            raise RetryableRequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+        except Exception as e:  # Suggests a fatal error which cannot be retried.
             message = str(e)
             message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
             raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
@@ -790,7 +844,10 @@ available.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
+<pre><code class="python">@retry(wait=wait_random_exponential(multiplier=1, min=1, max=5), stop=stop_after_attempt(10), reraise=True,
+       retry=retry_if_exception_type(RetryableRequestError),
+       before_sleep=before_sleep_log(logging.getLogger(fusion_platform.FUSION_PLATFORM_LOGGER), logging.INFO))
+def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
     &#34;&#34;&#34;
     Sends a request to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; using the specified path, method and JSON payload. This method will use the authentication bearer token, if
     available.
@@ -837,10 +894,15 @@ available.</p>
             payload = response.json()
             self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
 
-    except RequestError:
+    except RequestError:  # Suggests a fatal error which cannot be retried.
         raise
 
-    except Exception as e:
+    except (requests.ConnectionError, requests.Timeout) as e:  # Suggests an intermittent error which can be retried.
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RetryableRequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    except Exception as e:  # Suggests a fatal error which cannot be retried.
         message = str(e)
         message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
         raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
@@ -957,7 +1019,7 @@ available.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.6.3
+Version: 1.6.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -977,6 +1039,9 @@ Version: 1.6.3
 <ul>
 <li>
 <h4><code><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></code></h4>
+</li>
+<li>
+<h4><code><a title="fusion_platform.session.RetryableRequestError" href="#fusion_platform.session.RetryableRequestError">RetryableRequestError</a></code></h4>
 </li>
 <li>
 <h4><code><a title="fusion_platform.session.Session" href="#fusion_platform.session.Session">Session</a></code></h4>

@@ -8,6 +8,8 @@
 
 import logging
 import os
+from mock import patch
+import pytest
 
 from unittest import TestCase
 
@@ -49,3 +51,12 @@ class CustomTestCase(TestCase):
         :return: The path to the fixture.
         """
         return os.path.join(CustomTestCase.PACKAGE_DIR, CustomTestCase.FIXTURES_DIR, path)
+
+    @pytest.fixture(autouse=True)
+    def around_test(self):
+        """
+        Run around the test to make sure the environment is setup correctly.
+        """
+
+        with patch('time.sleep'):  # Mock sleep for @retrying.
+            yield

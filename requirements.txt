@@ -7,4 +7,5 @@ python-i18n[YAML]
 pytz
 requests
 requests-mock
+tenacity
 twine
