@@ -65,6 +65,9 @@ class Session(Base):
     # Mask keys.
     _MASK_KEYS = ['password', 'old_password', 'new_password', 'access_token', 'id_token', 'refresh_token']
 
+    # Download temporary file name extension.
+    DOWNLOAD_EXTENSION = '.download'
+
     def __init__(self):
         """
         Initialises the object.
@@ -93,7 +96,7 @@ class Session(Base):
             os.makedirs(directory, exist_ok=True)
 
         try:
-            # Download the file in chunks.
+            # Download the file in chunks to a temporarily named file.
             self._logger.info('downloading %s -> %s', url, destination)
             response = requests.get(url, stream=True)
 
@@ -102,16 +105,21 @@ class Session(Base):
                 raise RequestError(i18n.t('session.request_failed', message=response))
 
             # Download the content to file as a series of chunks.
+            temporary_destination = f"{destination}{Session.DOWNLOAD_EXTENSION}"
             download_size = 0
 
-            with open(destination, 'wb') as file:
-                for chunk in response.iter_content(chunk_size=8192):
+            with open(temporary_destination, 'wb') as file:
+                for chunk in response.iter_content(chunk_size=1024 * 1024 * 10):
                     file.write(chunk)
                     download_size += len(chunk)
                     self._logger.debug('downloaded %d bytes', download_size)
 
                     if callback is not None:
                         callback(url, destination, download_size)
+
+            # Rename the downloaded file.
+            if os.path.exists(temporary_destination):
+                os.rename(temporary_destination, destination)
 
             self._logger.info('downloaded %s', destination)
 
