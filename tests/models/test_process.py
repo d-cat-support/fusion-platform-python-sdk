@@ -323,6 +323,13 @@ class TestProcess(CustomTestCase):
             mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
             mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
             mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content]}))
+
+            with pytest.raises(ModelError):
+                execution_content['success'] = False
+                mock.get(f"{Session.API_URL_DEFAULT}{execution_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: execution_content}))
+                process.execute(wait=True)
+
+            execution_content['success'] = True
             mock.get(f"{Session.API_URL_DEFAULT}{execution_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: execution_content}))
             process.execute(wait=True)
 
@@ -369,7 +376,14 @@ class TestProcess(CustomTestCase):
             process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
             mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
             mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
-            mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content]}))
+            mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content, execution_content]}))
+
+            with pytest.raises(ModelError):
+                execution_content['success'] = False
+                mock.get(f"{Session.API_URL_DEFAULT}{execution_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: execution_content}))
+                process.execute(wait=True)
+
+            execution_content['success'] = True
             mock.get(f"{Session.API_URL_DEFAULT}{execution_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: execution_content}))
             process.execute(wait=True)
 

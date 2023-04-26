@@ -169,6 +169,7 @@ class ProcessExecution(Model):
 
             # Raise an exception if the execution failed.
             if complete and not self.success:
+                self._logger.error(i18n.t('models.process_execution.execution_failed'))
                 raise ModelError(i18n.t('models.process_execution.execution_failed'))
 
             if complete:

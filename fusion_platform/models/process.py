@@ -411,7 +411,7 @@ class Process(Model):
 
         Raises:
             RequestError: if the execute fails.
-            ModelError: if the execution fails.
+            ModelError: if any execution fails.
         """
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
@@ -420,9 +420,20 @@ class Process(Model):
             # If we are waiting for the execution to complete, wait for the next execution to start...
             self.wait_for_next_execution()
 
-            # ...and for all the executions to complete.
+            # ...and for all the executions to complete. Note that we wait for all executions to complete, even if at least one has failed.
+            exception = None
+
             for execution in self.executions:
-                execution.check_complete(wait=wait)
+                try:
+                    execution.check_complete(wait=wait)
+                except ModelError as e:
+                    # Keep the first exception raised.
+                    if exception is None:
+                        exception = e
+
+            # Raise any exception.
+            if exception is not None:
+                raise exception
 
     @property
     def executions(self):

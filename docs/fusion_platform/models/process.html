@@ -442,7 +442,7 @@ class Process(Model):
 
         Raises:
             RequestError: if the execute fails.
-            ModelError: if the execution fails.
+            ModelError: if any execution fails.
         &#34;&#34;&#34;
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
@@ -451,9 +451,20 @@ class Process(Model):
             # If we are waiting for the execution to complete, wait for the next execution to start...
             self.wait_for_next_execution()
 
-            # ...and for all the executions to complete.
+            # ...and for all the executions to complete. Note that we wait for all executions to complete, even if at least one has failed.
+            exception = None
+
             for execution in self.executions:
-                execution.check_complete(wait=wait)
+                try:
+                    execution.check_complete(wait=wait)
+                except ModelError as e:
+                    # Keep the first exception raised.
+                    if exception is None:
+                        exception = e
+
+            # Raise any exception.
+            if exception is not None:
+                raise exception
 
     @property
     def executions(self):
@@ -1208,7 +1219,7 @@ class Process(Model):
 
         Raises:
             RequestError: if the execute fails.
-            ModelError: if the execution fails.
+            ModelError: if any execution fails.
         &#34;&#34;&#34;
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
@@ -1217,9 +1228,20 @@ class Process(Model):
             # If we are waiting for the execution to complete, wait for the next execution to start...
             self.wait_for_next_execution()
 
-            # ...and for all the executions to complete.
+            # ...and for all the executions to complete. Note that we wait for all executions to complete, even if at least one has failed.
+            exception = None
+
             for execution in self.executions:
-                execution.check_complete(wait=wait)
+                try:
+                    execution.check_complete(wait=wait)
+                except ModelError as e:
+                    # Keep the first exception raised.
+                    if exception is None:
+                        exception = e
+
+            # Raise any exception.
+            if exception is not None:
+                raise exception
 
     @property
     def executions(self):
@@ -1866,7 +1888,7 @@ def options(self):
 <dt><code>RequestError</code></dt>
 <dd>if the execute fails.</dd>
 <dt><code>ModelError</code></dt>
-<dd>if the execution fails.</dd>
+<dd>if any execution fails.</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -1881,7 +1903,7 @@ def options(self):
 
     Raises:
         RequestError: if the execute fails.
-        ModelError: if the execution fails.
+        ModelError: if any execution fails.
     &#34;&#34;&#34;
     # Send the request and load the resulting model.
     self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
@@ -1890,9 +1912,20 @@ def options(self):
         # If we are waiting for the execution to complete, wait for the next execution to start...
         self.wait_for_next_execution()
 
-        # ...and for all the executions to complete.
+        # ...and for all the executions to complete. Note that we wait for all executions to complete, even if at least one has failed.
+        exception = None
+
         for execution in self.executions:
-            execution.check_complete(wait=wait)</code></pre>
+            try:
+                execution.check_complete(wait=wait)
+            except ModelError as e:
+                # Keep the first exception raised.
+                if exception is None:
+                    exception = e
+
+        # Raise any exception.
+        if exception is not None:
+            raise exception</code></pre>
 </details>
 </dd>
 <dt id="fusion_platform.models.process.Process.find_executions"><code class="name flex">
@@ -2302,7 +2335,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.6.6
+Version: 1.6.7
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

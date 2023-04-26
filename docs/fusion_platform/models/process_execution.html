@@ -200,6 +200,7 @@ class ProcessExecution(Model):
 
             # Raise an exception if the execution failed.
             if complete and not self.success:
+                self._logger.error(i18n.t(&#39;models.process_execution.execution_failed&#39;))
                 raise ModelError(i18n.t(&#39;models.process_execution.execution_failed&#39;))
 
             if complete:
@@ -305,6 +306,7 @@ class ProcessExecution(Model):
 
             # Raise an exception if the execution failed.
             if complete and not self.success:
+                self._logger.error(i18n.t(&#39;models.process_execution.execution_failed&#39;))
                 raise ModelError(i18n.t(&#39;models.process_execution.execution_failed&#39;))
 
             if complete:
@@ -435,6 +437,7 @@ def components(self):
 
         # Raise an exception if the execution failed.
         if complete and not self.success:
+            self._logger.error(i18n.t(&#39;models.process_execution.execution_failed&#39;))
             raise ModelError(i18n.t(&#39;models.process_execution.execution_failed&#39;))
 
         if complete:
@@ -608,7 +611,7 @@ def components(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.6.6
+Version: 1.6.7
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
