@@ -38,3 +38,4 @@
 * **delete_expiry**: When will the execution expire and therefore be deleted?
 * **delete_warning_status**: What is the notification status for the delete warning?
 * **deletable**: Is this execution scheduled for deletion?
+* **delete_protection**: Is this execution prevented from being deleted irrespective of its delete expiry?

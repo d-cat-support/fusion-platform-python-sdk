@@ -44,6 +44,7 @@ from time import sleep
 from fusion_platform.models import fields
 from fusion_platform.models.model import Model, ModelError
 from fusion_platform.models.process_service_execution import ProcessServiceExecution
+from fusion_platform.session import Session
 
 
 # Define the model schema classes. These are maintained from the API definitions.
@@ -141,6 +142,7 @@ class ProcessExecutionSchema(Schema):
     delete_expiry = fields.DateTime(required=True)
     delete_warning_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    delete_protection = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     class Meta:
         &#34;&#34;&#34;
@@ -171,6 +173,21 @@ class ProcessExecution(Model):
 
     # Add in the custom model paths.
     _PATH_COMPONENTS = f&#34;{_PATH_BASE}/process_service_executions&#34;
+    _PATH_CHANGE_DELETE_EXPIRY = f&#34;{_PATH_BASE}/change_delete_expiry&#34;
+
+    def change_delete_expiry(self, delete_expiry):
+        &#34;&#34;&#34;
+        Changes the delete expiry. This will either change the delete expiry of a single execution, or if the execution is in a group, all the corresponding
+        executions in the group.
+
+        Args:
+            delete_expiry: The new delete expiry.
+
+        Raises:
+            RequestError: if the update fails.
+        &#34;&#34;&#34;
+        body = {self.__class__.__name__: {&#39;delete_expiry&#39;: delete_expiry.isoformat()}}
+        self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_DELETE_EXPIRY), method=Session.METHOD_POST, body=body)
 
     def check_complete(self, wait=False):
         &#34;&#34;&#34;
@@ -277,6 +294,21 @@ class ProcessExecution(Model):
 
     # Add in the custom model paths.
     _PATH_COMPONENTS = f&#34;{_PATH_BASE}/process_service_executions&#34;
+    _PATH_CHANGE_DELETE_EXPIRY = f&#34;{_PATH_BASE}/change_delete_expiry&#34;
+
+    def change_delete_expiry(self, delete_expiry):
+        &#34;&#34;&#34;
+        Changes the delete expiry. This will either change the delete expiry of a single execution, or if the execution is in a group, all the corresponding
+        executions in the group.
+
+        Args:
+            delete_expiry: The new delete expiry.
+
+        Raises:
+            RequestError: if the update fails.
+        &#34;&#34;&#34;
+        body = {self.__class__.__name__: {&#39;delete_expiry&#39;: delete_expiry.isoformat()}}
+        self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_DELETE_EXPIRY), method=Session.METHOD_POST, body=body)
 
     def check_complete(self, wait=False):
         &#34;&#34;&#34;
@@ -384,6 +416,41 @@ def components(self):
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="fusion_platform.models.process_execution.ProcessExecution.change_delete_expiry"><code class="name flex">
+<span>def <span class="ident">change_delete_expiry</span></span>(<span>self, delete_expiry)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Changes the delete expiry. This will either change the delete expiry of a single execution, or if the execution is in a group, all the corresponding
+executions in the group.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>delete_expiry</code></strong></dt>
+<dd>The new delete expiry.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if the update fails.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def change_delete_expiry(self, delete_expiry):
+    &#34;&#34;&#34;
+    Changes the delete expiry. This will either change the delete expiry of a single execution, or if the execution is in a group, all the corresponding
+    executions in the group.
+
+    Args:
+        delete_expiry: The new delete expiry.
+
+    Raises:
+        RequestError: if the update fails.
+    &#34;&#34;&#34;
+    body = {self.__class__.__name__: {&#39;delete_expiry&#39;: delete_expiry.isoformat()}}
+    self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_DELETE_EXPIRY), method=Session.METHOD_POST, body=body)</code></pre>
+</details>
+</dd>
 <dt id="fusion_platform.models.process_execution.ProcessExecution.check_complete"><code class="name flex">
 <span>def <span class="ident">check_complete</span></span>(<span>self, wait=False)</span>
 </code></dt>
@@ -548,6 +615,7 @@ def components(self):
 <li><strong>delete_expiry</strong>: When will the execution expire and therefore be deleted?</li>
 <li><strong>delete_warning_status</strong>: What is the notification status for the delete warning?</li>
 <li><strong>deletable</strong>: Is this execution scheduled for deletion?</li>
+<li><strong>delete_protection</strong>: Is this execution prevented from being deleted irrespective of its delete expiry?</li>
 </ul></div>
 <details class="source">
 <summary>
@@ -587,6 +655,7 @@ def components(self):
     delete_expiry = fields.DateTime(required=True)
     delete_warning_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    delete_protection = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     class Meta:
         &#34;&#34;&#34;
@@ -611,7 +680,7 @@ def components(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.6.7
+Version: 1.6.9
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -631,8 +700,9 @@ Version: 1.6.7
 <ul>
 <li>
 <h4><code><a title="fusion_platform.models.process_execution.ProcessExecution" href="#fusion_platform.models.process_execution.ProcessExecution">ProcessExecution</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="fusion_platform.models.process_execution.ProcessExecution.attributes" href="model.html#fusion_platform.models.process_execution.ProcessExecution.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.process_execution.ProcessExecution.change_delete_expiry" href="#fusion_platform.models.process_execution.ProcessExecution.change_delete_expiry">change_delete_expiry</a></code></li>
 <li><code><a title="fusion_platform.models.process_execution.ProcessExecution.check_complete" href="#fusion_platform.models.process_execution.ProcessExecution.check_complete">check_complete</a></code></li>
 <li><code><a title="fusion_platform.models.process_execution.ProcessExecution.components" href="#fusion_platform.models.process_execution.ProcessExecution.components">components</a></code></li>
 <li><code><a title="fusion_platform.models.process_execution.ProcessExecution.delete" href="model.html#fusion_platform.models.process_execution.ProcessExecution.delete">delete</a></code></li>

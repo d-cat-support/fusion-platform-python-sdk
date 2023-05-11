@@ -13,6 +13,7 @@ from time import sleep
 from fusion_platform.models import fields
 from fusion_platform.models.model import Model, ModelError
 from fusion_platform.models.process_service_execution import ProcessServiceExecution
+from fusion_platform.session import Session
 
 
 # Define the model schema classes. These are maintained from the API definitions.
@@ -110,6 +111,7 @@ class ProcessExecutionSchema(Schema):
     delete_expiry = fields.DateTime(required=True)
     delete_warning_status = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    delete_protection = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     class Meta:
         """
@@ -140,6 +142,21 @@ class ProcessExecution(Model):
 
     # Add in the custom model paths.
     _PATH_COMPONENTS = f"{_PATH_BASE}/process_service_executions"
+    _PATH_CHANGE_DELETE_EXPIRY = f"{_PATH_BASE}/change_delete_expiry"
+
+    def change_delete_expiry(self, delete_expiry):
+        """
+        Changes the delete expiry. This will either change the delete expiry of a single execution, or if the execution is in a group, all the corresponding
+        executions in the group.
+
+        Args:
+            delete_expiry: The new delete expiry.
+
+        Raises:
+            RequestError: if the update fails.
+        """
+        body = {self.__class__.__name__: {'delete_expiry': delete_expiry.isoformat()}}
+        self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_DELETE_EXPIRY), method=Session.METHOD_POST, body=body)
 
     def check_complete(self, wait=False):
         """

@@ -32,6 +32,45 @@ class TestProcessExecution(CustomTestCase):
         process_execution = ProcessExecution(Session())
         self.assertIsNotNone(process_execution)
 
+    def test_change_delete_expiry(self):
+        """
+        Tests that the delete expiry for an execution can be updated.
+        """
+        with open(self.fixture_path('process_execution.json'), 'r') as file:
+            content = json.loads(file.read())
+
+        session = Session()
+        organisation_id = content.get('organisation_id')
+        process_execution_id = content.get(Model._FIELD_ID)
+        path = ProcessExecution._PATH_CHANGE_DELETE_EXPIRY.format(organisation_id=organisation_id, process_execution_id=process_execution_id)
+        delete_expiry = datetime.now(timezone.utc) + timedelta(days=2)
+
+        process_execution = ProcessExecution(session)
+        self.assertIsNotNone(process_execution)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{ProcessExecution._PATH_GET.format(organisation_id=organisation_id, process_execution_id=process_execution_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            process_execution.get(organisation_id=organisation_id, process_execution_id=process_execution_id)
+            self.assertIsNotNone(process_execution)
+            self.assertEqual(str(process_execution_id), str(process_execution.id))
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{path}", exc=requests.exceptions.ConnectTimeout)
+                process_execution.change_delete_expiry(delete_expiry=delete_expiry)
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{path}", status_code=400)
+                process_execution.change_delete_expiry(delete_expiry=delete_expiry)
+
+            self.assertNotEqual(delete_expiry, process_execution.delete_expiry)
+
+            content['delete_expiry'] = delete_expiry
+            adapter = mock.post(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}, default=json_default))
+            process_execution.change_delete_expiry(delete_expiry=delete_expiry)
+
+            self.assertEqual({'ProcessExecution': {'delete_expiry': delete_expiry.isoformat()}}, json.loads(adapter.last_request.text))
+
     def test_check_complete_no_wait(self):
         """
         Tests checking if the execution is complete without waiting.
