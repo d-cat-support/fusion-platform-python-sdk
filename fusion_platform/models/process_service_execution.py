@@ -139,6 +139,7 @@ class ProcessServiceExecutionSchema(Schema):
     process_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     service_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     image_id = fields.UUID(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    chain_index = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     name = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     started_at = fields.DateTime(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.

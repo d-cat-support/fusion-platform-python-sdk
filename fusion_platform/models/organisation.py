@@ -111,6 +111,7 @@ class Organisation(Model):
     _PATH_OWN_SERVICES = f"{_PATH_BASE}/services"
     _PATH_PROCESSES = f"{_PATH_BASE}/processes"
     _PATH_SERVICES = f"{_PATH_BASE}/services/latest"
+    _PATH_DISPATCHERS = f"{_PATH_BASE}/services/dispatchers"
 
     def create_data(self, name, file_type, files, wait=False):
         """
@@ -188,6 +189,28 @@ class Organisation(Model):
         find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter, search=search)
         return self.__class__._first_and_generator(find)
 
+    def find_dispatchers(self, id=None, ssd_id=None, name=None, keyword=None, search=None):
+        """
+        Searches for dispatcher services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
+        Dispatchers are specific services used by processes to dispatch outputs to particular destinations. These services should not be used to form processes
+        themselves.
+
+        Args:
+            id: The service id to search for.
+            ssd_id: The SSD id to search for.
+            name: The name to search for (case-sensitive).
+            keyword: The keyword to search for (case-sensitive).
+            search: The term to search for (case-insensitive).
+
+        Returns:
+            The first found dispatcher service object, or None if not found, and an iterator through the found service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
+        """
+        return self.__find_services(self.__class__._PATH_DISPATCHERS, id, ssd_id, name, keyword, search)
+
     def find_processes(self, id=None, name=None, search=None):
         """
         Searches for the organisation's processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.
@@ -211,11 +234,12 @@ class Organisation(Model):
         find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter, search=search)
         return self.__class__._first_and_generator(find)
 
-    def find_services(self, id=None, ssd_id=None, name=None, keyword=None, search=None):
+    def __find_services(self, path, id=None, ssd_id=None, name=None, keyword=None, search=None):
         """
         Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
 
         Args:
+            path: The API path against which the search should be performed.
             id: The service id to search for.
             ssd_id: The SSD id to search for.
             name: The name to search for (case-sensitive).
@@ -236,8 +260,28 @@ class Organisation(Model):
              (self.__class__._FIELD_KEYWORDS, self.__class__._FILTER_MODIFIER_CONTAINS, keyword)])
 
         # Build the partial find generator and execute it.
-        find = partial(Service._models_from_api_path, self._session, self._get_path(self.__class__._PATH_SERVICES), filter=filter, search=search)
+        find = partial(Service._models_from_api_path, self._session, self._get_path(path), filter=filter, search=search)
         return self.__class__._first_and_generator(find)
+
+    def find_services(self, id=None, ssd_id=None, name=None, keyword=None, search=None):
+        """
+        Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
+
+        Args:
+            id: The service id to search for.
+            ssd_id: The SSD id to search for.
+            name: The name to search for (case-sensitive).
+            keyword: The keyword to search for (case-sensitive).
+            search: The term to search for (case-insensitive).
+
+        Returns:
+            The first found service object, or None if not found, and an iterator through the found service objects.
+
+        Raises:
+            RequestError: if any get fails.
+            ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
+        """
+        return self.__find_services(self.__class__._PATH_SERVICES, id, ssd_id, name, keyword, search)
 
     def new_process(self, name, service):
         """
@@ -256,7 +300,8 @@ class Organisation(Model):
         """
         # Get a new template for the process model using the service.
         process = Process(self._session)
-        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id}, organisation_id=self.id, name=name)
+        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id},
+                     extras=[(self.__class__._FIELD_DISPATCHERS, self.__class__._FIELD_AVAILABLE_DISPATCHERS)], organisation_id=self.id, name=name)
 
         return process
 

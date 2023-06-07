@@ -416,6 +416,56 @@ class TestOrganisation(CustomTestCase):
             for data in generator:
                 self.assertEqual(first.attributes, data.attributes)
 
+    def test_find_dispatchers(self):
+        """
+        Tests the finding of dispatcher services.
+        """
+        with open(self.fixture_path('organisation1.json'), 'r') as file:
+            organisation_content = json.loads(file.read())
+
+        with open(self.fixture_path('service.json'), 'r') as file:
+            service_content = json.loads(file.read())
+
+        session = Session()
+        organisation_id = organisation_content.get(Model._FIELD_ID)
+        service_id = service_content.get(Model._FIELD_ID)
+        ssd_id = service_content.get(Model._FIELD_SSD_ID)
+        name = service_content.get(Model._FIELD_NAME)
+        keyword = service_content.get(Model._FIELD_KEYWORDS)[0]
+        search = service_content.get(Model._FIELD_NAME)
+        path = Organisation._PATH_DISPATCHERS.format(organisation_id=organisation_id)
+
+        organisation = Organisation(session)
+        self.assertIsNotNone(organisation)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{Organisation._PATH_GET.format(organisation_id=organisation_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: organisation_content}))
+            organisation.get(id=organisation_id)
+            self.assertIsNotNone(organisation)
+            self.assertEqual(str(organisation_id), str(organisation.id))
+
+            with pytest.raises(RequestError):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", exc=requests.exceptions.ConnectTimeout)
+                organisation.find_dispatchers()
+
+            with pytest.raises(RequestError):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", status_code=400)
+                organisation.find_dispatchers()
+
+            with pytest.raises(StopIteration):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
+                first, generator = organisation.find_dispatchers()
+                self.assertIsNone(first)
+                next(generator)
+
+            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [service_content]}))
+            first, generator = organisation.find_dispatchers(id=service_id, ssd_id=ssd_id, name=name, keyword=keyword, search=search)
+            self.assertIsNotNone(first)
+
+            for service in generator:
+                self.assertEqual(first.attributes, service.attributes)
+
     def test_find_processes(self):
         """
         Tests the finding of processes.
@@ -627,6 +677,9 @@ class TestOrganisation(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             process_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         wrong_content = {}
 
         for key in process_content:
@@ -671,10 +724,12 @@ class TestOrganisation(CustomTestCase):
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
                 organisation.new_process('Test', service)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: wrong_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: wrong_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             organisation.new_process('Test', service)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process = organisation.new_process('Test', service)
 
             schema = ProcessSchema()
@@ -683,6 +738,9 @@ class TestOrganisation(CustomTestCase):
                 if (Model._METADATA_HIDE not in schema.fields[key].metadata) and (process_content[key] is not None):
                     self.assertEqual(json.dumps(value_to_read_only(process_content[key]), default=json_default),
                                      json.dumps(getattr(process, key), default=json_default))
+
+            for dispatcher in process.available_dispatchers:
+                self.assertIsNotNone(dispatcher)
 
     def test_own_services(self):
         """

@@ -17,9 +17,11 @@ en:
       description: "The constrained values for the option."
 
   no_change_executing: "Process cannot be modified as it is currently executing"
+  dispatcher_not_specified: "Dispatcher number or name must be provided to add a dispatcher"
   input_not_specified: "Input number or object must be provided to set input"
   data_not_specified: "Data object must be provided to set input"
   option_not_specified: "Option name or object must be provided to set option"
+  cannot_find_dispatcher: "No such dispatcher"
   cannot_find_input: "No such input"
   cannot_find_option: "No such option"
   option_wrong_type: "Option value should be of type %{type}"

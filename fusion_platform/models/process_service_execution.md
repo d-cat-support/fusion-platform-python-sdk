@@ -6,6 +6,7 @@
 * **process_id**: The process executed.
 * **service_id**: The explicit service version of the SSD which has been executed.
 * **image_id**: The image which was executed.
+* **chain_index**: The index in the processing chain for this executed service in the process.
 * **name**: The name of the service which has been executed.
 * **started_at**: When did the execution start?
 * **ended_at**: When did the execution end?

@@ -40,9 +40,14 @@ class Model(Base):
     _PATH_PATCH = None
 
     # Useful fields and templates.
+    _FIELD_AVAILABLE_DISPATCHERS = 'available_dispatchers'
     _FIELD_CONSTRAINED_NAMES = 'constrained_names'
     _FIELD_CONSTRAINED_VALUES = 'constrained_values'
     _FIELD_DATA_TYPE = 'data_type'
+    _FIELD_DISPATCH_INTERMEDIATE = 'dispatch_intermediate'
+    _FIELD_DISPATCHERS = 'dispatchers'
+    _FIELD_DOCUMENTATION_SUMMARY = 'documentation_summary'
+    _FIELD_DOCUMENTATION_DESCRIPTION = 'documentation_description'
     _FIELD_ERROR = 'error'
     _FIELD_EXECUTIONS = 'executions'
     _FIELD_FILE_TYPE = 'file_type'
@@ -519,15 +524,17 @@ class Model(Base):
 
                 yield model
 
-    def _new(self, query_parameters=None, **kwargs):
+    def _new(self, query_parameters=None, extras=None, **kwargs):
         """
-        Gets a new template model object by loading it from the Fusion Platform<sup>&reg;</sup>. The explicit base model id value should be provided via a keyword argument. This
-        assumes the model is obtained using a GET RESTful request from the corresponding path, and that the model data is held with the expected dictionary key
-        within the response. The template model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before loading
-        it into the model as a set of read-only attributes.
+        Gets a new template model object by loading it from the Fusion Platform<sup>&reg;</sup>. The explicit base model id value should be provided via a keyword
+        argument. This assumes the model is obtained using a GET RESTful request from the corresponding path, and that the model data is held with the expected
+        dictionary key within the response. The template model is then loaded using the supplied schema to obtain the corresponding Python representation of it,
+        before loading it into the model as a set of read-only attributes. If any extras are provided as a list of tuples (key, attribute), where key refers to the
+        field in the extras, and attribute is the corresponding model attribute to be set from the field, then each is added to the model.
 
         Args:
             query_parameters: The optional query parameters as a dictionary.
+            extras: The optional list of extras tuples (key, attribute) which should be added to the model.
             kwargs: Should include the base model id, if needed.
 
         Raises:
@@ -539,11 +546,20 @@ class Model(Base):
 
         # Assume that the resulting model is held within the expected key within the resulting dictionary.
         if Model._RESPONSE_KEY_MODEL not in response:
-            raise ModelError(i18n.t('models.model.failed_model_new'))
+            raise ModelError(i18n.t('models.model.failed_model_new_model'))
+
+        # If any extras are required, extract them.
+        if (Model._RESPONSE_KEY_EXTRAS not in response) and (extras is not None):
+            raise ModelError(i18n.t('models.model.failed_model_new_extras'))
+
+        modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
+        model_extras = response.get(Model._RESPONSE_KEY_EXTRAS, {})
+
+        for key, attribute in (extras if extras is not None else []):
+            if (key is not None) and (attribute is not None):
+                modified_response[attribute] = model_extras.get(key)
 
         # Add in the keyword arguments to the response so that they are set in the model as well.
-        modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
-
         for key, value in kwargs.items():
             modified_response[key] = value
 

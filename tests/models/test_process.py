@@ -35,6 +35,89 @@ class TestProcess(CustomTestCase):
         process = Process(Session())
         self.assertIsNotNone(process)
 
+    def test_add_remove_dispatcher(self):
+        """
+        Tests that a dispatcher can be added and removed from a template process.
+        """
+        with open(self.fixture_path('process.json'), 'r') as file:
+            process_content = json.loads(file.read())
+
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
+        session = Session()
+        organisation_id = process_content.get('organisation_id')
+        get_path = Process._PATH_NEW.format(organisation_id=organisation_id)
+
+        process = Process(session)
+        self.assertIsNotNone(process)
+
+        with requests_mock.Mocker() as mock:
+            with pytest.raises(ModelError):
+                process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
+                mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+                process._new(extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)], organisation_id=organisation_id)
+                process.add_dispatcher(number=1)
+
+            process_content['process_status'] = 'draft'
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
+            process._new(extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)], organisation_id=organisation_id)
+
+            with pytest.raises(ModelError):
+                process.add_dispatcher(number=2)
+
+            with pytest.raises(ModelError):
+                process.add_dispatcher(name='Rubbish')
+
+            self.assertEqual(0, len([item for item in process.dispatchers]))
+            process.add_dispatcher(number=1)
+            self.assertEqual(1, len([item for item in process.dispatchers]))
+
+            self.assertFalse(next(process.dispatchers).dispatch_intermediate)
+            process.update(dispatcher_number=1, dispatch_intermediate=True)
+            self.assertTrue(next(process.dispatchers).dispatch_intermediate)
+
+            process.add_dispatcher(name='AWS S3')
+            self.assertEqual(2, len([item for item in process.dispatchers]))
+
+            dispatchers = process.dispatchers
+            self.assertTrue(next(dispatchers).dispatch_intermediate)
+            self.assertFalse(next(dispatchers).dispatch_intermediate)
+
+            self.assertIsNone(list(list(process.dispatchers)[1].options)[0].value)
+            process.update(dispatcher_number=2, option_name='bucket', value='test-bucket')
+            self.assertEqual('test-bucket', list(list(process.dispatchers)[1].options)[0].value)
+
+            process.update(dispatcher_number=2, option_name='bucket', value='coerced', coerce_value=True)
+            self.assertEqual('coerced', list(list(process.dispatchers)[1].options)[0].value)
+
+            process.update(dispatcher_number=2, option_name='bucket', value='test', dispatch_intermediate=True)
+            self.assertEqual('test', list(list(process.dispatchers)[1].options)[0].value)
+            self.assertTrue(list(process.dispatchers)[1].dispatch_intermediate)
+
+            process.update(dispatcher_number=2, dispatch_intermediate=False)
+            self.assertFalse(list(process.dispatchers)[1].dispatch_intermediate)
+
+            with pytest.raises(ModelError):
+                process.remove_dispatcher(number=3)
+
+            self.assertEqual(2, len([item for item in process.dispatchers]))
+            process.remove_dispatcher(number=1)
+            self.assertEqual(1, len([item for item in process.dispatchers]))
+
+            self.assertFalse(next(process.dispatchers).dispatch_intermediate)
+
+            process._set_field(['process_status'], Process._PROCESS_STATUS_EXECUTE)
+
+            with pytest.raises(ModelError):
+                process.remove_dispatcher(number=2)
+
+            process._set_field(['process_status'], 'draft')
+
+            process.remove_dispatcher(number=1)
+            self.assertEqual(0, len([item for item in process.dispatchers]))
+
     def test_copy(self):
         """
         Tests that a template copy object can be created from an API endpoint with validation using a Marshmallow schema.

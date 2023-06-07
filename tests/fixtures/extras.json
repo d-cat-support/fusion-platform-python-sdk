@@ -1,0 +1,71 @@
+[
+  {
+    "ssd_id": "3433223a-3656-4aa6-83de-77608eaf2506",
+    "name": "AWS S3",
+    "options": [
+      {
+        "ssd_id": "3433223a-3656-4aa6-83de-77608eaf2506",
+        "name": "bucket",
+        "value": null,
+        "required": true,
+        "data_type": "string",
+        "validation": null,
+        "mutually_exclusive": null,
+        "advanced": false,
+        "title": "Bucket",
+        "description": "The target bucket name."
+      },
+      {
+        "ssd_id": "3433223a-3656-4aa6-83de-77608eaf2506",
+        "name": "s3_key_format",
+        "value": null,
+        "required": false,
+        "data_type": "string",
+        "validation": null,
+        "mutually_exclusive": null,
+        "advanced": true,
+        "title": "S3 Key Format",
+        "description": "The format of keys in the S3 bucket for a corresponding dispatched file. May contain any of the following: 'service_id', 'service_ssd_id', 'service_name', 'process_id', 'process_name', 'process_execution_id', 'process_execution_started_at', 'process_execution_group_id', 'process_execution_group_count', 'process_execution_group_index', 'dispatching_service_name', 'output', 'output_name' or 'file_name'."
+      },
+      {
+        "ssd_id": "3433223a-3656-4aa6-83de-77608eaf2506",
+        "name": "access_key_id",
+        "value": null,
+        "required": false,
+        "data_type": "string",
+        "validation": null,
+        "mutually_exclusive": null,
+        "advanced": false,
+        "title": "Access Key Id",
+        "description": "The access key id part of the credentials, if credentials are provided."
+      },
+      {
+        "ssd_id": "3433223a-3656-4aa6-83de-77608eaf2506",
+        "name": "secret_access_key",
+        "value": null,
+        "required": false,
+        "data_type": "string",
+        "validation": null,
+        "mutually_exclusive": null,
+        "advanced": false,
+        "title": "Secret Access Key",
+        "description": "The secret access key part of the credentials, if credentials are provided."
+      },
+      {
+        "ssd_id": "3433223a-3656-4aa6-83de-77608eaf2506",
+        "name": "session_token",
+        "value": null,
+        "required": false,
+        "data_type": "string",
+        "validation": null,
+        "mutually_exclusive": null,
+        "advanced": false,
+        "title": "Session Token",
+        "description": "The session token part of the credentials, if credentials are provided and they use a session."
+      }
+    ],
+    "dispatch_intermediate": false,
+    "documentation_summary": "This service dispatches to AWS S3.",
+    "documentation_description": "You must provide the target bucket, and then optionally provide a custom S3 key format and AWS credentials."
+  }
+]

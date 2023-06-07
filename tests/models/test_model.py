@@ -19,7 +19,7 @@ from tests.custom_test_case import CustomTestCase
 
 from fusion_platform.common.utilities import json_default, value_to_read_only, value_to_string
 from fusion_platform.session import Session, RequestError
-from fusion_platform.models.data import DataSchema
+from fusion_platform.models.process import ProcessSchema
 from fusion_platform.models.model import Model, ModelError
 from fusion_platform.models.user import User, UserSchema
 
@@ -362,8 +362,11 @@ class TestModel(CustomTestCase):
         """
         Tests that a template new object can be created from an API endpoint with validation using a Marshmallow schema.
         """
-        with open(self.fixture_path('data.json'), 'r') as file:
+        with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
+
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
 
         wrong_content = {}
 
@@ -377,35 +380,54 @@ class TestModel(CustomTestCase):
         model = Model(session)
         self.assertIsNotNone(model)
 
+        schema = ProcessSchema()
+        del schema.fields[Model._FIELD_AVAILABLE_DISPATCHERS].metadata[Model._METADATA_HIDE]  # Remove 'hide' so that the extras are loaded as an attribute.
+
         with requests_mock.Mocker() as mock:
             with patch.object(Model, Model._get_path.__name__, return_value=path):
-                with patch.object(Model, '_Model__get_schema', return_value=DataSchema()):
+                with patch.object(Model, '_Model__get_schema', return_value=schema):
 
                     with pytest.raises(RequestError):
-                        mock.get(f"{Session.API_URL_DEFAULT}{path}", exc=requests.exceptions.ConnectTimeout)
-                        model._new(organisation_id=organisation_id)
+                        mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", exc=requests.exceptions.ConnectTimeout)
+                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
+                                   organisation_id=organisation_id)
 
                     with pytest.raises(RequestError):
-                        mock.get(f"{Session.API_URL_DEFAULT}{path}", status_code=400)
-                        model._new(organisation_id=organisation_id)
+                        mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", status_code=400)
+                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
+                                   organisation_id=organisation_id)
 
                     with pytest.raises(ModelError):
-                        mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
-                        model._new(organisation_id=organisation_id)
+                        mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text='{}')
+                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
+                                   organisation_id=organisation_id)
 
-                    mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: wrong_content}))
-                    model._new(organisation_id=organisation_id)
+                    mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text=json.dumps({Model._RESPONSE_KEY_MODEL: wrong_content}))
+                    model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
-                    mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-                    model._new(organisation_id=organisation_id)
+                    with pytest.raises(ModelError):
+                        mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
+                                   organisation_id=organisation_id)
 
-                    schema = DataSchema()
+                    mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                    model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
+
+                    mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value",
+                             text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
+                    model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
+                               organisation_id=organisation_id)
 
                     for key in content:
-                        if Model._METADATA_HIDE not in schema.fields[key].metadata:
+                        if (Model._METADATA_HIDE not in schema.fields[key].metadata) and (content[key] is not None):
                             self.assertEqual(json.dumps(content[key], default=json_default), json.dumps(getattr(model, key), default=json_default))
                         else:
                             self.assertFalse(hasattr(model, key))
+
+                    self.assertEqual(json.loads(json.dumps(extras, default=json_default)),
+                                     json.loads(json.dumps(model.available_dispatchers, default=json_default)))
+
+        schema.fields[Model._FIELD_AVAILABLE_DISPATCHERS].metadata[Model._METADATA_HIDE] = True  # Put back 'hide' so that the remaining tests work.
 
     def test_set_field(self):
         """

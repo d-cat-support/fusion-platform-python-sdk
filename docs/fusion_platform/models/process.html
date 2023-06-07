@@ -52,7 +52,7 @@ from fusion_platform.models.process_execution import ProcessExecution
 from fusion_platform.session import Session
 
 
-# Define a schema class used to coerce option values. See #__coerce_value.
+# Define a schema class used to coerce option values. See Option#__coerce_value.
 
 class OptionDataTypeSchema(Schema):
     &#34;&#34;&#34;
@@ -71,6 +71,188 @@ class OptionDataTypeSchema(Schema):
 # Define a model class for an option which overrides the representation to display more relevant information.
 
 class Option(Model):
+    &#34;&#34;&#34;
+    Model option class.
+    &#34;&#34;&#34;
+
+    # Validation parsing for constrained values.
+    _VALIDATION_DELIMITER = &#39;;&#39;
+    _VALIDATION_EQUALS = &#39;=&#39;
+    _VALIDATION_FORMAT = &#39;format&#39;
+    _VALIDATION_ITEM_DELIMITER = &#39;,&#39;
+    _VALIDATION_NAMES = &#39;names&#39;
+    _VALIDATION_VALUES = &#39;values&#39;
+
+    @classmethod
+    def __coerce_value(cls, value, data_type):
+        &#34;&#34;&#34;
+        Attempts to coerce a value into its corresponding data type.
+
+        Args:
+            value: The value to coerce.
+            data_type: The required data type.
+
+        Returns:
+            The coerced value of the correct data type.
+        &#34;&#34;&#34;
+        # Deal with None values.
+        if (value is None) or (value == str(None)) or (value == &#39;null&#39;):
+            return None
+        else:
+            # Use the option schema to attempt to load the value using its data type as a name.
+            model = OptionDataTypeSchema().load({data_type: value})
+            return model.get(data_type)
+
+    @classmethod
+    def __extract_constrained_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the constrained values from a constrained option validation.
+
+        Args:
+            validation: The constrained option validation.
+
+        Returns:
+            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Option._VALIDATION_DELIMITER)
+        constrained_names = None
+        constrained_values = None
+
+        if len(elements) &lt;= 2:
+            for element in elements:
+                values = element.split(Option._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Option._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Option._VALIDATION_VALUES:
+                            constrained_values = rhs.split(Option._VALIDATION_ITEM_DELIMITER)
+
+                        if lhs == Option._VALIDATION_NAMES:
+                            constrained_names = rhs.split(Option._VALIDATION_ITEM_DELIMITER)
+                    except:
+                        pass  # Cannot be parsed.
+
+        return constrained_names, constrained_values
+
+    @classmethod
+    def __extract_datetime_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the datetime format from a datatime option validation.
+
+        Args:
+            validation: The datatime option validation.
+
+        Returns:
+            The datetime format, or None if it cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Option._VALIDATION_DELIMITER)
+        format = None
+
+        if len(elements) &lt;= 3:
+            for element in elements:
+                values = element.split(Option._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Option._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Option._VALIDATION_FORMAT:
+                            format = rhs
+                    except:
+                        pass  # Cannot be parsed.
+
+        return format
+
+    @classmethod
+    def get_option_value(cls, option, value, coerce_value):
+        &#34;&#34;&#34;
+        Checks the supplied value for an option, coercing it if needed, and returns the value that can to into the model.
+
+        Args:
+            option: The option object for the option to set.
+            value: The value for the option.
+            coerce_value: Coerce the supplied value to be the correct type?
+
+        Raises:
+            ModelError: if the value has a different type to the option.
+
+        Returns:
+            The correct string representation of the option.
+        &#34;&#34;&#34;
+        # Check that the option has the same data type as the value.
+        data_type = option.get(cls._FIELD_DATA_TYPE)
+        existing_value = cls.__coerce_value(option[cls._FIELD_VALUE], data_type)
+
+        # Optionally coerce the supplied value, now that we know its data type.
+        if coerce_value:
+            value = cls.__coerce_value(value, data_type)
+
+        class_matches = isinstance(value, existing_value.__class__)
+
+        # Supplied ints can be used for floats.
+        if isinstance(value, int) and isinstance(existing_value, float):
+            class_matches = True
+
+        if (value is not None) and (existing_value is not None) and (not class_matches):
+            raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
+
+        validation = option.get(cls._FIELD_VALIDATION)
+
+        return cls.__value_to_option(value, data_type, validation)
+
+    @classmethod
+    def options_iterator(cls, options):
+        &#34;&#34;&#34;
+        Provides an iterator through a list of options.
+
+        Returns:
+            An iterator through the options.
+        &#34;&#34;&#34;
+        for option in options:
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+            option = value_from_read_only(option)
+
+            # If the option is a constrained data type, then add in the constrained names and values from the validation.
+            if option.get(cls._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
+                option[cls._FIELD_CONSTRAINED_NAMES], option[cls._FIELD_CONSTRAINED_VALUES] = cls.__extract_constrained_validation(
+                    option.get(cls._FIELD_VALIDATION, &#39;&#39;))
+
+            # Coerce the value to be of the correct data type.
+            option[cls._FIELD_VALUE] = cls.__coerce_value(option.get(cls._FIELD_VALUE), option.get(cls._FIELD_DATA_TYPE))
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Option(None, schema=ProcessOptionSchema())
+            model._set_model(option)
+
+            yield model
+
+    @classmethod
+    def __value_to_option(cls, value, data_type, validation):
+        &#34;&#34;&#34;
+        Converts a Python option value into a string depending upon its data type and validation parameters.
+
+        Args:
+            value: The value to convert.
+            data_type: The option data type.
+            validation: The optional validation for the option.
+
+        Returns:
+            The correct string representation of the option.
+        &#34;&#34;&#34;
+        if value is None:
+            return None
+        elif isinstance(value, bool):
+            return str(value).lower()
+        if data_type == fusion_platform.DATA_TYPE_DATETIME:
+            return datetime.strftime(value, cls.__extract_datetime_validation(validation))
+        else:
+            return str(value)
 
     def __repr__(self):
         &#34;&#34;&#34;
@@ -83,6 +265,9 @@ class Option(Model):
 # Define a model class for an input which overrides the representation to display more relevant information.
 
 class Input(Model):
+    &#34;&#34;&#34;
+    Model input class.
+    &#34;&#34;&#34;
 
     def __repr__(self):
         &#34;&#34;&#34;
@@ -90,6 +275,31 @@ class Input(Model):
             A string representation of the object.
         &#34;&#34;&#34;
         return f&#34;{self.title} ({self.file_type}) = {self.name + &#39; (&#39; + str(self.id) + &#39;)&#39; if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}&#34;
+
+
+# Define a model class for a dispatcher which overrides the representation to display more relevant information.
+
+class Dispatcher(Model):
+    &#34;&#34;&#34;
+    Model dispatcher class.
+    &#34;&#34;&#34;
+
+    @property
+    def options(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the dispatcher&#39;s options.
+
+        Returns:
+            An iterator through the options.
+        &#34;&#34;&#34;
+        return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            A string representation of the object.
+        &#34;&#34;&#34;
+        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate}): {self.documentation_summary}&#34;
 
 
 # Define the model schema classes. These are maintained from the API definitions.
@@ -228,6 +438,25 @@ class ProcessOptionSchema(Schema):
         ordered = True
 
 
+class ProcessDispatcherSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for dispatchers.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    name = fields.String(required=True)
+    dispatch_intermediate = fields.Boolean(allow_none=True)
+    documentation_summary = fields.String(allow_none=True)
+    documentation_description = fields.String(allow_none=True)
+    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True
+
+
 class ProcessSchema(Schema):
     &#34;&#34;&#34;
     Schema class for process model.
@@ -266,6 +495,8 @@ class ProcessSchema(Schema):
     output_storage_period = fields.Integer(allow_none=True)
     test_run = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
+    dispatchers = fields.List(fields.Nested(ProcessDispatcherSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+
     # Removed prices.
     price = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
@@ -276,6 +507,8 @@ class ProcessSchema(Schema):
 
     # Removed creator.
     # Removed search.
+
+    available_dispatchers = fields.List(fields.Nested(ProcessDispatcherSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Added pseudo-field.
 
     class Meta:
         &#34;&#34;&#34;
@@ -320,14 +553,6 @@ class Process(Model):
     # The maximum number of seconds to wait after an execution was meant to start.
     _EXECUTE_WAIT_TOLERANCE = 900
 
-    # Validation parsing for constrained values.
-    _VALIDATION_DELIMITER = &#39;;&#39;
-    _VALIDATION_EQUALS = &#39;=&#39;
-    _VALIDATION_FORMAT = &#39;format&#39;
-    _VALIDATION_ITEM_DELIMITER = &#39;,&#39;
-    _VALIDATION_NAMES = &#39;names&#39;
-    _VALIDATION_VALUES = &#39;values&#39;
-
     # Allowed file type substitutions.
     # @formatter:off
     _FILE_TYPE_SUBSTITUTIONS = {
@@ -346,25 +571,64 @@ class Process(Model):
     }
     # @formatter:on
 
-    @classmethod
-    def __coerce_value(cls, value, data_type):
+    def add_dispatcher(self, number=None, name=None):
         &#34;&#34;&#34;
-        Attempts to coerce a value into its corresponding data type.
+        Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
+        execute status or the dispatcher does not exist.
 
         Args:
-            value: The value to coerce.
-            data_type: The required data type.
+            number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
+            input: The dispatcher name to add. Either the number or the name must be provided.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the dispatcher does not exist.
+            ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Make sure the arguments are provided.
+        if (number is None) and (name is None):
+            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding dispatcher.
+        dispatchers = self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(
+            self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else []
+        found_dispatcher = None
+
+        for i, item in enumerate(dispatchers):
+            found = (number is not None) and (number == (i + 1))
+            found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME)) if not found else found
+
+            if found:
+                found_dispatcher = item
+                break
+
+        if found_dispatcher is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+        # Add the dispatcher to the end of the existing list.
+        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+        dispatchers.append(found_dispatcher)
+
+        # Update the dispatchers in the model.
+        self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+        # Now update the model, persisting as needed.
+        super(Process, self).update()
+
+    @property
+    def available_dispatchers(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; available dispatchers.
 
         Returns:
-            The coerced value of the correct data type.
+            An iterator through the available dispatchers.
         &#34;&#34;&#34;
-        # Deal with None values.
-        if (value is None) or (value == str(None)) or (value == &#39;null&#39;):
-            return None
-        else:
-            # Use the option schema to attempt to load the value using its data type as a name.
-            model = OptionDataTypeSchema().load({data_type: value})
-            return model.get(data_type)
+        return self.__dispatchers(
+            self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else [])
 
     def copy(self, name):
         &#34;&#34;&#34;
@@ -433,6 +697,33 @@ class Process(Model):
         # Attempt to issue the create.
         self._create()
 
+    def __dispatchers(self, dispatchers):
+        &#34;&#34;&#34;
+        Provides an iterator through dispatchers.
+
+        Returns:
+            An iterator through the dispatchers.
+        &#34;&#34;&#34;
+        for dispatcher in dispatchers:
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in an object.
+            dispatcher = value_from_read_only(dispatcher)
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Dispatcher(None, schema=ProcessDispatcherSchema())
+            model._set_model(dispatcher)
+
+            yield model
+
+    @property
+    def dispatchers(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; dispatchers.
+
+        Returns:
+            An iterator through the dispatchers.
+        &#34;&#34;&#34;
+        return self.__dispatchers(self._model.get(self.__class__._FIELD_DISPATCHERS) if self._model.get(self.__class__._FIELD_DISPATCHERS) is not None else [])
+
     def execute(self, wait=False):
         &#34;&#34;&#34;
         Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
@@ -479,72 +770,6 @@ class Process(Model):
             ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
         return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
-
-    @classmethod
-    def __extract_constrained_validation(cls, validation):
-        &#34;&#34;&#34;
-        Extracts the constrained values from a constrained option validation.
-
-        Args:
-            validation: The constrained option validation.
-
-        Returns:
-            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
-        &#34;&#34;&#34;
-        # Extract the elements.
-        elements = validation.split(Process._VALIDATION_DELIMITER)
-        constrained_names = None
-        constrained_values = None
-
-        if len(elements) &lt;= 2:
-            for element in elements:
-                values = element.split(Process._VALIDATION_EQUALS)
-
-                if len(values) &gt; 0:
-                    lhs = values[0].lower()
-                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
-
-                    try:
-                        if lhs == Process._VALIDATION_VALUES:
-                            constrained_values = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
-
-                        if lhs == Process._VALIDATION_NAMES:
-                            constrained_names = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
-                    except:
-                        pass  # Cannot be parsed.
-
-        return constrained_names, constrained_values
-
-    @classmethod
-    def __extract_datetime_validation(cls, validation):
-        &#34;&#34;&#34;
-        Extracts the datetime format from a datatime option validation.
-
-        Args:
-            validation: The datatime option validation.
-
-        Returns:
-            The datetime format, or None if it cannot be extracted.
-        &#34;&#34;&#34;
-        # Extract the elements.
-        elements = validation.split(Process._VALIDATION_DELIMITER)
-        format = None
-
-        if len(elements) &lt;= 3:
-            for element in elements:
-                values = element.split(Process._VALIDATION_EQUALS)
-
-                if len(values) &gt; 0:
-                    lhs = values[0].lower()
-                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
-
-                    try:
-                        if lhs == Process._VALIDATION_FORMAT:
-                            format = rhs
-                    except:
-                        pass  # Cannot be parsed.
-
-        return format
 
     def find_executions(self, id=None, group_id=None):
         &#34;&#34;&#34;
@@ -599,24 +824,129 @@ class Process(Model):
         Returns:
             An iterator through the options.
         &#34;&#34;&#34;
-        for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
-            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            option = value_from_read_only(option)
+        return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))
 
-            # If the option is a constrained data type, then add in the constrained names and values from the validation.
-            if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
-                option[self.__class__._FIELD_CONSTRAINED_NAMES], option[self.__class__._FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
-                    option.get(self.__class__._FIELD_VALIDATION, &#39;&#39;))
+    def remove_dispatcher(self, number):
+        &#34;&#34;&#34;
+        Removes the dispatcher service with the corresponding number from the process.
 
-            # Coerce the value to be of the correct data type.
-            option[self.__class__._FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__._FIELD_VALUE),
-                                                                                option.get(self.__class__._FIELD_DATA_TYPE))
+        Args:
+            number: The number to remove, starting from 1 for the first dispatcher.
 
-            # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Option(None, schema=ProcessOptionSchema())
-            model._set_model(option)
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the dispatcher does not exist.
+            ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Make sure the argument is provided.
+        if number is None:
+            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
 
-            yield model
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding dispatcher.
+        found_dispatcher_index = None
+        found_dispatcher = None
+
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
+            found = (number is not None) and (number == (i + 1))
+
+            if found:
+                found_dispatcher_index = i
+                found_dispatcher = item
+                break
+
+        if found_dispatcher is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+        # Remove the dispatcher from the existing list.
+        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+        dispatchers.pop(found_dispatcher_index)
+
+        # Update the dispatchers in the model.
+        self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+        # Now update the model, persisting as needed.
+        super(Process, self).update()
+
+    def __set_dispatcher(self, number, option_name=None, value=None, coerce_value=False, **kwargs):
+        &#34;&#34;&#34;
+        Sets the specified option for the and kwargs for the dispatcher. An exception is raised if the process is in the execute status, the dispatcher does not
+        exist or the option value has the wrong type.
+
+        Args:
+            number: The dispatcher number to update, starting from 1 for the first dispatcher.
+            option_name: The option name for the dispatcher to set.
+            value: The value for the option.
+            coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
+
+        Raises:
+            RequestError: if the update fails.
+            ModelError: if the process is in the execute state.
+            ModelError: if the value has a different type to the option.
+        &#34;&#34;&#34;
+        # Make sure the argument is provided.
+        if number is None:
+            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding dispatcher.
+        found_dispatcher_index = None
+        found_dispatcher = None
+
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
+            found = (number is not None) and (number == (i + 1))
+
+            if found:
+                found_dispatcher_index = i
+                found_dispatcher = item
+                break
+
+        if found_dispatcher is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+        # Get the dispatcher so that it can be modified.
+        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can access it.
+        dispatcher = dict(dispatchers[found_dispatcher_index])  # Convert read-only tuple to dict, so we can modify it.
+
+        # Optionally, find the corresponding option.
+        if (option_name is not None) or (value is not None):
+            options = list(dispatcher.get(self.__class__._FIELD_OPTIONS, []))  # Convert read-only tuple to list, so we can modify it.
+            options = [dict(option) for option in options]  # Convert read-only mapping to dict, so we can modify it.
+            found_option_index = None
+            found_option = None
+
+            for i, item in enumerate(options):
+                found = (option_name is not None) and (option_name == item.get(self.__class__._FIELD_NAME))
+
+                if found:
+                    found_option_index = i
+                    found_option = item
+                    break
+
+            if found_option is None:
+                raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
+
+            # We can now update the option. All options are expressed as strings with the correct format.
+            option_value = Option.get_option_value(found_option, value, coerce_value)
+            found_option[self.__class__._FIELD_VALUE] = option_value
+            dispatcher[self.__class__._FIELD_OPTIONS] = options
+            dispatcher[self.__class__._FIELD_OPTIONS][found_option_index] = found_option
+
+        # Modify any of the dispatcher attributes. We do not allow updates to read-only or hidden fields.
+        schema = ProcessDispatcherSchema()
+
+        for key in kwargs:
+            if (Model._METADATA_READ_ONLY not in schema.fields[key].metadata) and (Model._METADATA_HIDE not in schema.fields[key].metadata):
+                dispatcher[key] = kwargs[key]
+
+        # Update the dispatchers in the model.
+        self._set_field([self.__class__._FIELD_DISPATCHERS, found_dispatcher_index], dispatcher)
 
     def __set_input(self, number=None, input=None, data=None):
         &#34;&#34;&#34;
@@ -646,15 +976,16 @@ class Process(Model):
             raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
 
         # Find the corresponding input.
-        index = None
+        found_input_index = None
         found_input = None
 
-        for index, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
-            found = (number is not None) and (number == (index + 1))
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
+            found = (number is not None) and (number == (i + 1))
             found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
                     input.input == item.get(self.__class__._FIELD_INPUT)) if not found else found
 
             if found:
+                found_input_index = i
                 found_input = item
                 break
 
@@ -679,7 +1010,7 @@ class Process(Model):
             raise ModelError(i18n.t(&#39;models.process.wrong_file_type&#39;, expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
 
         # We can now update the input.
-        self._set_field([self.__class__._FIELD_INPUTS, index, self.__class__._FIELD_ID], data.id)
+        self._set_field([self.__class__._FIELD_INPUTS, found_input_index, self.__class__._FIELD_ID], data.id)
 
     def __set_option(self, name=None, option=None, value=None, coerce_value=False):
         &#34;&#34;&#34;
@@ -705,40 +1036,25 @@ class Process(Model):
             raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
 
         # Find the corresponding option.
-        index = None
+        found_option_index = None
         found_option = None
 
-        for index, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
             found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME))
             found = (option is not None) and (str(option.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
                     option.name == item.get(self.__class__._FIELD_NAME)) if not found else found
 
             if found:
+                found_option_index = i
                 found_option = item
                 break
 
         if found_option is None:
             raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
 
-        # Check that the option has the same data type as the value. We cannot check this if either value is None. Note that supplied ints can be used for floats.
-        data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
-        existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
-
-        # Optionally coerce the supplied value, now that we know its data type.
-        if coerce_value:
-            value = self.__class__.__coerce_value(value, data_type)
-
-        class_matches = isinstance(value, existing_value.__class__)
-
-        if isinstance(value, int) and isinstance(existing_value, float):
-            class_matches = True
-
-        if (value is not None) and (existing_value is not None) and (not class_matches):
-            raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
-
         # We can now update the option. All options are expressed as strings with the correct format.
-        validation = found_option.get(self.__class__._FIELD_VALIDATION)
-        self._set_field([self.__class__._FIELD_OPTIONS, index, self.__class__._FIELD_VALUE], self.__class__.__value_to_option(value, data_type, validation))
+        option_value = Option.get_option_value(found_option, value, coerce_value)
+        self._set_field([self.__class__._FIELD_OPTIONS, found_option_index, self.__class__._FIELD_VALUE], option_value)
 
     def stop(self):
         &#34;&#34;&#34;
@@ -750,16 +1066,17 @@ class Process(Model):
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)
 
-    def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
+    def update(self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
         &#34;&#34;&#34;
         Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
         contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
-        of setting inputs and options.
+        of setting inputs, options and dispatchers.
 
         Args:
             input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
             input: The input object for the input to set. Either the number or the input must be provided when setting an input.
             data: The data object to use for an input.
+            dispatcher_number: The dispatcher number to update, starting from 1 for the first dispatcher. If used then options and kwargs are for the dispatcher.
             option_name: The option name to set. Either the name or the option must be provided when setting an option.
             option: The option object for the option to set. Either the name or the option must be provided when setting an option.
             value: The value for the option.
@@ -769,45 +1086,32 @@ class Process(Model):
         Raises:
             RequestError: if the update fails.
             ModelError: if the process is in the execute state.
-            ModelError: if the process has been persisted and changes are requested to an input or option.
             ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
         # Make sure the process is not in the execute state.
         if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
             raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
 
+        update_kwargs = kwargs
+
         # Deal with the special case of inputs.
         if (input_number is not None) or (input is not None):
             self.__set_input(number=input_number, input=input, data=data)
 
-        # Deal with the special case of options.
-        if (option_name is not None) or (option is not None):
-            self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
+        # Deal with the special case of dispatchers.
+        if dispatcher_number is not None:  # Options and kwargs are for the dispatcher.
+            self.__set_dispatcher(number=dispatcher_number, option_name=option_name, value=value, coerce_value=coerce_value, **kwargs)
+
+            # The kwargs have been used on the dispatcher, so are not for the process.
+            update_kwargs = {}
+
+        else:  # Options and kwargs are for the process.
+            # Deal with the special case of options.
+            if (option_name is not None) or (option is not None):
+                self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
 
         # Now update the model, persisting as needed.
-        super(Process, self).update(**kwargs)
-
-    @classmethod
-    def __value_to_option(cls, value, data_type, validation):
-        &#34;&#34;&#34;
-        Converts a Python option value into a string depending upon its data type and validation parameters.
-
-        Args:
-            value: The value to convert.
-            data_type: The option data type.
-            validation: The optional validation for the option.
-
-        Returns:
-            The correct string representation of the option.
-        &#34;&#34;&#34;
-        if value is None:
-            return None
-        elif isinstance(value, bool):
-            return str(value).lower()
-        if data_type == fusion_platform.DATA_TYPE_DATETIME:
-            return datetime.strftime(value, cls.__extract_datetime_validation(validation))
-        else:
-            return str(value)
+        super(Process, self).update(**update_kwargs)
 
     def wait_for_next_execution(self):
         &#34;&#34;&#34;
@@ -868,12 +1172,133 @@ class Process(Model):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="fusion_platform.models.process.Dispatcher"><code class="flex name class">
+<span>class <span class="ident">Dispatcher</span></span>
+<span>(</span><span>session, schema=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Model dispatcher class.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Dispatcher(Model):
+    &#34;&#34;&#34;
+    Model dispatcher class.
+    &#34;&#34;&#34;
+
+    @property
+    def options(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the dispatcher&#39;s options.
+
+        Returns:
+            An iterator through the options.
+        &#34;&#34;&#34;
+        return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))
+
+    def __repr__(self):
+        &#34;&#34;&#34;
+        Returns:
+            A string representation of the object.
+        &#34;&#34;&#34;
+        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate}): {self.documentation_summary}&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
+<li>fusion_platform.base.Base</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.Dispatcher.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
+</p>
+<div class="desc inherited"><h2 id="returns">Returns</h2>
+<p>The model attributes as a dictionary.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Dispatcher.options"><code class="name">var <span class="ident">options</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the dispatcher's options.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the options.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def options(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the dispatcher&#39;s options.
+
+    Returns:
+        An iterator through the options.
+    &#34;&#34;&#34;
+    return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.models.process.Dispatcher.delete"><code class="name flex">
+<span>def <span class="ident">delete</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.delete" href="model.html#fusion_platform.models.model.Model.delete">delete</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Dispatcher.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.get" href="model.html#fusion_platform.models.model.Model.get">get</a></code>
+</p>
+<div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Dispatcher.to_csv"><code class="name flex">
+<span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.to_csv" href="model.html#fusion_platform.models.model.Model.to_csv">to_csv</a></code>
+</p>
+<div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Dispatcher.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.update" href="model.html#fusion_platform.models.model.Model.update">update</a></code>
+</p>
+<div class="desc inherited"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without …</p></div>
+</dd>
+</dl>
+</dd>
 <dt id="fusion_platform.models.process.Input"><code class="flex name class">
 <span>class <span class="ident">Input</span></span>
 <span>(</span><span>session, schema=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Model base class providing attributes and methods to manipulate models.</p>
+<div class="desc"><p>Model input class.</p>
 <p>Initialises the object.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -887,6 +1312,9 @@ class Process(Model):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Input(Model):
+    &#34;&#34;&#34;
+    Model input class.
+    &#34;&#34;&#34;
 
     def __repr__(self):
         &#34;&#34;&#34;
@@ -961,7 +1389,7 @@ class Process(Model):
 <span>(</span><span>session, schema=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Model base class providing attributes and methods to manipulate models.</p>
+<div class="desc"><p>Model option class.</p>
 <p>Initialises the object.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -975,6 +1403,188 @@ class Process(Model):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Option(Model):
+    &#34;&#34;&#34;
+    Model option class.
+    &#34;&#34;&#34;
+
+    # Validation parsing for constrained values.
+    _VALIDATION_DELIMITER = &#39;;&#39;
+    _VALIDATION_EQUALS = &#39;=&#39;
+    _VALIDATION_FORMAT = &#39;format&#39;
+    _VALIDATION_ITEM_DELIMITER = &#39;,&#39;
+    _VALIDATION_NAMES = &#39;names&#39;
+    _VALIDATION_VALUES = &#39;values&#39;
+
+    @classmethod
+    def __coerce_value(cls, value, data_type):
+        &#34;&#34;&#34;
+        Attempts to coerce a value into its corresponding data type.
+
+        Args:
+            value: The value to coerce.
+            data_type: The required data type.
+
+        Returns:
+            The coerced value of the correct data type.
+        &#34;&#34;&#34;
+        # Deal with None values.
+        if (value is None) or (value == str(None)) or (value == &#39;null&#39;):
+            return None
+        else:
+            # Use the option schema to attempt to load the value using its data type as a name.
+            model = OptionDataTypeSchema().load({data_type: value})
+            return model.get(data_type)
+
+    @classmethod
+    def __extract_constrained_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the constrained values from a constrained option validation.
+
+        Args:
+            validation: The constrained option validation.
+
+        Returns:
+            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Option._VALIDATION_DELIMITER)
+        constrained_names = None
+        constrained_values = None
+
+        if len(elements) &lt;= 2:
+            for element in elements:
+                values = element.split(Option._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Option._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Option._VALIDATION_VALUES:
+                            constrained_values = rhs.split(Option._VALIDATION_ITEM_DELIMITER)
+
+                        if lhs == Option._VALIDATION_NAMES:
+                            constrained_names = rhs.split(Option._VALIDATION_ITEM_DELIMITER)
+                    except:
+                        pass  # Cannot be parsed.
+
+        return constrained_names, constrained_values
+
+    @classmethod
+    def __extract_datetime_validation(cls, validation):
+        &#34;&#34;&#34;
+        Extracts the datetime format from a datatime option validation.
+
+        Args:
+            validation: The datatime option validation.
+
+        Returns:
+            The datetime format, or None if it cannot be extracted.
+        &#34;&#34;&#34;
+        # Extract the elements.
+        elements = validation.split(Option._VALIDATION_DELIMITER)
+        format = None
+
+        if len(elements) &lt;= 3:
+            for element in elements:
+                values = element.split(Option._VALIDATION_EQUALS)
+
+                if len(values) &gt; 0:
+                    lhs = values[0].lower()
+                    rhs = Option._VALIDATION_EQUALS.join(values[1:])
+
+                    try:
+                        if lhs == Option._VALIDATION_FORMAT:
+                            format = rhs
+                    except:
+                        pass  # Cannot be parsed.
+
+        return format
+
+    @classmethod
+    def get_option_value(cls, option, value, coerce_value):
+        &#34;&#34;&#34;
+        Checks the supplied value for an option, coercing it if needed, and returns the value that can to into the model.
+
+        Args:
+            option: The option object for the option to set.
+            value: The value for the option.
+            coerce_value: Coerce the supplied value to be the correct type?
+
+        Raises:
+            ModelError: if the value has a different type to the option.
+
+        Returns:
+            The correct string representation of the option.
+        &#34;&#34;&#34;
+        # Check that the option has the same data type as the value.
+        data_type = option.get(cls._FIELD_DATA_TYPE)
+        existing_value = cls.__coerce_value(option[cls._FIELD_VALUE], data_type)
+
+        # Optionally coerce the supplied value, now that we know its data type.
+        if coerce_value:
+            value = cls.__coerce_value(value, data_type)
+
+        class_matches = isinstance(value, existing_value.__class__)
+
+        # Supplied ints can be used for floats.
+        if isinstance(value, int) and isinstance(existing_value, float):
+            class_matches = True
+
+        if (value is not None) and (existing_value is not None) and (not class_matches):
+            raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
+
+        validation = option.get(cls._FIELD_VALIDATION)
+
+        return cls.__value_to_option(value, data_type, validation)
+
+    @classmethod
+    def options_iterator(cls, options):
+        &#34;&#34;&#34;
+        Provides an iterator through a list of options.
+
+        Returns:
+            An iterator through the options.
+        &#34;&#34;&#34;
+        for option in options:
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+            option = value_from_read_only(option)
+
+            # If the option is a constrained data type, then add in the constrained names and values from the validation.
+            if option.get(cls._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
+                option[cls._FIELD_CONSTRAINED_NAMES], option[cls._FIELD_CONSTRAINED_VALUES] = cls.__extract_constrained_validation(
+                    option.get(cls._FIELD_VALIDATION, &#39;&#39;))
+
+            # Coerce the value to be of the correct data type.
+            option[cls._FIELD_VALUE] = cls.__coerce_value(option.get(cls._FIELD_VALUE), option.get(cls._FIELD_DATA_TYPE))
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Option(None, schema=ProcessOptionSchema())
+            model._set_model(option)
+
+            yield model
+
+    @classmethod
+    def __value_to_option(cls, value, data_type, validation):
+        &#34;&#34;&#34;
+        Converts a Python option value into a string depending upon its data type and validation parameters.
+
+        Args:
+            value: The value to convert.
+            data_type: The option data type.
+            validation: The optional validation for the option.
+
+        Returns:
+            The correct string representation of the option.
+        &#34;&#34;&#34;
+        if value is None:
+            return None
+        elif isinstance(value, bool):
+            return str(value).lower()
+        if data_type == fusion_platform.DATA_TYPE_DATETIME:
+            return datetime.strftime(value, cls.__extract_datetime_validation(validation))
+        else:
+            return str(value)
 
     def __repr__(self):
         &#34;&#34;&#34;
@@ -988,6 +1598,110 @@ class Process(Model):
 <li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
 <li>fusion_platform.base.Base</li>
 </ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="fusion_platform.models.process.Option.get_option_value"><code class="name flex">
+<span>def <span class="ident">get_option_value</span></span>(<span>option, value, coerce_value)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks the supplied value for an option, coercing it if needed, and returns the value that can to into the model.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>option</code></strong></dt>
+<dd>The option object for the option to set.</dd>
+<dt><strong><code>value</code></strong></dt>
+<dd>The value for the option.</dd>
+<dt><strong><code>coerce_value</code></strong></dt>
+<dd>Coerce the supplied value to be the correct type?</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ModelError</code></dt>
+<dd>if the value has a different type to the option.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>The correct string representation of the option.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def get_option_value(cls, option, value, coerce_value):
+    &#34;&#34;&#34;
+    Checks the supplied value for an option, coercing it if needed, and returns the value that can to into the model.
+
+    Args:
+        option: The option object for the option to set.
+        value: The value for the option.
+        coerce_value: Coerce the supplied value to be the correct type?
+
+    Raises:
+        ModelError: if the value has a different type to the option.
+
+    Returns:
+        The correct string representation of the option.
+    &#34;&#34;&#34;
+    # Check that the option has the same data type as the value.
+    data_type = option.get(cls._FIELD_DATA_TYPE)
+    existing_value = cls.__coerce_value(option[cls._FIELD_VALUE], data_type)
+
+    # Optionally coerce the supplied value, now that we know its data type.
+    if coerce_value:
+        value = cls.__coerce_value(value, data_type)
+
+    class_matches = isinstance(value, existing_value.__class__)
+
+    # Supplied ints can be used for floats.
+    if isinstance(value, int) and isinstance(existing_value, float):
+        class_matches = True
+
+    if (value is not None) and (existing_value is not None) and (not class_matches):
+        raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
+
+    validation = option.get(cls._FIELD_VALIDATION)
+
+    return cls.__value_to_option(value, data_type, validation)</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Option.options_iterator"><code class="name flex">
+<span>def <span class="ident">options_iterator</span></span>(<span>options)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through a list of options.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the options.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@classmethod
+def options_iterator(cls, options):
+    &#34;&#34;&#34;
+    Provides an iterator through a list of options.
+
+    Returns:
+        An iterator through the options.
+    &#34;&#34;&#34;
+    for option in options:
+        # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
+        option = value_from_read_only(option)
+
+        # If the option is a constrained data type, then add in the constrained names and values from the validation.
+        if option.get(cls._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
+            option[cls._FIELD_CONSTRAINED_NAMES], option[cls._FIELD_CONSTRAINED_VALUES] = cls.__extract_constrained_validation(
+                option.get(cls._FIELD_VALIDATION, &#39;&#39;))
+
+        # Coerce the value to be of the correct data type.
+        option[cls._FIELD_VALUE] = cls.__coerce_value(option.get(cls._FIELD_VALUE), option.get(cls._FIELD_DATA_TYPE))
+
+        # Encapsulate the dictionary within a model (which does not talk to the API).
+        model = Option(None, schema=ProcessOptionSchema())
+        model._set_model(option)
+
+        yield model</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Instance variables</h3>
 <dl>
 <dt id="fusion_platform.models.process.Option.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
@@ -1097,14 +1811,6 @@ class Process(Model):
     # The maximum number of seconds to wait after an execution was meant to start.
     _EXECUTE_WAIT_TOLERANCE = 900
 
-    # Validation parsing for constrained values.
-    _VALIDATION_DELIMITER = &#39;;&#39;
-    _VALIDATION_EQUALS = &#39;=&#39;
-    _VALIDATION_FORMAT = &#39;format&#39;
-    _VALIDATION_ITEM_DELIMITER = &#39;,&#39;
-    _VALIDATION_NAMES = &#39;names&#39;
-    _VALIDATION_VALUES = &#39;values&#39;
-
     # Allowed file type substitutions.
     # @formatter:off
     _FILE_TYPE_SUBSTITUTIONS = {
@@ -1123,25 +1829,64 @@ class Process(Model):
     }
     # @formatter:on
 
-    @classmethod
-    def __coerce_value(cls, value, data_type):
+    def add_dispatcher(self, number=None, name=None):
         &#34;&#34;&#34;
-        Attempts to coerce a value into its corresponding data type.
+        Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
+        execute status or the dispatcher does not exist.
 
         Args:
-            value: The value to coerce.
-            data_type: The required data type.
+            number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
+            input: The dispatcher name to add. Either the number or the name must be provided.
+
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the dispatcher does not exist.
+            ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Make sure the arguments are provided.
+        if (number is None) and (name is None):
+            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding dispatcher.
+        dispatchers = self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(
+            self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else []
+        found_dispatcher = None
+
+        for i, item in enumerate(dispatchers):
+            found = (number is not None) and (number == (i + 1))
+            found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME)) if not found else found
+
+            if found:
+                found_dispatcher = item
+                break
+
+        if found_dispatcher is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+        # Add the dispatcher to the end of the existing list.
+        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+        dispatchers.append(found_dispatcher)
+
+        # Update the dispatchers in the model.
+        self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+        # Now update the model, persisting as needed.
+        super(Process, self).update()
+
+    @property
+    def available_dispatchers(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; available dispatchers.
 
         Returns:
-            The coerced value of the correct data type.
+            An iterator through the available dispatchers.
         &#34;&#34;&#34;
-        # Deal with None values.
-        if (value is None) or (value == str(None)) or (value == &#39;null&#39;):
-            return None
-        else:
-            # Use the option schema to attempt to load the value using its data type as a name.
-            model = OptionDataTypeSchema().load({data_type: value})
-            return model.get(data_type)
+        return self.__dispatchers(
+            self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else [])
 
     def copy(self, name):
         &#34;&#34;&#34;
@@ -1210,6 +1955,33 @@ class Process(Model):
         # Attempt to issue the create.
         self._create()
 
+    def __dispatchers(self, dispatchers):
+        &#34;&#34;&#34;
+        Provides an iterator through dispatchers.
+
+        Returns:
+            An iterator through the dispatchers.
+        &#34;&#34;&#34;
+        for dispatcher in dispatchers:
+            # We first have to remove the mapping proxy so that we can wrap the dictionary in an object.
+            dispatcher = value_from_read_only(dispatcher)
+
+            # Encapsulate the dictionary within a model (which does not talk to the API).
+            model = Dispatcher(None, schema=ProcessDispatcherSchema())
+            model._set_model(dispatcher)
+
+            yield model
+
+    @property
+    def dispatchers(self):
+        &#34;&#34;&#34;
+        Provides an iterator through the process&#39; dispatchers.
+
+        Returns:
+            An iterator through the dispatchers.
+        &#34;&#34;&#34;
+        return self.__dispatchers(self._model.get(self.__class__._FIELD_DISPATCHERS) if self._model.get(self.__class__._FIELD_DISPATCHERS) is not None else [])
+
     def execute(self, wait=False):
         &#34;&#34;&#34;
         Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
@@ -1256,72 +2028,6 @@ class Process(Model):
             ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
         return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
-
-    @classmethod
-    def __extract_constrained_validation(cls, validation):
-        &#34;&#34;&#34;
-        Extracts the constrained values from a constrained option validation.
-
-        Args:
-            validation: The constrained option validation.
-
-        Returns:
-            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
-        &#34;&#34;&#34;
-        # Extract the elements.
-        elements = validation.split(Process._VALIDATION_DELIMITER)
-        constrained_names = None
-        constrained_values = None
-
-        if len(elements) &lt;= 2:
-            for element in elements:
-                values = element.split(Process._VALIDATION_EQUALS)
-
-                if len(values) &gt; 0:
-                    lhs = values[0].lower()
-                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
-
-                    try:
-                        if lhs == Process._VALIDATION_VALUES:
-                            constrained_values = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
-
-                        if lhs == Process._VALIDATION_NAMES:
-                            constrained_names = rhs.split(Process._VALIDATION_ITEM_DELIMITER)
-                    except:
-                        pass  # Cannot be parsed.
-
-        return constrained_names, constrained_values
-
-    @classmethod
-    def __extract_datetime_validation(cls, validation):
-        &#34;&#34;&#34;
-        Extracts the datetime format from a datatime option validation.
-
-        Args:
-            validation: The datatime option validation.
-
-        Returns:
-            The datetime format, or None if it cannot be extracted.
-        &#34;&#34;&#34;
-        # Extract the elements.
-        elements = validation.split(Process._VALIDATION_DELIMITER)
-        format = None
-
-        if len(elements) &lt;= 3:
-            for element in elements:
-                values = element.split(Process._VALIDATION_EQUALS)
-
-                if len(values) &gt; 0:
-                    lhs = values[0].lower()
-                    rhs = Process._VALIDATION_EQUALS.join(values[1:])
-
-                    try:
-                        if lhs == Process._VALIDATION_FORMAT:
-                            format = rhs
-                    except:
-                        pass  # Cannot be parsed.
-
-        return format
 
     def find_executions(self, id=None, group_id=None):
         &#34;&#34;&#34;
@@ -1376,24 +2082,129 @@ class Process(Model):
         Returns:
             An iterator through the options.
         &#34;&#34;&#34;
-        for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
-            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            option = value_from_read_only(option)
+        return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))
 
-            # If the option is a constrained data type, then add in the constrained names and values from the validation.
-            if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
-                option[self.__class__._FIELD_CONSTRAINED_NAMES], option[self.__class__._FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
-                    option.get(self.__class__._FIELD_VALIDATION, &#39;&#39;))
+    def remove_dispatcher(self, number):
+        &#34;&#34;&#34;
+        Removes the dispatcher service with the corresponding number from the process.
 
-            # Coerce the value to be of the correct data type.
-            option[self.__class__._FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__._FIELD_VALUE),
-                                                                                option.get(self.__class__._FIELD_DATA_TYPE))
+        Args:
+            number: The number to remove, starting from 1 for the first dispatcher.
 
-            # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Option(None, schema=ProcessOptionSchema())
-            model._set_model(option)
+        Raises:
+            ModelError: if the process is the execute status.
+            ModelError: if the dispatcher does not exist.
+            ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        &#34;&#34;&#34;
+        # Make sure the argument is provided.
+        if number is None:
+            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
 
-            yield model
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding dispatcher.
+        found_dispatcher_index = None
+        found_dispatcher = None
+
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
+            found = (number is not None) and (number == (i + 1))
+
+            if found:
+                found_dispatcher_index = i
+                found_dispatcher = item
+                break
+
+        if found_dispatcher is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+        # Remove the dispatcher from the existing list.
+        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+        dispatchers.pop(found_dispatcher_index)
+
+        # Update the dispatchers in the model.
+        self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+        # Now update the model, persisting as needed.
+        super(Process, self).update()
+
+    def __set_dispatcher(self, number, option_name=None, value=None, coerce_value=False, **kwargs):
+        &#34;&#34;&#34;
+        Sets the specified option for the and kwargs for the dispatcher. An exception is raised if the process is in the execute status, the dispatcher does not
+        exist or the option value has the wrong type.
+
+        Args:
+            number: The dispatcher number to update, starting from 1 for the first dispatcher.
+            option_name: The option name for the dispatcher to set.
+            value: The value for the option.
+            coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
+
+        Raises:
+            RequestError: if the update fails.
+            ModelError: if the process is in the execute state.
+            ModelError: if the value has a different type to the option.
+        &#34;&#34;&#34;
+        # Make sure the argument is provided.
+        if number is None:
+            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+        # Make sure the process is not in the execute state.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+        # Find the corresponding dispatcher.
+        found_dispatcher_index = None
+        found_dispatcher = None
+
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
+            found = (number is not None) and (number == (i + 1))
+
+            if found:
+                found_dispatcher_index = i
+                found_dispatcher = item
+                break
+
+        if found_dispatcher is None:
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+        # Get the dispatcher so that it can be modified.
+        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can access it.
+        dispatcher = dict(dispatchers[found_dispatcher_index])  # Convert read-only tuple to dict, so we can modify it.
+
+        # Optionally, find the corresponding option.
+        if (option_name is not None) or (value is not None):
+            options = list(dispatcher.get(self.__class__._FIELD_OPTIONS, []))  # Convert read-only tuple to list, so we can modify it.
+            options = [dict(option) for option in options]  # Convert read-only mapping to dict, so we can modify it.
+            found_option_index = None
+            found_option = None
+
+            for i, item in enumerate(options):
+                found = (option_name is not None) and (option_name == item.get(self.__class__._FIELD_NAME))
+
+                if found:
+                    found_option_index = i
+                    found_option = item
+                    break
+
+            if found_option is None:
+                raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
+
+            # We can now update the option. All options are expressed as strings with the correct format.
+            option_value = Option.get_option_value(found_option, value, coerce_value)
+            found_option[self.__class__._FIELD_VALUE] = option_value
+            dispatcher[self.__class__._FIELD_OPTIONS] = options
+            dispatcher[self.__class__._FIELD_OPTIONS][found_option_index] = found_option
+
+        # Modify any of the dispatcher attributes. We do not allow updates to read-only or hidden fields.
+        schema = ProcessDispatcherSchema()
+
+        for key in kwargs:
+            if (Model._METADATA_READ_ONLY not in schema.fields[key].metadata) and (Model._METADATA_HIDE not in schema.fields[key].metadata):
+                dispatcher[key] = kwargs[key]
+
+        # Update the dispatchers in the model.
+        self._set_field([self.__class__._FIELD_DISPATCHERS, found_dispatcher_index], dispatcher)
 
     def __set_input(self, number=None, input=None, data=None):
         &#34;&#34;&#34;
@@ -1423,15 +2234,16 @@ class Process(Model):
             raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
 
         # Find the corresponding input.
-        index = None
+        found_input_index = None
         found_input = None
 
-        for index, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
-            found = (number is not None) and (number == (index + 1))
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
+            found = (number is not None) and (number == (i + 1))
             found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
                     input.input == item.get(self.__class__._FIELD_INPUT)) if not found else found
 
             if found:
+                found_input_index = i
                 found_input = item
                 break
 
@@ -1456,7 +2268,7 @@ class Process(Model):
             raise ModelError(i18n.t(&#39;models.process.wrong_file_type&#39;, expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
 
         # We can now update the input.
-        self._set_field([self.__class__._FIELD_INPUTS, index, self.__class__._FIELD_ID], data.id)
+        self._set_field([self.__class__._FIELD_INPUTS, found_input_index, self.__class__._FIELD_ID], data.id)
 
     def __set_option(self, name=None, option=None, value=None, coerce_value=False):
         &#34;&#34;&#34;
@@ -1482,40 +2294,25 @@ class Process(Model):
             raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
 
         # Find the corresponding option.
-        index = None
+        found_option_index = None
         found_option = None
 
-        for index, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
+        for i, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
             found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME))
             found = (option is not None) and (str(option.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
                     option.name == item.get(self.__class__._FIELD_NAME)) if not found else found
 
             if found:
+                found_option_index = i
                 found_option = item
                 break
 
         if found_option is None:
             raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
 
-        # Check that the option has the same data type as the value. We cannot check this if either value is None. Note that supplied ints can be used for floats.
-        data_type = found_option.get(self.__class__._FIELD_DATA_TYPE)
-        existing_value = self.__class__.__coerce_value(found_option[self.__class__._FIELD_VALUE], data_type)
-
-        # Optionally coerce the supplied value, now that we know its data type.
-        if coerce_value:
-            value = self.__class__.__coerce_value(value, data_type)
-
-        class_matches = isinstance(value, existing_value.__class__)
-
-        if isinstance(value, int) and isinstance(existing_value, float):
-            class_matches = True
-
-        if (value is not None) and (existing_value is not None) and (not class_matches):
-            raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
-
         # We can now update the option. All options are expressed as strings with the correct format.
-        validation = found_option.get(self.__class__._FIELD_VALIDATION)
-        self._set_field([self.__class__._FIELD_OPTIONS, index, self.__class__._FIELD_VALUE], self.__class__.__value_to_option(value, data_type, validation))
+        option_value = Option.get_option_value(found_option, value, coerce_value)
+        self._set_field([self.__class__._FIELD_OPTIONS, found_option_index, self.__class__._FIELD_VALUE], option_value)
 
     def stop(self):
         &#34;&#34;&#34;
@@ -1527,16 +2324,17 @@ class Process(Model):
         # Send the request and load the resulting model.
         self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)
 
-    def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
+    def update(self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
         &#34;&#34;&#34;
         Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
         contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
-        of setting inputs and options.
+        of setting inputs, options and dispatchers.
 
         Args:
             input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
             input: The input object for the input to set. Either the number or the input must be provided when setting an input.
             data: The data object to use for an input.
+            dispatcher_number: The dispatcher number to update, starting from 1 for the first dispatcher. If used then options and kwargs are for the dispatcher.
             option_name: The option name to set. Either the name or the option must be provided when setting an option.
             option: The option object for the option to set. Either the name or the option must be provided when setting an option.
             value: The value for the option.
@@ -1546,45 +2344,32 @@ class Process(Model):
         Raises:
             RequestError: if the update fails.
             ModelError: if the process is in the execute state.
-            ModelError: if the process has been persisted and changes are requested to an input or option.
             ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
         # Make sure the process is not in the execute state.
         if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
             raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
 
+        update_kwargs = kwargs
+
         # Deal with the special case of inputs.
         if (input_number is not None) or (input is not None):
             self.__set_input(number=input_number, input=input, data=data)
 
-        # Deal with the special case of options.
-        if (option_name is not None) or (option is not None):
-            self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
+        # Deal with the special case of dispatchers.
+        if dispatcher_number is not None:  # Options and kwargs are for the dispatcher.
+            self.__set_dispatcher(number=dispatcher_number, option_name=option_name, value=value, coerce_value=coerce_value, **kwargs)
+
+            # The kwargs have been used on the dispatcher, so are not for the process.
+            update_kwargs = {}
+
+        else:  # Options and kwargs are for the process.
+            # Deal with the special case of options.
+            if (option_name is not None) or (option is not None):
+                self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
 
         # Now update the model, persisting as needed.
-        super(Process, self).update(**kwargs)
-
-    @classmethod
-    def __value_to_option(cls, value, data_type, validation):
-        &#34;&#34;&#34;
-        Converts a Python option value into a string depending upon its data type and validation parameters.
-
-        Args:
-            value: The value to convert.
-            data_type: The option data type.
-            validation: The optional validation for the option.
-
-        Returns:
-            The correct string representation of the option.
-        &#34;&#34;&#34;
-        if value is None:
-            return None
-        elif isinstance(value, bool):
-            return str(value).lower()
-        if data_type == fusion_platform.DATA_TYPE_DATETIME:
-            return datetime.strftime(value, cls.__extract_datetime_validation(validation))
-        else:
-            return str(value)
+        super(Process, self).update(**update_kwargs)
 
     def wait_for_next_execution(self):
         &#34;&#34;&#34;
@@ -1650,6 +2435,47 @@ class Process(Model):
 </p>
 <div class="desc inherited"><h2 id="returns">Returns</h2>
 <p>The model attributes as a dictionary.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.Process.available_dispatchers"><code class="name">var <span class="ident">available_dispatchers</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the process' available dispatchers.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the available dispatchers.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def available_dispatchers(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the process&#39; available dispatchers.
+
+    Returns:
+        An iterator through the available dispatchers.
+    &#34;&#34;&#34;
+    return self.__dispatchers(
+        self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else [])</code></pre>
+</details>
+</dd>
+<dt id="fusion_platform.models.process.Process.dispatchers"><code class="name">var <span class="ident">dispatchers</span></code></dt>
+<dd>
+<div class="desc"><p>Provides an iterator through the process' dispatchers.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the dispatchers.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def dispatchers(self):
+    &#34;&#34;&#34;
+    Provides an iterator through the process&#39; dispatchers.
+
+    Returns:
+        An iterator through the dispatchers.
+    &#34;&#34;&#34;
+    return self.__dispatchers(self._model.get(self.__class__._FIELD_DISPATCHERS) if self._model.get(self.__class__._FIELD_DISPATCHERS) is not None else [])</code></pre>
+</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.executions"><code class="name">var <span class="ident">executions</span></code></dt>
 <dd>
@@ -1732,29 +2558,87 @@ def options(self):
     Returns:
         An iterator through the options.
     &#34;&#34;&#34;
-    for option in self._model.get(self.__class__._FIELD_OPTIONS, []):
-        # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-        option = value_from_read_only(option)
-
-        # If the option is a constrained data type, then add in the constrained names and values from the validation.
-        if option.get(self.__class__._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
-            option[self.__class__._FIELD_CONSTRAINED_NAMES], option[self.__class__._FIELD_CONSTRAINED_VALUES] = self.__class__.__extract_constrained_validation(
-                option.get(self.__class__._FIELD_VALIDATION, &#39;&#39;))
-
-        # Coerce the value to be of the correct data type.
-        option[self.__class__._FIELD_VALUE] = self.__class__.__coerce_value(option.get(self.__class__._FIELD_VALUE),
-                                                                            option.get(self.__class__._FIELD_DATA_TYPE))
-
-        # Encapsulate the dictionary within a model (which does not talk to the API).
-        model = Option(None, schema=ProcessOptionSchema())
-        model._set_model(option)
-
-        yield model</code></pre>
+    return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))</code></pre>
 </details>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="fusion_platform.models.process.Process.add_dispatcher"><code class="name flex">
+<span>def <span class="ident">add_dispatcher</span></span>(<span>self, number=None, name=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
+execute status or the dispatcher does not exist.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>number</code></strong></dt>
+<dd>The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.</dd>
+<dt><strong><code>input</code></strong></dt>
+<dd>The dispatcher name to add. Either the number or the name must be provided.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ModelError</code></dt>
+<dd>if the process is the execute status.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the dispatcher does not exist.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the model could not be updated and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_dispatcher(self, number=None, name=None):
+    &#34;&#34;&#34;
+    Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
+    execute status or the dispatcher does not exist.
+
+    Args:
+        number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
+        input: The dispatcher name to add. Either the number or the name must be provided.
+
+    Raises:
+        ModelError: if the process is the execute status.
+        ModelError: if the dispatcher does not exist.
+        ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Make sure the arguments are provided.
+    if (number is None) and (name is None):
+        raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+    # Make sure the process is not in the execute state.
+    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+    # Find the corresponding dispatcher.
+    dispatchers = self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(
+        self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else []
+    found_dispatcher = None
+
+    for i, item in enumerate(dispatchers):
+        found = (number is not None) and (number == (i + 1))
+        found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME)) if not found else found
+
+        if found:
+            found_dispatcher = item
+            break
+
+    if found_dispatcher is None:
+        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+    # Add the dispatcher to the end of the existing list.
+    dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+    dispatchers.append(found_dispatcher)
+
+    # Update the dispatchers in the model.
+    self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+    # Now update the model, persisting as needed.
+    super(Process, self).update()</code></pre>
+</details>
+</dd>
 <dt id="fusion_platform.models.process.Process.copy"><code class="name flex">
 <span>def <span class="ident">copy</span></span>(<span>self, name)</span>
 </code></dt>
@@ -1982,6 +2866,75 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
 </p>
 <div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
 </dd>
+<dt id="fusion_platform.models.process.Process.remove_dispatcher"><code class="name flex">
+<span>def <span class="ident">remove_dispatcher</span></span>(<span>self, number)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Removes the dispatcher service with the corresponding number from the process.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>number</code></strong></dt>
+<dd>The number to remove, starting from 1 for the first dispatcher.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ModelError</code></dt>
+<dd>if the process is the execute status.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the dispatcher does not exist.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if the model could not be updated and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_dispatcher(self, number):
+    &#34;&#34;&#34;
+    Removes the dispatcher service with the corresponding number from the process.
+
+    Args:
+        number: The number to remove, starting from 1 for the first dispatcher.
+
+    Raises:
+        ModelError: if the process is the execute status.
+        ModelError: if the dispatcher does not exist.
+        ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Make sure the argument is provided.
+    if number is None:
+        raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+    # Make sure the process is not in the execute state.
+    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+    # Find the corresponding dispatcher.
+    found_dispatcher_index = None
+    found_dispatcher = None
+
+    for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
+        found = (number is not None) and (number == (i + 1))
+
+        if found:
+            found_dispatcher_index = i
+            found_dispatcher = item
+            break
+
+    if found_dispatcher is None:
+        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+    # Remove the dispatcher from the existing list.
+    dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+    dispatchers.pop(found_dispatcher_index)
+
+    # Update the dispatchers in the model.
+    self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+    # Now update the model, persisting as needed.
+    super(Process, self).update()</code></pre>
+</details>
+</dd>
 <dt id="fusion_platform.models.process.Process.stop"><code class="name flex">
 <span>def <span class="ident">stop</span></span>(<span>self)</span>
 </code></dt>
@@ -2018,12 +2971,12 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
 <div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
 </dd>
 <dt id="fusion_platform.models.process.Process.update"><code class="name flex">
-<span>def <span class="ident">update</span></span>(<span>self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs)</span>
+<span>def <span class="ident">update</span></span>(<span>self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
 contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
-of setting inputs and options.</p>
+of setting inputs, options and dispatchers.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>input_number</code></strong></dt>
@@ -2032,6 +2985,8 @@ of setting inputs and options.</p>
 <dd>The input object for the input to set. Either the number or the input must be provided when setting an input.</dd>
 <dt><strong><code>data</code></strong></dt>
 <dd>The data object to use for an input.</dd>
+<dt><strong><code>dispatcher_number</code></strong></dt>
+<dd>The dispatcher number to update, starting from 1 for the first dispatcher. If used then options and kwargs are for the dispatcher.</dd>
 <dt><strong><code>option_name</code></strong></dt>
 <dd>The option name to set. Either the name or the option must be provided when setting an option.</dd>
 <dt><strong><code>option</code></strong></dt>
@@ -2050,24 +3005,23 @@ of setting inputs and options.</p>
 <dt><code>ModelError</code></dt>
 <dd>if the process is in the execute state.</dd>
 <dt><code>ModelError</code></dt>
-<dd>if the process has been persisted and changes are requested to an input or option.</dd>
-<dt><code>ModelError</code></dt>
 <dd>if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def update(self, input_number=None, input=None, data=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
+<pre><code class="python">def update(self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
     &#34;&#34;&#34;
     Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
     contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
-    of setting inputs and options.
+    of setting inputs, options and dispatchers.
 
     Args:
         input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
         input: The input object for the input to set. Either the number or the input must be provided when setting an input.
         data: The data object to use for an input.
+        dispatcher_number: The dispatcher number to update, starting from 1 for the first dispatcher. If used then options and kwargs are for the dispatcher.
         option_name: The option name to set. Either the name or the option must be provided when setting an option.
         option: The option object for the option to set. Either the name or the option must be provided when setting an option.
         value: The value for the option.
@@ -2077,23 +3031,32 @@ of setting inputs and options.</p>
     Raises:
         RequestError: if the update fails.
         ModelError: if the process is in the execute state.
-        ModelError: if the process has been persisted and changes are requested to an input or option.
         ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
     &#34;&#34;&#34;
     # Make sure the process is not in the execute state.
     if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
         raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
 
+    update_kwargs = kwargs
+
     # Deal with the special case of inputs.
     if (input_number is not None) or (input is not None):
         self.__set_input(number=input_number, input=input, data=data)
 
-    # Deal with the special case of options.
-    if (option_name is not None) or (option is not None):
-        self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
+    # Deal with the special case of dispatchers.
+    if dispatcher_number is not None:  # Options and kwargs are for the dispatcher.
+        self.__set_dispatcher(number=dispatcher_number, option_name=option_name, value=value, coerce_value=coerce_value, **kwargs)
+
+        # The kwargs have been used on the dispatcher, so are not for the process.
+        update_kwargs = {}
+
+    else:  # Options and kwargs are for the process.
+        # Deal with the special case of options.
+        if (option_name is not None) or (option is not None):
+            self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
 
     # Now update the model, persisting as needed.
-    super(Process, self).update(**kwargs)</code></pre>
+    super(Process, self).update(**update_kwargs)</code></pre>
 </details>
 </dd>
 <dt id="fusion_platform.models.process.Process.wait_for_next_execution"><code class="name flex">
@@ -2162,6 +3125,51 @@ Otherwise, this method will block until the next scheduled execution has started
         # We are waiting, so block for a short while.
         sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
 </details>
+</dd>
+</dl>
+</dd>
+<dt id="fusion_platform.models.process.ProcessDispatcherSchema"><code class="flex name class">
+<span>class <span class="ident">ProcessDispatcherSchema</span></span>
+<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Nested schema class for dispatchers.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ProcessDispatcherSchema(Schema):
+    &#34;&#34;&#34;
+    Nested schema class for dispatchers.
+    &#34;&#34;&#34;
+    ssd_id = fields.UUID(required=True)
+    name = fields.String(required=True)
+    dispatch_intermediate = fields.Boolean(allow_none=True)
+    documentation_summary = fields.String(allow_none=True)
+    documentation_description = fields.String(allow_none=True)
+    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+
+    class Meta:
+        &#34;&#34;&#34;
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        &#34;&#34;&#34;
+        unknown = EXCLUDE
+        ordered = True</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>marshmallow.schema.Schema</li>
+<li>marshmallow.base.SchemaABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessDispatcherSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
+<dd>
+<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessDispatcherSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -2301,6 +3309,8 @@ Otherwise, this method will block until the next scheduled execution has started
     output_storage_period = fields.Integer(allow_none=True)
     test_run = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
+    dispatchers = fields.List(fields.Nested(ProcessDispatcherSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+
     # Removed prices.
     price = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
@@ -2311,6 +3321,8 @@ Otherwise, this method will block until the next scheduled execution has started
 
     # Removed creator.
     # Removed search.
+
+    available_dispatchers = fields.List(fields.Nested(ProcessDispatcherSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Added pseudo-field.
 
     class Meta:
         &#34;&#34;&#34;
@@ -2335,7 +3347,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.6.9
+Version: 1.7.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -2354,6 +3366,17 @@ Version: 1.6.9
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="fusion_platform.models.process.Dispatcher" href="#fusion_platform.models.process.Dispatcher">Dispatcher</a></code></h4>
+<ul class="two-column">
+<li><code><a title="fusion_platform.models.process.Dispatcher.attributes" href="model.html#fusion_platform.models.process.Dispatcher.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.process.Dispatcher.delete" href="model.html#fusion_platform.models.process.Dispatcher.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.process.Dispatcher.get" href="model.html#fusion_platform.models.process.Dispatcher.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.process.Dispatcher.options" href="#fusion_platform.models.process.Dispatcher.options">options</a></code></li>
+<li><code><a title="fusion_platform.models.process.Dispatcher.to_csv" href="model.html#fusion_platform.models.process.Dispatcher.to_csv">to_csv</a></code></li>
+<li><code><a title="fusion_platform.models.process.Dispatcher.update" href="model.html#fusion_platform.models.process.Dispatcher.update">update</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="fusion_platform.models.process.Input" href="#fusion_platform.models.process.Input">Input</a></code></h4>
 <ul class="">
 <li><code><a title="fusion_platform.models.process.Input.attributes" href="model.html#fusion_platform.models.process.Input.attributes">attributes</a></code></li>
@@ -2365,10 +3388,12 @@ Version: 1.6.9
 </li>
 <li>
 <h4><code><a title="fusion_platform.models.process.Option" href="#fusion_platform.models.process.Option">Option</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="fusion_platform.models.process.Option.attributes" href="model.html#fusion_platform.models.process.Option.attributes">attributes</a></code></li>
 <li><code><a title="fusion_platform.models.process.Option.delete" href="model.html#fusion_platform.models.process.Option.delete">delete</a></code></li>
 <li><code><a title="fusion_platform.models.process.Option.get" href="model.html#fusion_platform.models.process.Option.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.process.Option.get_option_value" href="#fusion_platform.models.process.Option.get_option_value">get_option_value</a></code></li>
+<li><code><a title="fusion_platform.models.process.Option.options_iterator" href="#fusion_platform.models.process.Option.options_iterator">options_iterator</a></code></li>
 <li><code><a title="fusion_platform.models.process.Option.to_csv" href="model.html#fusion_platform.models.process.Option.to_csv">to_csv</a></code></li>
 <li><code><a title="fusion_platform.models.process.Option.update" href="model.html#fusion_platform.models.process.Option.update">update</a></code></li>
 </ul>
@@ -2376,20 +3401,31 @@ Version: 1.6.9
 <li>
 <h4><code><a title="fusion_platform.models.process.Process" href="#fusion_platform.models.process.Process">Process</a></code></h4>
 <ul class="">
+<li><code><a title="fusion_platform.models.process.Process.add_dispatcher" href="#fusion_platform.models.process.Process.add_dispatcher">add_dispatcher</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.attributes" href="model.html#fusion_platform.models.process.Process.attributes">attributes</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.available_dispatchers" href="#fusion_platform.models.process.Process.available_dispatchers">available_dispatchers</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.copy" href="#fusion_platform.models.process.Process.copy">copy</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.create" href="#fusion_platform.models.process.Process.create">create</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.delete" href="model.html#fusion_platform.models.process.Process.delete">delete</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.dispatchers" href="#fusion_platform.models.process.Process.dispatchers">dispatchers</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.execute" href="#fusion_platform.models.process.Process.execute">execute</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.executions" href="#fusion_platform.models.process.Process.executions">executions</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.find_executions" href="#fusion_platform.models.process.Process.find_executions">find_executions</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.get" href="model.html#fusion_platform.models.process.Process.get">get</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.inputs" href="#fusion_platform.models.process.Process.inputs">inputs</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.options" href="#fusion_platform.models.process.Process.options">options</a></code></li>
+<li><code><a title="fusion_platform.models.process.Process.remove_dispatcher" href="#fusion_platform.models.process.Process.remove_dispatcher">remove_dispatcher</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.stop" href="#fusion_platform.models.process.Process.stop">stop</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.to_csv" href="model.html#fusion_platform.models.process.Process.to_csv">to_csv</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.update" href="#fusion_platform.models.process.Process.update">update</a></code></li>
 <li><code><a title="fusion_platform.models.process.Process.wait_for_next_execution" href="#fusion_platform.models.process.Process.wait_for_next_execution">wait_for_next_execution</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="fusion_platform.models.process.ProcessDispatcherSchema" href="#fusion_platform.models.process.ProcessDispatcherSchema">ProcessDispatcherSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessDispatcherSchema.Meta" href="#fusion_platform.models.process.ProcessDispatcherSchema.Meta">Meta</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessDispatcherSchema.opts" href="#fusion_platform.models.process.ProcessDispatcherSchema.opts">opts</a></code></li>
 </ul>
 </li>
 <li>

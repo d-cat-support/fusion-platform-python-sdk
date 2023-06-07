@@ -170,6 +170,7 @@ class ProcessServiceExecutionSchema(Schema):
     process_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     service_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     image_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    chain_index = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     name = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     started_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -593,6 +594,7 @@ def outputs(self):
 <li><strong>process_id</strong>: The process executed.</li>
 <li><strong>service_id</strong>: The explicit service version of the SSD which has been executed.</li>
 <li><strong>image_id</strong>: The image which was executed.</li>
+<li><strong>chain_index</strong>: The index in the processing chain for this executed service in the process.</li>
 <li><strong>name</strong>: The name of the service which has been executed.</li>
 <li><strong>started_at</strong>: When did the execution start?</li>
 <li><strong>ended_at</strong>: When did the execution end?</li>
@@ -670,6 +672,7 @@ def outputs(self):
     process_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     service_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     image_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    chain_index = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     name = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     started_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -717,7 +720,7 @@ def outputs(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.6.9
+Version: 1.7.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -14,7 +14,8 @@ en:
   no_such_keys: "No such keys %{keys}"
 
   failed_model_send_and_load: "Failed to request and load model"
-  failed_model_new: "Failed to get model template from response"
+  failed_model_new_model: "Failed to get model template from response"
+  failed_model_new_extras: "Failed to get model extras from response"
   failed_model_validation: "Failed to validate model: %{message}"
 
   create_empty_body: "Create cannot be requested as there are no attributes to be used (read-only attributes have been removed)"
