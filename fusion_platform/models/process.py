@@ -268,7 +268,7 @@ class Dispatcher(Model):
         Returns:
             A string representation of the object.
         """
-        return f"{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate}): {self.documentation_summary}"
+        return f"{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False}): {self.documentation_summary}"
 
 
 # Define the model schema classes. These are maintained from the API definitions.

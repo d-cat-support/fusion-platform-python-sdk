@@ -299,7 +299,7 @@ class Dispatcher(Model):
         Returns:
             A string representation of the object.
         &#34;&#34;&#34;
-        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate}): {self.documentation_summary}&#34;
+        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False}): {self.documentation_summary}&#34;
 
 
 # Define the model schema classes. These are maintained from the API definitions.
@@ -1210,7 +1210,7 @@ class Process(Model):
         Returns:
             A string representation of the object.
         &#34;&#34;&#34;
-        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate}): {self.documentation_summary}&#34;</code></pre>
+        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False}): {self.documentation_summary}&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -3347,7 +3347,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.7.3
+Version: 1.7.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -185,6 +185,7 @@ class ProcessServiceExecutionSchema(Schema):
                           metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     inputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     outputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    # Removed storage_id.
     intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
     # Removed task_definition_id.
@@ -687,6 +688,7 @@ def outputs(self):
                           metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     inputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     outputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    # Removed storage_id.
     intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
     # Removed task_definition_id.
@@ -720,7 +722,7 @@ def outputs(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.7.3
+Version: 1.7.4
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
