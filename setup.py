@@ -19,7 +19,7 @@ PACKAGE_DIR = pathlib.Path(__file__).parent
 # @formatter:off
 setup(
     name='fusion-platform-python-sdk',
-    version='1.7.4',
+    version='1.8.1',
     description='Python SDK used to interact with the Fusion Platform(r)',
     long_description=(PACKAGE_DIR / 'README.md').read_text(),
     long_description_content_type='text/markdown',
@@ -30,10 +30,10 @@ setup(
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3.10'
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11'
     ],
     packages=find_packages(exclude='tests'),
     include_package_data=True,

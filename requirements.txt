@@ -1,5 +1,6 @@
 marshmallow
 mock
+pdoc3
 pyjwt[crypto]
 pytest
 python-dateutil

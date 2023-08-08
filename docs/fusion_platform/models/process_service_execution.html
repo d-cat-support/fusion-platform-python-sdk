@@ -581,7 +581,7 @@ def outputs(self):
 </dd>
 <dt id="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema"><code class="flex name class">
 <span>class <span class="ident">ProcessServiceExecutionSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+<span>(</span><span>*, only: types.StrSequenceOrSet | None = None, exclude: types.StrSequenceOrSet = (), many: bool = False, context: dict | None = None, load_only: types.StrSequenceOrSet = (), dump_only: types.StrSequenceOrSet = (), partial: bool | types.StrSequenceOrSet | None = None, unknown: str | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Schema class for process service execution model.</p>
@@ -710,6 +710,7 @@ def outputs(self):
 <ul class="hlist">
 <li>marshmallow.schema.Schema</li>
 <li>marshmallow.base.SchemaABC</li>
+<li>abc.ABC</li>
 </ul>
 </dd>
 </dl>
@@ -722,7 +723,7 @@ def outputs(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.7.4
+Version: 1.8.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

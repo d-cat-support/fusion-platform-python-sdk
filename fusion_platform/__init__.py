@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '1.7.4'
-__version_date__ = '2023-07-07T12:49:04Z'
+__version__ = '1.8.1'
+__version_date__ = '2023-08-08T09:03:58Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -28,6 +28,7 @@ __pdoc__ = {
     'models.credit.CreditSchema.Meta': False,
     'models.credit.CreditSchema.opts': False,
     'models.credit.CreditSsdsSchema': False,
+    'models.credit.CreditMonthlySpendSchema': False,
     'models.data.DataSchema.Meta': False,
     'models.data.DataSchema.opts': False,
     'models.data_file.DataFileSchema.Meta': False,
@@ -42,9 +43,11 @@ __pdoc__ = {
     'models.process.OptionDataTypeSchema': False,
     'models.process.ProcessChainOptionSchema': False,
     'models.process.ProcessChainSchema': False,
+    'models.process.ProcessExecutionStatusSchema': False,
+    'models.process.ProcessSelectorSchema': False,
     'models.process.ProcessInputSchema': False,
     'models.process.ProcessOptionSchema': False,
-    'models.process.ProcessSelectorSchema': False,
+    'models.process.ProcessDispatcherSchema': False,
     'models.process_execution.ProcessExecutionSchema.Meta': False,
     'models.process_execution.ProcessExecutionSchema.opts': False,
     'models.process_execution.ProcessExecutionChainOptionSchema': False,
@@ -52,8 +55,8 @@ __pdoc__ = {
     'models.process_execution.ProcessExecutionOptionSchema': False,
     'models.process_service_execution.ProcessServiceExecutionSchema.Meta': False,
     'models.process_service_execution.ProcessServiceExecutionSchema.opts': False,
-    'models.process_service_execution.ProcessServiceExecutionActionSchema': False,
     'models.process_service_execution.ProcessServiceExecutionActionValueSchema': False,
+    'models.process_service_execution.ProcessServiceExecutionActionSchema': False,
     'models.process_service_execution.ProcessServiceExecutionActionsSchema': False,
     'models.process_service_execution.ProcessServiceExecutionMetricSchema': False,
     'models.process_service_execution.ProcessServiceExecutionOptionSchema': False,
@@ -61,10 +64,12 @@ __pdoc__ = {
     'models.process_service_execution_log.ProcessServiceExecutionLogSchema.opts': False,
     'models.service.ServiceSchema.Meta': False,
     'models.service.ServiceSchema.opts': False,
-    'models.service.ServiceActionSchema': False,
     'models.service.ServiceActionValueSchema': False,
+    'models.service.ServiceActionSchema': False,
     'models.service.ServiceDefinitionLinkageSchema': False,
     'models.service.ServiceDefinitionSchema': False,
+    'models.service.ServiceGroupAggregatorOptionSchema': False,
+    'models.service.ServiceGroupAggregatorSchema': False,
     'models.service.ServiceInputExpressionSchema': False,
     'models.service.ServiceOptionExpressionSchema': False,
     'models.service.ServiceValidationSchema': False,

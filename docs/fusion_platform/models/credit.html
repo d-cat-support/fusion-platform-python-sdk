@@ -230,50 +230,9 @@ class Credit(Model):
 </dd>
 </dl>
 </dd>
-<dt id="fusion_platform.models.credit.CreditMonthlySpendSchema"><code class="flex name class">
-<span>class <span class="ident">CreditMonthlySpendSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Nested schema class for spend.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class CreditMonthlySpendSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for spend.
-    &#34;&#34;&#34;
-    month = fields.DateTime(required=True)
-    credits = fields.Decimal(required=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="fusion_platform.models.credit.CreditMonthlySpendSchema.Meta"><code class="name">var <span class="ident">Meta</span></code></dt>
-<dd>
-<div class="desc"><p>When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.</p></div>
-</dd>
-<dt id="fusion_platform.models.credit.CreditMonthlySpendSchema.opts"><code class="name">var <span class="ident">opts</span></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
 <dt id="fusion_platform.models.credit.CreditSchema"><code class="flex name class">
 <span>class <span class="ident">CreditSchema</span></span>
-<span>(</span><span>*, only: Union[Sequence[str], Set[str], ForwardRef(None)] = None, exclude: Union[Sequence[str], Set[str]] = (), many: bool = False, context: Optional[Dict] = None, load_only: Union[Sequence[str], Set[str]] = (), dump_only: Union[Sequence[str], Set[str]] = (), partial: Union[bool, Sequence[str], Set[str]] = False, unknown: Optional[str] = None)</span>
+<span>(</span><span>*, only: types.StrSequenceOrSet | None = None, exclude: types.StrSequenceOrSet = (), many: bool = False, context: dict | None = None, load_only: types.StrSequenceOrSet = (), dump_only: types.StrSequenceOrSet = (), partial: bool | types.StrSequenceOrSet | None = None, unknown: str | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Schema class for credit model.</p>
@@ -337,6 +296,7 @@ class Credit(Model):
 <ul class="hlist">
 <li>marshmallow.schema.Schema</li>
 <li>marshmallow.base.SchemaABC</li>
+<li>abc.ABC</li>
 </ul>
 </dd>
 </dl>
@@ -349,7 +309,7 @@ class Credit(Model):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.7.4
+Version: 1.8.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -375,13 +335,6 @@ Version: 1.7.4
 <li><code><a title="fusion_platform.models.credit.Credit.get" href="model.html#fusion_platform.models.credit.Credit.get">get</a></code></li>
 <li><code><a title="fusion_platform.models.credit.Credit.to_csv" href="model.html#fusion_platform.models.credit.Credit.to_csv">to_csv</a></code></li>
 <li><code><a title="fusion_platform.models.credit.Credit.update" href="model.html#fusion_platform.models.credit.Credit.update">update</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="fusion_platform.models.credit.CreditMonthlySpendSchema" href="#fusion_platform.models.credit.CreditMonthlySpendSchema">CreditMonthlySpendSchema</a></code></h4>
-<ul class="">
-<li><code><a title="fusion_platform.models.credit.CreditMonthlySpendSchema.Meta" href="#fusion_platform.models.credit.CreditMonthlySpendSchema.Meta">Meta</a></code></li>
-<li><code><a title="fusion_platform.models.credit.CreditMonthlySpendSchema.opts" href="#fusion_platform.models.credit.CreditMonthlySpendSchema.opts">opts</a></code></li>
 </ul>
 </li>
 <li>

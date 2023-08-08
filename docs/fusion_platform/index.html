@@ -46,8 +46,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 &#34;&#34;&#34;
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = &#39;1.7.4&#39;
-__version_date__ = &#39;2023-07-07T12:49:04Z&#39;
+__version__ = &#39;1.8.1&#39;
+__version_date__ = &#39;2023-08-08T09:03:58Z&#39;
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -63,6 +63,7 @@ __pdoc__ = {
     &#39;models.credit.CreditSchema.Meta&#39;: False,
     &#39;models.credit.CreditSchema.opts&#39;: False,
     &#39;models.credit.CreditSsdsSchema&#39;: False,
+    &#39;models.credit.CreditMonthlySpendSchema&#39;: False,
     &#39;models.data.DataSchema.Meta&#39;: False,
     &#39;models.data.DataSchema.opts&#39;: False,
     &#39;models.data_file.DataFileSchema.Meta&#39;: False,
@@ -77,9 +78,11 @@ __pdoc__ = {
     &#39;models.process.OptionDataTypeSchema&#39;: False,
     &#39;models.process.ProcessChainOptionSchema&#39;: False,
     &#39;models.process.ProcessChainSchema&#39;: False,
+    &#39;models.process.ProcessExecutionStatusSchema&#39;: False,
+    &#39;models.process.ProcessSelectorSchema&#39;: False,
     &#39;models.process.ProcessInputSchema&#39;: False,
     &#39;models.process.ProcessOptionSchema&#39;: False,
-    &#39;models.process.ProcessSelectorSchema&#39;: False,
+    &#39;models.process.ProcessDispatcherSchema&#39;: False,
     &#39;models.process_execution.ProcessExecutionSchema.Meta&#39;: False,
     &#39;models.process_execution.ProcessExecutionSchema.opts&#39;: False,
     &#39;models.process_execution.ProcessExecutionChainOptionSchema&#39;: False,
@@ -87,8 +90,8 @@ __pdoc__ = {
     &#39;models.process_execution.ProcessExecutionOptionSchema&#39;: False,
     &#39;models.process_service_execution.ProcessServiceExecutionSchema.Meta&#39;: False,
     &#39;models.process_service_execution.ProcessServiceExecutionSchema.opts&#39;: False,
-    &#39;models.process_service_execution.ProcessServiceExecutionActionSchema&#39;: False,
     &#39;models.process_service_execution.ProcessServiceExecutionActionValueSchema&#39;: False,
+    &#39;models.process_service_execution.ProcessServiceExecutionActionSchema&#39;: False,
     &#39;models.process_service_execution.ProcessServiceExecutionActionsSchema&#39;: False,
     &#39;models.process_service_execution.ProcessServiceExecutionMetricSchema&#39;: False,
     &#39;models.process_service_execution.ProcessServiceExecutionOptionSchema&#39;: False,
@@ -96,10 +99,12 @@ __pdoc__ = {
     &#39;models.process_service_execution_log.ProcessServiceExecutionLogSchema.opts&#39;: False,
     &#39;models.service.ServiceSchema.Meta&#39;: False,
     &#39;models.service.ServiceSchema.opts&#39;: False,
-    &#39;models.service.ServiceActionSchema&#39;: False,
     &#39;models.service.ServiceActionValueSchema&#39;: False,
+    &#39;models.service.ServiceActionSchema&#39;: False,
     &#39;models.service.ServiceDefinitionLinkageSchema&#39;: False,
     &#39;models.service.ServiceDefinitionSchema&#39;: False,
+    &#39;models.service.ServiceGroupAggregatorOptionSchema&#39;: False,
+    &#39;models.service.ServiceGroupAggregatorSchema&#39;: False,
     &#39;models.service.ServiceInputExpressionSchema&#39;: False,
     &#39;models.service.ServiceOptionExpressionSchema&#39;: False,
     &#39;models.service.ServiceValidationSchema&#39;: False,
@@ -336,7 +341,7 @@ def set_log_level(level):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.7.4
+Version: 1.8.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
