@@ -547,7 +547,7 @@ class Process(Model):
 
         Args:
             number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
-            input: The dispatcher name to add. Either the number or the name must be provided.
+            name: The dispatcher name to add. Either the number or the name must be provided.
 
         Raises:
             ModelError: if the process is the execute status.

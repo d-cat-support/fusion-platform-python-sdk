@@ -578,7 +578,7 @@ class Process(Model):
 
         Args:
             number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
-            input: The dispatcher name to add. Either the number or the name must be provided.
+            name: The dispatcher name to add. Either the number or the name must be provided.
 
         Raises:
             ModelError: if the process is the execute status.
@@ -1836,7 +1836,7 @@ def options_iterator(cls, options):
 
         Args:
             number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
-            input: The dispatcher name to add. Either the number or the name must be provided.
+            name: The dispatcher name to add. Either the number or the name must be provided.
 
         Raises:
             ModelError: if the process is the execute status.
@@ -2574,7 +2574,7 @@ execute status or the dispatcher does not exist.</p>
 <dl>
 <dt><strong><code>number</code></strong></dt>
 <dd>The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.</dd>
-<dt><strong><code>input</code></strong></dt>
+<dt><strong><code>name</code></strong></dt>
 <dd>The dispatcher name to add. Either the number or the name must be provided.</dd>
 </dl>
 <h2 id="raises">Raises</h2>
@@ -2597,7 +2597,7 @@ execute status or the dispatcher does not exist.</p>
 
     Args:
         number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
-        input: The dispatcher name to add. Either the number or the name must be provided.
+        name: The dispatcher name to add. Either the number or the name must be provided.
 
     Raises:
         ModelError: if the process is the execute status.
@@ -3253,7 +3253,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.8.1
+Version: 1.8.2
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
