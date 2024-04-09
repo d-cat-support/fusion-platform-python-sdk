@@ -1,6 +1,8 @@
 marshmallow
 mock
 pdoc3
+pip-review
+pip-upgrader
 pyjwt[crypto]
 pytest
 python-dateutil
@@ -8,5 +10,7 @@ python-i18n[YAML]
 pytz
 requests
 requests-mock
+setuptools
 tenacity
 twine
+wheel

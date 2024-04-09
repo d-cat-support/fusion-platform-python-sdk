@@ -12,8 +12,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 
 ## Installation
 
-The SDK has been built for Python 3, and is tested against Python 3.8, 3.9, 3.10 and 3.11. To install the SDK into a suitable Python environment containing `pip`,
-execute the following:
+The SDK has been built for Python 3, and is tested against Python 3.8, 3.9, 3.10, 3.11 and 3.12. To install the SDK into a suitable Python environment containing
+`pip`, execute the following:
 
 ```shell
 pip install fusion-platform-python-sdk
