@@ -6,7 +6,7 @@
     </h2>
 
     <p>
-        Version: 1.11.1
+        Version: 1.12.2
     </p>
 
     <p>
