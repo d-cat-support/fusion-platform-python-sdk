@@ -72,8 +72,11 @@ class Model(Base):
 
     # Useful fields and templates.
     _FIELD_AVAILABLE_DISPATCHERS = &#39;available_dispatchers&#39;
+    _FIELD_BOUNDS = &#39;bounds&#39;
+    _FIELD_CATEGORY = &#39;category&#39;
     _FIELD_CONSTRAINED_NAMES = &#39;constrained_names&#39;
     _FIELD_CONSTRAINED_VALUES = &#39;constrained_values&#39;
+    _FIELD_CRS = &#39;crs&#39;
     _FIELD_DATA_TYPE = &#39;data_type&#39;
     _FIELD_DISPATCH_INTERMEDIATE = &#39;dispatch_intermediate&#39;
     _FIELD_DISPATCHERS = &#39;dispatchers&#39;
@@ -81,23 +84,37 @@ class Model(Base):
     _FIELD_DOCUMENTATION_DESCRIPTION = &#39;documentation_description&#39;
     _FIELD_ERROR = &#39;error&#39;
     _FIELD_EXECUTIONS = &#39;executions&#39;
+    _FIELD_EXTENSIONS = &#39;extensions&#39;
+    _FIELD_FILE_NAME = &#39;file_name&#39;
     _FIELD_FILE_TYPE = &#39;file_type&#39;
+    _FIELD_GEOSPATIAL = &#39;geospatial&#39;
     _FIELD_GROUP_COUNT = &#39;group_count&#39;
     _FIELD_GROUP_ID = &#39;group_id&#39;
     _FIELD_GROUP_INDEX = &#39;group_index&#39;
     _FIELD_HAS_EXECUTIONS = &#39;has_executions&#39;
+    _FIELD_HISTOGRAM = &#39;histogram&#39;
+    _FIELD_HISTOGRAM_MINIMUM = &#39;histogram_minimum&#39;
+    _FIELD_HISTOGRAM_MAXIMUM = &#39;histogram_maximum&#39;
     _FIELD_ID = &#39;id&#39;
     _FIELD_INPUT = &#39;input&#39;
     _FIELD_INPUTS = &#39;inputs&#39;
     _FIELD_KEYWORDS = &#39;keywords&#39;
+    _FIELD_MAXIMUM = &#39;maximum&#39;
+    _FIELD_MEAN = &#39;mean&#39;
+    _FIELD_MINIMUM = &#39;minimum&#39;
     _FIELD_NAME = &#39;name&#39;
     _FIELD_OPTIONS = &#39;options&#39;
     _FIELD_OUTPUTS = &#39;outputs&#39;
     _FIELD_PROCESS_STATUS = &#39;process_status&#39;
+    _FIELD_RESOLUTION = &#39;resolution&#39;
+    _FIELD_SD = &#39;sd&#39;
+    _FIELD_SELECTOR = &#39;selector&#39;
+    _FIELD_SELECTORS = &#39;selectors&#39;
     _FIELD_SSD_ID = &#39;ssd_id&#39;
     _FIELD_STARTED_AT = &#39;started_at&#39;
     _FIELD_PUBLISHABLE = &#39;publishable&#39;
     _FIELD_SIZE = &#39;size&#39;
+    _FIELD_UNIT = &#39;unit&#39;
     _FIELD_VALIDATION = &#39;validation&#39;
     _FIELD_VALUE = &#39;value&#39;
 
@@ -842,8 +859,11 @@ class Model(Base):
 
     # Useful fields and templates.
     _FIELD_AVAILABLE_DISPATCHERS = &#39;available_dispatchers&#39;
+    _FIELD_BOUNDS = &#39;bounds&#39;
+    _FIELD_CATEGORY = &#39;category&#39;
     _FIELD_CONSTRAINED_NAMES = &#39;constrained_names&#39;
     _FIELD_CONSTRAINED_VALUES = &#39;constrained_values&#39;
+    _FIELD_CRS = &#39;crs&#39;
     _FIELD_DATA_TYPE = &#39;data_type&#39;
     _FIELD_DISPATCH_INTERMEDIATE = &#39;dispatch_intermediate&#39;
     _FIELD_DISPATCHERS = &#39;dispatchers&#39;
@@ -851,23 +871,37 @@ class Model(Base):
     _FIELD_DOCUMENTATION_DESCRIPTION = &#39;documentation_description&#39;
     _FIELD_ERROR = &#39;error&#39;
     _FIELD_EXECUTIONS = &#39;executions&#39;
+    _FIELD_EXTENSIONS = &#39;extensions&#39;
+    _FIELD_FILE_NAME = &#39;file_name&#39;
     _FIELD_FILE_TYPE = &#39;file_type&#39;
+    _FIELD_GEOSPATIAL = &#39;geospatial&#39;
     _FIELD_GROUP_COUNT = &#39;group_count&#39;
     _FIELD_GROUP_ID = &#39;group_id&#39;
     _FIELD_GROUP_INDEX = &#39;group_index&#39;
     _FIELD_HAS_EXECUTIONS = &#39;has_executions&#39;
+    _FIELD_HISTOGRAM = &#39;histogram&#39;
+    _FIELD_HISTOGRAM_MINIMUM = &#39;histogram_minimum&#39;
+    _FIELD_HISTOGRAM_MAXIMUM = &#39;histogram_maximum&#39;
     _FIELD_ID = &#39;id&#39;
     _FIELD_INPUT = &#39;input&#39;
     _FIELD_INPUTS = &#39;inputs&#39;
     _FIELD_KEYWORDS = &#39;keywords&#39;
+    _FIELD_MAXIMUM = &#39;maximum&#39;
+    _FIELD_MEAN = &#39;mean&#39;
+    _FIELD_MINIMUM = &#39;minimum&#39;
     _FIELD_NAME = &#39;name&#39;
     _FIELD_OPTIONS = &#39;options&#39;
     _FIELD_OUTPUTS = &#39;outputs&#39;
     _FIELD_PROCESS_STATUS = &#39;process_status&#39;
+    _FIELD_RESOLUTION = &#39;resolution&#39;
+    _FIELD_SD = &#39;sd&#39;
+    _FIELD_SELECTOR = &#39;selector&#39;
+    _FIELD_SELECTORS = &#39;selectors&#39;
     _FIELD_SSD_ID = &#39;ssd_id&#39;
     _FIELD_STARTED_AT = &#39;started_at&#39;
     _FIELD_PUBLISHABLE = &#39;publishable&#39;
     _FIELD_SIZE = &#39;size&#39;
+    _FIELD_UNIT = &#39;unit&#39;
     _FIELD_VALIDATION = &#39;validation&#39;
     _FIELD_VALUE = &#39;value&#39;
 
@@ -1819,7 +1853,7 @@ attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatica
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.12.2
+Version: 1.13.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

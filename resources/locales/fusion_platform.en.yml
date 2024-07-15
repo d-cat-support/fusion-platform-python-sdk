@@ -7,7 +7,9 @@
 #
 
 en:
+  organisation: "Digital Content Analysis Technology Ltd"
   sdk: "Fusion Platform(r) SDK"
   version: "Version: %{version}"
   version_date: "Date: %{version_date}"
   support: "Support: support@d-cat.co.uk"
+  url: "https://www.d-cat.co.uk"

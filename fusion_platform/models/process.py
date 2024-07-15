@@ -473,8 +473,8 @@ class ProcessSchema(Schema):
     has_executions = fields.String(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
     has_executions_organisation_id = fields.String(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
-
     # Removed creator.
+
     # Removed search.
 
     available_dispatchers = fields.List(fields.Nested(ProcessDispatcherSchema()), allow_none=True, metadata={'hide': True})  # Added pseudo-field.
@@ -528,14 +528,16 @@ class Process(Model):
         fusion_platform.FILE_TYPE_GEOTIFF: [fusion_platform.FILE_TYPE_GEOTIFF, fusion_platform.FILE_TYPE_DEM, fusion_platform.FILE_TYPE_JPEG2000],
         fusion_platform.FILE_TYPE_JPEG2000: [fusion_platform.FILE_TYPE_JPEG2000],
         fusion_platform.FILE_TYPE_DEM: [fusion_platform.FILE_TYPE_DEM],
-        fusion_platform.FILE_TYPE_GEOJSON: [fusion_platform.FILE_TYPE_GEOJSON, fusion_platform.FILE_TYPE_KML, fusion_platform.FILE_TYPE_KMZ,
-                                            fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
+        fusion_platform.FILE_TYPE_GEOJSON: [fusion_platform.FILE_TYPE_GEOJSON, fusion_platform.FILE_TYPE_KML, fusion_platform.FILE_TYPE_KMZ, fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
         fusion_platform.FILE_TYPE_KML: [fusion_platform.FILE_TYPE_KML],
         fusion_platform.FILE_TYPE_KMZ: [fusion_platform.FILE_TYPE_KMZ],
         fusion_platform.FILE_TYPE_CSV: [fusion_platform.FILE_TYPE_CSV],
         fusion_platform.FILE_TYPE_ESRI_SHAPEFILE: [fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
         fusion_platform.FILE_TYPE_JPEG: [fusion_platform.FILE_TYPE_JPEG],
         fusion_platform.FILE_TYPE_PNG: [fusion_platform.FILE_TYPE_PNG],
+        fusion_platform.FILE_TYPE_PDF: [fusion_platform.FILE_TYPE_PDF],
+        fusion_platform.FILE_TYPE_GZIP: [fusion_platform.FILE_TYPE_GZIP],
+        fusion_platform.FILE_TYPE_ZIP: [fusion_platform.FILE_TYPE_ZIP],
         fusion_platform.FILE_TYPE_OTHER: [fusion_platform.FILE_TYPE_OTHER],
     }
     # @formatter:on

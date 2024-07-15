@@ -234,8 +234,8 @@ class ServiceSchema(Schema):
     version = fields.Integer(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     approval_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     # Removed latest.
-    # Removed dispatcher.
     featured = fields.String(allow_none=True)
+    # Removed dispatcher.
     show_in_latest = fields.Boolean(allow_none=True)  # Changed to optional.
     name = fields.String(required=True)
 
@@ -265,6 +265,7 @@ class ServiceSchema(Schema):
 
     # Removed creator.
     # Removed approver.
+
     # Removed search.
 
     documentation_summary = fields.String(required=True)
@@ -542,8 +543,8 @@ class Service(Model):
     version = fields.Integer(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     approval_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     # Removed latest.
-    # Removed dispatcher.
     featured = fields.String(allow_none=True)
+    # Removed dispatcher.
     show_in_latest = fields.Boolean(allow_none=True)  # Changed to optional.
     name = fields.String(required=True)
 
@@ -573,6 +574,7 @@ class Service(Model):
 
     # Removed creator.
     # Removed approver.
+
     # Removed search.
 
     documentation_summary = fields.String(required=True)
@@ -608,7 +610,7 @@ class Service(Model):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.12.2
+Version: 1.13.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

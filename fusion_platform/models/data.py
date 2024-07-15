@@ -44,10 +44,12 @@ class DataSchema(Schema):
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     file_with_preview = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
+    # Removed uploaded.
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed creator.
+
     # Removed search.
 
     class Meta:
@@ -341,3 +343,81 @@ class Data(Model):
             ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
         return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)
+
+    def get_stac_collection(self, items, collection_file_name=DataFile._STAC_COLLECTION_FILE_NAME, owner=None, created_at=None, detail=None):
+        """
+        Converts the data representation into a STAC collection with the specified STAC item file names.
+
+        Args:
+            items: The list of items to be put into the collection. This should be a tuple of (STAC item, item_file_name).
+            collection_file_name: The optional collection file name.
+            owner: The optional owner of the collection. Default None.
+            created_at: Optionally when the collection was created. Default None.
+            detail: The optional collection detail as a dictionary. Default None.
+
+        Returns:
+            A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.
+        """
+        stac_extensions = []
+
+        # Form the providers.
+        provider = {
+            'name': i18n.t('fusion_platform.organisation'),
+            'roles': ['producer', 'licensor'],
+            'url': i18n.t('fusion_platform.url')
+        }
+
+        # Add in the optional processing information, if any.
+        if owner is not None:
+            provider['processing:lineage'] = owner
+
+        if created_at is not None:
+            provider['processing.datetime'] = created_at
+
+        if detail is not None:
+            provider['processing:software'] = detail
+
+        if (owner is not None) or (created_at is not None) or (detail is not None):
+            stac_extensions.append('https://stac-extensions.github.io/processing/v1.2.0/schema.json')
+
+        # Form the links.
+        links = [
+            {'rel': 'self', 'href': collection_file_name, 'type': 'application/json'},
+            {'rel': 'root', 'href': collection_file_name, 'type': 'application/json'},
+        ]
+
+        # Add in the files calculating the maximal spatial and temporal extents.
+        bbox = None
+        interval_start = None
+        interval_end = None
+
+        for item, item_file_name in items:
+            # Calculate the spatial extent.
+            item_bbox = item.get('bbox')
+
+            if (bbox is None) or (len(bbox) < 4):
+                bbox = item_bbox
+
+            if (bbox is not None) and (len(bbox) >= 4) and (item_bbox is not None) and (len(item_bbox) >= 4):
+                bbox = [min(bbox[0], item_bbox[0]), min(bbox[1], item_bbox[1]), max(bbox[2], item_bbox[2]), max(bbox[3], item_bbox[3])]
+
+            # Calculate the temporal extent.
+            item_datetime = dict_nested_get(item, ['properties', 'datetime'])
+            interval_start = item_datetime if interval_start is None else min(interval_start, item_datetime)
+            interval_end = item_datetime if interval_end is None else max(interval_end, item_datetime)
+
+            # Add in the link.
+            links.append({'rel': 'item', 'href': item_file_name, 'type': 'application/geo+json'})
+
+        # Build the STAC collection.
+        return {
+            'type': 'Collection',
+            'stac_version': '1.0.0',
+            'stac_extensions': stac_extensions,
+            'id': self.id,
+            'description': self.name,
+            'license': 'proprietary',
+            'providers': [provider],
+            'extent': {'spatial': {'bbox': [bbox]}, 'temporal': {'interval': [[interval_start, interval_end]]}},
+            'links': links
+        }, collection_file_name

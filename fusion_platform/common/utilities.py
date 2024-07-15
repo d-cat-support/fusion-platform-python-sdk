@@ -8,7 +8,38 @@ author: Matthew Casey
 
 from datetime import date, datetime, time, timezone
 from decimal import Decimal
+import re
 from types import MappingProxyType
+
+
+def datetime_parse(string_or_blank):
+    """
+    Attempts to parse an ISO8601 datetime from a string using common formats.
+
+    Args:
+        string_or_blank: The datetime to parse, or blank.
+
+    Returns:
+        The parsed datetime or None if not parsable or blank.
+    """
+    parsed = None
+
+    if not string_blank(string_or_blank):
+        # Strip out all optional delimiters and then attempt to parse with and without the "Z".
+        stripped = re.sub(r"[:]|([-](?!((\d{2}[:]\d{2})|(\d{4}))$))", '', str(string_or_blank))
+        formats = ['%Y%m%dT%H%M%S.%f', '%Y%m%dT%H%M%S.%f%z', '%Y%m%dT%H%M%S', '%Y%m%dT%H%M%S%z']
+
+        for format in formats:
+            try:
+                parsed = datetime.strptime(stripped, format)
+                parsed = parsed.astimezone(timezone.utc) if parsed.tzinfo is None else parsed  # Assume UTC if no timezone is provided.
+            except:
+                pass
+
+            if parsed is not None:
+                break
+
+    return parsed
 
 
 def dict_nested_get(dictionary_or_value, keys, default=None):
@@ -58,6 +89,19 @@ def json_default(value):
         return dict(value)
     else:
         return str(value)
+
+
+def string_blank(string_or_blank):
+    """
+    Checks if a string is None or blank.
+
+    Args:
+        string_or_blank: The string to check.
+
+    Returns:
+        True if the string is None, blank ("") or just made up with spaces.
+    """
+    return (string_or_blank is None) or (not bool(string_or_blank.strip()))
 
 
 def string_camel_to_underscore(string):

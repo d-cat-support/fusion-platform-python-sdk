@@ -75,10 +75,12 @@ class DataSchema(Schema):
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     file_with_preview = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
+    # Removed uploaded.
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     # Removed creator.
+
     # Removed search.
 
     class Meta:
@@ -371,7 +373,85 @@ class Data(Model):
             RequestError: if any get fails.
             ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
-        return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)</code></pre>
+        return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)
+
+    def get_stac_collection(self, items, collection_file_name=DataFile._STAC_COLLECTION_FILE_NAME, owner=None, created_at=None, detail=None):
+        &#34;&#34;&#34;
+        Converts the data representation into a STAC collection with the specified STAC item file names.
+
+        Args:
+            items: The list of items to be put into the collection. This should be a tuple of (STAC item, item_file_name).
+            collection_file_name: The optional collection file name.
+            owner: The optional owner of the collection. Default None.
+            created_at: Optionally when the collection was created. Default None.
+            detail: The optional collection detail as a dictionary. Default None.
+
+        Returns:
+            A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.
+        &#34;&#34;&#34;
+        stac_extensions = []
+
+        # Form the providers.
+        provider = {
+            &#39;name&#39;: i18n.t(&#39;fusion_platform.organisation&#39;),
+            &#39;roles&#39;: [&#39;producer&#39;, &#39;licensor&#39;],
+            &#39;url&#39;: i18n.t(&#39;fusion_platform.url&#39;)
+        }
+
+        # Add in the optional processing information, if any.
+        if owner is not None:
+            provider[&#39;processing:lineage&#39;] = owner
+
+        if created_at is not None:
+            provider[&#39;processing.datetime&#39;] = created_at
+
+        if detail is not None:
+            provider[&#39;processing:software&#39;] = detail
+
+        if (owner is not None) or (created_at is not None) or (detail is not None):
+            stac_extensions.append(&#39;https://stac-extensions.github.io/processing/v1.2.0/schema.json&#39;)
+
+        # Form the links.
+        links = [
+            {&#39;rel&#39;: &#39;self&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+            {&#39;rel&#39;: &#39;root&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+        ]
+
+        # Add in the files calculating the maximal spatial and temporal extents.
+        bbox = None
+        interval_start = None
+        interval_end = None
+
+        for item, item_file_name in items:
+            # Calculate the spatial extent.
+            item_bbox = item.get(&#39;bbox&#39;)
+
+            if (bbox is None) or (len(bbox) &lt; 4):
+                bbox = item_bbox
+
+            if (bbox is not None) and (len(bbox) &gt;= 4) and (item_bbox is not None) and (len(item_bbox) &gt;= 4):
+                bbox = [min(bbox[0], item_bbox[0]), min(bbox[1], item_bbox[1]), max(bbox[2], item_bbox[2]), max(bbox[3], item_bbox[3])]
+
+            # Calculate the temporal extent.
+            item_datetime = dict_nested_get(item, [&#39;properties&#39;, &#39;datetime&#39;])
+            interval_start = item_datetime if interval_start is None else min(interval_start, item_datetime)
+            interval_end = item_datetime if interval_end is None else max(interval_end, item_datetime)
+
+            # Add in the link.
+            links.append({&#39;rel&#39;: &#39;item&#39;, &#39;href&#39;: item_file_name, &#39;type&#39;: &#39;application/geo+json&#39;})
+
+        # Build the STAC collection.
+        return {
+            &#39;type&#39;: &#39;Collection&#39;,
+            &#39;stac_version&#39;: &#39;1.0.0&#39;,
+            &#39;stac_extensions&#39;: stac_extensions,
+            &#39;id&#39;: self.id,
+            &#39;description&#39;: self.name,
+            &#39;license&#39;: &#39;proprietary&#39;,
+            &#39;providers&#39;: [provider],
+            &#39;extent&#39;: {&#39;spatial&#39;: {&#39;bbox&#39;: [bbox]}, &#39;temporal&#39;: {&#39;interval&#39;: [[interval_start, interval_end]]}},
+            &#39;links&#39;: links
+        }, collection_file_name</code></pre>
 </details>
 </section>
 <section>
@@ -681,7 +761,85 @@ class Data(Model):
             RequestError: if any get fails.
             ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
-        return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)</code></pre>
+        return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)
+
+    def get_stac_collection(self, items, collection_file_name=DataFile._STAC_COLLECTION_FILE_NAME, owner=None, created_at=None, detail=None):
+        &#34;&#34;&#34;
+        Converts the data representation into a STAC collection with the specified STAC item file names.
+
+        Args:
+            items: The list of items to be put into the collection. This should be a tuple of (STAC item, item_file_name).
+            collection_file_name: The optional collection file name.
+            owner: The optional owner of the collection. Default None.
+            created_at: Optionally when the collection was created. Default None.
+            detail: The optional collection detail as a dictionary. Default None.
+
+        Returns:
+            A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.
+        &#34;&#34;&#34;
+        stac_extensions = []
+
+        # Form the providers.
+        provider = {
+            &#39;name&#39;: i18n.t(&#39;fusion_platform.organisation&#39;),
+            &#39;roles&#39;: [&#39;producer&#39;, &#39;licensor&#39;],
+            &#39;url&#39;: i18n.t(&#39;fusion_platform.url&#39;)
+        }
+
+        # Add in the optional processing information, if any.
+        if owner is not None:
+            provider[&#39;processing:lineage&#39;] = owner
+
+        if created_at is not None:
+            provider[&#39;processing.datetime&#39;] = created_at
+
+        if detail is not None:
+            provider[&#39;processing:software&#39;] = detail
+
+        if (owner is not None) or (created_at is not None) or (detail is not None):
+            stac_extensions.append(&#39;https://stac-extensions.github.io/processing/v1.2.0/schema.json&#39;)
+
+        # Form the links.
+        links = [
+            {&#39;rel&#39;: &#39;self&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+            {&#39;rel&#39;: &#39;root&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+        ]
+
+        # Add in the files calculating the maximal spatial and temporal extents.
+        bbox = None
+        interval_start = None
+        interval_end = None
+
+        for item, item_file_name in items:
+            # Calculate the spatial extent.
+            item_bbox = item.get(&#39;bbox&#39;)
+
+            if (bbox is None) or (len(bbox) &lt; 4):
+                bbox = item_bbox
+
+            if (bbox is not None) and (len(bbox) &gt;= 4) and (item_bbox is not None) and (len(item_bbox) &gt;= 4):
+                bbox = [min(bbox[0], item_bbox[0]), min(bbox[1], item_bbox[1]), max(bbox[2], item_bbox[2]), max(bbox[3], item_bbox[3])]
+
+            # Calculate the temporal extent.
+            item_datetime = dict_nested_get(item, [&#39;properties&#39;, &#39;datetime&#39;])
+            interval_start = item_datetime if interval_start is None else min(interval_start, item_datetime)
+            interval_end = item_datetime if interval_end is None else max(interval_end, item_datetime)
+
+            # Add in the link.
+            links.append({&#39;rel&#39;: &#39;item&#39;, &#39;href&#39;: item_file_name, &#39;type&#39;: &#39;application/geo+json&#39;})
+
+        # Build the STAC collection.
+        return {
+            &#39;type&#39;: &#39;Collection&#39;,
+            &#39;stac_version&#39;: &#39;1.0.0&#39;,
+            &#39;stac_extensions&#39;: stac_extensions,
+            &#39;id&#39;: self.id,
+            &#39;description&#39;: self.name,
+            &#39;license&#39;: &#39;proprietary&#39;,
+            &#39;providers&#39;: [provider],
+            &#39;extent&#39;: {&#39;spatial&#39;: {&#39;bbox&#39;: [bbox]}, &#39;temporal&#39;: {&#39;interval&#39;: [[interval_start, interval_end]]}},
+            &#39;links&#39;: links
+        }, collection_file_name</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -977,6 +1135,109 @@ until all upload and analysis (or errored) has completed and this method returns
 </p>
 <div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
 </dd>
+<dt id="fusion_platform.models.data.Data.get_stac_collection"><code class="name flex">
+<span>def <span class="ident">get_stac_collection</span></span>(<span>self, items, collection_file_name='.collection.stac', owner=None, created_at=None, detail=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts the data representation into a STAC collection with the specified STAC item file names.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>items</code></strong></dt>
+<dd>The list of items to be put into the collection. This should be a tuple of (STAC item, item_file_name).</dd>
+<dt><strong><code>collection_file_name</code></strong></dt>
+<dd>The optional collection file name.</dd>
+<dt><strong><code>owner</code></strong></dt>
+<dd>The optional owner of the collection. Default None.</dd>
+<dt><strong><code>created_at</code></strong></dt>
+<dd>Optionally when the collection was created. Default None.</dd>
+<dt><strong><code>detail</code></strong></dt>
+<dd>The optional collection detail as a dictionary. Default None.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_stac_collection(self, items, collection_file_name=DataFile._STAC_COLLECTION_FILE_NAME, owner=None, created_at=None, detail=None):
+    &#34;&#34;&#34;
+    Converts the data representation into a STAC collection with the specified STAC item file names.
+
+    Args:
+        items: The list of items to be put into the collection. This should be a tuple of (STAC item, item_file_name).
+        collection_file_name: The optional collection file name.
+        owner: The optional owner of the collection. Default None.
+        created_at: Optionally when the collection was created. Default None.
+        detail: The optional collection detail as a dictionary. Default None.
+
+    Returns:
+        A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.
+    &#34;&#34;&#34;
+    stac_extensions = []
+
+    # Form the providers.
+    provider = {
+        &#39;name&#39;: i18n.t(&#39;fusion_platform.organisation&#39;),
+        &#39;roles&#39;: [&#39;producer&#39;, &#39;licensor&#39;],
+        &#39;url&#39;: i18n.t(&#39;fusion_platform.url&#39;)
+    }
+
+    # Add in the optional processing information, if any.
+    if owner is not None:
+        provider[&#39;processing:lineage&#39;] = owner
+
+    if created_at is not None:
+        provider[&#39;processing.datetime&#39;] = created_at
+
+    if detail is not None:
+        provider[&#39;processing:software&#39;] = detail
+
+    if (owner is not None) or (created_at is not None) or (detail is not None):
+        stac_extensions.append(&#39;https://stac-extensions.github.io/processing/v1.2.0/schema.json&#39;)
+
+    # Form the links.
+    links = [
+        {&#39;rel&#39;: &#39;self&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+        {&#39;rel&#39;: &#39;root&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+    ]
+
+    # Add in the files calculating the maximal spatial and temporal extents.
+    bbox = None
+    interval_start = None
+    interval_end = None
+
+    for item, item_file_name in items:
+        # Calculate the spatial extent.
+        item_bbox = item.get(&#39;bbox&#39;)
+
+        if (bbox is None) or (len(bbox) &lt; 4):
+            bbox = item_bbox
+
+        if (bbox is not None) and (len(bbox) &gt;= 4) and (item_bbox is not None) and (len(item_bbox) &gt;= 4):
+            bbox = [min(bbox[0], item_bbox[0]), min(bbox[1], item_bbox[1]), max(bbox[2], item_bbox[2]), max(bbox[3], item_bbox[3])]
+
+        # Calculate the temporal extent.
+        item_datetime = dict_nested_get(item, [&#39;properties&#39;, &#39;datetime&#39;])
+        interval_start = item_datetime if interval_start is None else min(interval_start, item_datetime)
+        interval_end = item_datetime if interval_end is None else max(interval_end, item_datetime)
+
+        # Add in the link.
+        links.append({&#39;rel&#39;: &#39;item&#39;, &#39;href&#39;: item_file_name, &#39;type&#39;: &#39;application/geo+json&#39;})
+
+    # Build the STAC collection.
+    return {
+        &#39;type&#39;: &#39;Collection&#39;,
+        &#39;stac_version&#39;: &#39;1.0.0&#39;,
+        &#39;stac_extensions&#39;: stac_extensions,
+        &#39;id&#39;: self.id,
+        &#39;description&#39;: self.name,
+        &#39;license&#39;: &#39;proprietary&#39;,
+        &#39;providers&#39;: [provider],
+        &#39;extent&#39;: {&#39;spatial&#39;: {&#39;bbox&#39;: [bbox]}, &#39;temporal&#39;: {&#39;interval&#39;: [[interval_start, interval_end]]}},
+        &#39;links&#39;: links
+    }, collection_file_name</code></pre>
+</details>
+</dd>
 <dt id="fusion_platform.models.data.Data.to_csv"><code class="name flex">
 <span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
 </code></dt>
@@ -1046,10 +1307,12 @@ until all upload and analysis (or errored) has completed and this method returns
     bounds = fields.List(fields.Decimal(required=True), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     file_with_preview = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
+    # Removed uploaded.
     uploaded_organisation_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     # Removed creator.
+
     # Removed search.
 
     class Meta:
@@ -1076,7 +1339,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.12.2
+Version: 1.13.1
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -1104,6 +1367,7 @@ Version: 1.12.2
 <li><code><a title="fusion_platform.models.data.Data.delete" href="model.html#fusion_platform.models.data.Data.delete">delete</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.files" href="#fusion_platform.models.data.Data.files">files</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.get" href="model.html#fusion_platform.models.data.Data.get">get</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.get_stac_collection" href="#fusion_platform.models.data.Data.get_stac_collection">get_stac_collection</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.to_csv" href="model.html#fusion_platform.models.data.Data.to_csv">to_csv</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.update" href="model.html#fusion_platform.models.data.Data.update">update</a></code></li>
 </ul>

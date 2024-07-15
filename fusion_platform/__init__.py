@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '1.12.2'
-__version_date__ = '2024-06-11T07:57:10Z'
+__version__ = '1.13.1'
+__version_date__ = '2024-07-15T06:23:24Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -102,6 +102,9 @@ FILE_TYPE_CSV = 'CSV'
 FILE_TYPE_ESRI_SHAPEFILE = 'ESRI Shapefile'
 FILE_TYPE_JPEG = 'JPEG'
 FILE_TYPE_PNG = 'PNG'
+FILE_TYPE_PDF = 'PDF'
+FILE_TYPE_GZIP = 'GZIP'
+FILE_TYPE_ZIP = 'ZIP'
 FILE_TYPE_OTHER = 'Other'
 
 # Run types.

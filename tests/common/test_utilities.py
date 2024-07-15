@@ -16,10 +16,24 @@ import pytz
 
 from tests.custom_test_case import CustomTestCase
 
-from fusion_platform.common.utilities import dict_nested_get, json_default, string_camel_to_underscore, value_from_read_only, value_to_read_only, value_to_string
+from fusion_platform.common.utilities import datetime_parse, dict_nested_get, json_default, string_blank, string_camel_to_underscore, value_from_read_only, \
+    value_to_read_only, value_to_string
 
 
 class TestUtilities(CustomTestCase):
+    def test_datetime_parse(self):
+        """
+        Tests datetime_parse.
+        """
+        now = datetime.now()
+        now_utc = datetime.now(tz=timezone.utc)
+
+        self.assertIsNone(datetime_parse(None))
+        self.assertIsNone(datetime_parse(''))
+        self.assertIsNone(datetime_parse(' '))
+        self.assertEqual(now.astimezone(timezone.utc), datetime_parse(now.isoformat()))
+        self.assertEqual(now_utc, datetime_parse(now_utc.isoformat()))
+
     def test_dict_nested_get_none(self):
         """
         Tests dict_nested_get with no dictionary.
@@ -77,6 +91,16 @@ class TestUtilities(CustomTestCase):
         dictionary = {'tz_datetime': tz_datetime, 'int_number': int_number, 'float_number': float_number, 'decimal_number': decimal_number}
         self.assertEqual(str(dictionary), json_default(dictionary))
         self.assertEqual(dictionary, json_default(MappingProxyType(dictionary)))
+
+    def test_string_blank(self):
+        """
+        Tests string_blank.
+        """
+        self.assertTrue(string_blank(None))
+        self.assertTrue(string_blank(''))
+        self.assertTrue(string_blank(' '))
+        self.assertFalse(string_blank('test'))
+        self.assertFalse(string_blank(' test '))
 
     def test_string_camel_to_underscore(self):
         """

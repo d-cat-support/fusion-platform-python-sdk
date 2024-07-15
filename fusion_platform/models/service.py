@@ -203,8 +203,8 @@ class ServiceSchema(Schema):
     version = fields.Integer(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     approval_status = fields.String(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     # Removed latest.
-    # Removed dispatcher.
     featured = fields.String(allow_none=True)
+    # Removed dispatcher.
     show_in_latest = fields.Boolean(allow_none=True)  # Changed to optional.
     name = fields.String(required=True)
 
@@ -234,6 +234,7 @@ class ServiceSchema(Schema):
 
     # Removed creator.
     # Removed approver.
+
     # Removed search.
 
     documentation_summary = fields.String(required=True)

@@ -6,6 +6,7 @@
 # (c) Digital Content Analysis Technology Ltd 2022
 #
 
+from datetime import datetime, timezone
 import json
 import pytest
 import requests
@@ -19,6 +20,7 @@ import fusion_platform
 from fusion_platform.common.utilities import json_default
 from fusion_platform.models.model import Model, ModelError
 from fusion_platform.models.data import Data, DataSchema
+from fusion_platform.models.data_file import DataFile, DataFileSchema
 from fusion_platform.session import Session, RequestError
 
 
@@ -391,6 +393,58 @@ class TestData(CustomTestCase):
             data.get()
             self.assertIsNotNone(data)
             self.assertEqual(str(data_id), str(data.id))
+
+    def test_get_stac_collection(self):
+        """
+        Tests that the STAC collection item can be created from a data model.
+        """
+        with open(self.fixture_path('data.json'), 'r') as file:
+            data_content = json.loads(file.read())
+
+        with open(self.fixture_path('data_file.json'), 'r') as file:
+            data_file_content = json.loads(file.read())
+
+        session = Session()
+        organisation_id = data_content.get('organisation_id')
+        data_id = data_content.get(Model._FIELD_ID)
+        file_id = data_file_content.get('file_id')
+        data_path = Data._PATH_GET.format(organisation_id=organisation_id, data_id=data_id)
+
+        data = Data(session)
+        self.assertIsNotNone(data)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{data_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
+            data.get(organisation_id=organisation_id, data_id=data_id)
+            self.assertIsNotNone(data)
+            self.assertEqual(str(data_id), str(data.id))
+
+            items = []
+
+            for i in range(1, 10):
+                data_file_content[Model._FIELD_FILE_TYPE] = 'GeoTIFF'
+                data_file_content[Model._FIELD_FILE_NAME] = f"2024060{i}.tif"
+                data_file_content[Model._FIELD_CRS] = 'EPSG:3857'
+                data_file_content[Model._FIELD_BOUNDS] = [(i - 1) * 10, (i - 1) * 10, (i - 1) * 10, (i - 1) * 10]
+                data_file_content[Model._FIELD_SIZE] = 1024
+
+                data_file = DataFile(session)
+                self.assertIsNotNone(data_file)
+
+                data_file._set_model_from_response(data_file_content, DataFileSchema(), organisation_id=organisation_id)
+                self.assertEqual(str(organisation_id), str(data_file.organisation_id))
+                self.assertEqual(str(data_id), str(data_file.data_id))
+                self.assertEqual(str(file_id), str(data_file.file_id))
+
+                items.append(data_file.get_stac_item())
+
+            stac_collection, collection_file_name = data.get_stac_collection(items)
+            self.assertIsNotNone(stac_collection)
+            self.assertIsNotNone(collection_file_name)
+
+            stac_collection, collection_file_name = data.get_stac_collection(items, owner='Some Process', created_at=datetime.now(timezone.utc), detail={'test': 1})
+            self.assertIsNotNone(stac_collection)
+            self.assertIsNotNone(collection_file_name)
 
     def test_model_from_api_id(self):
         """
