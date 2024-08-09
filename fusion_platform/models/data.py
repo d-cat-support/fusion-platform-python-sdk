@@ -215,7 +215,7 @@ class Data(Model):
         # Return the copy.
         return self.__class__._model_from_api_id(self._session, organisation_id=self.organisation_id, id=copy_data_id)
 
-    def _create(self, name, file_type, files, wait=False):
+    def _create(self, name, file_type, files, wait=False, **kwargs):
         """
         Attempts to create the model object with the given values. This assumes the model template has been loaded first using the _new method, and that the model
         is then created using a POST RESTful request. This assumes that the post body contains key names which include the name of the model class.
@@ -223,10 +223,11 @@ class Data(Model):
         This method is overridden to also upload the corresponding files and optionally wait for the upload and analysis to complete.
 
         Args:
-        name: The name of the data object.
-        file_type: The type of files that the data object will hold.
-        files: The list of file paths to be uploaded.
-        wait: Optionally wait for the upload and analysis to complete? Default False.
+            name: The name of the data object.
+            file_type: The type of files that the data object will hold.
+            files: The list of file paths to be uploaded.
+            wait: Optionally wait for the upload and analysis to complete? Default False.
+            kwargs: The model attributes which override those already in the template.
 
         Returns:
             The created data object.
@@ -236,7 +237,7 @@ class Data(Model):
             ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
         """
         # Use the super method to create the data item with the correct attributes. This will raise an exception if anything fails.
-        super(Data, self)._create(name=name)
+        super(Data, self)._create(name=name, **kwargs)
 
         # Add each of the files, assuming that each is of the same file type, and start its upload in a thread.
         try:

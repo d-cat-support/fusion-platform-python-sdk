@@ -144,7 +144,7 @@ class Organisation(Model):
     _PATH_SERVICES = f&#34;{_PATH_BASE}/services/latest&#34;
     _PATH_DISPATCHERS = f&#34;{_PATH_BASE}/services/dispatchers&#34;
 
-    def create_data(self, name, file_type, files, wait=False):
+    def create_data(self, name, file_type, files, wait=False, **kwargs):
         &#34;&#34;&#34;
         Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
 
@@ -153,6 +153,7 @@ class Organisation(Model):
             file_type: The type of files that the data object will hold.
             files: The list of file paths to be uploaded.
             wait: Optionally wait for the upload and analysis to complete? Default False.
+            kwargs: The model attributes which override those already in the template.
 
         Returns:
             The created data object.
@@ -165,8 +166,8 @@ class Organisation(Model):
         data = Data(self._session)
         data._new(organisation_id=self.id)
 
-        # Now attempt to create the data item.
-        data._create(name, file_type, files, wait)
+        # Now attempt to create the data item with any overriding keyword arguments.
+        data._create(name, file_type, files, wait=wait, **kwargs)
 
         return data
 
@@ -429,7 +430,7 @@ class Organisation(Model):
     _PATH_SERVICES = f&#34;{_PATH_BASE}/services/latest&#34;
     _PATH_DISPATCHERS = f&#34;{_PATH_BASE}/services/dispatchers&#34;
 
-    def create_data(self, name, file_type, files, wait=False):
+    def create_data(self, name, file_type, files, wait=False, **kwargs):
         &#34;&#34;&#34;
         Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
 
@@ -438,6 +439,7 @@ class Organisation(Model):
             file_type: The type of files that the data object will hold.
             files: The list of file paths to be uploaded.
             wait: Optionally wait for the upload and analysis to complete? Default False.
+            kwargs: The model attributes which override those already in the template.
 
         Returns:
             The created data object.
@@ -450,8 +452,8 @@ class Organisation(Model):
         data = Data(self._session)
         data._new(organisation_id=self.id)
 
-        # Now attempt to create the data item.
-        data._create(name, file_type, files, wait)
+        # Now attempt to create the data item with any overriding keyword arguments.
+        data._create(name, file_type, files, wait=wait, **kwargs)
 
         return data
 
@@ -831,7 +833,7 @@ def services(self):
 <h3>Methods</h3>
 <dl>
 <dt id="fusion_platform.models.organisation.Organisation.create_data"><code class="name flex">
-<span>def <span class="ident">create_data</span></span>(<span>self, name, file_type, files, wait=False)</span>
+<span>def <span class="ident">create_data</span></span>(<span>self, name, file_type, files, wait=False, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.</p>
@@ -845,6 +847,8 @@ def services(self):
 <dd>The list of file paths to be uploaded.</dd>
 <dt><strong><code>wait</code></strong></dt>
 <dd>Optionally wait for the upload and analysis to complete? Default False.</dd>
+<dt><strong><code>kwargs</code></strong></dt>
+<dd>The model attributes which override those already in the template.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The created data object.</p>
@@ -859,7 +863,7 @@ def services(self):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_data(self, name, file_type, files, wait=False):
+<pre><code class="python">def create_data(self, name, file_type, files, wait=False, **kwargs):
     &#34;&#34;&#34;
     Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
 
@@ -868,6 +872,7 @@ def services(self):
         file_type: The type of files that the data object will hold.
         files: The list of file paths to be uploaded.
         wait: Optionally wait for the upload and analysis to complete? Default False.
+        kwargs: The model attributes which override those already in the template.
 
     Returns:
         The created data object.
@@ -880,8 +885,8 @@ def services(self):
     data = Data(self._session)
     data._new(organisation_id=self.id)
 
-    # Now attempt to create the data item.
-    data._create(name, file_type, files, wait)
+    # Now attempt to create the data item with any overriding keyword arguments.
+    data._create(name, file_type, files, wait=wait, **kwargs)
 
     return data</code></pre>
 </details>
@@ -1297,7 +1302,7 @@ themselves.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.13.1
+Version: 1.13.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

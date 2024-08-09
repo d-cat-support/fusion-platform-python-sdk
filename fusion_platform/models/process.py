@@ -473,6 +473,8 @@ class ProcessSchema(Schema):
     has_executions = fields.String(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
     has_executions_organisation_id = fields.String(required=True, metadata={'hide': True})  # Changed to hide as an attribute.
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
+    non_aggregator_count = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    aggregator_count = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     # Removed creator.
 
     # Removed search.
@@ -657,16 +659,19 @@ class Process(Model):
         # Return the copy.
         return process
 
-    def create(self):
+    def create(self, **kwargs):
         """
         Attempts to persist the template process in the Fusion Platform<sup>&reg;</sup> so that it can be executed.
+
+        Args:
+            kwargs: The model attributes which override those already in the template.
 
         Raises:
             RequestError: if the create fails.
             ModelError: if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.
         """
         # Attempt to issue the create.
-        self._create()
+        self._create(**kwargs)
 
     def __dispatchers(self, dispatchers):
         """

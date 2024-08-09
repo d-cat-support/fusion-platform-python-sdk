@@ -358,6 +358,8 @@
       "delete_expiry": "2022-02-16T11:00:05.062082+00:00"
     }
   ],
+  "aggregator_count": 2,
+  "non_aggregator_count": 3,
   "has_executions": "executions",
   "has_executions_organisation_id": "b8fe5452-9289-49c4-8110-5209462b2eaf"
 }

@@ -113,7 +113,7 @@ class Organisation(Model):
     _PATH_SERVICES = f"{_PATH_BASE}/services/latest"
     _PATH_DISPATCHERS = f"{_PATH_BASE}/services/dispatchers"
 
-    def create_data(self, name, file_type, files, wait=False):
+    def create_data(self, name, file_type, files, wait=False, **kwargs):
         """
         Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
 
@@ -122,6 +122,7 @@ class Organisation(Model):
             file_type: The type of files that the data object will hold.
             files: The list of file paths to be uploaded.
             wait: Optionally wait for the upload and analysis to complete? Default False.
+            kwargs: The model attributes which override those already in the template.
 
         Returns:
             The created data object.
@@ -134,8 +135,8 @@ class Organisation(Model):
         data = Data(self._session)
         data._new(organisation_id=self.id)
 
-        # Now attempt to create the data item.
-        data._create(name, file_type, files, wait)
+        # Now attempt to create the data item with any overriding keyword arguments.
+        data._create(name, file_type, files, wait=wait, **kwargs)
 
         return data
 

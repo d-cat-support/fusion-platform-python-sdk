@@ -165,11 +165,12 @@ class Model(Base):
 
         return attributes
 
-    def __build_body(self, **kwargs):
+    def __build_body(self, create=False, **kwargs):
         """
-        Builds a request body suitable for sending to the API. All current model attributes are included, with the keywords arguments overridding their value.
+        Builds a request body suitable for sending to the API. All current model attributes are included, with the keywords arguments overriding their value.
 
         Args:
+            create: Whether the body is being built for a create request. This allows the id to be overridden.
             kwargs: The model attributes which override those already in the template.
 
         Returns:
@@ -184,9 +185,11 @@ class Model(Base):
             if (self.__model is not None) and (key in self.__model):
                 body[Model._REQUEST_KEY_NAME.format(model=model_name, key=key)] = self.__model.get(key)
 
-        # Now override any of the passed in attributes, ignoring anything which is read-only or hidden.
+        # Now override any of the passed in attributes, ignoring anything which is read-only or hidden. The exception here is the id, which can be overridden
+        # during a create operation.
         for key in kwargs:
-            if (Model._METADATA_READ_ONLY not in schema.fields[key].metadata) and (Model._METADATA_HIDE not in schema.fields[key].metadata):
+            if (create and (key == Model._FIELD_ID)) or (
+                    (Model._METADATA_READ_ONLY not in schema.fields[key].metadata) and (Model._METADATA_HIDE not in schema.fields[key].metadata)):
                 body[Model._REQUEST_KEY_NAME.format(model=model_name, key=key)] = kwargs[key]
 
         return body
@@ -228,7 +231,7 @@ class Model(Base):
             raise ModelError(i18n.t('models.model.already_persisted'))
 
         # Form the post body dictionary from the current object and the keyword arguments.
-        body = self.__build_body(**kwargs)
+        body = self.__build_body(create=True, **kwargs)
 
         # Make sure there is a create which can be performed. This requires a non-empty body.
         if len(body) <= 0:

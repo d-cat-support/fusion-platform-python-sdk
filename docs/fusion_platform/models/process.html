@@ -504,6 +504,8 @@ class ProcessSchema(Schema):
     has_executions = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     has_executions_organisation_id = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    non_aggregator_count = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    aggregator_count = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     # Removed creator.
 
     # Removed search.
@@ -688,16 +690,19 @@ class Process(Model):
         # Return the copy.
         return process
 
-    def create(self):
+    def create(self, **kwargs):
         &#34;&#34;&#34;
         Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
+
+        Args:
+            kwargs: The model attributes which override those already in the template.
 
         Raises:
             RequestError: if the create fails.
             ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
         # Attempt to issue the create.
-        self._create()
+        self._create(**kwargs)
 
     def __dispatchers(self, dispatchers):
         &#34;&#34;&#34;
@@ -1948,16 +1953,19 @@ def options_iterator(cls, options):
         # Return the copy.
         return process
 
-    def create(self):
+    def create(self, **kwargs):
         &#34;&#34;&#34;
         Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
+
+        Args:
+            kwargs: The model attributes which override those already in the template.
 
         Raises:
             RequestError: if the create fails.
             ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
         # Attempt to issue the create.
-        self._create()
+        self._create(**kwargs)
 
     def __dispatchers(self, dispatchers):
         &#34;&#34;&#34;
@@ -2724,10 +2732,15 @@ execute status or the dispatcher does not exist.</p>
 </details>
 </dd>
 <dt id="fusion_platform.models.process.Process.create"><code class="name flex">
-<span>def <span class="ident">create</span></span>(<span>self)</span>
+<span>def <span class="ident">create</span></span>(<span>self, **kwargs)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Attempts to persist the template process in the Fusion Platform<sup>&reg;</sup> so that it can be executed.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>kwargs</code></strong></dt>
+<dd>The model attributes which override those already in the template.</dd>
+</dl>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>RequestError</code></dt>
@@ -2739,16 +2752,19 @@ execute status or the dispatcher does not exist.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create(self):
+<pre><code class="python">def create(self, **kwargs):
     &#34;&#34;&#34;
     Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
+
+    Args:
+        kwargs: The model attributes which override those already in the template.
 
     Raises:
         RequestError: if the create fails.
         ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
     &#34;&#34;&#34;
     # Attempt to issue the create.
-    self._create()</code></pre>
+    self._create(**kwargs)</code></pre>
 </details>
 </dd>
 <dt id="fusion_platform.models.process.Process.delete"><code class="name flex">
@@ -3175,6 +3191,8 @@ Otherwise, this method will block until the next scheduled execution has started
 <li><strong>test_run</strong>: Is this a test run of a service?</li>
 <li><strong>price</strong>: The price in FPUs to execute this process given its inputs and options.</li>
 <li><strong>deletable</strong>: Is this process scheduled for deletion?</li>
+<li><strong>non_aggregator_count</strong>: The count of non-aggregator executions within the current or last execution.</li>
+<li><strong>aggregator_count</strong>: The count of aggregator executions within the current or last execution.</li>
 </ul></div>
 <details class="source">
 <summary>
@@ -3227,6 +3245,8 @@ Otherwise, this method will block until the next scheduled execution has started
     has_executions = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     has_executions_organisation_id = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
+    non_aggregator_count = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    aggregator_count = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     # Removed creator.
 
     # Removed search.
@@ -3257,7 +3277,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.13.1
+Version: 1.13.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

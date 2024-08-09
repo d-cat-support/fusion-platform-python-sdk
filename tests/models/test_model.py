@@ -57,6 +57,31 @@ class TestModel(CustomTestCase):
             for key in attributes:
                 self.assertEqual(getattr(model, key), attributes[key])
 
+    def test_build_body(self):
+        """
+        Test build body.
+        """
+        model = Model(Session(), schema=UserSchema())
+        self.assertIsNotNone(model)
+
+        id = uuid.uuid4()
+        email = 'test@d-cat.co.uk'
+        family_name = 'James'
+
+        body = model._Model__build_body(id=id, email=email, family_name=family_name)
+        self.assertIsNotNone(body)
+
+        self.assertNotEqual(body.get(Model._REQUEST_KEY_NAME.format(model=Model.__name__, key='id')), id)
+        self.assertNotEqual(body.get(Model._REQUEST_KEY_NAME.format(model=Model.__name__, key='email')), email)
+        self.assertEqual(body.get(Model._REQUEST_KEY_NAME.format(model=Model.__name__, key='family_name')), family_name)
+
+        body = model._Model__build_body(create=True, id=id, email=email, family_name=family_name)
+        self.assertIsNotNone(body)
+
+        self.assertEqual(body.get(Model._REQUEST_KEY_NAME.format(model=Model.__name__, key='id')), id)
+        self.assertNotEqual(body.get(Model._REQUEST_KEY_NAME.format(model=Model.__name__, key='email')), email)
+        self.assertEqual(body.get(Model._REQUEST_KEY_NAME.format(model=Model.__name__, key='family_name')), family_name)
+
     def test_build_filter(self):
         """
         Test build a filter.

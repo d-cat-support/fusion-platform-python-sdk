@@ -29,3 +29,5 @@
 * **test_run**: Is this a test run of a service?
 * **price**: The price in FPUs to execute this process given its inputs and options.
 * **deletable**: Is this process scheduled for deletion?
+* **non_aggregator_count**: The count of non-aggregator executions within the current or last execution.
+* **aggregator_count**: The count of aggregator executions within the current or last execution.
