@@ -1,8 +1,10 @@
 marshmallow
 mock
+pathos
 pdoc3
 pip-review
 pip-upgrader
+prompt_toolkit
 pyjwt[crypto]
 pytest
 python-dateutil
@@ -12,5 +14,6 @@ requests
 requests-mock
 setuptools
 tenacity
+tqdm
 twine
 wheel

@@ -11,6 +11,183 @@ author: Matthew Casey
 import i18n
 
 # @formatter:off
+i18n.add_translation('command.validate_constrained_error', 'Not one of %{constrained}', 'en')
+i18n.add_translation('command.unknown_command', 'Unknown command \'%{command}\'', 'en')
+i18n.add_translation('command.no_such_service', 'No such service \'%{service}\'', 'en')
+i18n.add_translation('command.no_such_process', 'No such process or execution \'%{process}\'', 'en')
+i18n.add_translation('command.no_such_organisation', 'No such organisation \'%{organisation}\'', 'en')
+i18n.add_translation('command.no_such_input', 'No such input \'%{input_name}\'', 'en')
+i18n.add_translation('command.no_executions', 'No executions for process \'%{process}\'', 'en')
+i18n.add_translation('command.invalid_login_response', 'Incorrect username or password', 'en')
+i18n.add_translation('command.log_subdivider', '................................................................................................', 'en')
+i18n.add_translation('command.log_process', 'Process \'%{process}\'', 'en')
+i18n.add_translation('command.log_options', 'Options:', 'en')
+i18n.add_translation('command.log_inputs', 'Inputs:', 'en')
+i18n.add_translation('command.log_field', '%{field}: %{value}', 'en')
+i18n.add_translation('command.log_divider', '------------------------------------------------------------------------------------------------', 'en')
+i18n.add_translation('command.log_dispatchers', 'Dispatchers:', 'en')
+i18n.add_translation('command.log_bookend', '************************************************************************************************', 'en')
+i18n.add_translation('command.wait_for_next', 'Waiting for next execution...', 'en')
+i18n.add_translation('command.using_storage', 'Uploading storage \'%{filename}\' with id %{storage_id} to \'%{storage_name}\'', 'en')
+i18n.add_translation('command.using_service', 'Using service \'%{service}\'', 'en')
+i18n.add_translation('command.using_organisation', 'Using organisation \'%{organisation}\'', 'en')
+i18n.add_translation('command.upload_storage', 'Uploading %{files} storage file(s)...', 'en')
+i18n.add_translation('command.upload_inputs', 'Uploading/finding %{files} input file(s)...', 'en')
+i18n.add_translation('command.storage_name', '%{process} Storage %{group_index} %{chain_index}', 'en')
+i18n.add_translation('command.start_process', 'Starting \'%{process}\' from service \'%{service}\'', 'en')
+i18n.add_translation('command.remove_process', 'Removing input \'%{process}\'', 'en')
+i18n.add_translation('command.remove_input', 'Removing input \'%{input}\'', 'en')
+i18n.add_translation('command.prompt_yes', 'Yes', 'en')
+i18n.add_translation('command.prompt_no', 'No', 'en')
+i18n.add_translation('command.password', 'Password', 'en')
+i18n.add_translation('command.organisation', 'Organisation', 'en')
+i18n.add_translation('command.executing', 'Executing...', 'en')
+i18n.add_translation('command.email', 'Email', 'en')
+i18n.add_translation('command.download_process_execution', 'Downloading \'%{process}\' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, metrics %{metrics}, components %{components})', 'en')
+i18n.add_translation('command.download_process', 'Downloading process \'%{process}\' to %{output}', 'en')
+i18n.add_translation('command.download_files', 'Downloading %{files} file(s)...', 'en')
+i18n.add_translation('command.download_executions', 'Gathering files for %{executions} execution(s)...', 'en')
+i18n.add_translation('command.download_execution', 'Downloading execution %{execution} to %{output}', 'en')
+i18n.add_translation('command.define_storage', 'Defining %{files} storage file(s)...', 'en')
+i18n.add_translation('command.define_process', 'Defining \'%{process}\' (inputs %{inputs}, storage %{storage})', 'en')
+i18n.add_translation('command.define_inputs', 'Defining %{files} input file(s)...', 'en')
+i18n.add_translation('command.add_dispatcher', 'Add %{dispatcher} dispatcher?', 'en')
+i18n.add_translation('command.download.process_help', 'the name of the process, the process id or execution id to download', 'en')
+i18n.add_translation('command.download.process_long', 'process', 'en')
+i18n.add_translation('command.download.help', 'downloads the inputs and/or outputs for each process', 'en')
+i18n.add_translation('command.download.command', 'download', 'en')
+i18n.add_translation('command.define.process_help', 'the name of the process, the process id or execution id to build the YAML file', 'en')
+i18n.add_translation('command.define.process_long', 'process', 'en')
+i18n.add_translation('command.define.help', 'outputs a YAML file for each existing process', 'en')
+i18n.add_translation('command.define.command', 'define', 'en')
+i18n.add_translation('command.start.metrics_help', 'save process metrics to file (default %%(default)s)', 'en')
+i18n.add_translation('command.start.metrics_long', '--metrics', 'en')
+i18n.add_translation('command.start.metrics_short', '-t', 'en')
+i18n.add_translation('command.start.component_help', 'to only download specific components, use the exact name of the component', 'en')
+i18n.add_translation('command.start.component_long', '--component', 'en')
+i18n.add_translation('command.start.component_short', '-c', 'en')
+i18n.add_translation('command.start.intermediate_help', 'download the process inputs and/or outputs for all intermediate services (default %%(default)s)', 'en')
+i18n.add_translation('command.start.intermediate_long', '--intermediate', 'en')
+i18n.add_translation('command.start.intermediate_short', '-m', 'en')
+i18n.add_translation('command.start.storage_help', 'downloads the storage (default %%(default)s)', 'en')
+i18n.add_translation('command.start.storage_long', '--storage', 'en')
+i18n.add_translation('command.start.storage_short', '-s', 'en')
+i18n.add_translation('command.start.outputs_help', 'downloads the outputs (default %%(default)s)', 'en')
+i18n.add_translation('command.start.outputs_long', '--outputs', 'en')
+i18n.add_translation('command.start.outputs_short', '-o', 'en')
+i18n.add_translation('command.start.inputs_help', 'downloads the inputs (default %%(default)s)', 'en')
+i18n.add_translation('command.start.inputs_long', '--inputs', 'en')
+i18n.add_translation('command.start.inputs_short', '-i', 'en')
+i18n.add_translation('command.start.remove_help', 'removes the process and inputs after download (default %%(default)s)', 'en')
+i18n.add_translation('command.start.remove_long', '--remove', 'en')
+i18n.add_translation('command.start.remove_short', '-r', 'en')
+i18n.add_translation('command.start.download_help', 'download the process inputs and/or outputs', 'en')
+i18n.add_translation('command.start.download_long', '--download', 'en')
+i18n.add_translation('command.start.download_short', '-d', 'en')
+i18n.add_translation('command.start.wait_for_start_help', 'wait for the process to start (default %%(default)s)\'', 'en')
+i18n.add_translation('command.start.wait_for_start_long', '--wait_for_start', 'en')
+i18n.add_translation('command.start.wait_for_start_short', '-w', 'en')
+i18n.add_translation('command.start.options_help', 'the list of options to be applied as \'option=value\'', 'en')
+i18n.add_translation('command.start.options_long', '--options', 'en')
+i18n.add_translation('command.start.options_short', '-p', 'en')
+i18n.add_translation('command.start.input_list_help', 'the list of inputs to be used as either filenames or pre-existing input names', 'en')
+i18n.add_translation('command.start.input_list_long', '--input_list', 'en')
+i18n.add_translation('command.start.input_list_short', '-l', 'en')
+i18n.add_translation('command.start.definition_help', 'the names of the service used to start processes or YAML files which defines everything', 'en')
+i18n.add_translation('command.start.definition_long', 'service_or_yaml', 'en')
+i18n.add_translation('command.start.help', 'starts a process', 'en')
+i18n.add_translation('command.start.command', 'start', 'en')
+i18n.add_translation('command.subparser', 'starts, defines or downloads a process', 'en')
+i18n.add_translation('command.verbose_help', 'show verbose output (default \'%%(default)s\')', 'en')
+i18n.add_translation('command.verbose_long', '--verbose', 'en')
+i18n.add_translation('command.verbose_short', '-v', 'en')
+i18n.add_translation('command.organisation_help', 'the organisation to be used', 'en')
+i18n.add_translation('command.organisation_long', '--organisation', 'en')
+i18n.add_translation('command.organisation_short', '-g', 'en')
+i18n.add_translation('command.email_help', 'the email address to be used to login', 'en')
+i18n.add_translation('command.email_long', '--email', 'en')
+i18n.add_translation('command.email_short', '-e', 'en')
+i18n.add_translation('command.deployment_help', 'the deployment used to define the API URL (default \'%%(default)s\')', 'en')
+i18n.add_translation('command.deployment_long', '--deployment', 'en')
+i18n.add_translation('command.deployment_short', '-y', 'en')
+i18n.add_translation('command.epilog', '''
+For more detailed options, use:
+
+  fusion_platform start --help
+  fusion_platform define --help
+  fusion_platform download --help
+
+''', 'en')
+i18n.add_translation('command.description', '''
+Use this command to execute any service (by case-sensitive name) or to retrieve its inputs and outputs. The service can be selected via command line options or
+defined by a YAML file. This command can also be used to build a YAML file from an existing process.
+
+Usage:
+  The following will attempt to create one or more processes from the given \'service_name\' to use the inputs (in order) and options and execute them. All processes
+  will use the same inputs and options:
+
+    fusion_platform start <service_name> ... -l <input_file|input_name> ... -p <option=value> ...
+
+  The following will also attempt to create one or more processes and execute them, but this time with the parameters specified in the YAML files:
+
+    fusion_platform start <yaml_file> ...
+
+  The YAML file has the following structure:
+
+  service_name: <service_name>
+  process_name: <process_name>
+  inputs:
+    - <input_file|input_name>
+    - name: <input_name>
+      file: <input_file>
+    ...
+  storage:
+    - <storage_id>: <storage_file>
+    ...
+  options:
+    <option>: <value>
+    ...
+  dispatchers:
+    - name: <dispatcher_name>
+      options:
+        <option>: <value>
+        ...
+    ...
+
+  Note that additional values can be set in the YAML file which cannot be set via the command line, such as \'process_name\', \'storage\' and \'dispatchers\'.
+
+  String values can include the following keywords, which will be replaced by corresponding values:
+
+  {service_name}:           Is replaced with the service name.
+  {now}:                    Is replaced with the current date and time (UTC).
+  {today@hour:minute}:      Is replaced with today\'s date with the optional hour and minute (UTC). If \'@hour:minute\' is not provided, \'@00:00\' is assumed.
+  {tomorrow@hour:minute}:   Is replaced with tomorrow\'s date with the optional hour and minute (UTC). If \'@hour:minute\' is not provided, \'@00:00\' is assumed.
+  {<day_name>@hour:minute}: Is replaced with the next occurrence of the specified day, including today. If \'@hour:minute\' is not provided, \'@00:00\' is assumed.
+
+  The following will create a YAML file from one or more existing processes. The YAML file will be named as a sanitised version of the process name with any
+  existing file overwritten:
+
+    fusion_platform define <process_name> ...
+
+  The following will optionally download all the outputs for the executions of a process. Only the last execution is downloaded, unless it is part of a group,
+  in which case all the executions in the group are downloaded. The files are downloaded to a sanitised version of the process name with any existing directory
+  replaced:
+
+    fusion_platform download <process_name> -o
+
+  where
+    service_name: Is the name of the service used to create the process.
+    process_name: Is the name of the process, or for define or download a process id or an execution id.
+    input_file:   Is the path to an input file. The file\'s extension will be used to work out what type of file it is.
+    input_name:   Is the name of an existing input within the Fusion Platform(r) which will be used.
+    storage_id:   Is the UUID of the storage data item which should be uploaded.
+    storage_file: Is the path to a storage file.
+    option:       The precise (lower case) name of the option. For example, \'minimum_coverage\' or \'repeat_count\'.
+    value:        The value of the option. For date times, use ISO formatting, such as \'2024-02-21T13:40:06.732527+00:00\'
+    yaml_file:    Is the path to the YAML file.
+
+''', 'en')
+i18n.add_translation('command.program', 'fusion_platform', 'en')
 i18n.add_translation('session.request_failed', 'API request failed: %{message}', 'en')
 i18n.add_translation('session.login_failed', 'Login failed', 'en')
 i18n.add_translation('session.missing_password', 'Password must be specified', 'en')

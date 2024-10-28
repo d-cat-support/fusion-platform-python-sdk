@@ -78,6 +78,8 @@ with open('fusion_platform/translations.py', 'w') as file:
     for locale, translations in translations_by_locale.items():
         for key, value in translations.items():
             translation = value.replace("'", "\\'")
-            file.write(f"i18n.add_translation('{key}', '{translation}', '{locale}')\n")
+            start_quote = "'''\n" if '\n' in translation else "'"
+            end_quote = "\n'''" if '\n' in translation else "'"
+            file.write(f"i18n.add_translation('{key}', {start_quote}{translation}{end_quote}, '{locale}')\n")
 
     file.write('# @formatter:on\n')

@@ -19,7 +19,7 @@ PACKAGE_DIR = pathlib.Path(__file__).parent
 # @formatter:off
 setup(
     name='fusion-platform-python-sdk',
-    version='1.13.5',
+    version='1.14.6',
     description='Python SDK used to interact with the Fusion Platform(r)',
     long_description=(PACKAGE_DIR / 'README.md').read_text(),
     long_description_content_type='text/markdown',
@@ -40,15 +40,18 @@ setup(
     include_package_data=True,
     install_requires=[
         'marshmallow',
+        'pathos',
+        'prompt_toolkit',
         'pyjwt',
         'python-dateutil',
         'python-i18n[YAML]',
         'requests',
-        'tenacity'
+        'tenacity',
+        'tqdm'
     ],
     entry_points={
         'console_scripts': [
-            'fusion_platform=fusion_platform.command:fusion_platform',
+            'fusion_platform=fusion_platform.command:main',
         ]
     }
 )

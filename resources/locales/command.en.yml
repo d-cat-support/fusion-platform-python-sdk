@@ -1,0 +1,195 @@
+#
+# Fusion platform command English localisation file.
+#
+# @author Matthew Casey
+#
+# (c) Digital Content Analysis Technology Ltd 2024
+#
+
+en:
+  program: "fusion_platform"
+  description: |
+    Use this command to execute any service (by case-sensitive name) or to retrieve its inputs and outputs. The service can be selected via command line options or
+    defined by a YAML file. This command can also be used to build a YAML file from an existing process.
+
+    Usage:
+      The following will attempt to create one or more processes from the given 'service_name' to use the inputs (in order) and options and execute them. All processes
+      will use the same inputs and options:
+
+        fusion_platform start <service_name> ... -l <input_file|input_name> ... -p <option=value> ...
+
+      The following will also attempt to create one or more processes and execute them, but this time with the parameters specified in the YAML files:
+
+        fusion_platform start <yaml_file> ...
+
+      The YAML file has the following structure:
+
+      service_name: <service_name>
+      process_name: <process_name>
+      inputs:
+        - <input_file|input_name>
+        - name: <input_name>
+          file: <input_file>
+        ...
+      storage:
+        - <storage_id>: <storage_file>
+        ...
+      options:
+        <option>: <value>
+        ...
+      dispatchers:
+        - name: <dispatcher_name>
+          options:
+            <option>: <value>
+            ...
+        ...
+
+      Note that additional values can be set in the YAML file which cannot be set via the command line, such as 'process_name', 'storage' and 'dispatchers'.
+
+      String values can include the following keywords, which will be replaced by corresponding values:
+
+      {service_name}:           Is replaced with the service name.
+      {now}:                    Is replaced with the current date and time (UTC).
+      {today@hour:minute}:      Is replaced with today's date with the optional hour and minute (UTC). If '@hour:minute' is not provided, '@00:00' is assumed.
+      {tomorrow@hour:minute}:   Is replaced with tomorrow's date with the optional hour and minute (UTC). If '@hour:minute' is not provided, '@00:00' is assumed.
+      {<day_name>@hour:minute}: Is replaced with the next occurrence of the specified day, including today. If '@hour:minute' is not provided, '@00:00' is assumed.
+
+      The following will create a YAML file from one or more existing processes. The YAML file will be named as a sanitised version of the process name with any
+      existing file overwritten:
+
+        fusion_platform define <process_name> ...
+
+      The following will optionally download all the outputs for the executions of a process. Only the last execution is downloaded, unless it is part of a group,
+      in which case all the executions in the group are downloaded. The files are downloaded to a sanitised version of the process name with any existing directory
+      replaced:
+
+        fusion_platform download <process_name> -o
+
+      where
+        service_name: Is the name of the service used to create the process.
+        process_name: Is the name of the process, or for define or download a process id or an execution id.
+        input_file:   Is the path to an input file. The file's extension will be used to work out what type of file it is.
+        input_name:   Is the name of an existing input within the Fusion Platform(r) which will be used.
+        storage_id:   Is the UUID of the storage data item which should be uploaded.
+        storage_file: Is the path to a storage file.
+        option:       The precise (lower case) name of the option. For example, 'minimum_coverage' or 'repeat_count'.
+        value:        The value of the option. For date times, use ISO formatting, such as '2024-02-21T13:40:06.732527+00:00'
+        yaml_file:    Is the path to the YAML file.
+
+  epilog: |
+    For more detailed options, use:
+    
+      fusion_platform start --help
+      fusion_platform define --help
+      fusion_platform download --help
+
+  deployment_short: "-y"
+  deployment_long: "--deployment"
+  deployment_help: "the deployment used to define the API URL (default '%%(default)s')"
+  email_short: "-e"
+  email_long: "--email"
+  email_help: "the email address to be used to login"
+  organisation_short: "-g"
+  organisation_long: "--organisation"
+  organisation_help: "the organisation to be used"
+  verbose_short: "-v"
+  verbose_long: "--verbose"
+  verbose_help: "show verbose output (default '%%(default)s')"
+
+  subparser: "starts, defines or downloads a process"
+
+  start:
+    command: "start"
+    help: "starts a process"
+    definition_long: "service_or_yaml"
+    definition_help: "the names of the service used to start processes or YAML files which defines everything"
+    input_list_short: "-l"
+    input_list_long: "--input_list"
+    input_list_help: "the list of inputs to be used as either filenames or pre-existing input names"
+    options_short: "-p"
+    options_long: "--options"
+    options_help: "the list of options to be applied as 'option=value'"
+    wait_for_start_short: "-w"
+    wait_for_start_long: "--wait_for_start"
+    wait_for_start_help: "wait for the process to start (default %%(default)s)'"
+    download_short: "-d"
+    download_long: "--download"
+    download_help: "download the process inputs and/or outputs"
+    remove_short: "-r"
+    remove_long: "--remove"
+    remove_help: "removes the process and inputs after download (default %%(default)s)"
+    inputs_short: "-i"
+    inputs_long: "--inputs"
+    inputs_help: "downloads the inputs (default %%(default)s)"
+    outputs_short: "-o"
+    outputs_long: "--outputs"
+    outputs_help: "downloads the outputs (default %%(default)s)"
+    storage_short: "-s"
+    storage_long: "--storage"
+    storage_help: "downloads the storage (default %%(default)s)"
+    intermediate_short: "-m"
+    intermediate_long: "--intermediate"
+    intermediate_help: "download the process inputs and/or outputs for all intermediate services (default %%(default)s)"
+    component_short: "-c"
+    component_long: "--component"
+    component_help: "to only download specific components, use the exact name of the component"
+    metrics_short: "-t"
+    metrics_long: "--metrics"
+    metrics_help: "save process metrics to file (default %%(default)s)"
+
+  define:
+    command: "define"
+    help: "outputs a YAML file for each existing process"
+    process_long: "process"
+    process_help: "the name of the process, the process id or execution id to build the YAML file"
+
+  download:
+    command: "download"
+    help: "downloads the inputs and/or outputs for each process"
+    process_long: "process"
+    process_help: "the name of the process, the process id or execution id to download"
+
+  add_dispatcher: "Add %{dispatcher} dispatcher?"
+  define_inputs: "Defining %{files} input file(s)..."
+  define_process: "Defining '%{process}' (inputs %{inputs}, storage %{storage})"
+  define_storage: "Defining %{files} storage file(s)..."
+  download_execution: "Downloading execution %{execution} to %{output}"
+  download_executions: "Gathering files for %{executions} execution(s)..."
+  download_files: "Downloading %{files} file(s)..."
+  download_process: "Downloading process '%{process}' to %{output}"
+  download_process_execution: "Downloading '%{process}' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, metrics %{metrics}, components %{components})"
+  email: "Email"
+  executing: "Executing..."
+  organisation: "Organisation"
+  password: "Password"
+  prompt_no: "No"
+  prompt_yes: "Yes"
+  remove_input: "Removing input '%{input}'"
+  remove_process: "Removing input '%{process}'"
+  start_process: "Starting '%{process}' from service '%{service}'"
+  storage_name: "%{process} Storage %{group_index} %{chain_index}"
+  upload_inputs: "Uploading/finding %{files} input file(s)..."
+  upload_storage: "Uploading %{files} storage file(s)..."
+  using_organisation: "Using organisation '%{organisation}'"
+  using_service: "Using service '%{service}'"
+  using_storage: "Uploading storage '%{filename}' with id %{storage_id} to '%{storage_name}'"
+  wait_for_next: "Waiting for next execution..."
+
+  log_bookend: "************************************************************************************************"
+  log_dispatchers: "Dispatchers:"
+  log_divider: "------------------------------------------------------------------------------------------------"
+  log_field: "%{field}: %{value}"
+  log_inputs: "Inputs:"
+  log_options: "Options:"
+  log_process: "Process '%{process}'"
+  log_subdivider: "................................................................................................"
+
+  invalid_login_response: "Incorrect username or password"
+  no_executions: "No executions for process '%{process}'"
+  no_such_input: "No such input '%{input_name}'"
+  no_such_organisation: "No such organisation '%{organisation}'"
+  no_such_process: "No such process or execution '%{process}'"
+  no_such_service: "No such service '%{service}'"
+  unknown_command: "Unknown command '%{command}'"
+  validate_constrained_error: "Not one of %{constrained}"
+

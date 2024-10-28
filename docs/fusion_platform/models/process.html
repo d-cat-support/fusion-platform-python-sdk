@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<meta name="generator" content="pdoc3 0.11.1">
 <title>fusion_platform.models.process API documentation</title>
-<meta name="description" content="Process model class file …" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="Process model class file …">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => {
+hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
+hljs.highlightAll();
+})</script>
 </head>
 <body>
 <main>
@@ -25,1150 +28,6 @@
 <p>Process model class file.</p>
 <p>author: Matthew Casey</p>
 <p>&copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a></p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Process model class file.
-
-author: Matthew Casey
-
-&amp;copy; [Digital Content Analysis Technology Ltd](https://www.d-cat.co.uk)
-&#34;&#34;&#34;
-
-from datetime import datetime, timedelta, timezone
-from functools import partial
-import i18n
-from marshmallow import Schema, EXCLUDE
-from time import sleep
-
-import fusion_platform
-from fusion_platform.common.utilities import value_from_read_only
-from fusion_platform.models import fields
-from fusion_platform.models.data import Data
-from fusion_platform.models.model import Model, ModelError
-from fusion_platform.models.process_execution import ProcessExecution
-from fusion_platform.session import Session
-
-
-# Define a schema class used to coerce option values. See Option#__coerce_value.
-
-class OptionDataTypeSchema(Schema):
-    &#34;&#34;&#34;
-    Defines a Marshmallow schema which can be used to coerce any option value into its underlying Python data type.
-    &#34;&#34;&#34;
-
-    # List out all the allowed field types using their corresponding data type names.
-    numeric = fields.Float(allow_none=True)
-    currency = fields.Decimal(allow_none=True)
-    boolean = fields.Boolean(allow_none=True)
-    datetime = fields.DateTime(allow_none=True)
-    string = fields.String(allow_none=True)
-    constrained = fields.String(allow_none=True)
-
-
-# Define a model class for an option which overrides the representation to display more relevant information.
-
-class Option(Model):
-    &#34;&#34;&#34;
-    Model option class.
-    &#34;&#34;&#34;
-
-    # Validation parsing for constrained values.
-    _VALIDATION_DELIMITER = &#39;;&#39;
-    _VALIDATION_EQUALS = &#39;=&#39;
-    _VALIDATION_FORMAT = &#39;format&#39;
-    _VALIDATION_ITEM_DELIMITER = &#39;,&#39;
-    _VALIDATION_NAMES = &#39;names&#39;
-    _VALIDATION_VALUES = &#39;values&#39;
-
-    @classmethod
-    def __coerce_value(cls, value, data_type):
-        &#34;&#34;&#34;
-        Attempts to coerce a value into its corresponding data type.
-
-        Args:
-            value: The value to coerce.
-            data_type: The required data type.
-
-        Returns:
-            The coerced value of the correct data type.
-        &#34;&#34;&#34;
-        # Deal with None values.
-        if (value is None) or (value == str(None)) or (value == &#39;null&#39;):
-            return None
-        else:
-            # Use the option schema to attempt to load the value using its data type as a name.
-            model = OptionDataTypeSchema().load({data_type: value})
-            return model.get(data_type)
-
-    @classmethod
-    def __extract_constrained_validation(cls, validation):
-        &#34;&#34;&#34;
-        Extracts the constrained values from a constrained option validation.
-
-        Args:
-            validation: The constrained option validation.
-
-        Returns:
-            A tuple (constrained_names, constrained_values) of the extracted elements or (None, None) if the constrained values cannot be extracted.
-        &#34;&#34;&#34;
-        # Extract the elements.
-        elements = validation.split(Option._VALIDATION_DELIMITER)
-        constrained_names = None
-        constrained_values = None
-
-        if len(elements) &lt;= 2:
-            for element in elements:
-                values = element.split(Option._VALIDATION_EQUALS)
-
-                if len(values) &gt; 0:
-                    lhs = values[0].lower()
-                    rhs = Option._VALIDATION_EQUALS.join(values[1:])
-
-                    try:
-                        if lhs == Option._VALIDATION_VALUES:
-                            constrained_values = rhs.split(Option._VALIDATION_ITEM_DELIMITER)
-
-                        if lhs == Option._VALIDATION_NAMES:
-                            constrained_names = rhs.split(Option._VALIDATION_ITEM_DELIMITER)
-                    except:
-                        pass  # Cannot be parsed.
-
-        return constrained_names, constrained_values
-
-    @classmethod
-    def __extract_datetime_validation(cls, validation):
-        &#34;&#34;&#34;
-        Extracts the datetime format from a datatime option validation.
-
-        Args:
-            validation: The datatime option validation.
-
-        Returns:
-            The datetime format, or None if it cannot be extracted.
-        &#34;&#34;&#34;
-        # Extract the elements.
-        elements = validation.split(Option._VALIDATION_DELIMITER)
-        format = None
-
-        if len(elements) &lt;= 3:
-            for element in elements:
-                values = element.split(Option._VALIDATION_EQUALS)
-
-                if len(values) &gt; 0:
-                    lhs = values[0].lower()
-                    rhs = Option._VALIDATION_EQUALS.join(values[1:])
-
-                    try:
-                        if lhs == Option._VALIDATION_FORMAT:
-                            format = rhs
-                    except:
-                        pass  # Cannot be parsed.
-
-        return format
-
-    @classmethod
-    def get_option_value(cls, option, value, coerce_value):
-        &#34;&#34;&#34;
-        Checks the supplied value for an option, coercing it if needed, and returns the value that can to into the model.
-
-        Args:
-            option: The option object for the option to set.
-            value: The value for the option.
-            coerce_value: Coerce the supplied value to be the correct type?
-
-        Raises:
-            ModelError: if the value has a different type to the option.
-
-        Returns:
-            The correct string representation of the option.
-        &#34;&#34;&#34;
-        # Check that the option has the same data type as the value.
-        data_type = option.get(cls._FIELD_DATA_TYPE)
-        existing_value = cls.__coerce_value(option[cls._FIELD_VALUE], data_type)
-
-        # Optionally coerce the supplied value, now that we know its data type.
-        if coerce_value:
-            value = cls.__coerce_value(value, data_type)
-
-        class_matches = isinstance(value, existing_value.__class__)
-
-        # Supplied ints can be used for floats.
-        if isinstance(value, int) and isinstance(existing_value, float):
-            class_matches = True
-
-        if (value is not None) and (existing_value is not None) and (not class_matches):
-            raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
-
-        validation = option.get(cls._FIELD_VALIDATION)
-
-        return cls.__value_to_option(value, data_type, validation)
-
-    @classmethod
-    def options_iterator(cls, options):
-        &#34;&#34;&#34;
-        Provides an iterator through a list of options.
-
-        Returns:
-            An iterator through the options.
-        &#34;&#34;&#34;
-        for option in options:
-            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            option = value_from_read_only(option)
-
-            # If the option is a constrained data type, then add in the constrained names and values from the validation.
-            if option.get(cls._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
-                option[cls._FIELD_CONSTRAINED_NAMES], option[cls._FIELD_CONSTRAINED_VALUES] = cls.__extract_constrained_validation(
-                    option.get(cls._FIELD_VALIDATION, &#39;&#39;))
-
-            # Coerce the value to be of the correct data type.
-            option[cls._FIELD_VALUE] = cls.__coerce_value(option.get(cls._FIELD_VALUE), option.get(cls._FIELD_DATA_TYPE))
-
-            # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Option(None, schema=ProcessOptionSchema())
-            model._set_model(option)
-
-            yield model
-
-    @classmethod
-    def __value_to_option(cls, value, data_type, validation):
-        &#34;&#34;&#34;
-        Converts a Python option value into a string depending upon its data type and validation parameters.
-
-        Args:
-            value: The value to convert.
-            data_type: The option data type.
-            validation: The optional validation for the option.
-
-        Returns:
-            The correct string representation of the option.
-        &#34;&#34;&#34;
-        if value is None:
-            return None
-        elif isinstance(value, bool):
-            return str(value).lower()
-        if data_type == fusion_platform.DATA_TYPE_DATETIME:
-            return datetime.strftime(value, cls.__extract_datetime_validation(validation))
-        else:
-            return str(value)
-
-    def __repr__(self):
-        &#34;&#34;&#34;
-        Returns:
-            A string representation of the object.
-        &#34;&#34;&#34;
-        return f&#34;{self.title} (&#39;{self.name}&#39;, {self.data_type}{&#39;, required&#39; if self.required else &#39;&#39;}) = {self.value}: {self.description}&#34;
-
-
-# Define a model class for an input which overrides the representation to display more relevant information.
-
-class Input(Model):
-    &#34;&#34;&#34;
-    Model input class.
-    &#34;&#34;&#34;
-
-    def __repr__(self):
-        &#34;&#34;&#34;
-        Returns:
-            A string representation of the object.
-        &#34;&#34;&#34;
-        return f&#34;{self.title} ({self.file_type}) = {self.name + &#39; (&#39; + str(self.id) + &#39;)&#39; if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}&#34;
-
-
-# Define a model class for a dispatcher which overrides the representation to display more relevant information.
-
-class Dispatcher(Model):
-    &#34;&#34;&#34;
-    Model dispatcher class.
-    &#34;&#34;&#34;
-
-    @property
-    def options(self):
-        &#34;&#34;&#34;
-        Provides an iterator through the dispatcher&#39;s options.
-
-        Returns:
-            An iterator through the options.
-        &#34;&#34;&#34;
-        return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))
-
-    def __repr__(self):
-        &#34;&#34;&#34;
-        Returns:
-            A string representation of the object.
-        &#34;&#34;&#34;
-        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False}): {self.documentation_summary}&#34;
-
-
-# Define the model schema classes. These are maintained from the API definitions.
-
-class ProcessChainOptionSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for SSD chain option.
-    &#34;&#34;&#34;
-    name = fields.String(required=True)
-    value = fields.String(allow_none=True)
-    data_type = fields.String(required=True)
-    validation = fields.String(allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class ProcessChainSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for SSD chain.
-    &#34;&#34;&#34;
-    ssd_id = fields.UUID(required=True)
-    service_id = fields.UUID(required=True)
-    inputs = fields.List(fields.UUID(allow_none=True), allow_none=True)
-    outputs = fields.List(fields.UUID(required=True), allow_none=True)
-    options = fields.List(fields.Nested(ProcessChainOptionSchema()), allow_none=True)
-    intermediate = fields.Boolean(allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class ProcessExecutionStatusSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for execution status.
-    &#34;&#34;&#34;
-    process_execution_id = fields.UUID(required=True)
-    group_id = fields.UUID(allow_none=True)
-    group_index = fields.Integer(allow_none=True)
-    group_count = fields.Integer(allow_none=True)
-    job_status = fields.String(required=True)
-    abort_reason = fields.String(allow_none=True)
-    started_at = fields.DateTime(required=True)
-    ended_at = fields.DateTime(allow_none=True)
-    delete_warning_status = fields.String(required=True)
-    delete_expiry = fields.DateTime(required=True)
-    notified = fields.Boolean(allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class ProcessSelectorSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for selector, category, data type, unit and format.
-    &#34;&#34;&#34;
-    selector = fields.String(required=True)
-    category = fields.String(required=True)
-    data_type = fields.String(required=True)
-    unit = fields.String(allow_none=True)
-    validation = fields.String(allow_none=True)
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class ProcessInputSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for the processes inputs.
-    &#34;&#34;&#34;
-    ssd_id = fields.UUID(required=True)
-    input = fields.Integer(required=True)
-    file_type = fields.String(required=True)
-    resolution = fields.Integer(allow_none=True)
-    selectors = fields.List(fields.Nested(ProcessSelectorSchema()), allow_none=True)
-    id = fields.UUID(required=True)
-    model = fields.String(required=True)
-    change_trigger = fields.Boolean(required=True)
-    change_hash = fields.String(allow_none=True)
-    title = fields.String(allow_none=True)
-    description = fields.String(allow_none=True)
-
-    name = fields.String(allow_none=True)  # Changed to add this field for displaying the input name.
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class ProcessOptionSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for options which are provided to the SSD images when run.
-    &#34;&#34;&#34;
-    ssd_id = fields.UUID(required=True)
-    name = fields.String(required=True)
-    value = fields.String(allow_none=True)
-    required = fields.Boolean(required=True)
-    data_type = fields.String(required=True)
-    validation = fields.String(allow_none=True)
-    mutually_exclusive = fields.String(allow_none=True)
-    advanced = fields.Boolean(allow_none=True)
-    title = fields.String(allow_none=True)
-    description = fields.String(allow_none=True)
-
-    constrained_names = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_names.title&#39;),
-                                                                                             &#39;description&#39;: i18n.t(
-                                                                                                 &#39;models.process.option.constrained_names.description&#39;)})  # Added this field to gold extracted data.
-    constrained_values = fields.List(fields.String(required=True), allow_none=True, metadata={&#39;title&#39;: i18n.t(&#39;models.process.option.constrained_values.title&#39;),
-                                                                                              &#39;description&#39;: i18n.t(
-                                                                                                  &#39;models.process.option.constrained_values.description&#39;)})  # Added this field to gold extracted data.
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class ProcessDispatcherSchema(Schema):
-    &#34;&#34;&#34;
-    Nested schema class for dispatchers.
-    &#34;&#34;&#34;
-    ssd_id = fields.UUID(required=True)
-    name = fields.String(required=True)
-    dispatch_intermediate = fields.Boolean(allow_none=True)
-    documentation_summary = fields.String(allow_none=True)
-    documentation_description = fields.String(allow_none=True)
-    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class ProcessSchema(Schema):
-    &#34;&#34;&#34;
-    Schema class for process model.
-
-    Each process model has the following fields (and nested fields):
-
-    .. include::process.md
-    &#34;&#34;&#34;
-    id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-
-    created_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    updated_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-
-    organisation_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    ssd_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    service_id = fields.UUID(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    name = fields.String(required=True)
-
-    inputs = fields.List(fields.Nested(ProcessInputSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
-    options = fields.List(fields.Nested(ProcessOptionSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
-    chains = fields.List(fields.Nested(ProcessChainSchema()), allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-
-    # Removed maximum_bounds.
-
-    run_type = fields.String(required=True)
-    repeat_count = fields.Integer(required=True)
-    repeat_start = fields.DateTime(required=True)
-    repeat_end = fields.DateTime(allow_none=True)
-    repeat_gap = fields.RelativeDelta(allow_none=True)
-    repeat_offset = fields.TimeDelta(allow_none=True)
-
-    process_status = fields.String(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    process_status_at = fields.DateTime(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    process_status_changed_by = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-
-    output_storage_period = fields.Integer(allow_none=True)
-    test_run = fields.Boolean(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-
-    dispatchers = fields.List(fields.Nested(ProcessDispatcherSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
-
-    # Removed prices.
-    price = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-
-    deletable = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    has_executions = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
-    has_executions_organisation_id = fields.String(required=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
-    executions = fields.List(fields.Nested(ProcessExecutionStatusSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
-    non_aggregator_count = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    aggregator_count = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
-    # Removed creator.
-
-    # Removed search.
-
-    available_dispatchers = fields.List(fields.Nested(ProcessDispatcherSchema()), allow_none=True, metadata={&#39;hide&#39;: True})  # Added pseudo-field.
-
-    class Meta:
-        &#34;&#34;&#34;
-        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
-        &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True
-
-
-class Process(Model):
-    &#34;&#34;&#34;
-    Process model class providing attributes and methods to manipulate process item details.
-    &#34;&#34;&#34;
-
-    # Override the schema.
-    _SCHEMA = ProcessSchema()
-
-    # Override the base model class name.
-    _BASE_MODEL_CLASS_NAME = &#39;Organisation&#39;  # A string to prevent circular imports.
-
-    # Base path.
-    _PATH_ROOT = &#39;/organisations/{organisation_id}/processes&#39;
-    _PATH_BASE = f&#34;{_PATH_ROOT}/{{process_id}}&#34;
-
-    # Override the standard model paths.
-    _PATH_COPY = f&#34;{_PATH_BASE}/copy&#34;
-    _PATH_CREATE = _PATH_ROOT
-    _PATH_DELETE = _PATH_BASE
-    _PATH_GET = _PATH_BASE
-    _PATH_NEW = f&#34;{_PATH_ROOT}/new&#34;
-    _PATH_PATCH = _PATH_BASE
-
-    # Add in the custom model paths.
-    _PATH_EXECUTE = f&#34;{_PATH_BASE}/execute&#34;
-    _PATH_EXECUTIONS = f&#34;{_PATH_BASE}/executions&#34;
-    _PATH_STOP = f&#34;{_PATH_BASE}/stop&#34;
-
-    # Process status values.
-    _PROCESS_STATUS_EXECUTE = &#39;execute&#39;
-    _PROCESS_STATUS_STOP = &#39;stop&#39;
-
-    # The maximum number of seconds to wait after an execution was meant to start.
-    _EXECUTE_WAIT_TOLERANCE = 900
-
-    # Allowed file type substitutions.
-    # @formatter:off
-    _FILE_TYPE_SUBSTITUTIONS = {
-        fusion_platform.FILE_TYPE_GEOTIFF: [fusion_platform.FILE_TYPE_GEOTIFF, fusion_platform.FILE_TYPE_DEM, fusion_platform.FILE_TYPE_JPEG2000],
-        fusion_platform.FILE_TYPE_JPEG2000: [fusion_platform.FILE_TYPE_JPEG2000],
-        fusion_platform.FILE_TYPE_DEM: [fusion_platform.FILE_TYPE_DEM],
-        fusion_platform.FILE_TYPE_GEOJSON: [fusion_platform.FILE_TYPE_GEOJSON, fusion_platform.FILE_TYPE_KML, fusion_platform.FILE_TYPE_KMZ, fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
-        fusion_platform.FILE_TYPE_KML: [fusion_platform.FILE_TYPE_KML],
-        fusion_platform.FILE_TYPE_KMZ: [fusion_platform.FILE_TYPE_KMZ],
-        fusion_platform.FILE_TYPE_CSV: [fusion_platform.FILE_TYPE_CSV],
-        fusion_platform.FILE_TYPE_ESRI_SHAPEFILE: [fusion_platform.FILE_TYPE_ESRI_SHAPEFILE],
-        fusion_platform.FILE_TYPE_JPEG: [fusion_platform.FILE_TYPE_JPEG],
-        fusion_platform.FILE_TYPE_PNG: [fusion_platform.FILE_TYPE_PNG],
-        fusion_platform.FILE_TYPE_PDF: [fusion_platform.FILE_TYPE_PDF],
-        fusion_platform.FILE_TYPE_GZIP: [fusion_platform.FILE_TYPE_GZIP],
-        fusion_platform.FILE_TYPE_ZIP: [fusion_platform.FILE_TYPE_ZIP],
-        fusion_platform.FILE_TYPE_OTHER: [fusion_platform.FILE_TYPE_OTHER],
-    }
-    # @formatter:on
-
-    def add_dispatcher(self, number=None, name=None):
-        &#34;&#34;&#34;
-        Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
-        execute status or the dispatcher does not exist.
-
-        Args:
-            number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
-            name: The dispatcher name to add. Either the number or the name must be provided.
-
-        Raises:
-            ModelError: if the process is the execute status.
-            ModelError: if the dispatcher does not exist.
-            ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        # Make sure the arguments are provided.
-        if (number is None) and (name is None):
-            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
-
-        # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-        # Find the corresponding dispatcher.
-        dispatchers = self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(
-            self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else []
-        found_dispatcher = None
-
-        for i, item in enumerate(dispatchers):
-            found = (number is not None) and (number == (i + 1))
-            found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME)) if not found else found
-
-            if found:
-                found_dispatcher = item
-                break
-
-        if found_dispatcher is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
-
-        # Add the dispatcher to the end of the existing list.
-        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
-        dispatchers.append(found_dispatcher)
-
-        # Update the dispatchers in the model.
-        self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
-
-        # Now update the model, persisting as needed.
-        super(Process, self).update()
-
-    @property
-    def available_dispatchers(self):
-        &#34;&#34;&#34;
-        Provides an iterator through the process&#39; available dispatchers.
-
-        Returns:
-            An iterator through the available dispatchers.
-        &#34;&#34;&#34;
-        return self.__dispatchers(
-            self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else [])
-
-    def copy(self, name):
-        &#34;&#34;&#34;
-        Creates a new template process from an existing process object. This process is not persisted to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-
-        Args:
-            name: The name of the copy.
-
-        Returns:
-            The new template process object.
-
-        Raises:
-            RequestError: if the copy fails.
-            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        # Get a new template for the process model using the process as the source of the copy.
-        process = Process(self._session)
-
-        # Copy the process model.
-        response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_GET)
-
-        # Assume that the resulting model is held within the expected key within the resulting dictionary.
-        if Model._RESPONSE_KEY_MODEL not in response:
-            raise ModelError(i18n.t(&#39;models.process.failed_copy&#39;))
-
-        # Make sure we have an organisation id.
-        modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
-        modified_response[&#39;organisation_id&#39;] = self.organisation_id
-
-        # Load the response into the model. We ignore missing required fields and those which are None.
-        process._set_model_from_response(modified_response, partial=True)
-
-        # Update the options because these are not copied across to the new model, even though they are returned in the response.
-        options = modified_response.get(&#39;options&#39;, [])
-        options = [] if options is None else options
-
-        for option in options:
-            # Set the option value. The value may be a string, rather than the required type, but that will automatically be converted.
-            if (option.get(self.__class__._FIELD_NAME) is not None) and (option.get(self.__class__._FIELD_VALUE) is not None):
-                process.__set_option(name=option.get(self.__class__._FIELD_NAME), value=option.get(self.__class__._FIELD_VALUE), coerce_value=True)
-
-        # And now the same for the inputs. Here we also validate each input by retrieving it.
-        inputs = modified_response.get(&#39;inputs&#39;, [])
-        inputs = [] if inputs is None else inputs
-
-        for i, input in enumerate(inputs):
-            # See if we can find the associated model.
-            if input.get(self.__class__._FIELD_ID) is not None:
-                data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, data_id=input.get(self.__class__._FIELD_ID))
-                process.__set_input(number=i + 1, data=data)
-
-        # Set the name.
-        process.update(name=name)
-
-        # Return the copy.
-        return process
-
-    def create(self, **kwargs):
-        &#34;&#34;&#34;
-        Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
-
-        Args:
-            kwargs: The model attributes which override those already in the template.
-
-        Raises:
-            RequestError: if the create fails.
-            ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        # Attempt to issue the create.
-        self._create(**kwargs)
-
-    def __dispatchers(self, dispatchers):
-        &#34;&#34;&#34;
-        Provides an iterator through dispatchers.
-
-        Returns:
-            An iterator through the dispatchers.
-        &#34;&#34;&#34;
-        for dispatcher in dispatchers:
-            # We first have to remove the mapping proxy so that we can wrap the dictionary in an object.
-            dispatcher = value_from_read_only(dispatcher)
-
-            # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Dispatcher(None, schema=ProcessDispatcherSchema())
-            model._set_model(dispatcher)
-
-            yield model
-
-    @property
-    def dispatchers(self):
-        &#34;&#34;&#34;
-        Provides an iterator through the process&#39; dispatchers.
-
-        Returns:
-            An iterator through the dispatchers.
-        &#34;&#34;&#34;
-        return self.__dispatchers(self._model.get(self.__class__._FIELD_DISPATCHERS) if self._model.get(self.__class__._FIELD_DISPATCHERS) is not None else [])
-
-    def execute(self, wait=False):
-        &#34;&#34;&#34;
-        Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
-
-        Args:
-            wait: Optionally wait for the next execution to start and complete? Default False.
-
-        Raises:
-            RequestError: if the execute fails.
-            ModelError: if any execution fails.
-        &#34;&#34;&#34;
-        # Send the request and load the resulting model.
-        self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
-
-        if wait:
-            # If we are waiting for the execution to complete, wait for the next execution to start...
-            self.wait_for_next_execution()
-
-            # ...and for all the executions to complete. Note that we wait for all executions to complete, even if at least one has failed.
-            exception = None
-
-            for execution in self.executions:
-                try:
-                    execution.check_complete(wait=wait)
-                except ModelError as e:
-                    # Keep the first exception raised.
-                    if exception is None:
-                        exception = e
-
-            # Raise any exception.
-            if exception is not None:
-                raise exception
-
-    @property
-    def executions(self):
-        &#34;&#34;&#34;
-        Provides an iterator through the process&#39;s executions.
-
-        Returns:
-            An iterator through the execution objects.
-        
-        Raises:
-            RequestError: if any get fails.
-            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
-
-    def find_executions(self, id=None, group_id=None):
-        &#34;&#34;&#34;
-        Searches for the process&#39;s executions with the specified id and/or group id, returning the first object found and an iterator.
-
-        Args:
-            id: The execution id to search for.
-            group_id: The execution group id to search for.
-
-        Returns:
-            The first found execution object, or None if not found, and an iterator through the found execution objects.
-        
-        Raises:
-            RequestError if any get fails.
-            ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        filter = self.__class__._build_filter(
-            [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
-
-        # Build the partial find generator and execute it.
-        find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
-        return self.__class__._first_and_generator(find)
-
-    @property
-    def inputs(self):
-        &#34;&#34;&#34;
-        Provides an iterator through the process&#39; inputs.
-
-        Returns:
-            An iterator through the inputs.
-        &#34;&#34;&#34;
-        for input in self._model.get(self.__class__._FIELD_INPUTS, []):
-            # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-            input = value_from_read_only(input)
-
-            # See if we can find the associated model.
-            if input.get(self.__class__._FIELD_ID) is not None:
-                data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, id=input.get(self.__class__._FIELD_ID))
-                input[self.__class__._FIELD_NAME] = data.name
-
-            # Encapsulate the dictionary within a model (which does not talk to the API).
-            model = Input(None, schema=ProcessInputSchema())
-            model._set_model(input)
-
-            yield model
-
-    @property
-    def options(self):
-        &#34;&#34;&#34;
-        Provides an iterator through the process&#39; options.
-
-        Returns:
-            An iterator through the options.
-        &#34;&#34;&#34;
-        return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))
-
-    def remove_dispatcher(self, number):
-        &#34;&#34;&#34;
-        Removes the dispatcher service with the corresponding number from the process.
-
-        Args:
-            number: The number to remove, starting from 1 for the first dispatcher.
-
-        Raises:
-            ModelError: if the process is the execute status.
-            ModelError: if the dispatcher does not exist.
-            ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        # Make sure the argument is provided.
-        if number is None:
-            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
-
-        # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-        # Find the corresponding dispatcher.
-        found_dispatcher_index = None
-        found_dispatcher = None
-
-        for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
-            found = (number is not None) and (number == (i + 1))
-
-            if found:
-                found_dispatcher_index = i
-                found_dispatcher = item
-                break
-
-        if found_dispatcher is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
-
-        # Remove the dispatcher from the existing list.
-        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
-        dispatchers.pop(found_dispatcher_index)
-
-        # Update the dispatchers in the model.
-        self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
-
-        # Now update the model, persisting as needed.
-        super(Process, self).update()
-
-    def __set_dispatcher(self, number, option_name=None, value=None, coerce_value=False, **kwargs):
-        &#34;&#34;&#34;
-        Sets the specified option for the and kwargs for the dispatcher. An exception is raised if the process is in the execute status, the dispatcher does not
-        exist or the option value has the wrong type.
-
-        Args:
-            number: The dispatcher number to update, starting from 1 for the first dispatcher.
-            option_name: The option name for the dispatcher to set.
-            value: The value for the option.
-            coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
-
-        Raises:
-            RequestError: if the update fails.
-            ModelError: if the process is in the execute state.
-            ModelError: if the value has a different type to the option.
-        &#34;&#34;&#34;
-        # Make sure the argument is provided.
-        if number is None:
-            raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
-
-        # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-        # Find the corresponding dispatcher.
-        found_dispatcher_index = None
-        found_dispatcher = None
-
-        for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
-            found = (number is not None) and (number == (i + 1))
-
-            if found:
-                found_dispatcher_index = i
-                found_dispatcher = item
-                break
-
-        if found_dispatcher is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
-
-        # Get the dispatcher so that it can be modified.
-        dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can access it.
-        dispatcher = dict(dispatchers[found_dispatcher_index])  # Convert read-only tuple to dict, so we can modify it.
-
-        # Optionally, find the corresponding option.
-        if (option_name is not None) or (value is not None):
-            options = list(dispatcher.get(self.__class__._FIELD_OPTIONS, []))  # Convert read-only tuple to list, so we can modify it.
-            options = [dict(option) for option in options]  # Convert read-only mapping to dict, so we can modify it.
-            found_option_index = None
-            found_option = None
-
-            for i, item in enumerate(options):
-                found = (option_name is not None) and (option_name == item.get(self.__class__._FIELD_NAME))
-
-                if found:
-                    found_option_index = i
-                    found_option = item
-                    break
-
-            if found_option is None:
-                raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
-
-            # We can now update the option. All options are expressed as strings with the correct format.
-            option_value = Option.get_option_value(found_option, value, coerce_value)
-            found_option[self.__class__._FIELD_VALUE] = option_value
-            dispatcher[self.__class__._FIELD_OPTIONS] = options
-            dispatcher[self.__class__._FIELD_OPTIONS][found_option_index] = found_option
-
-        # Modify any of the dispatcher attributes. We do not allow updates to read-only or hidden fields.
-        schema = ProcessDispatcherSchema()
-
-        for key in kwargs:
-            if (Model._METADATA_READ_ONLY not in schema.fields[key].metadata) and (Model._METADATA_HIDE not in schema.fields[key].metadata):
-                dispatcher[key] = kwargs[key]
-
-        # Update the dispatchers in the model.
-        self._set_field([self.__class__._FIELD_DISPATCHERS, found_dispatcher_index], dispatcher)
-
-    def __set_input(self, number=None, input=None, data=None):
-        &#34;&#34;&#34;
-        Sets the specified input for the process to the data item. An exception is raised if the process is in the execute status, the input does not exist, is not
-        ready to be used or has the wrong file type.
-
-        Args:
-            number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided.
-            input: The input object for the input to set. Either the number or the input must be provided.
-            data: The data object to use for the input.
-
-        Raises:
-            ModelError: if the process is the execute status.
-            ModelError: if the input does not exist.
-            ModelError: if the data object is ready to be used in a process.
-            ModelError: if the data object has a different file type to the input.
-        &#34;&#34;&#34;
-        # Make sure the arguments are provided.
-        if (number is None) and (input is None):
-            raise ModelError(i18n.t(&#39;models.process.input_not_specified&#39;))
-
-        if (data is None) or (not isinstance(data, Data)):
-            raise ModelError(i18n.t(&#39;models.process.data_not_specified&#39;))
-
-        # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-        # Find the corresponding input.
-        found_input_index = None
-        found_input = None
-
-        for i, item in enumerate(self._model.get(self.__class__._FIELD_INPUTS, [])):
-            found = (number is not None) and (number == (i + 1))
-            found = (input is not None) and (str(input.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
-                    input.input == item.get(self.__class__._FIELD_INPUT)) if not found else found
-
-            if found:
-                found_input_index = i
-                found_input = item
-                break
-
-        if found_input is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_input&#39;))
-
-        # Check that all the files in the data object are ready to be used. Along the way, pick out the first file type.
-        found_file_type = None
-        ready = True
-
-        for file in data.files:
-            found_file_type = file.file_type if found_file_type is None else found_file_type
-
-            if not hasattr(file, self.__class__._FIELD_PUBLISHABLE):
-                ready = False
-
-        if not ready:
-            raise ModelError(i18n.t(&#39;models.process.data_not_ready&#39;))
-
-        # Check the file type against the allowed list of substitutions.
-        if found_file_type not in Process._FILE_TYPE_SUBSTITUTIONS.get(found_input.get(self.__class__._FIELD_FILE_TYPE), []):
-            raise ModelError(i18n.t(&#39;models.process.wrong_file_type&#39;, expected=found_input.get(self.__class__._FIELD_FILE_TYPE), actual=found_file_type))
-
-        # We can now update the input.
-        self._set_field([self.__class__._FIELD_INPUTS, found_input_index, self.__class__._FIELD_ID], data.id)
-
-    def __set_option(self, name=None, option=None, value=None, coerce_value=False):
-        &#34;&#34;&#34;
-        Sets the specified option for the process to the value. An exception is raised if the process is in the execute status, the option does not exist or the
-        value has the wrong type.
-
-        Args:
-            name: The option name to set. Either the name or the option must be provided.
-            option: The option object for the option to set. Either the name or the option must be provided.
-            value: The value for the option.
-            coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
-
-        Raises:
-            ModelError: if the process is the execute status.
-            ModelError: if the value has a different type to the option.
-        &#34;&#34;&#34;
-        # Make sure the arguments are provided.
-        if (name is None) and (option is None):
-            raise ModelError(i18n.t(&#39;models.process.option_not_specified&#39;))
-
-        # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-        # Find the corresponding option.
-        found_option_index = None
-        found_option = None
-
-        for i, item in enumerate(self._model.get(self.__class__._FIELD_OPTIONS, [])):
-            found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME))
-            found = (option is not None) and (str(option.ssd_id) == str(item.get(self.__class__._FIELD_SSD_ID))) and (
-                    option.name == item.get(self.__class__._FIELD_NAME)) if not found else found
-
-            if found:
-                found_option_index = i
-                found_option = item
-                break
-
-        if found_option is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
-
-        # We can now update the option. All options are expressed as strings with the correct format.
-        option_value = Option.get_option_value(found_option, value, coerce_value)
-        self._set_field([self.__class__._FIELD_OPTIONS, found_option_index, self.__class__._FIELD_VALUE], option_value)
-
-    def stop(self):
-        &#34;&#34;&#34;
-        Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.
-
-        Raises:
-            RequestError: if the stop fails.
-        &#34;&#34;&#34;
-        # Send the request and load the resulting model.
-        self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)
-
-    def update(self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
-        &#34;&#34;&#34;
-        Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
-        contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
-        of setting inputs, options and dispatchers.
-
-        Args:
-            input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
-            input: The input object for the input to set. Either the number or the input must be provided when setting an input.
-            data: The data object to use for an input.
-            dispatcher_number: The dispatcher number to update, starting from 1 for the first dispatcher. If used then options and kwargs are for the dispatcher.
-            option_name: The option name to set. Either the name or the option must be provided when setting an option.
-            option: The option object for the option to set. Either the name or the option must be provided when setting an option.
-            value: The value for the option.
-            coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
-            kwargs: The model attributes which are to be patched.
-
-        Raises:
-            RequestError: if the update fails.
-            ModelError: if the process is in the execute state.
-            ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        # Make sure the process is not in the execute state.
-        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-            raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-        update_kwargs = kwargs
-
-        # Deal with the special case of inputs.
-        if (input_number is not None) or (input is not None):
-            self.__set_input(number=input_number, input=input, data=data)
-
-        # Deal with the special case of dispatchers.
-        if dispatcher_number is not None:  # Options and kwargs are for the dispatcher.
-            self.__set_dispatcher(number=dispatcher_number, option_name=option_name, value=value, coerce_value=coerce_value, **kwargs)
-
-            # The kwargs have been used on the dispatcher, so are not for the process.
-            update_kwargs = {}
-
-        else:  # Options and kwargs are for the process.
-            # Deal with the special case of options.
-            if (option_name is not None) or (option is not None):
-                self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
-
-        # Now update the model, persisting as needed.
-        super(Process, self).update(**update_kwargs)
-
-    def wait_for_next_execution(self):
-        &#34;&#34;&#34;
-        Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
-        Otherwise, this method will block until the next scheduled execution has started.
-
-        Raises:
-            RequestError: if any request fails.
-            ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-        &#34;&#34;&#34;
-        # Wait until we find the next execution.
-        while True:
-            # Load in the most recent version of the model.
-            self.get(organisation_id=self.organisation_id)
-
-            # Check that the model is executing. It may have stopped on error.
-            if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_STOP):
-                raise ModelError(i18n.t(&#39;models.process.execution_stopped&#39;))
-
-            # Check whether we have the next execution listed in the model. We sort the list to find the most recent.
-            self._logger.debug(&#39;checking for next execution&#39;)
-            executions = []
-
-            if self._model.get(self.__class__._FIELD_HAS_EXECUTIONS, False):
-                executions = [item for item in self._model.get(self.__class__._FIELD_EXECUTIONS, [])]  # Turn the read-only field into a list we can sort.
-                executions = sorted(executions, key=lambda item: item.get(self.__class__._FIELD_STARTED_AT), reverse=True)  # Sort by most recent first.
-
-            execution = executions[0] if len(executions) &gt; 0 else None
-
-            # If the execution is in a group, then make sure that all the executions in the group have started.
-            if (execution is not None) and (execution.get(self.__class__._FIELD_GROUP_ID) is not None):
-                group = [item for item in executions if item.get(self.__class__._FIELD_GROUP_ID) == execution.get(self.__class__._FIELD_GROUP_ID)]
-                execution = None if (len(group) &lt; execution.get(self.__class__._FIELD_GROUP_COUNT)) else execution
-
-            # Ignore any execution older than when the next execution is expected. This assumes that the process repeat start is maintained correctly, and that it
-            # is set after any corresponding executions have been created for the current repeat start.
-            execution = None if (execution is not None) and (execution.get(self.__class__._FIELD_STARTED_AT) &lt; self.repeat_start) else execution
-
-            # Stop if we have an execution which is beyond the repeat start date.
-            if execution is not None:
-                self._logger.debug(&#39;execution %s found&#39;, execution.get(self.__class__._FIELD_ID))
-                break
-
-            # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.
-            if (execution is None) and (self.repeat_start + timedelta(seconds=Process._EXECUTE_WAIT_TOLERANCE)) &lt; datetime.now(timezone.utc):
-                raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
-
-            # We are waiting, so block for a short while.
-            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
-</details>
 </section>
 <section>
 </section>
@@ -1226,7 +85,7 @@ class Process(Model):
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="fusion_platform.models.process.Dispatcher.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="fusion_platform.models.process.Dispatcher.attributes"><code class="name">prop <span class="ident">attributes</span></code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
@@ -1235,7 +94,7 @@ class Process(Model):
 <div class="desc inherited"><h2 id="returns">Returns</h2>
 <p>The model attributes as a dictionary.</p></div>
 </dd>
-<dt id="fusion_platform.models.process.Dispatcher.options"><code class="name">var <span class="ident">options</span></code></dt>
+<dt id="fusion_platform.models.process.Dispatcher.options"><code class="name">prop <span class="ident">options</span></code></dt>
 <dd>
 <div class="desc"><p>Provides an iterator through the dispatcher's options.</p>
 <h2 id="returns">Returns</h2>
@@ -1337,7 +196,7 @@ def options(self):
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="fusion_platform.models.process.Input.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="fusion_platform.models.process.Input.attributes"><code class="name">prop <span class="ident">attributes</span></code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
@@ -1628,47 +487,6 @@ def options(self):
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The correct string representation of the option.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def get_option_value(cls, option, value, coerce_value):
-    &#34;&#34;&#34;
-    Checks the supplied value for an option, coercing it if needed, and returns the value that can to into the model.
-
-    Args:
-        option: The option object for the option to set.
-        value: The value for the option.
-        coerce_value: Coerce the supplied value to be the correct type?
-
-    Raises:
-        ModelError: if the value has a different type to the option.
-
-    Returns:
-        The correct string representation of the option.
-    &#34;&#34;&#34;
-    # Check that the option has the same data type as the value.
-    data_type = option.get(cls._FIELD_DATA_TYPE)
-    existing_value = cls.__coerce_value(option[cls._FIELD_VALUE], data_type)
-
-    # Optionally coerce the supplied value, now that we know its data type.
-    if coerce_value:
-        value = cls.__coerce_value(value, data_type)
-
-    class_matches = isinstance(value, existing_value.__class__)
-
-    # Supplied ints can be used for floats.
-    if isinstance(value, int) and isinstance(existing_value, float):
-        class_matches = True
-
-    if (value is not None) and (existing_value is not None) and (not class_matches):
-        raise ModelError(i18n.t(&#39;models.process.option_wrong_type&#39;, type=existing_value.__class__))
-
-    validation = option.get(cls._FIELD_VALIDATION)
-
-    return cls.__value_to_option(value, data_type, validation)</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Option.options_iterator"><code class="name flex">
 <span>def <span class="ident">options_iterator</span></span>(<span>options)</span>
@@ -1677,41 +495,11 @@ def get_option_value(cls, option, value, coerce_value):
 <div class="desc"><p>Provides an iterator through a list of options.</p>
 <h2 id="returns">Returns</h2>
 <p>An iterator through the options.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@classmethod
-def options_iterator(cls, options):
-    &#34;&#34;&#34;
-    Provides an iterator through a list of options.
-
-    Returns:
-        An iterator through the options.
-    &#34;&#34;&#34;
-    for option in options:
-        # We first have to remove the mapping proxy so that we can wrap the dictionary in a model.
-        option = value_from_read_only(option)
-
-        # If the option is a constrained data type, then add in the constrained names and values from the validation.
-        if option.get(cls._FIELD_DATA_TYPE) == fusion_platform.DATA_TYPE_CONSTRAINED:
-            option[cls._FIELD_CONSTRAINED_NAMES], option[cls._FIELD_CONSTRAINED_VALUES] = cls.__extract_constrained_validation(
-                option.get(cls._FIELD_VALIDATION, &#39;&#39;))
-
-        # Coerce the value to be of the correct data type.
-        option[cls._FIELD_VALUE] = cls.__coerce_value(option.get(cls._FIELD_VALUE), option.get(cls._FIELD_DATA_TYPE))
-
-        # Encapsulate the dictionary within a model (which does not talk to the API).
-        model = Option(None, schema=ProcessOptionSchema())
-        model._set_model(option)
-
-        yield model</code></pre>
-</details>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="fusion_platform.models.process.Option.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="fusion_platform.models.process.Option.attributes"><code class="name">prop <span class="ident">attributes</span></code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
@@ -2439,7 +1227,7 @@ def options_iterator(cls, options):
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="fusion_platform.models.process.Process.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
+<dt id="fusion_platform.models.process.Process.attributes"><code class="name">prop <span class="ident">attributes</span></code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
@@ -2448,7 +1236,7 @@ def options_iterator(cls, options):
 <div class="desc inherited"><h2 id="returns">Returns</h2>
 <p>The model attributes as a dictionary.</p></div>
 </dd>
-<dt id="fusion_platform.models.process.Process.available_dispatchers"><code class="name">var <span class="ident">available_dispatchers</span></code></dt>
+<dt id="fusion_platform.models.process.Process.available_dispatchers"><code class="name">prop <span class="ident">available_dispatchers</span></code></dt>
 <dd>
 <div class="desc"><p>Provides an iterator through the process' available dispatchers.</p>
 <h2 id="returns">Returns</h2>
@@ -2469,7 +1257,7 @@ def available_dispatchers(self):
         self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else [])</code></pre>
 </details>
 </dd>
-<dt id="fusion_platform.models.process.Process.dispatchers"><code class="name">var <span class="ident">dispatchers</span></code></dt>
+<dt id="fusion_platform.models.process.Process.dispatchers"><code class="name">prop <span class="ident">dispatchers</span></code></dt>
 <dd>
 <div class="desc"><p>Provides an iterator through the process' dispatchers.</p>
 <h2 id="returns">Returns</h2>
@@ -2489,7 +1277,7 @@ def dispatchers(self):
     return self.__dispatchers(self._model.get(self.__class__._FIELD_DISPATCHERS) if self._model.get(self.__class__._FIELD_DISPATCHERS) is not None else [])</code></pre>
 </details>
 </dd>
-<dt id="fusion_platform.models.process.Process.executions"><code class="name">var <span class="ident">executions</span></code></dt>
+<dt id="fusion_platform.models.process.Process.executions"><code class="name">prop <span class="ident">executions</span></code></dt>
 <dd>
 <div class="desc"><p>Provides an iterator through the process's executions.</p>
 <h2 id="returns">Returns</h2>
@@ -2520,7 +1308,7 @@ def executions(self):
     return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.</code></pre>
 </details>
 </dd>
-<dt id="fusion_platform.models.process.Process.inputs"><code class="name">var <span class="ident">inputs</span></code></dt>
+<dt id="fusion_platform.models.process.Process.inputs"><code class="name">prop <span class="ident">inputs</span></code></dt>
 <dd>
 <div class="desc"><p>Provides an iterator through the process' inputs.</p>
 <h2 id="returns">Returns</h2>
@@ -2553,7 +1341,7 @@ def inputs(self):
         yield model</code></pre>
 </details>
 </dd>
-<dt id="fusion_platform.models.process.Process.options"><code class="name">var <span class="ident">options</span></code></dt>
+<dt id="fusion_platform.models.process.Process.options"><code class="name">prop <span class="ident">options</span></code></dt>
 <dd>
 <div class="desc"><p>Provides an iterator through the process' options.</p>
 <h2 id="returns">Returns</h2>
@@ -2598,58 +1386,6 @@ execute status or the dispatcher does not exist.</p>
 <dt><code>ModelError</code></dt>
 <dd>if the model could not be updated and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def add_dispatcher(self, number=None, name=None):
-    &#34;&#34;&#34;
-    Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
-    execute status or the dispatcher does not exist.
-
-    Args:
-        number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
-        name: The dispatcher name to add. Either the number or the name must be provided.
-
-    Raises:
-        ModelError: if the process is the execute status.
-        ModelError: if the dispatcher does not exist.
-        ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-    &#34;&#34;&#34;
-    # Make sure the arguments are provided.
-    if (number is None) and (name is None):
-        raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
-
-    # Make sure the process is not in the execute state.
-    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-    # Find the corresponding dispatcher.
-    dispatchers = self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(
-        self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else []
-    found_dispatcher = None
-
-    for i, item in enumerate(dispatchers):
-        found = (number is not None) and (number == (i + 1))
-        found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME)) if not found else found
-
-        if found:
-            found_dispatcher = item
-            break
-
-    if found_dispatcher is None:
-        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
-
-    # Add the dispatcher to the end of the existing list.
-    dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
-    dispatchers.append(found_dispatcher)
-
-    # Update the dispatchers in the model.
-    self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
-
-    # Now update the model, persisting as needed.
-    super(Process, self).update()</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.copy"><code class="name flex">
 <span>def <span class="ident">copy</span></span>(<span>self, name)</span>
@@ -2670,66 +1406,6 @@ execute status or the dispatcher does not exist.</p>
 <dt><code>ModelError</code></dt>
 <dd>if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def copy(self, name):
-    &#34;&#34;&#34;
-    Creates a new template process from an existing process object. This process is not persisted to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-
-    Args:
-        name: The name of the copy.
-
-    Returns:
-        The new template process object.
-
-    Raises:
-        RequestError: if the copy fails.
-        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-    &#34;&#34;&#34;
-    # Get a new template for the process model using the process as the source of the copy.
-    process = Process(self._session)
-
-    # Copy the process model.
-    response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_GET)
-
-    # Assume that the resulting model is held within the expected key within the resulting dictionary.
-    if Model._RESPONSE_KEY_MODEL not in response:
-        raise ModelError(i18n.t(&#39;models.process.failed_copy&#39;))
-
-    # Make sure we have an organisation id.
-    modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
-    modified_response[&#39;organisation_id&#39;] = self.organisation_id
-
-    # Load the response into the model. We ignore missing required fields and those which are None.
-    process._set_model_from_response(modified_response, partial=True)
-
-    # Update the options because these are not copied across to the new model, even though they are returned in the response.
-    options = modified_response.get(&#39;options&#39;, [])
-    options = [] if options is None else options
-
-    for option in options:
-        # Set the option value. The value may be a string, rather than the required type, but that will automatically be converted.
-        if (option.get(self.__class__._FIELD_NAME) is not None) and (option.get(self.__class__._FIELD_VALUE) is not None):
-            process.__set_option(name=option.get(self.__class__._FIELD_NAME), value=option.get(self.__class__._FIELD_VALUE), coerce_value=True)
-
-    # And now the same for the inputs. Here we also validate each input by retrieving it.
-    inputs = modified_response.get(&#39;inputs&#39;, [])
-    inputs = [] if inputs is None else inputs
-
-    for i, input in enumerate(inputs):
-        # See if we can find the associated model.
-        if input.get(self.__class__._FIELD_ID) is not None:
-            data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, data_id=input.get(self.__class__._FIELD_ID))
-            process.__set_input(number=i + 1, data=data)
-
-    # Set the name.
-    process.update(name=name)
-
-    # Return the copy.
-    return process</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.create"><code class="name flex">
 <span>def <span class="ident">create</span></span>(<span>self, **kwargs)</span>
@@ -2748,24 +1424,6 @@ execute status or the dispatcher does not exist.</p>
 <dt><code>ModelError</code></dt>
 <dd>if the model could not be created and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def create(self, **kwargs):
-    &#34;&#34;&#34;
-    Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
-
-    Args:
-        kwargs: The model attributes which override those already in the template.
-
-    Raises:
-        RequestError: if the create fails.
-        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-    &#34;&#34;&#34;
-    # Attempt to issue the create.
-    self._create(**kwargs)</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.delete"><code class="name flex">
 <span>def <span class="ident">delete</span></span>(<span>self)</span>
@@ -2794,43 +1452,6 @@ execute status or the dispatcher does not exist.</p>
 <dt><code>ModelError</code></dt>
 <dd>if any execution fails.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def execute(self, wait=False):
-    &#34;&#34;&#34;
-    Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
-
-    Args:
-        wait: Optionally wait for the next execution to start and complete? Default False.
-
-    Raises:
-        RequestError: if the execute fails.
-        ModelError: if any execution fails.
-    &#34;&#34;&#34;
-    # Send the request and load the resulting model.
-    self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
-
-    if wait:
-        # If we are waiting for the execution to complete, wait for the next execution to start...
-        self.wait_for_next_execution()
-
-        # ...and for all the executions to complete. Note that we wait for all executions to complete, even if at least one has failed.
-        exception = None
-
-        for execution in self.executions:
-            try:
-                execution.check_complete(wait=wait)
-            except ModelError as e:
-                # Keep the first exception raised.
-                if exception is None:
-                    exception = e
-
-        # Raise any exception.
-        if exception is not None:
-            raise exception</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.find_executions"><code class="name flex">
 <span>def <span class="ident">find_executions</span></span>(<span>self, id=None, group_id=None)</span>
@@ -2849,32 +1470,6 @@ execute status or the dispatcher does not exist.</p>
 <h2 id="raises">Raises</h2>
 <p>RequestError if any get fails.
 ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def find_executions(self, id=None, group_id=None):
-    &#34;&#34;&#34;
-    Searches for the process&#39;s executions with the specified id and/or group id, returning the first object found and an iterator.
-
-    Args:
-        id: The execution id to search for.
-        group_id: The execution group id to search for.
-
-    Returns:
-        The first found execution object, or None if not found, and an iterator through the found execution objects.
-    
-    Raises:
-        RequestError if any get fails.
-        ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-    &#34;&#34;&#34;
-    filter = self.__class__._build_filter(
-        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
-
-    # Build the partial find generator and execute it.
-    find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
-    return self.__class__._first_and_generator(find)</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
@@ -2905,55 +1500,6 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
 <dt><code>ModelError</code></dt>
 <dd>if the model could not be updated and validated by the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def remove_dispatcher(self, number):
-    &#34;&#34;&#34;
-    Removes the dispatcher service with the corresponding number from the process.
-
-    Args:
-        number: The number to remove, starting from 1 for the first dispatcher.
-
-    Raises:
-        ModelError: if the process is the execute status.
-        ModelError: if the dispatcher does not exist.
-        ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-    &#34;&#34;&#34;
-    # Make sure the argument is provided.
-    if number is None:
-        raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
-
-    # Make sure the process is not in the execute state.
-    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-    # Find the corresponding dispatcher.
-    found_dispatcher_index = None
-    found_dispatcher = None
-
-    for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
-        found = (number is not None) and (number == (i + 1))
-
-        if found:
-            found_dispatcher_index = i
-            found_dispatcher = item
-            break
-
-    if found_dispatcher is None:
-        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
-
-    # Remove the dispatcher from the existing list.
-    dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
-    dispatchers.pop(found_dispatcher_index)
-
-    # Update the dispatchers in the model.
-    self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
-
-    # Now update the model, persisting as needed.
-    super(Process, self).update()</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.stop"><code class="name flex">
 <span>def <span class="ident">stop</span></span>(<span>self)</span>
@@ -2965,20 +1511,6 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
 <dt><code>RequestError</code></dt>
 <dd>if the stop fails.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def stop(self):
-    &#34;&#34;&#34;
-    Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.
-
-    Raises:
-        RequestError: if the stop fails.
-    &#34;&#34;&#34;
-    # Send the request and load the resulting model.
-    self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.to_csv"><code class="name flex">
 <span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
@@ -3027,57 +1559,6 @@ of setting inputs, options and dispatchers.</p>
 <dt><code>ModelError</code></dt>
 <dd>if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def update(self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
-    &#34;&#34;&#34;
-    Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
-    contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
-    of setting inputs, options and dispatchers.
-
-    Args:
-        input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
-        input: The input object for the input to set. Either the number or the input must be provided when setting an input.
-        data: The data object to use for an input.
-        dispatcher_number: The dispatcher number to update, starting from 1 for the first dispatcher. If used then options and kwargs are for the dispatcher.
-        option_name: The option name to set. Either the name or the option must be provided when setting an option.
-        option: The option object for the option to set. Either the name or the option must be provided when setting an option.
-        value: The value for the option.
-        coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
-        kwargs: The model attributes which are to be patched.
-
-    Raises:
-        RequestError: if the update fails.
-        ModelError: if the process is in the execute state.
-        ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-    &#34;&#34;&#34;
-    # Make sure the process is not in the execute state.
-    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
-        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
-
-    update_kwargs = kwargs
-
-    # Deal with the special case of inputs.
-    if (input_number is not None) or (input is not None):
-        self.__set_input(number=input_number, input=input, data=data)
-
-    # Deal with the special case of dispatchers.
-    if dispatcher_number is not None:  # Options and kwargs are for the dispatcher.
-        self.__set_dispatcher(number=dispatcher_number, option_name=option_name, value=value, coerce_value=coerce_value, **kwargs)
-
-        # The kwargs have been used on the dispatcher, so are not for the process.
-        update_kwargs = {}
-
-    else:  # Options and kwargs are for the process.
-        # Deal with the special case of options.
-        if (option_name is not None) or (option is not None):
-            self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
-
-    # Now update the model, persisting as needed.
-    super(Process, self).update(**update_kwargs)</code></pre>
-</details>
 </dd>
 <dt id="fusion_platform.models.process.Process.wait_for_next_execution"><code class="name flex">
 <span>def <span class="ident">wait_for_next_execution</span></span>(<span>self)</span>
@@ -3092,65 +1573,12 @@ Otherwise, this method will block until the next scheduled execution has started
 <dt><code>ModelError</code></dt>
 <dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def wait_for_next_execution(self):
-    &#34;&#34;&#34;
-    Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
-    Otherwise, this method will block until the next scheduled execution has started.
-
-    Raises:
-        RequestError: if any request fails.
-        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
-    &#34;&#34;&#34;
-    # Wait until we find the next execution.
-    while True:
-        # Load in the most recent version of the model.
-        self.get(organisation_id=self.organisation_id)
-
-        # Check that the model is executing. It may have stopped on error.
-        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_STOP):
-            raise ModelError(i18n.t(&#39;models.process.execution_stopped&#39;))
-
-        # Check whether we have the next execution listed in the model. We sort the list to find the most recent.
-        self._logger.debug(&#39;checking for next execution&#39;)
-        executions = []
-
-        if self._model.get(self.__class__._FIELD_HAS_EXECUTIONS, False):
-            executions = [item for item in self._model.get(self.__class__._FIELD_EXECUTIONS, [])]  # Turn the read-only field into a list we can sort.
-            executions = sorted(executions, key=lambda item: item.get(self.__class__._FIELD_STARTED_AT), reverse=True)  # Sort by most recent first.
-
-        execution = executions[0] if len(executions) &gt; 0 else None
-
-        # If the execution is in a group, then make sure that all the executions in the group have started.
-        if (execution is not None) and (execution.get(self.__class__._FIELD_GROUP_ID) is not None):
-            group = [item for item in executions if item.get(self.__class__._FIELD_GROUP_ID) == execution.get(self.__class__._FIELD_GROUP_ID)]
-            execution = None if (len(group) &lt; execution.get(self.__class__._FIELD_GROUP_COUNT)) else execution
-
-        # Ignore any execution older than when the next execution is expected. This assumes that the process repeat start is maintained correctly, and that it
-        # is set after any corresponding executions have been created for the current repeat start.
-        execution = None if (execution is not None) and (execution.get(self.__class__._FIELD_STARTED_AT) &lt; self.repeat_start) else execution
-
-        # Stop if we have an execution which is beyond the repeat start date.
-        if execution is not None:
-            self._logger.debug(&#39;execution %s found&#39;, execution.get(self.__class__._FIELD_ID))
-            break
-
-        # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.
-        if (execution is None) and (self.repeat_start + timedelta(seconds=Process._EXECUTE_WAIT_TOLERANCE)) &lt; datetime.now(timezone.utc):
-            raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
-
-        # We are waiting, so block for a short while.
-        sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
-</details>
 </dd>
 </dl>
 </dd>
 <dt id="fusion_platform.models.process.ProcessSchema"><code class="flex name class">
 <span>class <span class="ident">ProcessSchema</span></span>
-<span>(</span><span>*, only: types.StrSequenceOrSet | None = None, exclude: types.StrSequenceOrSet = (), many: bool = False, context: dict | None = None, load_only: types.StrSequenceOrSet = (), dump_only: types.StrSequenceOrSet = (), partial: bool | types.StrSequenceOrSet | None = None, unknown: str | None = None)</span>
+<span>(</span><span>*, only: types.StrSequenceOrSet | None = None, exclude: types.StrSequenceOrSet = (), many: bool | None = None, context: dict | None = None, load_only: types.StrSequenceOrSet = (), dump_only: types.StrSequenceOrSet = (), partial: bool | types.StrSequenceOrSet | None = None, unknown: str | None = None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Schema class for process model.</p>
@@ -3277,13 +1705,12 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.13.5
+Version: 1.14.6
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
 <p>
 </header>
-<h1>Index</h1>
 <div class="toc">
 <ul></ul>
 </div>
@@ -3360,7 +1787,7 @@ Version: 1.13.5
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
 </footer>
 </body>
 </html>
