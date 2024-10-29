@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '1.14.6'
-__version_date__ = '2024-10-28T10:43:11Z'
+__version__ = '1.14.7'
+__version_date__ = '2024-10-29T15:47:22Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off

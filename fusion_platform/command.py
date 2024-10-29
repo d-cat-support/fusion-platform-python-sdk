@@ -1229,7 +1229,10 @@ class Command(Base):
         self.__print(logging.INFO, i18n.t('command.start_process', process=process_name, service=service_name))
 
         # Upload the inputs.
-        data_items = self.__upload_or_find_inputs(organisation, process_name, input_files)
+        if (input_files is not None) and (len(input_files) > 0):
+            data_items = self.__upload_or_find_inputs(organisation, process_name, input_files)
+        else:
+            data_items = []
 
         # Find the service using its case-sensitive name (starts with).
         service, _ = organisation.find_services(name=service_name)
@@ -1247,7 +1250,8 @@ class Command(Base):
         process = self.__create_process(organisation, process_name, options, dispatchers, service, data_items)
 
         # Upload the optional storage data items now that the process has been created because we need the process id.
-        self.__upload_storage(organisation, storage_files, process)
+        if (storage_files is not None) and (len(storage_files) > 0):
+            self.__upload_storage(organisation, storage_files, process)
 
         # Now execute the process, but do not wait for it to complete.
         self.__print(logging.INFO, i18n.t('command.executing'))
