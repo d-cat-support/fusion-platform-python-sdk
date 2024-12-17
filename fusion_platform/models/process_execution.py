@@ -106,6 +106,7 @@ class ProcessExecutionSchema(Schema):
     stopped = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     abort = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     abort_reason = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    exit_type = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     success = fields.Boolean(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     progress = fields.Integer(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     delete_expiry = fields.DateTime(required=True)

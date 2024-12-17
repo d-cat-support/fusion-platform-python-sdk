@@ -30,6 +30,7 @@ class TestService(CustomTestCase):
         """
         service = Service(Session())
         self.assertIsNotNone(service)
+        self._logger.info(service)
 
     def test_delete(self):
         """

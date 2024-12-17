@@ -31,6 +31,7 @@ class TestUser(CustomTestCase):
         """
         user = User(Session())
         self.assertIsNotNone(user)
+        self._logger.info(user)
 
     def test_change_password(self):
         """

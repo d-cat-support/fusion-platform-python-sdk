@@ -35,9 +35,14 @@ class Model(Base):
     # Define the standard template model paths. Override these with the correct paths.
     _PATH_CREATE = None
     _PATH_DELETE = None
+    _PATH_EDIT = None
     _PATH_GET = None
     _PATH_NEW = None
     _PATH_PATCH = None
+
+    # Define the expected model and list extras. Override these with the correct values.
+    _EXTRAS_MODEL = None
+    _EXTRAS_LIST = None
 
     # Useful fields and templates.
     _FIELD_AVAILABLE_DISPATCHERS = 'available_dispatchers'
@@ -152,6 +157,27 @@ class Model(Base):
         # Initialise the fields.
         self.__model = None
         self.__persisted = False
+
+    @classmethod
+    def _extract_extras(cls, response, extras=None):
+        """
+        Extracts the optional extras from the response. If the extras are not found, they are not loaded.
+
+        Args:
+            response: The response to be modified.
+            extras: The optional list of extras as tuples (key, attribute) to extract.
+
+        Returns:
+            The extracted extras.
+        """
+        extracted_extras = {}
+        model_extras = response.get(Model._RESPONSE_KEY_EXTRAS, {})
+
+        for key, attribute in (extras if extras is not None else []):
+            if (key is not None) and (attribute is not None):
+                extracted_extras[attribute] = model_extras.get(key)
+
+        return extracted_extras
 
     @property
     def attributes(self):
@@ -308,9 +334,9 @@ class Model(Base):
     def get(self, **kwargs):
         """
         Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless explicit
-        values are provided via keyword arguments. This assumes the model is obtained using a GET RESTful request, and that the model data is held with the expected
-        dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding Python representation of it, before
-        loading it into the model as a set of read-only attributes.
+        values are provided via keyword arguments. Any expected extras are also added. This assumes the model is obtained using a GET RESTful request, and that the
+        model data is held with the expected dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding
+        Python representation of it, before loading it into the model as a set of read-only attributes.
 
         Args:
             kwargs: Any explicit ids to be used.
@@ -431,7 +457,7 @@ class Model(Base):
     @classmethod
     def _model_from_api_id(cls, session, **kwargs):
         """
-        Loads a model object with the given ids as keyword arguments from the Fusion Platform<sup>&reg;</sup>.
+        Loads a model object with the given ids as keyword arguments from the Fusion Platform<sup>&reg;</sup>. Any required extras are also added.
 
         Args:
             session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
@@ -455,7 +481,7 @@ class Model(Base):
     @classmethod
     def _models_from_api_ids(cls, session, ids):
         """
-        Generates an iterator through a series of models using their ids. Each model is loaded using an id.
+        Generates an iterator through a series of models using their ids. Each model is loaded using an id. Any extras are optionally added.
 
         Args:
             session: The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.
@@ -471,10 +497,10 @@ class Model(Base):
         return (cls._model_from_api_id(session, **id) for id in ids)
 
     @classmethod
-    def _models_from_api_path(cls, session, path, items_per_request=24, reverse=False, filter=None, search=None, **kwargs):
+    def _models_from_api_path(cls, session, path, items_per_request=24, reverse=False, filter=None, search=None, load_extras=True, **kwargs):
         """
-        Generates an iterator through a series of models using a path which returns a list of objects. Each model is loaded from the list. Since API lists are
-        paged, the generator takes into account having to get subsequent pages of results.
+        Generates an iterator through a series of models using a path which returns a list of objects. Each model is loaded from the list with its expected extras.
+        Since API lists are paged, the generator takes into account having to get subsequent pages of results.
 
         Use the items per request, reverse and filter parameters to modify the set of results returned. The items per request parameter determines how many results
         are returned by each request to the API for a page of results, up to the maximum number of results available. The reverse parameter can be used to return
@@ -508,6 +534,7 @@ class Model(Base):
             reverse: Whether the list should be reversed or not. Default False.
             filter: The optional filter to be applied to the results. Default is no filter.
             search: The optional search term to be applied to the results. Default to no search term.
+            load_extras: Should the model extras be automatically loaded? Default True.
             kwargs: Any additional attributes which are to be set on each model which are not provided in each item from the path.
 
         Returns:
@@ -541,55 +568,40 @@ class Model(Base):
                 Model._RESPONSE_KEY_LAST) is not None else {}
             finished = len(last) <= 0
 
-            # Build the generator around all of the returned items, which must all have been persisted.
+            # Optionally extract the extras.
+            extracted_extras = cls._extract_extras(response, extras=cls._EXTRAS_LIST) if load_extras else {}
+
+            # Build the generator around all of the returned items, which must all have been persisted. Optional extras are added to each model.
             for item in response.get(Model._RESPONSE_KEY_LIST, []):
+                # Add the optional extras into the item.
+                for key, value in extracted_extras.items():
+                    item[key] = value
+
+                # Build the model from the modified item dictionary.
                 model = cls(session)
                 model._set_model_from_response(item, **kwargs)
                 model.__persisted = True
 
                 yield model
 
-    def _new(self, query_parameters=None, extras=None, **kwargs):
+    def _new(self, query_parameters=None, **kwargs):
         """
-        Gets a new template model object by loading it from the Fusion Platform<sup>&reg;</sup>. The explicit base model id value should be provided via a keyword
-        argument. This assumes the model is obtained using a GET RESTful request from the corresponding path, and that the model data is held with the expected
-        dictionary key within the response. The template model is then loaded using the supplied schema to obtain the corresponding Python representation of it,
-        before loading it into the model as a set of read-only attributes. If any extras are provided as a list of tuples (key, attribute), where key refers to the
-        field in the extras, and attribute is the corresponding model attribute to be set from the field, then each is added to the model.
+        Gets a new template model object by loading it from the Fusion Platform<sup>&reg;</sup>. Any expected extras are also added. The explicit base model id
+        value should be provided via a keyword argument. This assumes the model is obtained using a GET RESTful request from the corresponding path, and that the
+        model data is held with the expected dictionary key within the response. The template model is then loaded using the supplied schema to obtain the
+        corresponding Python representation of it, before loading it into the model as a set of read-only attributes.
 
         Args:
             query_parameters: The optional query parameters as a dictionary.
-            extras: The optional list of extras tuples (key, attribute) which should be added to the model.
             kwargs: Should include the base model id, if needed.
 
         Raises:
             RequestError: if the new fails.
             ModelError: if the model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
-        # Get the data.
-        response = self._session.request(path=self._get_path(self.__class__._PATH_NEW, **kwargs), query_parameters=query_parameters)
 
-        # Assume that the resulting model is held within the expected key within the resulting dictionary.
-        if Model._RESPONSE_KEY_MODEL not in response:
-            raise ModelError(i18n.t('models.model.failed_model_new_model'))
-
-        # If any extras are required, extract them.
-        if (Model._RESPONSE_KEY_EXTRAS not in response) and (extras is not None):
-            raise ModelError(i18n.t('models.model.failed_model_new_extras'))
-
-        modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
-        model_extras = response.get(Model._RESPONSE_KEY_EXTRAS, {})
-
-        for key, attribute in (extras if extras is not None else []):
-            if (key is not None) and (attribute is not None):
-                modified_response[attribute] = model_extras.get(key)
-
-        # Add in the keyword arguments to the response so that they are set in the model as well.
-        for key, value in kwargs.items():
-            modified_response[key] = value
-
-        # Load the response into the model. We ignore missing required fields and those which are None.
-        self._set_model_from_response(modified_response, partial=True)
+        # Get and load the data, setting the extras as well.
+        self._send_and_load(self._get_path(self.__class__._PATH_NEW, **kwargs), partial=True, query_parameters=query_parameters, **kwargs)
 
         # The model is not persisted.
         self.__persisted = False
@@ -604,25 +616,40 @@ class Model(Base):
         """
         return self.__persisted
 
-    def _send_and_load(self, path, method=Session.METHOD_GET, body=None, key=_RESPONSE_KEY_MODEL):
+    def _send_and_load(self, path, method=Session.METHOD_GET, body=None, key=_RESPONSE_KEY_MODEL, partial=False, query_parameters=None, **kwargs):
         """
-        Sends the body to the path using the method and then loads the resulting model.
+        Sends the body to the path using the method and then loads the resulting model. Additional query parameters may be specified that should be added to the
+        model. Keyword arguments can be used to be added to the model, overriding any values that may have been retrieved.
 
         Args:
             path: The path to send the request to.
             method: The optional RESTful method for sending. Default is GET.
             body: The optional body to send. Default is None.
             key: The optional key to load the model from the response. Default is RESPONSE_KEY_MODEL.
+            partial: Skip validation of required fields which are missing? Default False.
+            query_parameters: The optional query parameters as a dictionary.
+            kwargs: Should include the base model id, if needed.
         """
         # Send the request.
-        response = self._session.request(path=path, method=method, body=body)
+        response = self._session.request(path=path, query_parameters=query_parameters, method=method, body=body)
 
         # Assume that the resulting model is held within the expected key within the resulting dictionary.
         if key not in response:
             raise ModelError(i18n.t('models.model.failed_model_send_and_load'))
 
-        # Load the response into the model.
-        self._set_model_from_response(response.get(key, {}))
+        # If any extras are required, extract them and add them to the model.
+        modified_response = response.get(key, {}) if key is not None else response
+        extracted_extras = self.__class__._extract_extras(response, extras=self.__class__._EXTRAS_MODEL)
+
+        for key, value in extracted_extras.items():
+            modified_response[key] = value
+
+        # Add in the keyword arguments to the response so that they are set in the model as well.
+        for key, value in kwargs.items():
+            modified_response[key] = value
+
+        # Load the response into the model. Optionally ignore missing required fields and those which are None.
+        self._set_model_from_response(modified_response, partial=partial)
 
     def __setattr__(self, key, value):
         """
@@ -760,8 +787,8 @@ class Model(Base):
     def update(self, **kwargs):
         """
         Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without validation,
-        which will occur when the model is persisted. For models which have been persisted, the update is made via the Fusion Platform<sup>&reg;</sup>. All current model
-        attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatically ignore any which are not allowed or are read-only.
+        which will occur when the model is persisted. For models which have been persisted, the update is made via the Fusion Platform<sup>&reg;</sup>. All current
+        model attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatically ignore any which are not allowed or are read-only.
 
         Args:
             kwargs: The model attributes which are to be patched.

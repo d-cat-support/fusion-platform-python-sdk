@@ -184,6 +184,22 @@ class ServiceValidationSchema(Schema):
         ordered = True
 
 
+class ServiceOrganisationChargeExpressionSchema(Schema):
+    """
+    Nested schema class for service organisation.
+    """
+    id = fields.UUID(required=True)
+    platform = fields.String(allow_none=True)
+    owner = fields.String(allow_none=True)
+
+    class Meta:
+        """
+        When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
+        """
+        unknown = EXCLUDE
+        ordered = True
+
+
 class ServiceSchema(Schema):
     """
     Schema class for service model.
@@ -230,6 +246,7 @@ class ServiceSchema(Schema):
     charge_expression_owner = fields.String(allow_none=True)  # Changed to optional.
 
     organisations = fields.List(fields.UUID(required=True), allow_none=True)
+    organisation_charge_expressions = fields.List(fields.Nested(ServiceOrganisationChargeExpressionSchema()), allow_none=True)
     geographic_regions = fields.List(fields.String(required=True), allow_none=True)
 
     # Removed creator.

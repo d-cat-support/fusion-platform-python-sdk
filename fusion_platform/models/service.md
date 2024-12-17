@@ -68,6 +68,10 @@
 * **charge_expression_platform**: The expression used to calculate the charge in FPUs levied for the platform.
 * **charge_expression_owner**: The expression used to calculate the charge in FPUs levied for the owner of the service.
 * **organisations**: The optional whitelist of organisations who can use this service.
+* **organisation_charge_expressions**: For the whitelisted organisations, these provide the optional charge expressions to be applied.
+    * **id**: The owning organisation.
+    * **platform**: The expression used to calculate the charge in FPUs levied for the platform.
+    * **owner**: The expression used to calculate the charge in FPUs levied for the owner of the service.
 * **geographic_regions**: The optional list of geographic regions from which this service can be used.
 * **documentation_summary**: The documentation summary of the service.
 * **documentation_description**: The documentation description of the service.

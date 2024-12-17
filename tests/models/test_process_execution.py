@@ -31,6 +31,7 @@ class TestProcessExecution(CustomTestCase):
         """
         process_execution = ProcessExecution(Session())
         self.assertIsNotNone(process_execution)
+        self._logger.info(process_execution)
 
     def test_change_delete_expiry(self):
         """

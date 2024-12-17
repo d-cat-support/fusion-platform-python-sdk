@@ -457,7 +457,7 @@ def options(self):
         Returns:
             A string representation of the object.
         &#34;&#34;&#34;
-        return f&#34;{self.title} (&#39;{self.name}&#39;, {self.data_type}{&#39;, required&#39; if self.required else &#39;&#39;}) = {self.value}: {self.description}&#34;</code></pre>
+        return f&#34;{self.title} (&#39;{self.name}&#39;, {self.data_type}{&#39; &#39; + str(self.constrained_values) if self.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else &#39;&#39;}{&#39;, required&#39; if self.required else &#39;&#39;}) = {self.value}: {self.description}&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -599,6 +599,10 @@ def options(self):
     _PATH_EXECUTIONS = f&#34;{_PATH_BASE}/executions&#34;
     _PATH_STOP = f&#34;{_PATH_BASE}/stop&#34;
 
+    # Define the expected model and list extras.
+    _EXTRAS_MODEL = [(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)]
+    _EXTRAS_LIST = [(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)]
+
     # Process status values.
     _PROCESS_STATUS_EXECUTE = &#39;execute&#39;
     _PROCESS_STATUS_STOP = &#39;stop&#39;
@@ -712,6 +716,12 @@ def options(self):
         # Make sure we have an organisation id.
         modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
         modified_response[&#39;organisation_id&#39;] = self.organisation_id
+
+        # Extract the extras.
+        extracted_extras = self.__class__._extract_extras(response, extras=self.__class__._EXTRAS_LIST)
+
+        for key, value in extracted_extras.items():
+            modified_response[key] = value
 
         # Load the response into the model. We ignore missing required fields and those which are None.
         process._set_model_from_response(modified_response, partial=True)
@@ -827,7 +837,8 @@ def options(self):
             RequestError: if any get fails.
             ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
         &#34;&#34;&#34;
-        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
+        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True,
+                                                      load_extras=False)  # Most recent first.
 
     def find_executions(self, id=None, group_id=None):
         &#34;&#34;&#34;
@@ -848,7 +859,7 @@ def options(self):
             [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
 
         # Build the partial find generator and execute it.
-        find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
+        find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter, load_extras=False)
         return self.__class__._first_and_generator(find)
 
     @property
@@ -1305,7 +1316,8 @@ def executions(self):
         RequestError: if any get fails.
         ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
     &#34;&#34;&#34;
-    return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.</code></pre>
+    return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True,
+                                                  load_extras=False)  # Most recent first.</code></pre>
 </details>
 </dd>
 <dt id="fusion_platform.models.process.Process.inputs"><code class="name">prop <span class="ident">inputs</span></code></dt>
@@ -1705,7 +1717,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.14.7
+Version: 1.15.11
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

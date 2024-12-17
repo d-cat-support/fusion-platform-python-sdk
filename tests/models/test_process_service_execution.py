@@ -34,6 +34,7 @@ class TestProcessServiceExecution(CustomTestCase):
         """
         process_service_execution = ProcessServiceExecution(Session())
         self.assertIsNotNone(process_service_execution)
+        self._logger.info(process_service_execution)
 
     def test_download_log_file(self):
         """

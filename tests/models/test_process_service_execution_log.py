@@ -31,6 +31,7 @@ class TestProcessServiceExecutionLog(CustomTestCase):
         """
         process_service_execution_log = ProcessServiceExecutionLog(Session())
         self.assertIsNotNone(process_service_execution_log)
+        self._logger.info(process_service_execution_log)
 
     def test_schema(self):
         """

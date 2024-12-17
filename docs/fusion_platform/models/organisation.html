@@ -267,8 +267,7 @@ hljs.highlightAll();
         &#34;&#34;&#34;
         # Get a new template for the process model using the service.
         process = Process(self._session)
-        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id},
-                     extras=[(self.__class__._FIELD_DISPATCHERS, self.__class__._FIELD_AVAILABLE_DISPATCHERS)], organisation_id=self.id, name=name)
+        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id}, organisation_id=self.id, name=name)
 
         return process
 
@@ -789,7 +788,7 @@ themselves.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.14.7
+Version: 1.15.11
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -228,7 +228,7 @@ class Option(Model):
         Returns:
             A string representation of the object.
         """
-        return f"{self.title} ('{self.name}', {self.data_type}{', required' if self.required else ''}) = {self.value}: {self.description}"
+        return f"{self.title} ('{self.name}', {self.data_type}{' ' + str(self.constrained_values) if self.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else ''}{', required' if self.required else ''}) = {self.value}: {self.description}"
 
 
 # Define a model class for an input which overrides the representation to display more relevant information.
@@ -319,6 +319,7 @@ class ProcessExecutionStatusSchema(Schema):
     group_count = fields.Integer(allow_none=True)
     job_status = fields.String(required=True)
     abort_reason = fields.String(allow_none=True)
+    exit_type = fields.String(allow_none=True)
     started_at = fields.DateTime(required=True)
     ended_at = fields.DateTime(allow_none=True)
     delete_warning_status = fields.String(required=True)
@@ -517,6 +518,10 @@ class Process(Model):
     _PATH_EXECUTIONS = f"{_PATH_BASE}/executions"
     _PATH_STOP = f"{_PATH_BASE}/stop"
 
+    # Define the expected model and list extras.
+    _EXTRAS_MODEL = [(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)]
+    _EXTRAS_LIST = [(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)]
+
     # Process status values.
     _PROCESS_STATUS_EXECUTE = 'execute'
     _PROCESS_STATUS_STOP = 'stop'
@@ -630,6 +635,12 @@ class Process(Model):
         # Make sure we have an organisation id.
         modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
         modified_response['organisation_id'] = self.organisation_id
+
+        # Extract the extras.
+        extracted_extras = self.__class__._extract_extras(response, extras=self.__class__._EXTRAS_LIST)
+
+        for key, value in extracted_extras.items():
+            modified_response[key] = value
 
         # Load the response into the model. We ignore missing required fields and those which are None.
         process._set_model_from_response(modified_response, partial=True)
@@ -745,7 +756,8 @@ class Process(Model):
             RequestError: if any get fails.
             ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
-        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True)  # Most recent first.
+        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True,
+                                                      load_extras=False)  # Most recent first.
 
     def find_executions(self, id=None, group_id=None):
         """
@@ -766,7 +778,7 @@ class Process(Model):
             [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
 
         # Build the partial find generator and execute it.
-        find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter)
+        find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter, load_extras=False)
         return self.__class__._first_and_generator(find)
 
     @property

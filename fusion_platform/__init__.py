@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '1.14.7'
-__version_date__ = '2024-10-29T15:47:22Z'
+__version__ = '1.15.11'
+__version_date__ = '2024-12-13T13:48:29Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -73,6 +73,7 @@ __pdoc__ = {
     'models.service.ServiceInputExpressionSchema': False,
     'models.service.ServiceOptionExpressionSchema': False,
     'models.service.ServiceValidationSchema': False,
+    'models.service.ServiceOrganisationChargeExpressionSchema': False,
     'models.user.UserSchema.Meta': False,
     'models.user.UserSchema.opts': False,
     'models.user.UserOrganisationSchema': False,

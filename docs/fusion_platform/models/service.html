@@ -234,6 +234,12 @@ hljs.highlightAll();
 <li><strong>charge_expression_platform</strong>: The expression used to calculate the charge in FPUs levied for the platform.</li>
 <li><strong>charge_expression_owner</strong>: The expression used to calculate the charge in FPUs levied for the owner of the service.</li>
 <li><strong>organisations</strong>: The optional whitelist of organisations who can use this service.</li>
+<li><strong>organisation_charge_expressions</strong>: For the whitelisted organisations, these provide the optional charge expressions to be applied.<ul>
+<li><strong>id</strong>: The owning organisation.</li>
+<li><strong>platform</strong>: The expression used to calculate the charge in FPUs levied for the platform.</li>
+<li><strong>owner</strong>: The expression used to calculate the charge in FPUs levied for the owner of the service.</li>
+</ul>
+</li>
 <li><strong>geographic_regions</strong>: The optional list of geographic regions from which this service can be used.</li>
 <li><strong>documentation_summary</strong>: The documentation summary of the service.</li>
 <li><strong>documentation_description</strong>: The documentation description of the service.</li>
@@ -294,6 +300,7 @@ hljs.highlightAll();
     charge_expression_owner = fields.String(allow_none=True)  # Changed to optional.
 
     organisations = fields.List(fields.UUID(required=True), allow_none=True)
+    organisation_charge_expressions = fields.List(fields.Nested(ServiceOrganisationChargeExpressionSchema()), allow_none=True)
     geographic_regions = fields.List(fields.String(required=True), allow_none=True)
 
     # Removed creator.
@@ -334,7 +341,7 @@ hljs.highlightAll();
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.14.7
+Version: 1.15.11
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

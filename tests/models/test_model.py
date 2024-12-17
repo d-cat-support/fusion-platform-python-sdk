@@ -39,6 +39,9 @@ class TestModel(CustomTestCase):
         self.assertIsNotNone(model)
         self.assertEqual(session, model._session)
 
+        with pytest.raises(NotImplementedError):
+            self._logger.info(model)
+
     def test_attributes(self):
         """
         Test that properties can be retrieved as a dictionary of attributes.
@@ -414,34 +417,29 @@ class TestModel(CustomTestCase):
 
                     with pytest.raises(RequestError):
                         mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", exc=requests.exceptions.ConnectTimeout)
-                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
-                                   organisation_id=organisation_id)
+                        model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
                     with pytest.raises(RequestError):
                         mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", status_code=400)
-                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
-                                   organisation_id=organisation_id)
+                        model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
                     with pytest.raises(ModelError):
                         mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text='{}')
-                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
-                                   organisation_id=organisation_id)
+                        model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
                     mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text=json.dumps({Model._RESPONSE_KEY_MODEL: wrong_content}))
                     model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
-                    with pytest.raises(ModelError):
-                        mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
-                        model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
-                                   organisation_id=organisation_id)
+                    mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                    model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
                     mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                    Model._EXTRAS_MODEL = [(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)]
                     model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
                     mock.get(f"{Session.API_URL_DEFAULT}{path}?test=value",
                              text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
-                    model._new(query_parameters={'test': 'value'}, extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)],
-                               organisation_id=organisation_id)
+                    model._new(query_parameters={'test': 'value'}, organisation_id=organisation_id)
 
                     for key in content:
                         if (Model._METADATA_HIDE not in schema.fields[key].metadata) and (content[key] is not None):
@@ -451,6 +449,8 @@ class TestModel(CustomTestCase):
 
                     self.assertEqual(json.loads(json.dumps(extras, default=json_default)),
                                      json.loads(json.dumps(model.available_dispatchers, default=json_default)))
+
+                    Model._EXTRAS_MODEL = None  # Put back the extras.
 
         schema.fields[Model._FIELD_AVAILABLE_DISPATCHERS].metadata[Model._METADATA_HIDE] = True  # Put back 'hide' so that the remaining tests work.
 

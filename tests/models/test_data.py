@@ -35,6 +35,7 @@ class TestData(CustomTestCase):
         """
         data = Data(Session())
         self.assertIsNotNone(data)
+        self._logger.info(data)
 
     def test_copy(self):
         """

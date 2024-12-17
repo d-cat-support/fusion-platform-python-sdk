@@ -305,7 +305,7 @@ class Command(Base):
             non_aggregator_digits = len(str(non_aggregator_count))
             non_aggregator_chains = process.chains if hasattr(process, Model._FIELD_CHAINS) else []
 
-            self.__print(logging.INFO, i18n.t('command.define_storage', files=non_aggregator_count))
+            self.__print(logging.INFO, i18n.t('command.define_storage', slices=non_aggregator_count))
             progress_bar = tqdm(total=non_aggregator_count, ncols=100)
 
             for group_index in range(1, non_aggregator_count + 1):
@@ -896,7 +896,7 @@ class Command(Base):
         # Change the print and logging to the desired level.
         self._logger.setLevel(logging.CRITICAL)
 
-        if arguments.verbose:
+        if arguments.debug:
             self.__print_level = logging.DEBUG
         else:
             self.__print_level = logging.INFO
@@ -979,6 +979,9 @@ class Command(Base):
 
         # Create the subparsers.
         subparsers = parser.add_subparsers(help=i18n.t('command.subparser'), dest='command')
+        parser.add_argument(i18n.t('command.version_short'), i18n.t('command.version_long'), help=i18n.t('command.version_help'), action='version',
+                            version=i18n.t('command.version_content', version=fusion_platform.__version__, version_date=fusion_platform.__version_date__))
+
         subparsers.required = True
         parser_start = subparsers.add_parser(i18n.t('command.start.command'), help=i18n.t('command.start.help'))
         parser_define = subparsers.add_parser(i18n.t('command.define.command'), help=i18n.t('command.define.help'))
@@ -990,7 +993,7 @@ class Command(Base):
                                    default=Command._DEPLOYMENT_PRODUCTION_IRL)
             subparser.add_argument(i18n.t('command.email_short'), i18n.t('command.email_long'), help=i18n.t('command.email_help'))
             subparser.add_argument(i18n.t('command.organisation_short'), i18n.t('command.organisation_long'), help=i18n.t('command.organisation_help'))
-            subparser.add_argument(i18n.t('command.verbose_short'), i18n.t('command.verbose_long'), help=i18n.t('command.verbose_help'), default=False,
+            subparser.add_argument(i18n.t('command.debug_short'), i18n.t('command.debug_long'), help=i18n.t('command.debug_help'), default=False,
                                    action="store_true")
 
         # Start arguments.
@@ -1416,3 +1419,7 @@ def main():
     Main entry point for command line.
     """
     Command().main()
+
+
+if __name__ == "__main__":
+    main()

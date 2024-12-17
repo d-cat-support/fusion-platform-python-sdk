@@ -37,6 +37,7 @@ class TestOrganisation(CustomTestCase):
         """
         organisation = Organisation(Session())
         self.assertIsNotNone(organisation)
+        self._logger.info(organisation)
 
     def test_create_data_wait(self):
         """
@@ -476,6 +477,9 @@ class TestOrganisation(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             process_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = organisation_content.get(Model._FIELD_ID)
         process_id = process_content.get(Model._FIELD_ID)
@@ -501,18 +505,23 @@ class TestOrganisation(CustomTestCase):
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", status_code=400)
                 organisation.find_processes()
 
+            mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
+            organisation.find_processes()
+
             with pytest.raises(StopIteration):
-                mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
                 first, generator = organisation.find_processes()
                 self.assertIsNone(first)
                 next(generator)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content]}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content], Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             first, generator = organisation.find_processes(id=process_id, name=name, search=search)
             self.assertIsNotNone(first)
 
             for process in generator:
-                self.assertEqual(first.attributes, process.attributes)
+                self.assertEqual(json.dumps(first.attributes, default=json_default),
+                                 json.dumps(process.attributes, default=json_default))  # JSON to ignore available dispatchers.
 
     def test_find_services(self):
         """
@@ -793,6 +802,9 @@ class TestOrganisation(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             process_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = organisation_content.get(Model._FIELD_ID)
         path = Organisation._PATH_PROCESSES.format(organisation_id=organisation_id)
@@ -819,7 +831,12 @@ class TestOrganisation(CustomTestCase):
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
                 next(organisation.processes)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content]}))
+            with pytest.raises(StopIteration):
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
+                next(organisation.processes)
+
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content], Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
 
             for process in organisation.processes:
                 self.assertEqual(str(organisation_id), str(process.organisation_id))

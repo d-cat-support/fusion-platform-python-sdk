@@ -301,8 +301,7 @@ class Organisation(Model):
         """
         # Get a new template for the process model using the service.
         process = Process(self._session)
-        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id},
-                     extras=[(self.__class__._FIELD_DISPATCHERS, self.__class__._FIELD_AVAILABLE_DISPATCHERS)], organisation_id=self.id, name=name)
+        process._new(query_parameters={Model._get_id_name(Service.__name__): service.id}, organisation_id=self.id, name=name)
 
         return process
 

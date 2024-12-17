@@ -30,6 +30,7 @@ class TestCredit(CustomTestCase):
         """
         credit = Credit(Session())
         self.assertIsNotNone(credit)
+        self._logger.info(credit)
 
     def test_get(self):
         """

@@ -37,6 +37,7 @@ class TestDataFile(CustomTestCase):
         """
         data_file = DataFile(Session())
         self.assertIsNotNone(data_file)
+        self._logger.info(data_file)
 
     def test_download_no_wait(self):
         """

@@ -61,17 +61,15 @@ class TestSession(CustomTestCase):
         """
 
         with tempfile.TemporaryDirectory() as dir:
-            destination = os.path.join(dir, 'file.pdf')
+            destination = os.path.join(dir, 'file.html')
 
             session = Session()
 
             with pytest.raises(RequestError):
-                session.download_file('https://www.d-cat.co.uk/rails/active_storage/blobs/rubbish/Water%20RA%20Webinar%20IoT%20September%202020.pdf?', destination)
+                session.download_file('https://www.d-cat.co.uk/.well-known/acme-challenge/test.html', destination)
 
             self.assertFalse(os.path.exists(destination))
-            session.download_file(
-                'https://www.d-cat.co.uk/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBkUT09IiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--8a6deba9596edd3e9f0c341d274ae1317da59bbc/Water%20RA%20Webinar%20IoT%20September%202020.pdf?',
-                destination, self.download_callback)
+            session.download_file('https://www.d-cat.co.uk/home', destination, self.download_callback)
             self.assertTrue(os.path.exists(destination))
             self.assertIsNotNone(self._download_size)
 

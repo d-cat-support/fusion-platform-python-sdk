@@ -34,6 +34,7 @@ class TestProcess(CustomTestCase):
         """
         process = Process(Session())
         self.assertIsNotNone(process)
+        self._logger.info(process)
 
     def test_add_remove_dispatcher(self):
         """
@@ -56,13 +57,16 @@ class TestProcess(CustomTestCase):
             with pytest.raises(ModelError):
                 process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
                 mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
-                process._new(extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)], organisation_id=organisation_id)
+                process._new(organisation_id=organisation_id)
                 process.add_dispatcher(number=1)
 
             process_content['process_status'] = 'draft'
             mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
                      text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
-            process._new(extras=[(Model._FIELD_DISPATCHERS, Model._FIELD_AVAILABLE_DISPATCHERS)], organisation_id=organisation_id)
+            process._new(organisation_id=organisation_id)
+
+            for dispatcher in process.available_dispatchers:
+                self._logger.info(dispatcher)
 
             with pytest.raises(ModelError):
                 process.add_dispatcher(number=2)
@@ -125,6 +129,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         with open(self.fixture_path('data.json'), 'r') as file:
             data_content = json.loads(file.read())
 
@@ -148,7 +155,7 @@ class TestProcess(CustomTestCase):
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
 
             data_content['id'] = str(data1_id)
@@ -180,10 +187,11 @@ class TestProcess(CustomTestCase):
                 process.copy(name=name)
 
             with pytest.raises(ModelError):
-                mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({'rubbish': content}))
+                mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({'rubbish': content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
                 process.copy(name=name)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process_copy = process.copy(name=name)
 
             schema = ProcessSchema()
@@ -213,6 +221,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = content.get('organisation_id')
         path = Process._PATH_CREATE.format(organisation_id=organisation_id)
@@ -221,7 +232,8 @@ class TestProcess(CustomTestCase):
         self.assertIsNotNone(process)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_NEW.format(organisation_id=organisation_id)}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_NEW.format(organisation_id=organisation_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process._new(organisation_id=organisation_id)
 
             with pytest.raises(RequestError):
@@ -236,7 +248,8 @@ class TestProcess(CustomTestCase):
                 mock.post(f"{Session.API_URL_DEFAULT}{path}", text='{}')
                 process.create()
 
-            mock.post(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.post(f"{Session.API_URL_DEFAULT}{path}",
+                      text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.create()
 
             schema = ProcessSchema()
@@ -252,6 +265,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = content.get('organisation_id')
         process_id = content.get(Model._FIELD_ID)
@@ -262,7 +278,7 @@ class TestProcess(CustomTestCase):
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -288,6 +304,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process_execution.json'), 'r') as file:
             execution_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = process_content.get('organisation_id')
         process_id = process_content.get(Model._FIELD_ID)
@@ -301,7 +320,8 @@ class TestProcess(CustomTestCase):
         self.assertIsNotNone(process)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -319,7 +339,8 @@ class TestProcess(CustomTestCase):
                 process.execute()
 
             process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
-            mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.post(f"{Session.API_URL_DEFAULT}{execute_path}",
+                      text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.execute()
 
             with pytest.raises(RequestError):
@@ -334,7 +355,8 @@ class TestProcess(CustomTestCase):
                 mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text='{}')
                 process.wait_for_next_execution()
 
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.wait_for_next_execution()
 
             mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content]}))
@@ -365,6 +387,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process_execution.json'), 'r') as file:
             execution_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = process_content.get('organisation_id')
         process_id = process_content.get(Model._FIELD_ID)
@@ -378,7 +403,8 @@ class TestProcess(CustomTestCase):
         self.assertIsNotNone(process)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -397,14 +423,16 @@ class TestProcess(CustomTestCase):
 
             process_content['process_status'] = Process._PROCESS_STATUS_STOP
             mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
 
             with pytest.raises(ModelError):
                 process.execute(wait=True)
 
             process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
             mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content]}))
 
             with pytest.raises(ModelError):
@@ -426,6 +454,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process_execution.json'), 'r') as file:
             execution_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = process_content.get('organisation_id')
         process_id = process_content.get(Model._FIELD_ID)
@@ -439,7 +470,8 @@ class TestProcess(CustomTestCase):
         self.assertIsNotNone(process)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -458,7 +490,8 @@ class TestProcess(CustomTestCase):
 
             process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
             mock.post(f"{Session.API_URL_DEFAULT}{execute_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             mock.get(f"{Session.API_URL_DEFAULT}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content, execution_content]}))
 
             with pytest.raises(ModelError):
@@ -480,6 +513,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process_execution.json'), 'r') as file:
             execution_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = process_content.get('organisation_id')
         process_id = process_content.get(Model._FIELD_ID)
@@ -490,7 +526,7 @@ class TestProcess(CustomTestCase):
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -522,6 +558,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process_execution.json'), 'r') as file:
             execution_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = process_content.get('organisation_id')
         process_id = process_content.get(Model._FIELD_ID)
@@ -534,7 +573,7 @@ class TestProcess(CustomTestCase):
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -567,6 +606,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = content.get('organisation_id')
         process_id = content.get(Model._FIELD_ID)
@@ -588,7 +630,8 @@ class TestProcess(CustomTestCase):
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
                 process.get(organisation_id=organisation_id, process_id=process_id)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -607,6 +650,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('data.json'), 'r') as file:
             data_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = process_content.get('organisation_id')
         process_id = process_content.get(Model._FIELD_ID)
@@ -617,7 +663,8 @@ class TestProcess(CustomTestCase):
         self.assertIsNotNone(process)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -630,6 +677,7 @@ class TestProcess(CustomTestCase):
 
             for input in inputs:
                 self.assertIsNotNone(input.ssd_id)
+                self._logger.info(input)
 
     def test_model_from_api_id(self):
         """
@@ -637,6 +685,9 @@ class TestProcess(CustomTestCase):
         """
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
+
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
 
         session = Session()
         organisation_id = content.get('organisation_id')
@@ -656,7 +707,8 @@ class TestProcess(CustomTestCase):
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
                 Process._model_from_api_id(session, id=process_id, organisation_id=organisation_id)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process = Process._model_from_api_id(session, id=process_id, organisation_id=organisation_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -668,13 +720,17 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = content.get('organisation_id')
         process_id = content.get(Model._FIELD_ID)
         path = Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             processes = Process._models_from_api_ids(session, [{Model._FIELD_ID: process_id, 'organisation_id': organisation_id}])
             self.assertIsNotNone(processes)
 
@@ -688,12 +744,24 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         process_id = content.get(Model._FIELD_ID)
         path = '/path'
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [content]}))
+            processes = Process._models_from_api_path(session, path, load_extras=False)
+            self.assertIsNotNone(processes)
+
+            for process in processes:
+                self.assertEqual(str(process_id), str(process.id))
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [content], Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             processes = Process._models_from_api_path(session, path)
             self.assertIsNotNone(processes)
 
@@ -706,6 +774,9 @@ class TestProcess(CustomTestCase):
         """
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
+
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
 
         wrong_content = {}
 
@@ -733,10 +804,12 @@ class TestProcess(CustomTestCase):
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text='{}')
                 process._new(organisation_id=organisation_id)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: wrong_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: wrong_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process._new(organisation_id=organisation_id)
 
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process._new(organisation_id=organisation_id)
 
             schema = ProcessSchema()
@@ -752,6 +825,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = content.get('organisation_id')
         process_id = content.get(Model._FIELD_ID)
@@ -761,7 +837,8 @@ class TestProcess(CustomTestCase):
         self.assertIsNotNone(process)
 
         with requests_mock.Mocker() as mock:
-            mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -771,6 +848,7 @@ class TestProcess(CustomTestCase):
 
             for option in options:
                 self.assertIsNotNone(option.ssd_id)
+                self._logger.info(option)
 
     def test_schema(self):
         """
@@ -792,6 +870,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         session = Session()
         organisation_id = content.get('organisation_id')
         process_id = content.get(Model._FIELD_ID)
@@ -802,7 +883,7 @@ class TestProcess(CustomTestCase):
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -819,7 +900,8 @@ class TestProcess(CustomTestCase):
                 mock.post(f"{Session.API_URL_DEFAULT}{path}", text='{}')
                 process.stop()
 
-            mock.post(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.post(f"{Session.API_URL_DEFAULT}{path}",
+                      text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.stop()
 
     def test_update(self):
@@ -828,6 +910,9 @@ class TestProcess(CustomTestCase):
         """
         with open(self.fixture_path('process.json'), 'r') as file:
             content = json.loads(file.read())
+
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
 
         session = Session()
         organisation_id = content.get('organisation_id')
@@ -840,7 +925,7 @@ class TestProcess(CustomTestCase):
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertIsNotNone(process)
             self.assertEqual(str(process_id), str(process.id))
@@ -861,7 +946,7 @@ class TestProcess(CustomTestCase):
 
             content['process_status'] = Process._PROCESS_STATUS_EXECUTE
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertEqual(Process._PROCESS_STATUS_EXECUTE, process.process_status)
 
@@ -871,12 +956,13 @@ class TestProcess(CustomTestCase):
 
             content['process_status'] = 'draft'
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
-                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.get(organisation_id=organisation_id, process_id=process_id)
             self.assertNotEqual(Process._PROCESS_STATUS_EXECUTE, process.process_status)
 
             content['name'] = name
-            mock.patch(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
+            mock.patch(f"{Session.API_URL_DEFAULT}{path}",
+                       text=json.dumps({Model._RESPONSE_KEY_MODEL: content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process.update(name=name)
             self.assertEqual(name, process.name)
 
@@ -886,6 +972,9 @@ class TestProcess(CustomTestCase):
         """
         with open(self.fixture_path('process.json'), 'r') as file:
             process_content = json.loads(file.read())
+
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
 
         input_content = process_content['inputs'][0]
 
@@ -921,13 +1010,15 @@ class TestProcess(CustomTestCase):
 
             with pytest.raises(ModelError):
                 process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
-                mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+                mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                         text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
                 process._new(organisation_id=organisation_id)
                 input = next(process.inputs)
                 process.update(input=input, data=data)
 
             process_content['process_status'] = 'draft'
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process._new(organisation_id=organisation_id)
 
             with pytest.raises(ModelError):
@@ -974,6 +1065,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             process_content = json.loads(file.read())
 
+        with open(self.fixture_path('extras.json'), 'r') as file:
+            extras = json.loads(file.read())
+
         option_content = process_content['options'][0]
 
         session = Session()
@@ -986,13 +1080,15 @@ class TestProcess(CustomTestCase):
         with requests_mock.Mocker() as mock:
             with pytest.raises(ModelError):
                 process_content['process_status'] = Process._PROCESS_STATUS_EXECUTE
-                mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+                mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                         text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
                 process._new(organisation_id=organisation_id)
                 option = next(process.options)
                 process.update(option=option, value=None)
 
             process_content['process_status'] = 'draft'
-            mock.get(f"{Session.API_URL_DEFAULT}{get_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content}))
+            mock.get(f"{Session.API_URL_DEFAULT}{get_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
             process._new(organisation_id=organisation_id)
 
             with pytest.raises(ModelError):
