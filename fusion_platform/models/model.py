@@ -45,9 +45,11 @@ class Model(Base):
     _EXTRAS_LIST = None
 
     # Useful fields and templates.
+    _FIELD_ABORT_REASON = 'abort_reason'
     _FIELD_AVAILABLE_DISPATCHERS = 'available_dispatchers'
     _FIELD_BOUNDS = 'bounds'
     _FIELD_CATEGORY = 'category'
+    _FIELD_CATEGORIES = 'categories'
     _FIELD_CHAINS = 'chains'
     _FIELD_CHAIN_INDEX = 'chain_index'
     _FIELD_CONSTRAINED_NAMES = 'constrained_names'
@@ -58,8 +60,13 @@ class Model(Base):
     _FIELD_DISPATCHERS = 'dispatchers'
     _FIELD_DOCUMENTATION_SUMMARY = 'documentation_summary'
     _FIELD_DOCUMENTATION_DESCRIPTION = 'documentation_description'
+    _FIELD_DOCUMENTATION_INPUTS = 'documentation_inputs'
+    _FIELD_DOCUMENTATION_OUTPUTS = 'documentation_outputs'
+    _FIELD_DOCUMENTATION_OPTIONS = 'documentation_options'
+    _FIELD_ENDED_AT = 'ended_at'
     _FIELD_ERROR = 'error'
     _FIELD_EXECUTIONS = 'executions'
+    _FIELD_EXIT_TYPE = 'exit_type'
     _FIELD_EXTENSIONS = 'extensions'
     _FIELD_FILE = 'file'
     _FIELD_FILE_NAME = 'file_name'

@@ -13,19 +13,37 @@ import i18n
 # @formatter:off
 i18n.add_translation('command.validate_constrained_error', 'Not one of %{constrained}', 'en')
 i18n.add_translation('command.unknown_command', 'Unknown command \'%{command}\'', 'en')
+i18n.add_translation('command.no_process_or_service', 'No such service, process or execution \'%{process_or_service}\'', 'en')
 i18n.add_translation('command.no_such_service', 'No such service \'%{service}\'', 'en')
 i18n.add_translation('command.no_such_process', 'No such process or execution \'%{process}\'', 'en')
 i18n.add_translation('command.no_such_organisation', 'No such organisation \'%{organisation}\'', 'en')
 i18n.add_translation('command.no_such_input', 'No such input \'%{input_name}\'', 'en')
 i18n.add_translation('command.no_executions', 'No executions for process \'%{process}\'', 'en')
 i18n.add_translation('command.invalid_login_response', 'Incorrect username or password', 'en')
-i18n.add_translation('command.log_subdivider', '................................................................................................', 'en')
-i18n.add_translation('command.log_process', 'Process \'%{process}\'', 'en')
-i18n.add_translation('command.log_options', 'Options:', 'en')
-i18n.add_translation('command.log_inputs', 'Inputs:', 'en')
-i18n.add_translation('command.log_field', '%{field}: %{value}', 'en')
-i18n.add_translation('command.log_divider', '------------------------------------------------------------------------------------------------', 'en')
+i18n.add_translation('command.log_execution_group', ' (group \'%{group_id}\' %{group_index} of %{group_count})', 'en')
+i18n.add_translation('command.log_execution_duration', ' - %{minutes} minute(s)', 'en')
+i18n.add_translation('command.log_execution_period', ' (%{started_at}%{ended_at})', 'en')
+i18n.add_translation('command.log_execution_ended_at', ' -> %{ended_at}', 'en')
+i18n.add_translation('command.log_execution_failed', 'failed%{exit_type}%{abort_reason}', 'en')
+i18n.add_translation('command.log_execution_exit_type', ' (%{exit_type})', 'en')
+i18n.add_translation('command.log_execution_abort_reason', ': %{abort_reason}', 'en')
+i18n.add_translation('command.log_execution_stopped', 'stopped', 'en')
+i18n.add_translation('command.log_execution_progress', 'processing %{progress}%%', 'en')
+i18n.add_translation('command.log_execution_success', 'success', 'en')
+i18n.add_translation('command.log_actions', 'Actions:', 'en')
+i18n.add_translation('command.log_assumptions', 'Assumptions:', 'en')
+i18n.add_translation('command.log_description', 'Description:', 'en')
+i18n.add_translation('command.log_summary', 'Summary:', 'en')
 i18n.add_translation('command.log_dispatchers', 'Dispatchers:', 'en')
+i18n.add_translation('command.log_options', 'Options:', 'en')
+i18n.add_translation('command.log_outputs', 'Outputs:', 'en')
+i18n.add_translation('command.log_inputs', 'Inputs:', 'en')
+i18n.add_translation('command.log_execution', 'Execution \'%{id}\'%{period}: %{status}%{duration}%{group}', 'en')
+i18n.add_translation('command.log_service', 'Service \'%{service}\'', 'en')
+i18n.add_translation('command.log_process', 'Process \'%{process}\'', 'en')
+i18n.add_translation('command.log_field', '%{field}: %{value}', 'en')
+i18n.add_translation('command.log_subdivider', '................................................................................................', 'en')
+i18n.add_translation('command.log_divider', '------------------------------------------------------------------------------------------------', 'en')
 i18n.add_translation('command.log_bookend', '************************************************************************************************', 'en')
 i18n.add_translation('command.wait_for_next', 'Waiting for next execution...', 'en')
 i18n.add_translation('command.using_storage', 'Uploading storage \'%{filename}\' with id %{storage_id} to \'%{storage_name}\'', 'en')
@@ -97,7 +115,11 @@ i18n.add_translation('command.start.definition_help', 'the names of the service 
 i18n.add_translation('command.start.definition_long', 'service_or_yaml', 'en')
 i18n.add_translation('command.start.help', 'starts a process', 'en')
 i18n.add_translation('command.start.command', 'start', 'en')
-i18n.add_translation('command.subparser', 'starts, defines or downloads a process', 'en')
+i18n.add_translation('command.display.service_or_process_help', 'the names of the service, id, SSD id, process, process id or associated execution id that are to be displayed', 'en')
+i18n.add_translation('command.display.service_or_process_long', 'process_or_service', 'en')
+i18n.add_translation('command.display.help', 'displays service information or a configured process', 'en')
+i18n.add_translation('command.display.command', 'display', 'en')
+i18n.add_translation('command.subparser', 'displays a service or process, or starts, defines or downloads a process', 'en')
 i18n.add_translation('command.version_content', '%%(prog)s %{version} (%{version_date})', 'en')
 i18n.add_translation('command.version_help', 'show the version information and exit', 'en')
 i18n.add_translation('command.version_long', '--version', 'en')
@@ -117,18 +139,26 @@ i18n.add_translation('command.deployment_short', '-y', 'en')
 i18n.add_translation('command.epilog', '''
 For more detailed options, use:
 
+  fusion_platform display --help
   fusion_platform start --help
   fusion_platform define --help
   fusion_platform download --help
 
 ''', 'en')
 i18n.add_translation('command.description', '''
-Use this command to execute any service (by case-sensitive name) or to retrieve its inputs and outputs. The service can be selected via command line options or
-defined by a YAML file. This command can also be used to build a YAML file from an existing process.
+Use this command to display service information and processes, and to start, download or define processes. Processes can be selected via command line options or
+defined by a YAML file.
 
 Usage:
-  The following will attempt to create one or more processes from the given \'service_name\' to use the inputs (in order) and options and execute them. All processes
-  will use the same inputs and options:
+  The following will display information about one or more services or processes from the given \'service_or_process_name\'.
+
+    fusion_platform display <service_or_process_name> ...
+
+  For a service, this will display the full service documentation, including its expected inputs and options. For a process, it will show the current process
+  configuration.
+
+  The following will attempt to create one or more processes from the given \'service_name\' to use the inputs (in order) and options and execute them. All
+  processes will use the same inputs and options:
 
     fusion_platform start <service_name> ... -l <input_file|input_name> ... -p <option=value> ...
 

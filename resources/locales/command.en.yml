@@ -9,12 +9,19 @@
 en:
   program: "fusion_platform"
   description: |
-    Use this command to execute any service (by case-sensitive name) or to retrieve its inputs and outputs. The service can be selected via command line options or
-    defined by a YAML file. This command can also be used to build a YAML file from an existing process.
+    Use this command to display service information and processes, and to start, download or define processes. Processes can be selected via command line options or
+    defined by a YAML file.
 
     Usage:
-      The following will attempt to create one or more processes from the given 'service_name' to use the inputs (in order) and options and execute them. All processes
-      will use the same inputs and options:
+      The following will display information about one or more services or processes from the given 'service_or_process_name'.
+    
+        fusion_platform display <service_or_process_name> ...
+    
+      For a service, this will display the full service documentation, including its expected inputs and options. For a process, it will show the current process
+      configuration.
+    
+      The following will attempt to create one or more processes from the given 'service_name' to use the inputs (in order) and options and execute them. All
+      processes will use the same inputs and options:
 
         fusion_platform start <service_name> ... -l <input_file|input_name> ... -p <option=value> ...
 
@@ -79,6 +86,7 @@ en:
   epilog: |
     For more detailed options, use:
     
+      fusion_platform display --help
       fusion_platform start --help
       fusion_platform define --help
       fusion_platform download --help
@@ -100,7 +108,13 @@ en:
   version_help: "show the version information and exit"
   version_content: "%%(prog)s %{version} (%{version_date})"
 
-  subparser: "starts, defines or downloads a process"
+  subparser: "displays a service or process, or starts, defines or downloads a process"
+
+  display:
+    command: "display"
+    help: "displays service information or a configured process"
+    service_or_process_long: "process_or_service"
+    service_or_process_help: "the names of the service, id, SSD id, process, process id or associated execution id that are to be displayed"
 
   start:
     command: "start"
@@ -180,13 +194,30 @@ en:
   wait_for_next: "Waiting for next execution..."
 
   log_bookend: "************************************************************************************************"
-  log_dispatchers: "Dispatchers:"
   log_divider: "------------------------------------------------------------------------------------------------"
-  log_field: "%{field}: %{value}"
-  log_inputs: "Inputs:"
-  log_options: "Options:"
-  log_process: "Process '%{process}'"
   log_subdivider: "................................................................................................"
+  log_field: "%{field}: %{value}"
+  log_process: "Process '%{process}'"
+  log_service: "Service '%{service}'"
+  log_execution: "Execution '%{id}'%{period}: %{status}%{duration}%{group}"
+  log_inputs: "Inputs:"
+  log_outputs: "Outputs:"
+  log_options: "Options:"
+  log_dispatchers: "Dispatchers:"
+  log_summary: "Summary:"
+  log_description: "Description:"
+  log_assumptions: "Assumptions:"
+  log_actions: "Actions:"
+  log_execution_success: "success"
+  log_execution_progress: "processing %{progress}%%"
+  log_execution_stopped: "stopped"
+  log_execution_abort_reason: ": %{abort_reason}"
+  log_execution_exit_type: " (%{exit_type})"
+  log_execution_failed: "failed%{exit_type}%{abort_reason}"
+  log_execution_ended_at: " -> %{ended_at}"
+  log_execution_period: " (%{started_at}%{ended_at})"
+  log_execution_duration: " - %{minutes} minute(s)"
+  log_execution_group: " (group '%{group_id}' %{group_index} of %{group_count})"
 
   invalid_login_response: "Incorrect username or password"
   no_executions: "No executions for process '%{process}'"
@@ -194,6 +225,7 @@ en:
   no_such_organisation: "No such organisation '%{organisation}'"
   no_such_process: "No such process or execution '%{process}'"
   no_such_service: "No such service '%{service}'"
+  no_process_or_service: "No such service, process or execution '%{process_or_service}'"
   unknown_command: "Unknown command '%{command}'"
   validate_constrained_error: "Not one of %{constrained}"
 

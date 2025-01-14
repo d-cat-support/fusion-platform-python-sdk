@@ -345,6 +345,60 @@ class Command(Base):
 
         return process_definition
 
+    def display_service(self, organisation, service_name):
+        """
+        Displays the documentation for the service. If the service does not exist, it will be ignored.
+
+        Args:
+            organisation: The logged in organisation.
+            service_name: The name of the service to display.
+
+        Returns:
+            True if a service was displayed.
+        """
+        found = False
+
+        # Try to find any existing service, ignoring any error.
+        try:
+            service = self.get_service(organisation, service_name)
+            found = True
+
+            self.__print_service(service)
+
+        except CommandError as e:
+            self.__print(logging.DEBUG, str(e))
+
+        return found
+
+    def display_process(self, organisation, process_name):
+        """
+        Displays the current configuration of the process. If the process does not exist, it will be ignored.
+
+        Args:
+            organisation: The logged in organisation.
+            process_name: The name of the process to display.
+
+        Returns:
+            True if a process was displayed.
+        """
+        found = False
+
+        # Try to find any existing process, ignoring any error.
+        try:
+            process, _ = self.get_process_or_execution(organisation, process_name)
+            found = True
+
+            self.__print_process(process)
+
+            # Display the status of any execution.
+            for execution in process.executions:
+                self.__print_execution(execution)
+
+        except CommandError as e:
+            self.__print(logging.DEBUG, str(e))
+
+        return found
+
     def __download_execution(self, process, download_inputs, download_outputs, download_storage, download_intermediate, download_components, output_dir, execution):
         """
         Downloads an execution.
@@ -756,10 +810,13 @@ class Command(Base):
 
         Args:
             organisation: The logged in organisation.
-            process_name: The name of the process to be downloaded. This can also be the id of a process or an execution.
+            process_name: The name of the process. This can also be the id of a process or an execution.
 
         Returns:
             The found process and/or execution.
+
+        Raises:
+            CommandError: if a process or execution could not be found.
         """
 
         # Attempt to find the process.
@@ -781,6 +838,37 @@ class Command(Base):
             raise CommandError(i18n.t('command.no_such_process', process=process_name))
 
         return process, execution
+
+    def get_service(self, organisation, service_name):
+        """
+        Attempts to find a service using the given service name, service id or SSD id.
+
+        Args:
+            organisation: The logged in organisation.
+            service_name: The name of the service. This can also be the id or SSD id of a service.
+
+        Returns:
+            The found service.
+
+        Raises:
+            CommandError: if a service could not be found.
+        """
+
+        # Find the service using its case-sensitive name (starts with).
+        service, _ = organisation.find_services(name=service_name)
+
+        # If the service cannot be found, try to find it by its id or SSD id.
+        if service is None:
+            service = next((item for item in organisation.services if (str(item.id) == service_name) or (str(item.ssd_id) == service_name)), None)
+
+        # If the service still cannot be found, then try it as a specific service for the organisation.
+        if service is None:
+            service = next((item for item in organisation.own_services if (str(item.id) == service_name) or (str(item.ssd_id) == service_name)), None)
+
+        if service is None:
+            raise CommandError(i18n.t('command.no_such_service', service=service_name))
+
+        return service
 
     def __get_storage_data_item(self, process, group_index, group_count, ssd_id, chain_index):
         """
@@ -897,6 +985,7 @@ class Command(Base):
         self._logger.setLevel(logging.CRITICAL)
 
         if arguments.debug:
+            self._logger.setLevel(logging.DEBUG)
             self.__print_level = logging.DEBUG
         else:
             self.__print_level = logging.INFO
@@ -905,8 +994,15 @@ class Command(Base):
             # Login to the correct deployment and select the organisation.
             organisation, _, _ = self.login(arguments.deployment, arguments.email, arguments.organisation)
 
-            # Perform the start, define or download.
-            if arguments.command == i18n.t('command.start.command'):
+            # Perform the display, start, define or download.
+            if arguments.command == i18n.t('command.display.command'):
+                # Display a service or process with the specified name or ids. If a service is displayed, we do not display a process.
+                for process_or_service in arguments.process_or_service:
+                    if not self.display_service(organisation, process_or_service):
+                        if not self.display_process(organisation, process_or_service):
+                            self.__print(logging.WARNING, i18n.t('command.no_process_or_service', process_or_service=process_or_service))
+
+            elif arguments.command == i18n.t('command.start.command'):
                 # Start one or more processes.
                 for service_or_yaml in arguments.service_or_yaml:
                     # Extract the command line or YAML file arguments.
@@ -983,18 +1079,22 @@ class Command(Base):
                             version=i18n.t('command.version_content', version=fusion_platform.__version__, version_date=fusion_platform.__version_date__))
 
         subparsers.required = True
+        parser_display = subparsers.add_parser(i18n.t('command.display.command'), help=i18n.t('command.display.help'))
         parser_start = subparsers.add_parser(i18n.t('command.start.command'), help=i18n.t('command.start.help'))
         parser_define = subparsers.add_parser(i18n.t('command.define.command'), help=i18n.t('command.define.help'))
         parser_download = subparsers.add_parser(i18n.t('command.download.command'), help=i18n.t('command.download.help'))
 
         # Add in the common arguments.
-        for subparser in [parser_start, parser_define, parser_download]:
+        for subparser in [parser_display, parser_start, parser_define, parser_download]:
             subparser.add_argument(i18n.t('command.deployment_short'), i18n.t('command.deployment_long'), help=i18n.t('command.deployment_help'),
                                    default=Command._DEPLOYMENT_PRODUCTION_IRL)
             subparser.add_argument(i18n.t('command.email_short'), i18n.t('command.email_long'), help=i18n.t('command.email_help'))
             subparser.add_argument(i18n.t('command.organisation_short'), i18n.t('command.organisation_long'), help=i18n.t('command.organisation_help'))
             subparser.add_argument(i18n.t('command.debug_short'), i18n.t('command.debug_long'), help=i18n.t('command.debug_help'), default=False,
                                    action="store_true")
+
+        # Display arguments.
+        parser_display.add_argument(i18n.t('command.display.service_or_process_long'), help=i18n.t('command.display.service_or_process_help'), nargs='+')
 
         # Start arguments.
         parser_start.add_argument(i18n.t('command.start.definition_long'), help=i18n.t('command.start.definition_help'), nargs='+')
@@ -1062,6 +1162,48 @@ class Command(Base):
             else:
                 print(message)
 
+    def __print_execution(self, execution):
+        """
+        Prints an execution. This just shows the status in a simple format.
+
+        Args:
+            execution: The execution to be logged.
+        """
+
+        # Form the status of the execution.
+        status = ''
+        group = ''
+
+        if execution.success:
+            status = i18n.t('command.log_execution_success')
+
+        elif execution.stopped:
+            status = i18n.t('command.log_execution_stopped')
+
+        elif execution.progress < 100:
+            status = i18n.t('command.log_execution_progress', progress=execution.progress)
+
+        else:
+            abort_reason = i18n.t('command.log_execution_abort_reason', abort_reason=execution.abort_reason) if hasattr(execution,
+                                                                                                                        Model._FIELD_ABORT_REASON) else ''
+            exit_type = i18n.t('command.log_execution_exit_type', exit_type=execution.exit_type) if hasattr(execution, Model._FIELD_EXIT_TYPE) else ''
+            status = i18n.t('command.log_execution_failed', exit_type=exit_type, abort_reason=abort_reason)
+
+        started_at = execution.started_at.strftime('%Y-%m-%d %H:%M:%S')
+        ended_at = i18n.t('command.log_execution_ended_at', ended_at=execution.ended_at.strftime('%Y-%m-%d %H:%M:%S')) if hasattr(execution,
+                                                                                                                                  Model._FIELD_ENDED_AT) else ''
+        period = i18n.t('command.log_execution_period', started_at=started_at, ended_at=ended_at)
+        duration = i18n.t('command.log_execution_duration', minutes=round((execution.ended_at - execution.started_at).total_seconds() // 60)) if hasattr(execution,
+                                                                                                                                                         Model._FIELD_ENDED_AT) and (
+                                                                                                                                                         execution.ended_at is not None) else ''
+
+        if (hasattr(execution, Model._FIELD_GROUP_ID) and (execution.group_id is not None)) and (
+                hasattr(execution, Model._FIELD_GROUP_INDEX) and (execution.group_index is not None)) and (
+                hasattr(execution, Model._FIELD_GROUP_COUNT) and (execution.group_count is not None)):
+            group = i18n.t('command.log_execution_group', group_id=execution.group_id, group_index=execution.group_index, group_count=execution.group_count)
+
+        self.__print(logging.INFO, i18n.t('command.log_execution', id=execution.id, period=period, status=status, duration=duration, group=group))
+
     def __print_process(self, process):
         """
         Prints a process.
@@ -1076,26 +1218,88 @@ class Command(Base):
             if hasattr(process, field):
                 self.__print(logging.INFO, i18n.t('command.log_field', field=field, value=getattr(process, field)))
 
+        process_inputs = [input for input in process.inputs]
+
+        if len(process_inputs) > 0:
+            self.__print(logging.INFO, i18n.t('command.log_divider'))
+            self.__print(logging.INFO, i18n.t('command.log_inputs'))
+
+            for data_item in process_inputs:
+                self.__print(logging.INFO, str(data_item), format=False)
+
+        process_options = [option for option in process.options]
+
+        if len(process_options) > 0:
+            self.__print(logging.INFO, i18n.t('command.log_divider'))
+            self.__print(logging.INFO, i18n.t('command.log_options'))
+
+            for option in process_options:
+                self.__print(logging.INFO, str(option), format=False)
+
+        process_dispatchers = [dispatcher for dispatcher in process.dispatchers]
+
+        if len(process_dispatchers) > 0:
+            self.__print(logging.INFO, i18n.t('command.log_divider'))
+            self.__print(logging.INFO, i18n.t('command.log_dispatchers'))
+
+            for dispatcher in process_dispatchers:
+                self.__print(logging.INFO, i18n.t('command.log_subdivider'))
+                self.__print(logging.INFO, str(dispatcher), format=False)
+
+                for option in dispatcher.options:
+                    self.__print(logging.INFO, str(option), format=False)
+
+        self.__print(logging.INFO, i18n.t('command.log_bookend'))
+
+    def __print_service(self, service):
+        """
+        Prints the documentation for a service.
+
+        Args:
+            service: The service to be logged.
+        """
+        self.__print(logging.INFO, i18n.t('command.log_bookend'))
+        self.__print(logging.INFO, i18n.t('command.log_service', service=service.name))
+
+        self.__print(logging.INFO, i18n.t('command.log_field', field=Model._FIELD_CATEGORIES, value=service.categories))
+        self.__print(logging.INFO, i18n.t('command.log_field', field=Model._FIELD_KEYWORDS, value=service.keywords))
+
         self.__print(logging.INFO, i18n.t('command.log_divider'))
-        self.__print(logging.INFO, i18n.t('command.log_inputs'))
-
-        for data_item in process.inputs:
-            self.__print(logging.INFO, str(data_item), format=False)
+        self.__print(logging.INFO, i18n.t('command.log_summary'))
+        self.__print(logging.INFO, service.documentation_summary, format=False)
 
         self.__print(logging.INFO, i18n.t('command.log_divider'))
-        self.__print(logging.INFO, i18n.t('command.log_options'))
-
-        for option in process.options:
-            self.__print(logging.INFO, str(option), format=False)
+        self.__print(logging.INFO, i18n.t('command.log_description'))
+        self.__print(logging.INFO, service.documentation_description, format=False)
 
         self.__print(logging.INFO, i18n.t('command.log_divider'))
-        self.__print(logging.INFO, i18n.t('command.log_dispatchers'))
+        self.__print(logging.INFO, i18n.t('command.log_assumptions'))
+        self.__print(logging.INFO, service.documentation_assumptions, format=False)
 
-        for dispatcher in process.dispatchers:
-            self.__print(logging.INFO, i18n.t('command.log_subdivider'))
-            self.__print(logging.INFO, str(dispatcher), format=False)
+        if len(service.documentation_actions.strip()) > 0:
+            self.__print(logging.INFO, i18n.t('command.log_divider'))
+            self.__print(logging.INFO, i18n.t('command.log_actions'))
+            self.__print(logging.INFO, service.documentation_actions, format=False)
 
-            for option in dispatcher.options:
+        if hasattr(service, Model._FIELD_DOCUMENTATION_INPUTS):
+            self.__print(logging.INFO, i18n.t('command.log_divider'))
+            self.__print(logging.INFO, i18n.t('command.log_inputs'))
+
+            for input in service.documentation_inputs:
+                self.__print(logging.INFO, str(input), format=False)
+
+        if hasattr(service, Model._FIELD_DOCUMENTATION_OUTPUTS):
+            self.__print(logging.INFO, i18n.t('command.log_divider'))
+            self.__print(logging.INFO, i18n.t('command.log_outputs'))
+
+            for output in service.documentation_outputs:
+                self.__print(logging.INFO, str(output), format=False)
+
+        if hasattr(service, Model._FIELD_DOCUMENTATION_OPTIONS):
+            self.__print(logging.INFO, i18n.t('command.log_divider'))
+            self.__print(logging.INFO, i18n.t('command.log_options'))
+
+            for option in service.documentation_options:
                 self.__print(logging.INFO, str(option), format=False)
 
         self.__print(logging.INFO, i18n.t('command.log_bookend'))
@@ -1237,16 +1441,8 @@ class Command(Base):
         else:
             data_items = []
 
-        # Find the service using its case-sensitive name (starts with).
-        service, _ = organisation.find_services(name=service_name)
-
-        # If the service cannot be found, then try it as a specific service for the organisation.
-        if service is None:
-            service = next((item for item in organisation.own_services if item.name == service_name), None)
-
-        if service is None:
-            raise CommandError(i18n.t('command.no_such_service', service=service_name))
-
+        # Find the service.
+        service = self.get_service(organisation, service_name)
         self.__print(logging.DEBUG, i18n.t('command.using_service', service=service.name))
 
         # Create the process with its options and inputs.
