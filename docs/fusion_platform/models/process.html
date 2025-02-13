@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>fusion_platform.models.process API documentation</title>
 <meta name="description" content="Process model class file …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -43,15 +54,6 @@ hljs.highlightAll();
 <span>(</span><span>session, schema=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Model dispatcher class.</p>
-<p>Initialises the object.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>session</code></strong></dt>
-<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
-<dt><strong><code>schema</code></strong></dt>
-<dd>The optional schema to use instead of the schema defined by the class.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -78,6 +80,15 @@ hljs.highlightAll();
         &#34;&#34;&#34;
         return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False}): {self.documentation_summary}&#34;</code></pre>
 </details>
+<div class="desc"><p>Model dispatcher class.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
@@ -96,9 +107,6 @@ hljs.highlightAll();
 </dd>
 <dt id="fusion_platform.models.process.Dispatcher.options"><code class="name">prop <span class="ident">options</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the dispatcher's options.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the options.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -113,6 +121,9 @@ def options(self):
     &#34;&#34;&#34;
     return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the dispatcher's options.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the options.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -164,15 +175,6 @@ def options(self):
 <span>(</span><span>session, schema=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Model input class.</p>
-<p>Initialises the object.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>session</code></strong></dt>
-<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
-<dt><strong><code>schema</code></strong></dt>
-<dd>The optional schema to use instead of the schema defined by the class.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -189,6 +191,15 @@ def options(self):
         &#34;&#34;&#34;
         return f&#34;{self.title} ({self.file_type}) = {self.name + &#39; (&#39; + str(self.id) + &#39;)&#39; if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}&#34;</code></pre>
 </details>
+<div class="desc"><p>Model input class.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
@@ -255,15 +266,6 @@ def options(self):
 <span>(</span><span>session, schema=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Model option class.</p>
-<p>Initialises the object.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>session</code></strong></dt>
-<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
-<dt><strong><code>schema</code></strong></dt>
-<dd>The optional schema to use instead of the schema defined by the class.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -459,6 +461,15 @@ def options(self):
         &#34;&#34;&#34;
         return f&#34;{self.title} (&#39;{self.name}&#39;, {self.data_type}{&#39; &#39; + str(self.constrained_values) if self.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else &#39;&#39;}{&#39;, required&#39; if self.required else &#39;&#39;}) = {self.value}: {self.description}&#34;</code></pre>
 </details>
+<div class="desc"><p>Model option class.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
@@ -558,15 +569,6 @@ def options(self):
 <span>(</span><span>session, schema=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Process model class providing attributes and methods to manipulate process item details.</p>
-<p>Initialises the object.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>session</code></strong></dt>
-<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
-<dt><strong><code>schema</code></strong></dt>
-<dd>The optional schema to use instead of the schema defined by the class.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1231,6 +1233,15 @@ def options(self):
             # We are waiting, so block for a short while.
             sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
 </details>
+<div class="desc"><p>Process model class providing attributes and methods to manipulate process item details.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
@@ -1249,9 +1260,6 @@ def options(self):
 </dd>
 <dt id="fusion_platform.models.process.Process.available_dispatchers"><code class="name">prop <span class="ident">available_dispatchers</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the process' available dispatchers.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the available dispatchers.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1267,12 +1275,12 @@ def available_dispatchers(self):
     return self.__dispatchers(
         self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else [])</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the process' available dispatchers.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the available dispatchers.</p></div>
 </dd>
 <dt id="fusion_platform.models.process.Process.dispatchers"><code class="name">prop <span class="ident">dispatchers</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the process' dispatchers.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the dispatchers.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1287,19 +1295,12 @@ def dispatchers(self):
     &#34;&#34;&#34;
     return self.__dispatchers(self._model.get(self.__class__._FIELD_DISPATCHERS) if self._model.get(self.__class__._FIELD_DISPATCHERS) is not None else [])</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the process' dispatchers.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the dispatchers.</p></div>
 </dd>
 <dt id="fusion_platform.models.process.Process.executions"><code class="name">prop <span class="ident">executions</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the process's executions.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the execution objects.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>RequestError</code></dt>
-<dd>if any get fails.</dd>
-<dt><code>ModelError</code></dt>
-<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1319,12 +1320,19 @@ def executions(self):
     return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True,
                                                   load_extras=False)  # Most recent first.</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the process's executions.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the execution objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
 </dd>
 <dt id="fusion_platform.models.process.Process.inputs"><code class="name">prop <span class="ident">inputs</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the process' inputs.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the inputs.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1352,12 +1360,12 @@ def inputs(self):
 
         yield model</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the process' inputs.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the inputs.</p></div>
 </dd>
 <dt id="fusion_platform.models.process.Process.options"><code class="name">prop <span class="ident">options</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the process' options.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the options.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1372,6 +1380,9 @@ def options(self):
     &#34;&#34;&#34;
     return Option.options_iterator(self._model.get(self.__class__._FIELD_OPTIONS, []))</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the process' options.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the options.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -1380,6 +1391,58 @@ def options(self):
 <span>def <span class="ident">add_dispatcher</span></span>(<span>self, number=None, name=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_dispatcher(self, number=None, name=None):
+    &#34;&#34;&#34;
+    Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
+    execute status or the dispatcher does not exist.
+
+    Args:
+        number: The dispatcher number to add, starting from 1 for the first in the available dispatchers. Either the number or the name must be provided.
+        name: The dispatcher name to add. Either the number or the name must be provided.
+
+    Raises:
+        ModelError: if the process is the execute status.
+        ModelError: if the dispatcher does not exist.
+        ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Make sure the arguments are provided.
+    if (number is None) and (name is None):
+        raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+    # Make sure the process is not in the execute state.
+    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+    # Find the corresponding dispatcher.
+    dispatchers = self._model.get(self.__class__._FIELD_AVAILABLE_DISPATCHERS) if self._model.get(
+        self.__class__._FIELD_AVAILABLE_DISPATCHERS) is not None else []
+    found_dispatcher = None
+
+    for i, item in enumerate(dispatchers):
+        found = (number is not None) and (number == (i + 1))
+        found = (name is not None) and (name == item.get(self.__class__._FIELD_NAME)) if not found else found
+
+        if found:
+            found_dispatcher = item
+            break
+
+    if found_dispatcher is None:
+        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+    # Add the dispatcher to the end of the existing list.
+    dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+    dispatchers.append(found_dispatcher)
+
+    # Update the dispatchers in the model.
+    self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+    # Now update the model, persisting as needed.
+    super(Process, self).update()</code></pre>
+</details>
 <div class="desc"><p>Adds a dispatcher to the process. Dispatchers can be selected from the list of available dispatchers. An exception is raised if the process is in the
 execute status or the dispatcher does not exist.</p>
 <h2 id="args">Args</h2>
@@ -1403,6 +1466,72 @@ execute status or the dispatcher does not exist.</p>
 <span>def <span class="ident">copy</span></span>(<span>self, name)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def copy(self, name):
+    &#34;&#34;&#34;
+    Creates a new template process from an existing process object. This process is not persisted to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+    Args:
+        name: The name of the copy.
+
+    Returns:
+        The new template process object.
+
+    Raises:
+        RequestError: if the copy fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Get a new template for the process model using the process as the source of the copy.
+    process = Process(self._session)
+
+    # Copy the process model.
+    response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_GET)
+
+    # Assume that the resulting model is held within the expected key within the resulting dictionary.
+    if Model._RESPONSE_KEY_MODEL not in response:
+        raise ModelError(i18n.t(&#39;models.process.failed_copy&#39;))
+
+    # Make sure we have an organisation id.
+    modified_response = response.get(Model._RESPONSE_KEY_MODEL, {})
+    modified_response[&#39;organisation_id&#39;] = self.organisation_id
+
+    # Extract the extras.
+    extracted_extras = self.__class__._extract_extras(response, extras=self.__class__._EXTRAS_LIST)
+
+    for key, value in extracted_extras.items():
+        modified_response[key] = value
+
+    # Load the response into the model. We ignore missing required fields and those which are None.
+    process._set_model_from_response(modified_response, partial=True)
+
+    # Update the options because these are not copied across to the new model, even though they are returned in the response.
+    options = modified_response.get(&#39;options&#39;, [])
+    options = [] if options is None else options
+
+    for option in options:
+        # Set the option value. The value may be a string, rather than the required type, but that will automatically be converted.
+        if (option.get(self.__class__._FIELD_NAME) is not None) and (option.get(self.__class__._FIELD_VALUE) is not None):
+            process.__set_option(name=option.get(self.__class__._FIELD_NAME), value=option.get(self.__class__._FIELD_VALUE), coerce_value=True)
+
+    # And now the same for the inputs. Here we also validate each input by retrieving it.
+    inputs = modified_response.get(&#39;inputs&#39;, [])
+    inputs = [] if inputs is None else inputs
+
+    for i, input in enumerate(inputs):
+        # See if we can find the associated model.
+        if input.get(self.__class__._FIELD_ID) is not None:
+            data = Data._model_from_api_id(self._session, organisation_id=self.organisation_id, data_id=input.get(self.__class__._FIELD_ID))
+            process.__set_input(number=i + 1, data=data)
+
+    # Set the name.
+    process.update(name=name)
+
+    # Return the copy.
+    return process</code></pre>
+</details>
 <div class="desc"><p>Creates a new template process from an existing process object. This process is not persisted to the Fusion Platform<sup>&reg;</sup>.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1423,6 +1552,24 @@ execute status or the dispatcher does not exist.</p>
 <span>def <span class="ident">create</span></span>(<span>self, **kwargs)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create(self, **kwargs):
+    &#34;&#34;&#34;
+    Attempts to persist the template process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; so that it can be executed.
+
+    Args:
+        kwargs: The model attributes which override those already in the template.
+
+    Raises:
+        RequestError: if the create fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Attempt to issue the create.
+    self._create(**kwargs)</code></pre>
+</details>
 <div class="desc"><p>Attempts to persist the template process in the Fusion Platform<sup>&reg;</sup> so that it can be executed.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1451,6 +1598,43 @@ execute status or the dispatcher does not exist.</p>
 <span>def <span class="ident">execute</span></span>(<span>self, wait=False)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def execute(self, wait=False):
+    &#34;&#34;&#34;
+    Attempts to execute the created process in the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;. Optionally waits for the next execution to start, and then for it to complete.
+
+    Args:
+        wait: Optionally wait for the next execution to start and complete? Default False.
+
+    Raises:
+        RequestError: if the execute fails.
+        ModelError: if any execution fails.
+    &#34;&#34;&#34;
+    # Send the request and load the resulting model.
+    self._send_and_load(self._get_path(self.__class__._PATH_EXECUTE), method=Session.METHOD_POST)
+
+    if wait:
+        # If we are waiting for the execution to complete, wait for the next execution to start...
+        self.wait_for_next_execution()
+
+        # ...and for all the executions to complete. Note that we wait for all executions to complete, even if at least one has failed.
+        exception = None
+
+        for execution in self.executions:
+            try:
+                execution.check_complete(wait=wait)
+            except ModelError as e:
+                # Keep the first exception raised.
+                if exception is None:
+                    exception = e
+
+        # Raise any exception.
+        if exception is not None:
+            raise exception</code></pre>
+</details>
 <div class="desc"><p>Attempts to execute the created process in the Fusion Platform<sup>&reg;</sup>. Optionally waits for the next execution to start, and then for it to complete.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1469,6 +1653,32 @@ execute status or the dispatcher does not exist.</p>
 <span>def <span class="ident">find_executions</span></span>(<span>self, id=None, group_id=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_executions(self, id=None, group_id=None):
+    &#34;&#34;&#34;
+    Searches for the process&#39;s executions with the specified id and/or group id, returning the first object found and an iterator.
+
+    Args:
+        id: The execution id to search for.
+        group_id: The execution group id to search for.
+
+    Returns:
+        The first found execution object, or None if not found, and an iterator through the found execution objects.
+    
+    Raises:
+        RequestError if any get fails.
+        ModelError if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    filter = self.__class__._build_filter(
+        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_GROUP_ID, self.__class__._FILTER_MODIFIER_EQ, group_id)])
+
+    # Build the partial find generator and execute it.
+    find = partial(ProcessExecution._models_from_api_path, self._session, self._get_path(self.__class__._PATH_EXECUTIONS), filter=filter, load_extras=False)
+    return self.__class__._first_and_generator(find)</code></pre>
+</details>
 <div class="desc"><p>Searches for the process's executions with the specified id and/or group id, returning the first object found and an iterator.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1497,6 +1707,55 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
 <span>def <span class="ident">remove_dispatcher</span></span>(<span>self, number)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_dispatcher(self, number):
+    &#34;&#34;&#34;
+    Removes the dispatcher service with the corresponding number from the process.
+
+    Args:
+        number: The number to remove, starting from 1 for the first dispatcher.
+
+    Raises:
+        ModelError: if the process is the execute status.
+        ModelError: if the dispatcher does not exist.
+        ModelError: if the model could not be updated and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Make sure the argument is provided.
+    if number is None:
+        raise ModelError(i18n.t(&#39;models.process.dispatcher_not_specified&#39;))
+
+    # Make sure the process is not in the execute state.
+    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+    # Find the corresponding dispatcher.
+    found_dispatcher_index = None
+    found_dispatcher = None
+
+    for i, item in enumerate(self._model.get(self.__class__._FIELD_DISPATCHERS, [])):
+        found = (number is not None) and (number == (i + 1))
+
+        if found:
+            found_dispatcher_index = i
+            found_dispatcher = item
+            break
+
+    if found_dispatcher is None:
+        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+
+    # Remove the dispatcher from the existing list.
+    dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
+    dispatchers.pop(found_dispatcher_index)
+
+    # Update the dispatchers in the model.
+    self._set_field([self.__class__._FIELD_DISPATCHERS], dispatchers)
+
+    # Now update the model, persisting as needed.
+    super(Process, self).update()</code></pre>
+</details>
 <div class="desc"><p>Removes the dispatcher service with the corresponding number from the process.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -1517,6 +1776,20 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
 <span>def <span class="ident">stop</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def stop(self):
+    &#34;&#34;&#34;
+    Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.
+
+    Raises:
+        RequestError: if the stop fails.
+    &#34;&#34;&#34;
+    # Send the request and load the resulting model.
+    self._send_and_load(self._get_path(self.__class__._PATH_STOP), method=Session.METHOD_POST)</code></pre>
+</details>
 <div class="desc"><p>Stops the process from being executed. This will abort any executions which are in progress and prevent any scheduled executions from taking place.</p>
 <h2 id="raises">Raises</h2>
 <dl>
@@ -1535,9 +1808,60 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
 <div class="desc inherited"><p>Converts the model attributes into a CSV string …</p></div>
 </dd>
 <dt id="fusion_platform.models.process.Process.update"><code class="name flex">
-<span>def <span class="ident">update</span></span>(<span>self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs)</span>
+<span>def <span class="ident">update</span></span>(<span>self,<br>input_number=None,<br>input=None,<br>data=None,<br>dispatcher_number=None,<br>option_name=None,<br>option=None,<br>value=None,<br>coerce_value=False,<br>**kwargs)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update(self, input_number=None, input=None, data=None, dispatcher_number=None, option_name=None, option=None, value=None, coerce_value=False, **kwargs):
+    &#34;&#34;&#34;
+    Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
+    contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
+    of setting inputs, options and dispatchers.
+
+    Args:
+        input_number: The input number to set, starting from 1 for the first input. Either the number or the input must be provided when setting an input.
+        input: The input object for the input to set. Either the number or the input must be provided when setting an input.
+        data: The data object to use for an input.
+        dispatcher_number: The dispatcher number to update, starting from 1 for the first dispatcher. If used then options and kwargs are for the dispatcher.
+        option_name: The option name to set. Either the name or the option must be provided when setting an option.
+        option: The option object for the option to set. Either the name or the option must be provided when setting an option.
+        value: The value for the option.
+        coerce_value: Optionally coerce the supplied value to be the correct type. Default False.
+        kwargs: The model attributes which are to be patched.
+
+    Raises:
+        RequestError: if the update fails.
+        ModelError: if the process is in the execute state.
+        ModelError: if the model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Make sure the process is not in the execute state.
+    if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_EXECUTE):
+        raise ModelError(i18n.t(&#39;models.process.no_change_executing&#39;))
+
+    update_kwargs = kwargs
+
+    # Deal with the special case of inputs.
+    if (input_number is not None) or (input is not None):
+        self.__set_input(number=input_number, input=input, data=data)
+
+    # Deal with the special case of dispatchers.
+    if dispatcher_number is not None:  # Options and kwargs are for the dispatcher.
+        self.__set_dispatcher(number=dispatcher_number, option_name=option_name, value=value, coerce_value=coerce_value, **kwargs)
+
+        # The kwargs have been used on the dispatcher, so are not for the process.
+        update_kwargs = {}
+
+    else:  # Options and kwargs are for the process.
+        # Deal with the special case of options.
+        if (option_name is not None) or (option is not None):
+            self.__set_option(name=option_name, option=option, value=value, coerce_value=coerce_value)
+
+    # Now update the model, persisting as needed.
+    super(Process, self).update(**update_kwargs)</code></pre>
+</details>
 <div class="desc"><p>Attempts to update the model object with the given values. This assumes the model is updated using a PATCH RESTful request. This assumes that the patch body
 contains key names which include the name of the model class. Overridden to prevent changes if the process is being executed and to handle the special cases
 of setting inputs, options and dispatchers.</p>
@@ -1576,6 +1900,59 @@ of setting inputs, options and dispatchers.</p>
 <span>def <span class="ident">wait_for_next_execution</span></span>(<span>self)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wait_for_next_execution(self):
+    &#34;&#34;&#34;
+    Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
+    Otherwise, this method will block until the next scheduled execution has started.
+
+    Raises:
+        RequestError: if any request fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Wait until we find the next execution.
+    while True:
+        # Load in the most recent version of the model.
+        self.get(organisation_id=self.organisation_id)
+
+        # Check that the model is executing. It may have stopped on error.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_STOP):
+            raise ModelError(i18n.t(&#39;models.process.execution_stopped&#39;))
+
+        # Check whether we have the next execution listed in the model. We sort the list to find the most recent.
+        self._logger.debug(&#39;checking for next execution&#39;)
+        executions = []
+
+        if self._model.get(self.__class__._FIELD_HAS_EXECUTIONS, False):
+            executions = [item for item in self._model.get(self.__class__._FIELD_EXECUTIONS, [])]  # Turn the read-only field into a list we can sort.
+            executions = sorted(executions, key=lambda item: item.get(self.__class__._FIELD_STARTED_AT), reverse=True)  # Sort by most recent first.
+
+        execution = executions[0] if len(executions) &gt; 0 else None
+
+        # If the execution is in a group, then make sure that all the executions in the group have started.
+        if (execution is not None) and (execution.get(self.__class__._FIELD_GROUP_ID) is not None):
+            group = [item for item in executions if item.get(self.__class__._FIELD_GROUP_ID) == execution.get(self.__class__._FIELD_GROUP_ID)]
+            execution = None if (len(group) &lt; execution.get(self.__class__._FIELD_GROUP_COUNT)) else execution
+
+        # Ignore any execution older than when the next execution is expected. This assumes that the process repeat start is maintained correctly, and that it
+        # is set after any corresponding executions have been created for the current repeat start.
+        execution = None if (execution is not None) and (execution.get(self.__class__._FIELD_STARTED_AT) &lt; self.repeat_start) else execution
+
+        # Stop if we have an execution which is beyond the repeat start date.
+        if execution is not None:
+            self._logger.debug(&#39;execution %s found&#39;, execution.get(self.__class__._FIELD_ID))
+            break
+
+        # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.
+        if (execution is None) and (self.repeat_start + timedelta(seconds=Process._EXECUTE_WAIT_TOLERANCE)) &lt; datetime.now(timezone.utc):
+            raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
+
+        # We are waiting, so block for a short while.
+        sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
+</details>
 <div class="desc"><p>Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
 Otherwise, this method will block until the next scheduled execution has started.</p>
 <h2 id="raises">Raises</h2>
@@ -1590,50 +1967,9 @@ Otherwise, this method will block until the next scheduled execution has started
 </dd>
 <dt id="fusion_platform.models.process.ProcessSchema"><code class="flex name class">
 <span>class <span class="ident">ProcessSchema</span></span>
-<span>(</span><span>*, only: types.StrSequenceOrSet | None = None, exclude: types.StrSequenceOrSet = (), many: bool | None = None, context: dict | None = None, load_only: types.StrSequenceOrSet = (), dump_only: types.StrSequenceOrSet = (), partial: bool | types.StrSequenceOrSet | None = None, unknown: str | None = None)</span>
+<span>(</span><span>*,<br>only: types.StrSequenceOrSet | None = None,<br>exclude: types.StrSequenceOrSet = (),<br>many: bool | None = None,<br>context: dict | None = None,<br>load_only: types.StrSequenceOrSet = (),<br>dump_only: types.StrSequenceOrSet = (),<br>partial: bool | types.StrSequenceOrSet | None = None,<br>unknown: str | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Schema class for process model.</p>
-<p>Each process model has the following fields (and nested fields):</p>
-<ul>
-<li><strong>id</strong>: The unique identifier for the record.</li>
-<li><strong>created_at</strong>: When was the record created?</li>
-<li><strong>updated_at</strong>: When was the record last updated?</li>
-<li><strong>organisation_id</strong>: The owning organisation.</li>
-<li><strong>ssd_id</strong>: The SSD for which this process.</li>
-<li><strong>service_id</strong>: The specific version of the SSD linked to this process.</li>
-<li><strong>name</strong>: The name of the process.</li>
-<li><strong>chains</strong>: The processing chain of SSDs which will be executed for this process.<ul>
-<li><strong>ssd_id</strong>: The SSD for this part of the chain.</li>
-<li><strong>service_id</strong>: The corresponding specific version of the SSD.</li>
-<li><strong>inputs</strong>: The inputs to the service.</li>
-<li><strong>outputs</strong>: The outputs from the service.</li>
-<li><strong>options</strong>: The options from the service.<ul>
-<li><strong>name</strong>: The name of the option.</li>
-<li><strong>value</strong>: The value for the option.</li>
-<li><strong>data_type</strong>: The data type associated with the option.</li>
-<li><strong>validation</strong>: The optional validation for the option. This must be supplied for date/time and constrained values.</li>
-</ul>
-</li>
-<li><strong>intermediate</strong>: Is this an intermediate service within the chain?</li>
-</ul>
-</li>
-<li><strong>run_type</strong>: How will the process be executed?</li>
-<li><strong>repeat_count</strong>: How many more repetitions of the process will there be?</li>
-<li><strong>repeat_start</strong>: When will the process repetitions next occur?</li>
-<li><strong>repeat_end</strong>: When will the process repetitions stop?</li>
-<li><strong>repeat_gap</strong>: How much time is there between repeated processes?</li>
-<li><strong>repeat_offset</strong>: At what offset from the repeat start will the process run?</li>
-<li><strong>process_status</strong>: The process status.</li>
-<li><strong>process_status_at</strong>: When was the process status changed?</li>
-<li><strong>process_status_changed_by</strong>: Who changed the process status?</li>
-<li><strong>output_storage_period</strong>: The number of days that outputs should be stored after execution before they are automatically deleted.</li>
-<li><strong>test_run</strong>: Is this a test run of a service?</li>
-<li><strong>price</strong>: The price in FPUs to execute this process given its inputs and options.</li>
-<li><strong>deletable</strong>: Is this process scheduled for deletion?</li>
-<li><strong>non_aggregator_count</strong>: The count of non-aggregator executions within the current or last execution.</li>
-<li><strong>aggregator_count</strong>: The count of aggregator executions within the current or last execution.</li>
-</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1700,12 +2036,68 @@ Otherwise, this method will block until the next scheduled execution has started
         unknown = EXCLUDE
         ordered = True</code></pre>
 </details>
+<div class="desc"><p>Schema class for process model.</p>
+<p>Each process model has the following fields (and nested fields):</p>
+<ul>
+<li><strong>id</strong>: The unique identifier for the record.</li>
+<li><strong>created_at</strong>: When was the record created?</li>
+<li><strong>updated_at</strong>: When was the record last updated?</li>
+<li><strong>organisation_id</strong>: The owning organisation.</li>
+<li><strong>ssd_id</strong>: The SSD for which this process.</li>
+<li><strong>service_id</strong>: The specific version of the SSD linked to this process.</li>
+<li><strong>name</strong>: The name of the process.</li>
+<li><strong>chains</strong>: The processing chain of SSDs which will be executed for this process.<ul>
+<li><strong>ssd_id</strong>: The SSD for this part of the chain.</li>
+<li><strong>service_id</strong>: The corresponding specific version of the SSD.</li>
+<li><strong>inputs</strong>: The inputs to the service.</li>
+<li><strong>outputs</strong>: The outputs from the service.</li>
+<li><strong>options</strong>: The options from the service.<ul>
+<li><strong>name</strong>: The name of the option.</li>
+<li><strong>value</strong>: The value for the option.</li>
+<li><strong>data_type</strong>: The data type associated with the option.</li>
+<li><strong>validation</strong>: The optional validation for the option. This must be supplied for date/time and constrained values.</li>
+</ul>
+</li>
+<li><strong>intermediate</strong>: Is this an intermediate service within the chain?</li>
+</ul>
+</li>
+<li><strong>run_type</strong>: How will the process be executed?</li>
+<li><strong>repeat_count</strong>: How many more repetitions of the process will there be?</li>
+<li><strong>repeat_start</strong>: When will the process repetitions next occur?</li>
+<li><strong>repeat_end</strong>: When will the process repetitions stop?</li>
+<li><strong>repeat_gap</strong>: How much time is there between repeated processes?</li>
+<li><strong>repeat_offset</strong>: At what offset from the repeat start will the process run?</li>
+<li><strong>process_status</strong>: The process status.</li>
+<li><strong>process_status_at</strong>: When was the process status changed?</li>
+<li><strong>process_status_changed_by</strong>: Who changed the process status?</li>
+<li><strong>output_storage_period</strong>: The number of days that outputs should be stored after execution before they are automatically deleted.</li>
+<li><strong>test_run</strong>: Is this a test run of a service?</li>
+<li><strong>price</strong>: The price in FPUs to execute this process given its inputs and options.</li>
+<li><strong>deletable</strong>: Is this process scheduled for deletion?</li>
+<li><strong>non_aggregator_count</strong>: The count of non-aggregator executions within the current or last execution.</li>
+<li><strong>aggregator_count</strong>: The count of aggregator executions within the current or last execution.</li>
+</ul></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>marshmallow.schema.Schema</li>
 <li>marshmallow.base.SchemaABC</li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.process.ProcessSchema.OPTIONS_CLASS"><code class="name">var <span class="ident">OPTIONS_CLASS</span> : type</code></dt>
+<dd>
+<div class="desc"><p>Defines defaults for <code>marshmallow.Schema.Meta</code>.</p></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessSchema.TYPE_MAPPING"><code class="name">var <span class="ident">TYPE_MAPPING</span> : dict[type, type[Field]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.models.process.ProcessSchema.error_messages"><code class="name">var <span class="ident">error_messages</span> : dict[str, str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -1717,7 +2109,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.15.12
+Version: 1.16.6
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -1792,6 +2184,11 @@ Version: 1.15.12
 </li>
 <li>
 <h4><code><a title="fusion_platform.models.process.ProcessSchema" href="#fusion_platform.models.process.ProcessSchema">ProcessSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.process.ProcessSchema.OPTIONS_CLASS" href="#fusion_platform.models.process.ProcessSchema.OPTIONS_CLASS">OPTIONS_CLASS</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessSchema.TYPE_MAPPING" href="#fusion_platform.models.process.ProcessSchema.TYPE_MAPPING">TYPE_MAPPING</a></code></li>
+<li><code><a title="fusion_platform.models.process.ProcessSchema.error_messages" href="#fusion_platform.models.process.ProcessSchema.error_messages">error_messages</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -1799,7 +2196,7 @@ Version: 1.15.12
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

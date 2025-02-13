@@ -23,5 +23,79 @@
       "category": "Polygon",
       "area": 21420824776.176483
     }
-  ]
+  ],
+  "stac_item": {
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "stac_extensions": [
+      "https://stac-extensions.github.io/processing/v1.2.0/schema.json",
+      "https://stac-extensions.github.io/projection/v1.1.0/schema.json",
+      "https://stac-extensions.github.io/file/v2.1.0/schema.json"
+    ],
+    "id": "05e3a152-e56c-4d7d-b744-273c4266e928",
+    "bbox": [
+      137.14280251090364,
+      -34.48420544424931,
+      139.1288442541587,
+      -33.2271235256643
+    ],
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            137.14280251090364,
+            -36.15367737606264
+          ],
+          [
+            139.1288442541587,
+            -36.15367737606264
+          ],
+          [
+            139.1288442541587,
+            -33.2271235256643
+          ],
+          [
+            137.14280251090364,
+            -33.2271235256643
+          ],
+          [
+            137.14280251090364,
+            -36.15367737606264
+          ]
+        ]
+      ]
+    },
+    "properties": {
+      "processing.software": "Fusion Platform®",
+      "processing.version": "1.16.1",
+      "datetime": "2025-01-31T14:54:40.426118+00:00",
+      "proj:epsg": "EPSG:4326"
+    },
+    "links": [
+      {
+        "rel": "self",
+        "href": ".adelaide.zip.stac",
+        "type": "application/json"
+      },
+      {
+        "rel": "root",
+        "href": ".collection.stac",
+        "type": "application/json"
+      },
+      {
+        "rel": "parent",
+        "href": ".collection.stac",
+        "type": "application/json"
+      }
+    ],
+    "assets": {
+      "asset": {
+        "href": "adelaide.zip",
+        "roles": [],
+        "file:size": 1024
+      }
+    }
+  },
+  "stac_item_file": ".adelaide.json.stac"
 }

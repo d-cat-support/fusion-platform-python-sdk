@@ -126,6 +126,11 @@ class Command(Base):
     _YAML_OPTIONS = 'options'
     _YAML_DISPATCHERS = 'dispatchers'
 
+    # Progress bar constants.
+    __PROGRESS_BAR_FORMAT = '{l_bar}{bar:50}{r_bar}'
+    __PROGRESS_BAR_COLOUR_ACTIVE = '#3379B6'
+    __PROGRESS_BAR_COLOUR_COMPLETE = '#5BB85C'
+
     def __init__(self):
         """
         Initialises the object.
@@ -271,26 +276,33 @@ class Command(Base):
             extracted_inputs = [(k + 1, input) for k, input in enumerate(process.inputs)]
 
             self.__print(logging.INFO, i18n.t('command.define_inputs', files=len(extracted_inputs)))
-            progress_bar = tqdm(total=len(extracted_inputs), ncols=100)
+            progress_bar = tqdm(total=len(extracted_inputs), bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE,
+                                unit='input')  # Unit matches keyword argument.
+            progress_bar.set_postfix(input=1)
 
-            for k, input in extracted_inputs:
-                # Get the data item for this input.
-                data, _ = organisation.find_data(id=input.id)
-                data.check_analysis_complete(wait=True)
+            try:
+                for k, input in extracted_inputs:
+                    # Get the data item for this input.
+                    data, _ = organisation.find_data(id=input.id)
+                    data.check_analysis_complete(wait=True)
 
-                # Get the list of files which we filter to only use those files that are not sources. This will include any files which do not have an alternative.
-                data_files = [data_file for data_file in data.files if data_file.file_type.lower().strip() == input.file_type.lower().strip()]
-                file_ids_to_ignore = [str(data_file.source) for data_file in data_files if hasattr(data_file, 'source') and (data_file.source is not None)]
-                data_files = [data_file for data_file in data_files if str(data_file.file_id) not in file_ids_to_ignore]
+                    # Get the list of files which we filter to only use those files that are not sources. This will include any files which do not have an alternative.
+                    data_files = [data_file for data_file in data.files if data_file.file_type.lower().strip() == input.file_type.lower().strip()]
+                    file_ids_to_ignore = [str(data_file.source) for data_file in data_files if hasattr(data_file, 'source') and (data_file.source is not None)]
+                    data_files = [data_file for data_file in data_files if str(data_file.file_id) not in file_ids_to_ignore]
 
-                # Build the list of downloads. Here we take just the first file found on the assumption that there should be only one.
-                if len(data_files) > 0:
-                    downloads.append((data_files[0], data_files[0].file_name))
-                    inputs.append({Model._FIELD_NAME: data.name, Model._FIELD_FILE: data_files[0].file_name})
+                    # Build the list of downloads. Here we take just the first file found on the assumption that there should be only one.
+                    if len(data_files) > 0:
+                        downloads.append((data_files[0], data_files[0].file_name, data_files[0].size))
+                        inputs.append({Model._FIELD_NAME: data.name, Model._FIELD_FILE: data_files[0].file_name})
 
-                progress_bar.update(1)
+                    progress_bar.set_postfix(input=k)
+                    progress_bar.update(1)
 
-            progress_bar.close()
+            finally:
+                progress_bar.set_postfix()
+                progress_bar.colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
+                progress_bar.close()
 
         else:
             # Just get the names of the inputs.
@@ -306,29 +318,36 @@ class Command(Base):
             non_aggregator_chains = process.chains if hasattr(process, Model._FIELD_CHAINS) else []
 
             self.__print(logging.INFO, i18n.t('command.define_storage', slices=non_aggregator_count))
-            progress_bar = tqdm(total=non_aggregator_count, ncols=100)
+            progress_bar = tqdm(total=non_aggregator_count, bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE,
+                                unit='slice')  # Unit matches keyword argument.
+            progress_bar.set_postfix(slice=1)
 
-            for group_index in range(1, non_aggregator_count + 1):
-                ssd_ids = [(i, non_aggregator_chains[i].get(Model._FIELD_SSD_ID)) for i in range(len(non_aggregator_chains))]
-                chain_digits = len(str(len(ssd_ids)))
+            try:
+                for group_index in range(1, non_aggregator_count + 1):
+                    ssd_ids = [(i, non_aggregator_chains[i].get(Model._FIELD_SSD_ID)) for i in range(len(non_aggregator_chains))]
+                    chain_digits = len(str(len(ssd_ids)))
 
-                for chain_index, ssd_id in ssd_ids:
-                    storage_data_item = self.__get_storage_data_item(process, group_index, non_aggregator_count, ssd_id, chain_index)
+                    for chain_index, ssd_id in ssd_ids:
+                        storage_data_item = self.__get_storage_data_item(process, group_index, non_aggregator_count, ssd_id, chain_index)
 
-                    if storage_data_item is not None:
-                        # Add the storage file to the downloads. We assume there are zero or one file for the storage data item.
-                        storage_data_item.check_analysis_complete(wait=True)
-                        storage_data_file = next(storage_data_item.files, None)
+                        if storage_data_item is not None:
+                            # Add the storage file to the downloads. We assume there are zero or one file for the storage data item.
+                            storage_data_item.check_analysis_complete(wait=True)
+                            storage_data_file = next(storage_data_item.files, None)
 
-                        if storage_data_file is not None:
-                            path = f"{str(group_index).zfill(non_aggregator_digits)}_{str(chain_index).zfill(chain_digits)}_{storage_data_file.file_name.split('_')[-1]}"
-                            key = f"{group_index}_{non_aggregator_count}_{ssd_id}_{chain_index}"
-                            downloads.append((storage_data_file, path))
-                            storage[key] = path
+                            if storage_data_file is not None:
+                                path = f"{str(group_index).zfill(non_aggregator_digits)}_{str(chain_index).zfill(chain_digits)}_{storage_data_file.file_name.split('_')[-1]}"
+                                key = f"{group_index}_{non_aggregator_count}_{ssd_id}_{chain_index}"
+                                downloads.append((storage_data_file, path, storage_data_file.size))
+                                storage[key] = path
 
-                progress_bar.update(1)
+                    progress_bar.set_postfix(slice=group_index)
+                    progress_bar.update(1)
 
-            progress_bar.close()
+            finally:
+                progress_bar.set_postfix()
+                progress_bar.colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
+                progress_bar.close()
 
         # Download the files.
         self.__download_files(downloads)
@@ -539,11 +558,16 @@ class Command(Base):
                     elif data_type == Command._DOWNLOAD_OUTPUT:
                         output_sizes.append(file.size)
 
-                    downloads.append((file, path))
-                    stac_definitions.append(file.get_stac_item())
+                    downloads.append((file, path, file.size))
+                    stac_item, stac_item_file = file.get_stac_item()
 
-                stac_collection = data_item.get_stac_collection(stac_definitions, owner=component.name, created_at=component.created_at, detail=component_options)
-                stac_definitions.append(stac_collection)
+                    if (stac_item is not None) and (stac_item_file is not None):
+                        stac_definitions.append((stac_item, stac_item_file))
+
+                if len(stac_definitions) > 0:
+                    stac_collection = data_item.get_stac_collection(stac_definitions, owner=component.name, created_at=component.created_at,
+                                                                    detail=component_options)
+                    stac_definitions.append(stac_collection)
 
                 # Write the STAC definitions.
                 for stac_definition, stac_file_name in stac_definitions:
@@ -561,29 +585,68 @@ class Command(Base):
         Downloads the files from the downloads list.
 
         Args:
-            downloads: A list of tuples with the file model and the download path.
+            downloads: A list of tuples with the file model, the download path and file size.
         """
         downloads = [] if downloads is None else downloads
 
         if len(downloads) > 0:
-            # Report progress.
             self.__print(logging.INFO, i18n.t('command.download_files', files=len(downloads)))
-            progress_bar = tqdm(total=len(downloads), ncols=100)
 
-            # Do all the downloads in batches. We use small batches so that we do not swamp memory.
-            batch_size = 2 * os.cpu_count()  # Downloads don't swamp CPU.
+            # Initialise the progress bar to show bytes downloaded.
+            total_size = sum([size for _, _, size in downloads if size is not None])
+            progress_bar = tqdm(total=total_size, bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE, unit='B', unit_scale=True,
+                                unit_divisor=1024)  # Show progress in bytes.
 
-            for batch in [downloads[i:i + batch_size] for i in range(0, len(downloads), batch_size)]:
-                # Start downloading the batch.
-                for file, path in batch:
-                    file.download(path=path, wait=False)
+            try:
+                # Do all the downloads in batches. We use small batches so that we do not swamp memory.
+                batch_size = 2 * os.cpu_count()  # Downloads don't swamp CPU.
 
-                # Wait for the download to complete.
-                for file, path in batch:
-                    progress_bar.update(1)
-                    file.download_complete(wait=True)
+                for batch in [downloads[i:i + batch_size] for i in range(0, len(downloads), batch_size)]:
+                    download_files = []
 
-            progress_bar.close()
+                    # Start downloading the batch.
+                    for file, path, size in batch:
+                        file.download(path=path, wait=False)
+                        download_files.append((file, False, 0, size))
+
+                    # Check the status of the batch of downloads so that we know when we have finished, updating the progress bar as we go.
+                    finished = False
+                    last_total_current_size = 0
+
+                    while not finished:
+                        # Wait a bit before checking progress again.
+                        sleep(0.25)
+
+                        # Now work out haw far we've got.
+                        total_current_size = 0
+                        count_complete = 0
+
+                        for i in range(len(download_files)):
+                            file, complete, current_size, download_size = download_files[i]
+
+                            if not complete:
+                                # Get the current download size.
+                                _, _, current_size = file.download_progress()
+
+                                # Now check for completion.
+                                complete = file.download_complete()
+                                download_files[i] = (file, complete, current_size, download_size)
+
+                            count_complete += 1 if complete else 0
+                            total_current_size += current_size
+
+                        # Increment the progress bar.
+                        update_current_size = total_current_size - last_total_current_size
+                        last_total_current_size = total_current_size
+                        progress_bar.update(update_current_size)
+
+                        # Check if we have finished.
+                        finished = count_complete == len(download_files)
+
+            finally:
+                # Make sure the progress bar is closed.
+                progress_bar.colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
+                progress_bar.close()
 
     def download_process_execution(self, organisation, process_name, download_inputs, download_outputs, download_storage, download_intermediate,
                                    download_components, save_metrics):
@@ -645,19 +708,26 @@ class Command(Base):
         # Do all the downloads in batches. We use small batches so that we do not swamp memory.
         batch_size = 2 * os.cpu_count()  # Downloads don't swamp CPU.
         self.__print(logging.INFO, i18n.t('command.download_executions', executions=len(executions)))
-        progress_bar = tqdm(total=len(executions), ncols=100)
+        progress_bar = tqdm(total=len(executions), bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE,
+                            unit='execution')  # Unit matches keyword argument.
+        progress_bar.set_postfix(execution=1)
 
-        # Now download each execution in batches.
-        partial_download_execution = partial(self.__download_execution, process, download_inputs, download_outputs, download_storage, download_intermediate,
-                                             download_components, output_dir)
-        results = []
+        try:
+            # Now download each execution in batches.
+            partial_download_execution = partial(self.__download_execution, process, download_inputs, download_outputs, download_storage, download_intermediate,
+                                                 download_components, output_dir)
+            results = []
 
-        with Pool(nodes=batch_size) as pool:
-            for result in pool.uimap(partial_download_execution, executions):
-                progress_bar.update(1)
-                results.append(result)
+            with Pool(nodes=batch_size) as pool:
+                for i, result in enumerate(pool.uimap(partial_download_execution, executions)):
+                    progress_bar.set_postfix(execution=i + 1)
+                    progress_bar.update(1)
+                    results.append(result)
 
-        progress_bar.close()
+        finally:
+            progress_bar.set_postfix()
+            progress_bar.colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
+            progress_bar.close()
 
         # Combine the results.
         downloads = []
@@ -1173,9 +1243,14 @@ class Command(Base):
         # Form the status of the execution.
         status = ''
         group = ''
+        abort_reason = i18n.t('command.log_execution_abort_reason', abort_reason=execution.abort_reason) if hasattr(execution, Model._FIELD_ABORT_REASON) else ''
+        exit_type = i18n.t('command.log_execution_exit_type', exit_type=execution.exit_type) if hasattr(execution, Model._FIELD_EXIT_TYPE) else ''
 
         if execution.success:
-            status = i18n.t('command.log_execution_success')
+            if len(abort_reason) <= 0:
+                status = i18n.t('command.log_execution_success')
+            else:
+                status = i18n.t('command.log_execution_warning', exit_type=exit_type, abort_reason=abort_reason)
 
         elif execution.stopped:
             status = i18n.t('command.log_execution_stopped')
@@ -1184,9 +1259,6 @@ class Command(Base):
             status = i18n.t('command.log_execution_progress', progress=execution.progress)
 
         else:
-            abort_reason = i18n.t('command.log_execution_abort_reason', abort_reason=execution.abort_reason) if hasattr(execution,
-                                                                                                                        Model._FIELD_ABORT_REASON) else ''
-            exit_type = i18n.t('command.log_execution_exit_type', exit_type=execution.exit_type) if hasattr(execution, Model._FIELD_EXIT_TYPE) else ''
             status = i18n.t('command.log_execution_failed', exit_type=exit_type, abort_reason=abort_reason)
 
         started_at = execution.started_at.strftime('%Y-%m-%d %H:%M:%S')
@@ -1475,78 +1547,97 @@ class Command(Base):
         Returns:
             The found data items in the same order as the input files.
         """
-        data_items = []
-        created_items = []
+        data_items = [None] * len(input_files)
+        find_items = []
+        create_items = []
 
-        self.__print(logging.INFO, i18n.t('command.upload_inputs', files=len(input_files)))
-        progress_bar = tqdm(total=len(input_files), ncols=100)
+        for i, input_file in enumerate(input_files if input_files is not None else []):
+            # The input file can either be a string representing a name or a file, or a dictionary with explicit values for both.
+            input_name = None
+            filename = None
+            extension = None
 
-        try:
-            for i, input_file in enumerate(input_files if input_files is not None else []):
-                # The input file can either be a string representing a name or a file, or a dictionary with explicit values for both.
-                input_name = None
-                filename = None
-                extension = None
+            if isinstance(input_file, dict):
+                input_name = input_file.get(Model._FIELD_NAME)
+                filename = input_file.get(Model._FIELD_FILE)
+                extension = os.path.splitext(filename.lower())[1] if filename is not None else None
+            else:
+                # An input name is not assumed to have an extension.
+                extension = os.path.splitext(input_file.lower())[1]
 
-                if isinstance(input_file, dict):
-                    input_name = input_file.get(Model._FIELD_NAME)
-                    filename = input_file.get(Model._FIELD_FILE)
-                    extension = os.path.splitext(filename.lower())[1]
+                if len(extension) > 0:
+                    filename = input_file
                 else:
-                    # An input name is not assumed to have an extension.
-                    extension = os.path.splitext(input_file.lower())[1]
+                    input_name = input_file
+                    extension = None
 
-                    if len(extension) > 0:
-                        filename = input_file
-                    else:
-                        input_name = input_file
-                        extension = None
-
-                if extension is not None:
-                    # Create a data item for each input.
-                    if (extension == '.tif') or (extension == '.tiff'):
-                        file_type = fusion_platform.FILE_TYPE_GEOTIFF
-                    elif extension == '.jp2':
-                        file_type = fusion_platform.FILE_TYPE_JPEG2000
-                    elif extension == '.dem':
-                        file_type = fusion_platform.FILE_TYPE_DEM
-                    elif (extension == '.json') or (extension == '.geojson'):
-                        file_type = fusion_platform.FILE_TYPE_GEOJSON
-                    elif extension == '.kml':
-                        file_type = fusion_platform.FILE_TYPE_KML
-                    elif extension == '.kmz':
-                        file_type = fusion_platform.FILE_TYPE_KMZ
-                    elif extension == '.csv':
-                        file_type = fusion_platform.FILE_TYPE_CSV
-                    elif extension == '.zip':
-                        file_type = fusion_platform.FILE_TYPE_ESRI_SHAPEFILE
-                    elif (extension == '.jpeg') or (extension == '.jpg'):
-                        file_type = fusion_platform.FILE_TYPE_JPEG
-                    elif extension == '.png':
-                        file_type = fusion_platform.FILE_TYPE_PNG
-                    else:
-                        file_type = fusion_platform.FILE_TYPE_OTHER
-
-                    input_name = f"{process_name} {i + 1}" if input_name is None else input_name
-                    created = organisation.create_data(name=input_name, file_type=file_type, files=[filename], wait=False)
-                    data_items.append(created)
-                    created_items.append(created)
+            if extension is not None:
+                # Create a data item for each input.
+                if (extension == '.tif') or (extension == '.tiff'):
+                    file_type = fusion_platform.FILE_TYPE_GEOTIFF
+                elif extension == '.jp2':
+                    file_type = fusion_platform.FILE_TYPE_JPEG2000
+                elif extension == '.dem':
+                    file_type = fusion_platform.FILE_TYPE_DEM
+                elif (extension == '.json') or (extension == '.geojson'):
+                    file_type = fusion_platform.FILE_TYPE_GEOJSON
+                elif extension == '.kml':
+                    file_type = fusion_platform.FILE_TYPE_KML
+                elif extension == '.kmz':
+                    file_type = fusion_platform.FILE_TYPE_KMZ
+                elif extension == '.csv':
+                    file_type = fusion_platform.FILE_TYPE_CSV
+                elif extension == '.zip':
+                    file_type = fusion_platform.FILE_TYPE_ESRI_SHAPEFILE
+                elif (extension == '.jpeg') or (extension == '.jpg'):
+                    file_type = fusion_platform.FILE_TYPE_JPEG
+                elif extension == '.png':
+                    file_type = fusion_platform.FILE_TYPE_PNG
                 else:
+                    file_type = fusion_platform.FILE_TYPE_OTHER
+
+                input_name = f"{process_name} {i + 1}" if input_name is None else input_name
+                create_items.append((i, input_name, file_type, filename))
+            else:
+                find_items.append((i, input_name))
+
+        # Find all required items with a progress bar.
+        if len(find_items) > 0:
+            self.__print(logging.INFO, i18n.t('command.find_inputs', inputs=len(find_items)))
+            progress_bar = tqdm(total=len(find_items), bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE,
+                                unit='input')  # Unit matches keyword argument.
+            progress_bar.set_postfix(input=1)
+            k = 1
+
+            try:
+                for i, input_name in find_items:
                     data_item, _ = organisation.find_data(name=input_name)
 
                     if data_item is None:
                         raise CommandError(i18n.t('command.no_such_input', input_name=input_name))
 
-                    data_items.append(data_item)
+                    data_items[i] = data_item
+
+                    k += 1
+                    progress_bar.set_postfix(input=k)
                     progress_bar.update(1)
+            finally:
+                progress_bar.set_postfix()
+                progress_bar.colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
+                progress_bar.close()
+
+        # Create all required items. The upload has a progress bar.
+        if len(create_items) > 0:
+            self.__print(logging.INFO, i18n.t('command.upload_inputs', inputs=len(create_items)))
+            created_items = []
+
+            for i, input_name, file_type, filename in create_items:
+                created = organisation.create_data(name=input_name, file_type=file_type, files=[filename], wait=False)
+                created_items.append((created, False, 0, os.path.getsize(filename)))
+                data_items[i] = created
 
             # Wait for the analysis of any created items to complete.
-            for created in created_items:
-                created.create_complete(wait=True)
-                progress_bar.update(1)
-
-        finally:
-            progress_bar.close()
+            self.__wait_for_uploads(created_items)
 
         return data_items
 
@@ -1559,42 +1650,35 @@ class Command(Base):
             storage_files: The list of storage files to be uploaded.
             process: The newly created process.
         """
+        self.__print(logging.INFO, i18n.t('command.upload_storage', files=len(storage_files)))
+        storage_files = {} if storage_files is None else storage_files
         created_items = []
 
-        self.__print(logging.INFO, i18n.t('command.upload_storage', files=len(storage_files)))
-        progress_bar = tqdm(total=len(storage_files), ncols=100)
+        for storage_key, storage_file in storage_files.items():
+            # The key represents the values used to generate the new storage id, without the process id, which will be different.
+            elements = storage_key.split('_')
+            group_index = int(elements[0])
+            group_count = int(elements[1])
+            ssd_id = elements[2]
+            chain_index = int(elements[3])
+            storage_name = i18n.t('command.storage_name', process=process.name, group_index=group_index, chain_index=chain_index)
 
-        try:
-            for storage_key, storage_file in (storage_files if storage_files is not None else {}).items():
-                # The key represents the values used to generate the new storage id, without the process id, which will be different.
-                elements = storage_key.split('_')
-                group_index = int(elements[0])
-                group_count = int(elements[1])
-                ssd_id = elements[2]
-                chain_index = int(elements[3])
-                storage_name = i18n.t('command.storage_name', process=process.name, group_index=group_index, chain_index=chain_index)
+            group_index = None if group_count == 1 else group_index  # If not in a group, then this needs to be None.
+            group_count = None if group_count == 1 else group_count  # If not in a group, then this needs to be None.
+            storage_id = self.__get_storage_id(process.id, group_index, group_count, ssd_id, chain_index)
 
-                group_index = None if group_count == 1 else group_index  # If not in a group, then this needs to be None.
-                group_count = None if group_count == 1 else group_count  # If not in a group, then this needs to be None.
-                storage_id = self.__get_storage_id(process.id, group_index, group_count, ssd_id, chain_index)
+            # The destination filename must be correct for everything to work, so we must make a copy with the right name.
+            with tempfile.TemporaryDirectory() as tmp_dir:
+                upload_file = os.path.join(tmp_dir, Command._STORAGE_NAME)
+                shutil.copy(storage_file, upload_file)
 
-                # The destination filename must be correct for everything to work, so we must make a copy with the right name.
-                with tempfile.TemporaryDirectory() as tmp_dir:
-                    upload_file = os.path.join(tmp_dir, Command._STORAGE_NAME)
-                    shutil.copy(storage_file, upload_file)
+                created = organisation.create_data(name=storage_name, file_type=fusion_platform.FILE_TYPE_GZIP, files=[upload_file], wait=False, id=storage_id)
+                created_items.append((created, False, 0, os.path.getsize(upload_file)))
 
-                    created = organisation.create_data(name=storage_name, file_type=fusion_platform.FILE_TYPE_GZIP, files=[upload_file], wait=False, id=storage_id)
-                    created_items.append(created)
+                os.remove(upload_file)
 
-                    os.remove(upload_file)
-
-            # Wait for the analysis of any created items to complete.
-            for created in created_items:
-                created.create_complete(wait=True)
-                progress_bar.update(1)
-
-        finally:
-            progress_bar.close()
+        # Wait for the analysis of any created items to complete.
+        self.__wait_for_uploads(created_items)
 
     def __validate_constrained(self, values, text):
         """
@@ -1608,6 +1692,60 @@ class Command(Base):
             True if the text is valid.
         """
         return text.lower() in [value.lower() for value in values]
+
+    def __wait_for_uploads(self, upload_data):
+        """
+        Waits for all the specified uploads to complete, showing a progress bar of bytes uploaded.
+
+        Args:
+            upload_data: A list of tuples of the data items being uploaded with the data model, if the upload has completed, the upload size and total size.
+        """
+
+        # Initialise the progress bar to show bytes uploaded.
+        total_size = sum([size for _, _, _, size in upload_data if size is not None])
+        progress_bar = tqdm(total=total_size, bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE, unit='B', unit_scale=True,
+                            unit_divisor=1024)  # Show progress in bytes.
+
+        try:
+            # Check the status of all uploads so that we know when we have finished, updating the progress bar as we go.
+            finished = False
+            last_total_current_size = 0
+
+            while not finished:
+                # Wait a bit before checking progress again.
+                sleep(0.25)
+
+                # Now work out haw far we've got.
+                total_current_size = 0
+                count_complete = 0
+
+                for i in range(len(upload_data)):
+                    data, complete, current_size, upload_size = upload_data[i]
+
+                    if not complete:
+                        # Check every file being uploaded for the data model.
+                        upload_progress = data.upload_progress()
+                        current_size = sum([size for _, size in upload_progress])
+
+                        # Now check for completion.
+                        complete = data.create_complete()
+                        upload_data[i] = (data, complete, current_size, upload_size)
+
+                    count_complete += 1 if complete else 0
+                    total_current_size += current_size
+
+                # Increment the progress bar.
+                update_current_size = total_current_size - last_total_current_size
+                last_total_current_size = total_current_size
+                progress_bar.update(update_current_size)
+
+                # Check if we have finished.
+                finished = count_complete == len(upload_data)
+
+        finally:
+            # Make sure the progress bar is closed.
+            progress_bar.colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
+            progress_bar.close()
 
 
 def main():

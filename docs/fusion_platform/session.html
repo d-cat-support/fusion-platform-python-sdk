@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>fusion_platform.session API documentation</title>
 <meta name="description" content="Session class file …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -43,7 +54,6 @@ hljs.highlightAll();
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Exception raised on request failure.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -54,6 +64,7 @@ hljs.highlightAll();
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
+<div class="desc"><p>Exception raised on request failure.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></li>
@@ -70,7 +81,6 @@ hljs.highlightAll();
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Exception raised on request failure which is retryable.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -81,6 +91,7 @@ hljs.highlightAll();
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
+<div class="desc"><p>Exception raised on request failure which is retryable.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></li>
@@ -93,8 +104,6 @@ hljs.highlightAll();
 <span>class <span class="ident">Session</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Provides a session for use in interfacing with the Fusion Platform<sup>&reg;</sup> API.</p>
-<p>Initialises the object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -309,19 +318,22 @@ hljs.highlightAll();
         # Return the payload.
         return payload
 
-    def upload_file(self, url, source):
+    def upload_file(self, url, source, callback=None):
         &#34;&#34;&#34;
         Uploads a file from the source path.
 
         Args:
             url: The URL to download as a file.
             source: The source file path.
+            callback: The optional callback method used to receive upload progress.
         &#34;&#34;&#34;
         try:
             # Upload the file as a data stream.
             self._logger.info(&#39;uploading %s -&gt; %s&#39;, url, source)
 
             with open(source, &#39;rb&#39;) as file:
+                # Wrap the file reader with a callback to give progress.
+                file = CallbackIOWrapper(UploadCallback(url, source, callback).callback, file, &#39;read&#39;) if callback is not None else file
                 response = requests.put(url, data=file)
 
                 # Raise any errors.
@@ -346,6 +358,8 @@ hljs.highlightAll();
         &#34;&#34;&#34;
         return self.__user_id</code></pre>
 </details>
+<div class="desc"><p>Provides a session for use in interfacing with the Fusion Platform<sup>&reg;</sup> API.</p>
+<p>Initialises the object.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>fusion_platform.base.Base</li>
@@ -385,8 +399,6 @@ hljs.highlightAll();
 <dl>
 <dt id="fusion_platform.session.Session.user_id"><code class="name">prop <span class="ident">user_id</span></code></dt>
 <dd>
-<div class="desc"><h2 id="returns">Returns</h2>
-<p>The user id.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -399,6 +411,8 @@ def user_id(self):
     &#34;&#34;&#34;
     return self.__user_id</code></pre>
 </details>
+<div class="desc"><h2 id="returns">Returns</h2>
+<p>The user id.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -407,6 +421,62 @@ def user_id(self):
 <span>def <span class="ident">download_file</span></span>(<span>self, url, destination, callback=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def download_file(self, url, destination, callback=None):
+    &#34;&#34;&#34;
+    Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
+    arguments which are the URL, destination and the number of bytes downloaded so far.
+
+    Args:
+        url: The URL to download as a file.
+        destination: The destination file path.
+        callback: The optional callback method used to receive download progress.
+    &#34;&#34;&#34;
+    # Make sure the destination directory exists.
+    directory = os.path.dirname(destination.strip())
+
+    if len(directory) &gt; 0:
+        os.makedirs(directory, exist_ok=True)
+
+    try:
+        # Download the file in chunks to a temporarily named file.
+        self._logger.info(&#39;downloading %s -&gt; %s&#39;, url, destination)
+        response = requests.get(url, stream=True)
+
+        # Raise any errors.
+        if not response:
+            raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+        # Download the content to file as a series of chunks.
+        temporary_destination = f&#34;{destination}{Session.DOWNLOAD_EXTENSION}&#34;
+        download_size = 0
+
+        with open(temporary_destination, &#39;wb&#39;) as file:
+            for chunk in response.iter_content(chunk_size=1024 * 1024 * 10):
+                file.write(chunk)
+                download_size += len(chunk)
+                self._logger.debug(&#39;downloaded %d bytes&#39;, download_size)
+
+                if callback is not None:
+                    callback(url, destination, download_size)
+
+        # Rename the downloaded file.
+        if os.path.exists(temporary_destination):
+            os.rename(temporary_destination, destination)
+
+        self._logger.info(&#39;downloaded %s&#39;, destination)
+
+    except RequestError:
+        raise
+
+    except Exception as e:
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e</code></pre>
+</details>
 <div class="desc"><p>Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
 arguments which are the URL, destination and the number of bytes downloaded so far.</p>
 <h2 id="args">Args</h2>
@@ -423,6 +493,55 @@ arguments which are the URL, destination and the number of bytes downloaded so f
 <span>def <span class="ident">login</span></span>(<span>self, email=None, user_id=None, password=None, api_url=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def login(self, email=None, user_id=None, password=None, api_url=None):
+    &#34;&#34;&#34;
+    Attempts to log into the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; to return a user model for the active session.
+
+    Args:
+    email: The user account email address. Either an email address or a user id must be provided.
+    user_id: The user account user id. Either an email address or a user id must be provided.
+    password: The password for the user account.
+    api_url: The optional custom API URL to use. Defaults to the production Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+    Returns:
+        The corresponding user id on successful login.
+
+    Raises:
+        ValueError: on incorrect parameters.
+        RequestError: on login failure.
+    &#34;&#34;&#34;
+    # Make sure we have all the required parameters.
+    if (email is None) and (user_id is None):
+        raise ValueError(i18n.t(&#39;session.missing_email_user_id&#39;))
+
+    if password is None:
+        raise ValueError(i18n.t(&#39;session.missing_password&#39;))
+
+    # Set any custom API URL.
+    if api_url is not None:
+        self.__api_url = api_url
+
+    # Login.
+    self._logger.debug(&#39;logging in...&#39;)
+    body = {&#39;User&#39;: {&#39;email&#39;: email, &#39;user_id&#39;: user_id, &#39;password&#39;: password}}
+    response = self.request(path=&#39;/users/login&#39;, method=Session.METHOD_POST, body=body)
+
+    id_token = response.get(&#39;id_token&#39;)
+
+    if id_token is not None:
+        self.__user_id = jwt.decode(id_token, options={&#39;verify_signature&#39;: False}).get(&#39;sub&#39;)
+
+    self.__bearer_token = response.get(&#39;access_token&#39;)
+
+    if (self.__user_id is None) or (self.__bearer_token is None):
+        raise RequestError(i18n.t(&#39;session.login_failed&#39;))
+
+    self._logger.debug(&#39;logged in&#39;)</code></pre>
+</details>
 <div class="desc"><p>Attempts to log into the Fusion Platform<sup>&reg;</sup> to return a user model for the active session.</p>
 <p>Args:
 email: The user account email address. Either an email address or a user id must be provided.
@@ -443,6 +562,76 @@ api_url: The optional custom API URL to use. Defaults to the production Fusion P
 <span>def <span class="ident">request</span></span>(<span>self, path='/', query_parameters=None, method='GET', body=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@retry(wait=wait_random_exponential(multiplier=1, min=1, max=5), stop=stop_after_attempt(10), reraise=True,
+       retry=retry_if_exception_type(RetryableRequestError),
+       before_sleep=before_sleep_log(logging.getLogger(fusion_platform.FUSION_PLATFORM_LOGGER), logging.INFO))
+def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, body=None):
+    &#34;&#34;&#34;
+    Sends a request to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; using the specified path, method and JSON payload. This method will use the authentication bearer token, if
+    available.
+
+    Args:
+        path: The optional path. Default &#39;/&#39;.
+        query_parameters: The optional query parameters as a dictionary.
+        method: The optional RESTful method type. Default GET.
+        body: The optional body. Default None.
+
+    Returns:
+        The decoded response body.
+
+    Raises:
+        RequestError: if the request failed.
+    &#34;&#34;&#34;
+    payload = None
+
+    # Optionally add the bearer token.
+    headers = {&#39;Content-Type&#39;: &#39;application/json&#39;}
+
+    if self.__bearer_token is not None:
+        headers[&#39;Authorization&#39;] = f&#34;Bearer {self.__bearer_token}&#34;
+
+    try:
+        # Issue the request.
+        self._logger.info(&#39;request %s: %s%s(%s) -&gt; %s&#39;, method, self.__api_url, path, query_parameters, self.__filter_nested_dictionary(body))
+        json_body = json.dumps(body, default=json_default) if body is not None else None
+        with requests.request(method, f&#34;{self.__api_url}{path}&#34;, params=query_parameters, data=json_body, headers=headers) as response:
+            self._logger.debug(&#39;response headers: %s&#39;, response.headers)
+
+            # Raise any errors.
+            if not response:
+                message = str(response.status_code)
+
+                try:
+                    message = response.json().get(&#39;error_message&#39;)
+                    self._logger.error(message)
+                except:
+                    pass  # Ignore the inability to extract the error message.
+
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message))
+
+            payload = response.json()
+            self._logger.debug(&#39;response: %s&#39;, self.__filter_nested_dictionary(payload))
+
+    except RequestError:  # Suggests a fatal error which cannot be retried.
+        raise
+
+    except (requests.ConnectionError, requests.Timeout) as e:  # Suggests an intermittent error which can be retried.
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RetryableRequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    except Exception as e:  # Suggests a fatal error which cannot be retried.
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e
+
+    # Return the payload.
+    return payload</code></pre>
+</details>
 <div class="desc"><p>Sends a request to the Fusion Platform<sup>&reg;</sup> using the specified path, method and JSON payload. This method will use the authentication bearer token, if
 available.</p>
 <h2 id="args">Args</h2>
@@ -465,9 +654,45 @@ available.</p>
 </dl></div>
 </dd>
 <dt id="fusion_platform.session.Session.upload_file"><code class="name flex">
-<span>def <span class="ident">upload_file</span></span>(<span>self, url, source)</span>
+<span>def <span class="ident">upload_file</span></span>(<span>self, url, source, callback=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def upload_file(self, url, source, callback=None):
+    &#34;&#34;&#34;
+    Uploads a file from the source path.
+
+    Args:
+        url: The URL to download as a file.
+        source: The source file path.
+        callback: The optional callback method used to receive upload progress.
+    &#34;&#34;&#34;
+    try:
+        # Upload the file as a data stream.
+        self._logger.info(&#39;uploading %s -&gt; %s&#39;, url, source)
+
+        with open(source, &#39;rb&#39;) as file:
+            # Wrap the file reader with a callback to give progress.
+            file = CallbackIOWrapper(UploadCallback(url, source, callback).callback, file, &#39;read&#39;) if callback is not None else file
+            response = requests.put(url, data=file)
+
+            # Raise any errors.
+            if not response:
+                raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=response))
+
+        self._logger.info(&#39;uploaded %s&#39;, source)
+
+    except RequestError:
+        raise
+
+    except Exception as e:
+        message = str(e)
+        message = e.__class__.__name__ if (e is None) or (len(str(e).strip()) &lt;= 0) else message
+        raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e</code></pre>
+</details>
 <div class="desc"><p>Uploads a file from the source path.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -475,6 +700,8 @@ available.</p>
 <dd>The URL to download as a file.</dd>
 <dt><strong><code>source</code></strong></dt>
 <dd>The source file path.</dd>
+<dt><strong><code>callback</code></strong></dt>
+<dd>The optional callback method used to receive upload progress.</dd>
 </dl></div>
 </dd>
 </dl>
@@ -484,7 +711,6 @@ available.</p>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Base exception raised on request failure.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -495,6 +721,7 @@ available.</p>
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
+<div class="desc"><p>Base exception raised on request failure.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>builtins.Exception</li>
@@ -506,12 +733,89 @@ available.</p>
 <li><a title="fusion_platform.session.ValueError" href="#fusion_platform.session.ValueError">ValueError</a></li>
 </ul>
 </dd>
+<dt id="fusion_platform.session.UploadCallback"><code class="flex name class">
+<span>class <span class="ident">UploadCallback</span></span>
+<span>(</span><span>url, source, callback)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class UploadCallback:
+    &#34;&#34;&#34;
+    Provides a callback mechanism for uploads using the CallbackIOWrapper.
+    &#34;&#34;&#34;
+
+    def __init__(self, url, source, callback):
+        &#34;&#34;&#34;
+        Initialises the object.
+
+        Args:
+            url: The URL being uploaded to.
+            source: The source file path.
+            callback: The callback method used to receive upload progress.
+        &#34;&#34;&#34;
+        self.__url = url
+        self.__source = source
+        self.__callback = callback
+        self.__upload_size = 0
+
+    def callback(self, size):
+        &#34;&#34;&#34;
+        Receives the upload callback every time data is read from the associated file.
+
+        Args:
+            size: The number of bytes which have been read from the associated file.
+        &#34;&#34;&#34;
+        self.__upload_size += size
+        self.__callback(self.__url, self.__source, self.__upload_size)</code></pre>
+</details>
+<div class="desc"><p>Provides a callback mechanism for uploads using the CallbackIOWrapper.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>url</code></strong></dt>
+<dd>The URL being uploaded to.</dd>
+<dt><strong><code>source</code></strong></dt>
+<dd>The source file path.</dd>
+<dt><strong><code>callback</code></strong></dt>
+<dd>The callback method used to receive upload progress.</dd>
+</dl></div>
+<h3>Methods</h3>
+<dl>
+<dt id="fusion_platform.session.UploadCallback.callback"><code class="name flex">
+<span>def <span class="ident">callback</span></span>(<span>self, size)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def callback(self, size):
+    &#34;&#34;&#34;
+    Receives the upload callback every time data is read from the associated file.
+
+    Args:
+        size: The number of bytes which have been read from the associated file.
+    &#34;&#34;&#34;
+    self.__upload_size += size
+    self.__callback(self.__url, self.__source, self.__upload_size)</code></pre>
+</details>
+<div class="desc"><p>Receives the upload callback every time data is read from the associated file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>size</code></strong></dt>
+<dd>The number of bytes which have been read from the associated file.</dd>
+</dl></div>
+</dd>
+</dl>
+</dd>
 <dt id="fusion_platform.session.ValueError"><code class="flex name class">
 <span>class <span class="ident">ValueError</span></span>
 <span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Exception raised on login failure.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -522,6 +826,7 @@ available.</p>
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
+<div class="desc"><p>Exception raised on login failure.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></li>
@@ -539,7 +844,7 @@ available.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.15.12
+Version: 1.16.6
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -583,6 +888,12 @@ Version: 1.15.12
 <h4><code><a title="fusion_platform.session.SessionError" href="#fusion_platform.session.SessionError">SessionError</a></code></h4>
 </li>
 <li>
+<h4><code><a title="fusion_platform.session.UploadCallback" href="#fusion_platform.session.UploadCallback">UploadCallback</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.session.UploadCallback.callback" href="#fusion_platform.session.UploadCallback.callback">callback</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="fusion_platform.session.ValueError" href="#fusion_platform.session.ValueError">ValueError</a></code></h4>
 </li>
 </ul>
@@ -591,7 +902,7 @@ Version: 1.15.12
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

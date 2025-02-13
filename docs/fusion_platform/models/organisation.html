@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>fusion_platform.models.organisation API documentation</title>
 <meta name="description" content="Organisation model class file …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -43,15 +54,6 @@ hljs.highlightAll();
 <span>(</span><span>session, schema=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Organisation model class providing attributes and methods to manipulate organisation details.</p>
-<p>Initialises the object.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>session</code></strong></dt>
-<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
-<dt><strong><code>schema</code></strong></dt>
-<dd>The optional schema to use instead of the schema defined by the class.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -313,6 +315,15 @@ hljs.highlightAll();
         &#34;&#34;&#34;
         return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_SERVICES))</code></pre>
 </details>
+<div class="desc"><p>Organisation model class providing attributes and methods to manipulate organisation details.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>schema</code></strong></dt>
+<dd>The optional schema to use instead of the schema defined by the class.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
@@ -331,15 +342,6 @@ hljs.highlightAll();
 </dd>
 <dt id="fusion_platform.models.organisation.Organisation.credit"><code class="name">prop <span class="ident">credit</span></code></dt>
 <dd>
-<div class="desc"><h2 id="returns">Returns</h2>
-<p>The credit model for the organisation.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>RequestError</code></dt>
-<dd>if any get fails.</dd>
-<dt><code>ModelError</code></dt>
-<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -356,12 +358,8 @@ def credit(self):
     &#34;&#34;&#34;
     return Credit._model_from_api_id(self._session, organisation_id=self.id, id=self.id)  # Credit model id is the same as the organisation&#39;s id.</code></pre>
 </details>
-</dd>
-<dt id="fusion_platform.models.organisation.Organisation.data"><code class="name">prop <span class="ident">data</span></code></dt>
-<dd>
-<div class="desc"><p>Provides an iterator through the organisation's uploaded data objects.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the data objects.</p>
+<div class="desc"><h2 id="returns">Returns</h2>
+<p>The credit model for the organisation.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>RequestError</code></dt>
@@ -369,6 +367,9 @@ def credit(self):
 <dt><code>ModelError</code></dt>
 <dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.data"><code class="name">prop <span class="ident">data</span></code></dt>
+<dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -387,12 +388,9 @@ def data(self):
     &#34;&#34;&#34;
     return Data._models_from_api_path(self._session, self._get_path(self.__class__._PATH_DATA))</code></pre>
 </details>
-</dd>
-<dt id="fusion_platform.models.organisation.Organisation.own_services"><code class="name">prop <span class="ident">own_services</span></code></dt>
-<dd>
-<div class="desc"><p>Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.</p>
+<div class="desc"><p>Provides an iterator through the organisation's uploaded data objects.</p>
 <h2 id="returns">Returns</h2>
-<p>An iterator through the service objects.</p>
+<p>An iterator through the data objects.</p>
 <h2 id="raises">Raises</h2>
 <dl>
 <dt><code>RequestError</code></dt>
@@ -400,6 +398,9 @@ def data(self):
 <dt><code>ModelError</code></dt>
 <dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
+</dd>
+<dt id="fusion_platform.models.organisation.Organisation.own_services"><code class="name">prop <span class="ident">own_services</span></code></dt>
+<dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -418,15 +419,19 @@ def own_services(self):
     &#34;&#34;&#34;
     return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_OWN_SERVICES))</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the service objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
 </dd>
 <dt id="fusion_platform.models.organisation.Organisation.processes"><code class="name">prop <span class="ident">processes</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the organisation's processes.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the process objects.</p>
-<h2 id="raises">Raises</h2>
-<p>RequestError if any get fails.
-ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -445,19 +450,15 @@ def processes(self):
     &#34;&#34;&#34;
     return Process._models_from_api_path(self._session, self._get_path(self.__class__._PATH_PROCESSES))</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the organisation's processes.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the process objects.</p>
+<h2 id="raises">Raises</h2>
+<p>RequestError if any get fails.
+ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</p></div>
 </dd>
 <dt id="fusion_platform.models.organisation.Organisation.services"><code class="name">prop <span class="ident">services</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the services available to the organisation for execution.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the service objects.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>RequestError</code></dt>
-<dd>if any get fails.</dd>
-<dt><code>ModelError</code></dt>
-<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -476,6 +477,16 @@ def services(self):
     &#34;&#34;&#34;
     return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_SERVICES))</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the services available to the organisation for execution.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the service objects.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -484,6 +495,37 @@ def services(self):
 <span>def <span class="ident">create_data</span></span>(<span>self, name, file_type, files, wait=False, **kwargs)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_data(self, name, file_type, files, wait=False, **kwargs):
+    &#34;&#34;&#34;
+    Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.
+
+    Args:
+        name: The name of the data object.
+        file_type: The type of files that the data object will hold.
+        files: The list of file paths to be uploaded.
+        wait: Optionally wait for the upload and analysis to complete? Default False.
+        kwargs: The model attributes which override those already in the template.
+
+    Returns:
+        The created data object.
+
+    Raises:
+        RequestError: if the create fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Get a new template for the data model.
+    data = Data(self._session)
+    data._new(organisation_id=self.id)
+
+    # Now attempt to create the data item with any overriding keyword arguments.
+    data._create(name, file_type, files, wait=wait, **kwargs)
+
+    return data</code></pre>
+</details>
 <div class="desc"><p>Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -522,6 +564,34 @@ def services(self):
 <span>def <span class="ident">find_data</span></span>(<span>self, id=None, name=None, search=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_data(self, id=None, name=None, search=None):
+    &#34;&#34;&#34;
+    Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+    Args:
+        id: The data id to search for.
+        name: The name to search for (case-sensitive).
+        search: The term to search for (case-insensitive).
+
+    Returns:
+        The first found data object, or None if not found, and an iterator through the found data objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Note that name is a key field, and hence we can only search using begins with.
+    filter = self.__class__._build_filter(
+        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_BEGINS_WITH, name)])
+
+    # Build the partial find generator and execute it.
+    find = partial(Data._models_from_api_path, self._session, self._get_path(self.__class__._PATH_DATA), filter=filter, search=search)
+    return self.__class__._first_and_generator(find)</code></pre>
+</details>
 <div class="desc"><p>Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -546,6 +616,32 @@ def services(self):
 <span>def <span class="ident">find_dispatchers</span></span>(<span>self, id=None, ssd_id=None, name=None, keyword=None, search=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_dispatchers(self, id=None, ssd_id=None, name=None, keyword=None, search=None):
+    &#34;&#34;&#34;
+    Searches for dispatcher services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
+    Dispatchers are specific services used by processes to dispatch outputs to particular destinations. These services should not be used to form processes
+    themselves.
+
+    Args:
+        id: The service id to search for.
+        ssd_id: The SSD id to search for.
+        name: The name to search for (case-sensitive).
+        keyword: The keyword to search for (case-sensitive).
+        search: The term to search for (case-insensitive).
+
+    Returns:
+        The first found dispatcher service object, or None if not found, and an iterator through the found service objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return self.__find_services(self.__class__._PATH_DISPATCHERS, id, ssd_id, name, keyword, search)</code></pre>
+</details>
 <div class="desc"><p>Searches for dispatcher services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
 Dispatchers are specific services used by processes to dispatch outputs to particular destinations. These services should not be used to form processes
 themselves.</p>
@@ -576,6 +672,33 @@ themselves.</p>
 <span>def <span class="ident">find_processes</span></span>(<span>self, id=None, name=None, search=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_processes(self, id=None, name=None, search=None):
+    &#34;&#34;&#34;
+    Searches for the organisation&#39;s processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.
+
+    Args:
+        id: The process id to search for.
+        name: The name to search for (case-sensitive).
+        search: The term to search for (case-insensitive).
+
+    Returns:
+        The first found process object, or None if not found, and an iterator through the found process objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    filter = self.__class__._build_filter(
+        [(self.__class__._FIELD_ID, self.__class__._FILTER_MODIFIER_EQ, id), (self.__class__._FIELD_NAME, self.__class__._FILTER_MODIFIER_CONTAINS, name)])
+
+    # Build the partial find generator and execute it.
+    find = partial(Process._models_from_api_path, self._session, self._get_path(self.__class__._PATH_PROCESSES), filter=filter, search=search)
+    return self.__class__._first_and_generator(find)</code></pre>
+</details>
 <div class="desc"><p>Searches for the organisation's processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -600,6 +723,30 @@ themselves.</p>
 <span>def <span class="ident">find_services</span></span>(<span>self, id=None, ssd_id=None, name=None, keyword=None, search=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_services(self, id=None, ssd_id=None, name=None, keyword=None, search=None):
+    &#34;&#34;&#34;
+    Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
+
+    Args:
+        id: The service id to search for.
+        ssd_id: The SSD id to search for.
+        name: The name to search for (case-sensitive).
+        keyword: The keyword to search for (case-sensitive).
+        search: The term to search for (case-insensitive).
+
+    Returns:
+        The first found service object, or None if not found, and an iterator through the found service objects.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    return self.__find_services(self.__class__._PATH_SERVICES, id, ssd_id, name, keyword, search)</code></pre>
+</details>
 <div class="desc"><p>Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -638,6 +785,31 @@ themselves.</p>
 <span>def <span class="ident">new_process</span></span>(<span>self, name, service)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def new_process(self, name, service):
+    &#34;&#34;&#34;
+    Creates a new template process from the service object. This process is not persisted to the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+
+    Args:
+        name: The name of the process.
+        service: The service for which the process is to be created.
+
+    Returns:
+        The new template process object.
+
+    Raises:
+        RequestError: if the new fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Get a new template for the process model using the service.
+    process = Process(self._session)
+    process._new(query_parameters={Model._get_id_name(Service.__name__): service.id}, organisation_id=self.id, name=name)
+
+    return process</code></pre>
+</details>
 <div class="desc"><p>Creates a new template process from the service object. This process is not persisted to the Fusion Platform<sup>&reg;</sup>.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -680,39 +852,9 @@ themselves.</p>
 </dd>
 <dt id="fusion_platform.models.organisation.OrganisationSchema"><code class="flex name class">
 <span>class <span class="ident">OrganisationSchema</span></span>
-<span>(</span><span>*, only: types.StrSequenceOrSet | None = None, exclude: types.StrSequenceOrSet = (), many: bool | None = None, context: dict | None = None, load_only: types.StrSequenceOrSet = (), dump_only: types.StrSequenceOrSet = (), partial: bool | types.StrSequenceOrSet | None = None, unknown: str | None = None)</span>
+<span>(</span><span>*,<br>only: types.StrSequenceOrSet | None = None,<br>exclude: types.StrSequenceOrSet = (),<br>many: bool | None = None,<br>context: dict | None = None,<br>load_only: types.StrSequenceOrSet = (),<br>dump_only: types.StrSequenceOrSet = (),<br>partial: bool | types.StrSequenceOrSet | None = None,<br>unknown: str | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Schema class for organisation model.</p>
-<p>Each organisation model has the following fields (and nested fields):</p>
-<ul>
-<li><strong>id</strong>: The unique identifier for the record.</li>
-<li><strong>created_at</strong>: When was the record created?</li>
-<li><strong>updated_at</strong>: When was the record last updated?</li>
-<li><strong>name</strong>: The unique name of the organisation</li>
-<li><strong>address_line_1</strong>: The first line of the address.</li>
-<li><strong>address_line_2</strong>: The second line of the address.</li>
-<li><strong>address_town_city</strong>: The town or city.</li>
-<li><strong>address_post_zip_code</strong>: The postal or zip code.</li>
-<li><strong>address_country</strong>: The country.</li>
-<li><strong>payment_customer</strong>: The payment customer reference from the payment service.</li>
-<li><strong>payment_valid</strong>: Are the payment service details valid?</li>
-<li><strong>income_customer</strong>: The income customer reference from the income service.</li>
-<li><strong>income_valid</strong>: Are the income service details valid?</li>
-<li><strong>income_tax_rate</strong>: The percentage tax to be applied to income.</li>
-<li><strong>income_tax_reference</strong>: The income tax reference.</li>
-<li><strong>currency</strong>: The currency to be used for payment and income.</li>
-<li><strong>users</strong>: The list of users linked to this organisation.<ul>
-<li><strong>id</strong>: The user identifier.</li>
-<li><strong>email</strong>: The user's email address.</li>
-<li><strong>roles</strong>: Assigned organisational roles.</li>
-</ul>
-</li>
-<li><strong>agreed_licenses</strong>: The list of licences agreed on behalf of the organisation.</li>
-<li><strong>offers</strong>: The list of offers linked to this organisation.</li>
-<li><strong>maximum_output_storage_period</strong>: The maximum period in days for this organisation for which an output can be stored before it is deleted.</li>
-<li><strong>maximum_file_downloads</strong>: The maximum number of time any file can be downloaded for this organisation.</li>
-</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -771,12 +913,57 @@ themselves.</p>
         unknown = EXCLUDE
         ordered = True</code></pre>
 </details>
+<div class="desc"><p>Schema class for organisation model.</p>
+<p>Each organisation model has the following fields (and nested fields):</p>
+<ul>
+<li><strong>id</strong>: The unique identifier for the record.</li>
+<li><strong>created_at</strong>: When was the record created?</li>
+<li><strong>updated_at</strong>: When was the record last updated?</li>
+<li><strong>name</strong>: The unique name of the organisation</li>
+<li><strong>address_line_1</strong>: The first line of the address.</li>
+<li><strong>address_line_2</strong>: The second line of the address.</li>
+<li><strong>address_town_city</strong>: The town or city.</li>
+<li><strong>address_post_zip_code</strong>: The postal or zip code.</li>
+<li><strong>address_country</strong>: The country.</li>
+<li><strong>payment_customer</strong>: The payment customer reference from the payment service.</li>
+<li><strong>payment_valid</strong>: Are the payment service details valid?</li>
+<li><strong>income_customer</strong>: The income customer reference from the income service.</li>
+<li><strong>income_valid</strong>: Are the income service details valid?</li>
+<li><strong>income_tax_rate</strong>: The percentage tax to be applied to income.</li>
+<li><strong>income_tax_reference</strong>: The income tax reference.</li>
+<li><strong>currency</strong>: The currency to be used for payment and income.</li>
+<li><strong>users</strong>: The list of users linked to this organisation.<ul>
+<li><strong>id</strong>: The user identifier.</li>
+<li><strong>email</strong>: The user's email address.</li>
+<li><strong>roles</strong>: Assigned organisational roles.</li>
+</ul>
+</li>
+<li><strong>agreed_licenses</strong>: The list of licences agreed on behalf of the organisation.</li>
+<li><strong>offers</strong>: The list of offers linked to this organisation.</li>
+<li><strong>maximum_output_storage_period</strong>: The maximum period in days for this organisation for which an output can be stored before it is deleted.</li>
+<li><strong>maximum_file_downloads</strong>: The maximum number of time any file can be downloaded for this organisation.</li>
+</ul></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>marshmallow.schema.Schema</li>
 <li>marshmallow.base.SchemaABC</li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.organisation.OrganisationSchema.OPTIONS_CLASS"><code class="name">var <span class="ident">OPTIONS_CLASS</span> : type</code></dt>
+<dd>
+<div class="desc"><p>Defines defaults for <code>marshmallow.Schema.Meta</code>.</p></div>
+</dd>
+<dt id="fusion_platform.models.organisation.OrganisationSchema.TYPE_MAPPING"><code class="name">var <span class="ident">TYPE_MAPPING</span> : dict[type, type[Field]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.models.organisation.OrganisationSchema.error_messages"><code class="name">var <span class="ident">error_messages</span> : dict[str, str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -788,7 +975,7 @@ themselves.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.15.12
+Version: 1.16.6
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -828,6 +1015,11 @@ Version: 1.15.12
 </li>
 <li>
 <h4><code><a title="fusion_platform.models.organisation.OrganisationSchema" href="#fusion_platform.models.organisation.OrganisationSchema">OrganisationSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.organisation.OrganisationSchema.OPTIONS_CLASS" href="#fusion_platform.models.organisation.OrganisationSchema.OPTIONS_CLASS">OPTIONS_CLASS</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.OrganisationSchema.TYPE_MAPPING" href="#fusion_platform.models.organisation.OrganisationSchema.TYPE_MAPPING">TYPE_MAPPING</a></code></li>
+<li><code><a title="fusion_platform.models.organisation.OrganisationSchema.error_messages" href="#fusion_platform.models.organisation.OrganisationSchema.error_messages">error_messages</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -835,7 +1027,7 @@ Version: 1.15.12
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

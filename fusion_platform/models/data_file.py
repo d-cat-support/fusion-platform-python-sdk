@@ -93,8 +93,13 @@ class DataFileSchema(Schema):
     downloads = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     geojson = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
+    # Removed detail.
+
     title = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     description = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
+    stac_item = fields.Dict(allow_none=True)  # Added pseudo-parameter.
+    stac_item_file = fields.String(allow_none=True)  # Added pseudo-parameter.
 
     class Meta:
         """
@@ -293,135 +298,8 @@ class DataFile(Model):
             A tuple of the STAC item definition as a dictionary and the item file name used in the definition.
         """
 
-        # Obtain all the relevant information.
-        bounds = self.bounds if hasattr(self, Model._FIELD_BOUNDS) else None
-        crs = self.crs if hasattr(self, Model._FIELD_CRS) else None
-        file_name = self.file_name if hasattr(self, Model._FIELD_FILE_NAME) else None
-        size = self.size if hasattr(self, Model._FIELD_SIZE) else None
+        # Extract the STAC item from the model.
+        stac_item = self.stac_item if hasattr(self, Model._FIELD_STAC_ITEM) else None
+        stac_item_file = self.stac_item_file if hasattr(self, Model._FIELD_STAC_ITEM_FILE) else None
 
-        # Attempt to find the file type to get its extension and geospatial type. Default to "Other" if not found.
-        found_file_type = DataFile._FILE_TYPES.get(self.file_type)
-
-        if found_file_type is None:
-            found_file_type = DataFile._FILE_TYPES.get(fusion_platform.FILE_TYPE_OTHER)
-
-        geospatial = found_file_type[1]
-
-        # Get the file extension.
-        extension = os.path.splitext(file_name)[1] if file_name is not None else None
-        extension = found_file_type[0] if extension is None else extension
-
-        if (extension is None) or (extension == '*'):
-            extension = ''
-        else:
-            extension = f".{extension}" if not extension.startswith('.') else extension
-
-        # Work out a suitable name for the file if one is not available.
-        if file_name is None:
-            file_name = f"{self.id}{extension}"
-
-        item_file_name = item_file_name_format.format(file_name=file_name)
-
-        # Start to build the STAC extensions list.
-        stac_extensions = ['https://stac-extensions.github.io/processing/v1.2.0/schema.json']  # For properties#processing.[software,version].
-
-        # Get the bounding box and geometry, if there is one.
-        bbox = []
-        geometry = {}
-
-        if (bounds is not None) and (len(bounds) >= 4):
-            bbox = bounds
-            geometry = {'type': 'Polygon', 'coordinates': [[[bbox[0], bbox[1]], [bbox[2], bbox[1]], [bbox[2], bbox[3]], [bbox[0], bbox[3]], [bbox[0], bbox[1]]]]}
-
-        # Get the datetime from the filename, if possible. We try various iterations of sections the file name until we find something.
-        for file_part in file_name.split('_'):
-            extracted_datetime = datetime_parse(file_part) or datetime_parse(f"{file_part}T00:00:00Z")  # Assume UTC.
-
-            if extracted_datetime is not None:
-                break
-
-        if extracted_datetime is None:
-            extracted_datetime = self.created_at
-
-        # Start to build the properties.
-        properties = {'processing.software': i18n.t('fusion_platform.sdk'), 'processing.version': fusion_platform.__version__, 'datetime': extracted_datetime}
-
-        # Add in the CRS, if there is one.
-        if crs is not None:
-            properties['proj:epsg'] = crs
-            stac_extensions.append('https://stac-extensions.github.io/projection/v1.1.0/schema.json')  # For properties#proj:epsg.
-
-        # Build the links.
-        links = [{'rel': 'self', 'href': item_file_name, 'type': 'application/json'}]
-
-        # Add in the optional owning collection.
-        if collection_file_name is not None:
-            links.append({'rel': 'root', 'href': collection_file_name, 'type': 'application/json'})
-            links.append({'rel': 'parent', 'href': collection_file_name, 'type': 'application/json'})
-
-        # Start to build the asset from the associated file.
-        asset = {'href': file_name, 'roles': []}
-
-        # Extract out the relevant values depending upon the file type.
-        raster_bands = None
-        eo_bands = None
-
-        if (geospatial == DataFile._GEOSPATIAL_RASTER) and hasattr(self, Model._FIELD_SELECTORS) and (self.selectors is not None):
-            for selector in self.selectors:
-                raster_band = {}
-                eo_band = {}
-
-                if hasattr(self, Model._FIELD_RESOLUTION):
-                    raster_band['spatial_resolution'] = self.resolution
-
-                if selector.get(Model._FIELD_UNIT) is not None:
-                    raster_band['unit'] = selector.get(Model._FIELD_UNIT)
-
-                if (selector.get(Model._FIELD_MINIMUM) is not None) and (selector.get(Model._FIELD_MAXIMUM) is not None) and (
-                        selector.get(Model._FIELD_MEAN) is not None) and (selector.get(Model._FIELD_SD) is not None):
-                    raster_band['statistics'] = {
-                        'minimum': selector.get(Model._FIELD_MINIMUM),
-                        'maximum': selector.get(Model._FIELD_MAXIMUM),
-                        'mean': selector.get(Model._FIELD_MEAN),
-                        'stddev': selector.get(Model._FIELD_SD)
-                    }
-
-                if (selector.get(Model._FIELD_HISTOGRAM_MINIMUM) is not None) and (selector.get(Model._FIELD_HISTOGRAM_MAXIMUM) is not None) and (
-                        selector.get(Model._FIELD_HISTOGRAM) is not None):
-                    raster_band['histogram'] = {
-                        'count': len(selector.get(Model._FIELD_HISTOGRAM)),
-                        'min': selector.get(Model._FIELD_HISTOGRAM_MINIMUM),
-                        'max': selector.get(Model._FIELD_HISTOGRAM_MAXIMUM),
-                        'buckets': selector.get(Model._FIELD_HISTOGRAM),
-                    }
-
-                if selector.get(Model._FIELD_CATEGORY) is not None:
-                    eo_band['name'] = selector.get(Model._FIELD_CATEGORY)
-
-                raster_bands = [raster_band] if raster_bands is None else [raster_band] + raster_bands
-                eo_bands = [eo_band] if eo_bands is None else [eo_band] + eo_bands
-
-            stac_extensions.append('https://stac-extensions.github.io/eo/v1.1.0/schema.json')  # For assets#eo:bands.
-            stac_extensions.append('https://stac-extensions.github.io/raster/v1.1.0/schema.json')  # For assets#raster:bands.
-
-        if raster_bands is not None:
-            asset['raster:bands'] = raster_bands
-            asset['eo:bands'] = eo_bands
-
-        # Add in the file size, if there is one.
-        if size is not None:
-            asset['file:size'] = size
-            stac_extensions.append('https://stac-extensions.github.io/file/v2.1.0/schema.json')  # For assets#file:size.
-
-        # Build the STAC item.
-        return {
-            'type': 'Feature',
-            'stac_version': '1.0.0',
-            'stac_extensions': stac_extensions,
-            'id': self.id,
-            'bbox': bbox,
-            'geometry': geometry,
-            'properties': properties,
-            'links': links,
-            'assets': {'asset': asset}
-        }, item_file_name
+        return stac_item, stac_item_file

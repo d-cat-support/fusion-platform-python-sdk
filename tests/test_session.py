@@ -302,3 +302,9 @@ class TestSession(CustomTestCase):
             adapter = mock.put(url, status_code=200)
             session.upload_file(url, source)
             self.assertIsNotNone(adapter.last_request.text)
+
+            def callback(url, source, upload_size):
+                pass
+
+            session.upload_file(url, source, callback=callback)  # Because the request is mocked, the callback will not be called because there are no reads.
+            self.assertIsNotNone(adapter.last_request.text)

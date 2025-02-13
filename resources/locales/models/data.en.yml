@@ -14,3 +14,4 @@ en:
   failed_add_missing_file: "Failed to add file as the file does not exist: %{file}"
 
   no_create: "No create is in progress"
+  no_upload: "No upload is in progress"

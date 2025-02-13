@@ -3,19 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.1">
+<meta name="generator" content="pdoc3 0.11.5">
 <title>fusion_platform.models.data API documentation</title>
 <meta name="description" content="Data model class file …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/typography.min.css" integrity="sha512-Y1DYSb995BAfxobCkKepB1BqJJTPrOp3zPL74AWFugHHmmdcvO+C48WLrUOlhGMc0QG7AE3f7gmvvcrmX2fDoA==" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:1.5em;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:2em 0 .50em 0}h3{font-size:1.4em;margin:1.6em 0 .7em 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .2s ease-in-out}a:visited{color:#503}a:hover{color:#b62}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900;font-weight:bold}pre code{font-size:.8em;line-height:1.4em;padding:1em;display:block}code{background:#f3f3f3;font-family:"DejaVu Sans Mono",monospace;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source > summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible;min-width:max-content}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em 1em;margin:1em 0}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
 <style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul ul{padding-left:1em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-D9gUyxqja7hBtkWpPWGt9wfbfaMGVt9gnyCvYa+jojwwPHLCzUm5i8rpk7vD7wNee9bA35eYIjobYPaQuKS1MQ==" crossorigin></script>
 <script>window.addEventListener('DOMContentLoaded', () => {
 hljs.configure({languages: ['bash', 'css', 'diff', 'graphql', 'ini', 'javascript', 'json', 'plaintext', 'python', 'python-repl', 'rust', 'shell', 'sql', 'typescript', 'xml', 'yaml']});
 hljs.highlightAll();
+/* Collapse source docstrings */
+setTimeout(() => {
+[...document.querySelectorAll('.hljs.language-python > .hljs-string')]
+.filter(el => el.innerHTML.length > 200 && ['"""', "'''"].includes(el.innerHTML.substring(0, 3)))
+.forEach(el => {
+let d = document.createElement('details');
+d.classList.add('hljs-string');
+d.innerHTML = '<summary>"""</summary>' + el.innerHTML.substring(3);
+el.replaceWith(d);
+});
+}, 100);
 })</script>
 </head>
 <body>
@@ -43,13 +54,6 @@ hljs.highlightAll();
 <span>(</span><span>session)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Data model class providing attributes and methods to manipulate data item details.</p>
-<p>Initialises the object.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>session</code></strong></dt>
-<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -94,6 +98,7 @@ hljs.highlightAll();
         super(Data, self).__init__(session)
 
         # Initialise the fields.
+        self.__upload_progress = {}
         self.__upload_threads = {}
 
     def __add_file(self, file_type, file):
@@ -132,10 +137,11 @@ hljs.highlightAll();
             raise ModelError(i18n.t(&#39;models.data.failed_add_file_not_unique&#39;))
 
         # Create and start a thread for the upload.
+        self.__upload_progress[file] = (file, 0)  # Indexed by file path, not file id.
         thread = None
 
         try:
-            thread = RaiseThread(target=self._session.upload_file, args=(url, file))
+            thread = RaiseThread(target=self._session.upload_file, args=(url, file, self.__upload_callback))
             thread.start()
 
         finally:
@@ -387,6 +393,12 @@ hljs.highlightAll();
         interval_end = None
 
         for item, item_file_name in items:
+            # So that we can extract things correctly, turn any mapping proxy into a dict (and relevant sub-mapping proxies).
+            item = dict(item)
+
+            if item.get(&#39;properties&#39;) is not None:
+                item[&#39;properties&#39;] = dict(item.get(&#39;properties&#39;))
+
             # Calculate the spatial extent.
             item_bbox = item.get(&#39;bbox&#39;)
 
@@ -415,8 +427,42 @@ hljs.highlightAll();
             &#39;providers&#39;: [provider],
             &#39;extent&#39;: {&#39;spatial&#39;: {&#39;bbox&#39;: [bbox]}, &#39;temporal&#39;: {&#39;interval&#39;: [[interval_start, interval_end]]}},
             &#39;links&#39;: links
-        }, collection_file_name</code></pre>
+        }, collection_file_name
+
+    def __upload_callback(self, url, source, size):
+        &#34;&#34;&#34;
+        Callback method used to receive progress from upload. Updates the upload progress.
+
+        Args:
+            url: The URL to upload as a file.
+            source: The source file path.
+            size: The total size in bytes so far uploaded.
+        &#34;&#34;&#34;
+        self.__upload_progress[source] = (source, size)
+
+    def upload_progress(self):
+        &#34;&#34;&#34;
+        Returns current upload progress.
+
+        Returns:
+            A list of tuples of the source and total number of bytes uploaded so far.
+
+        Raises:
+            ModelError: if no upload is in progress.
+        &#34;&#34;&#34;
+        # Make sure at least one upload is in progress.
+        if (self.__upload_threads is None) or (len(self.__upload_threads) == 0):
+            raise ModelError(i18n.t(&#39;models.data.no_upload&#39;))
+
+        return list(self.__upload_progress.values())</code></pre>
 </details>
+<div class="desc"><p>Data model class providing attributes and methods to manipulate data item details.</p>
+<p>Initialises the object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>session</code></strong></dt>
+<dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></li>
@@ -435,16 +481,6 @@ hljs.highlightAll();
 </dd>
 <dt id="fusion_platform.models.data.Data.files"><code class="name">prop <span class="ident">files</span></code></dt>
 <dd>
-<div class="desc"><p>Provides an iterator through the data object's files.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the data object's files.</p>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>RequestError</code></dt>
-<dd>if any get fails.</dd>
-<dt><code>ModelError</code></dt>
-<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
-</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -463,6 +499,16 @@ def files(self):
     &#34;&#34;&#34;
     return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)</code></pre>
 </details>
+<div class="desc"><p>Provides an iterator through the data object's files.</p>
+<h2 id="returns">Returns</h2>
+<p>An iterator through the data object's files.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RequestError</code></dt>
+<dd>if any get fails.</dd>
+<dt><code>ModelError</code></dt>
+<dd>if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</dd>
+</dl></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -471,6 +517,49 @@ def files(self):
 <span>def <span class="ident">check_analysis_complete</span></span>(<span>self, wait=False)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def check_analysis_complete(self, wait=False):
+    &#34;&#34;&#34;
+    Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete.
+
+    Args:
+        wait: Optionally wait for the analysis to complete? Default False.
+
+    Returns:
+        True if the analysis is complete for all files.
+
+    Raises:
+        RequestError: if any get fails.
+        ModelError: if a model could not be loaded or validated from the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    while True:
+        complete = True
+
+        # Load in each of the file models and check that every file has been uploaded, and has a publishable or error field to indicate that the analysis is
+        # complete.
+        for file in self.files:
+            self._logger.debug(&#39;file %s: %s&#39;, file.file_name, file.attributes)
+
+            has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                    hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
+
+            if not has_fields:
+                self._logger.debug(&#39;file %s not yet analysed&#39;, file.file_name)
+                complete = False
+                break
+
+        # Break the loop if we are not waiting or are complete.
+        if (not wait) or complete:
+            break
+
+        # We are waiting, so block for a short while.
+        sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+
+    return complete</code></pre>
+</details>
 <div class="desc"><p>Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -491,6 +580,38 @@ def files(self):
 <span>def <span class="ident">copy</span></span>(<span>self, name)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def copy(self, name):
+    &#34;&#34;&#34;
+    Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
+    even if the source data object was created by the platform and not uploaded.
+
+    Args:
+        name: The name of the copy.
+
+    Returns:
+        The created copy.
+
+    Raises:
+        RequestError: if the copy fails.
+        ModelError: if the model could not be created and validated by the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+    &#34;&#34;&#34;
+    # Copy the data model.
+    body = {self.__class__.__name__: {&#39;name&#39;: name}}
+    response = self._session.request(path=self._get_path(self.__class__._PATH_COPY), method=Session.METHOD_POST, body=body)
+
+    # Assume that the copy data id is held within the expected key within the resulting dictionary.
+    copy_data_id = dict_nested_get(response, [self.__class__._RESPONSE_KEY_MODEL, self.__class__._FIELD_ID])
+
+    if copy_data_id is None:
+        raise ModelError(i18n.t(&#39;models.data.failed_copy_id&#39;))
+
+    # Return the copy.
+    return self.__class__._model_from_api_id(self._session, organisation_id=self.organisation_id, id=copy_data_id)</code></pre>
+</details>
 <div class="desc"><p>Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
 even if the source data object was created by the platform and not uploaded.</p>
 <h2 id="args">Args</h2>
@@ -512,6 +633,91 @@ even if the source data object was created by the platform and not uploaded.</p>
 <span>def <span class="ident">create_complete</span></span>(<span>self, wait=False)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_complete(self, wait=False):
+    &#34;&#34;&#34;
+    Checks whether the data object file(s) upload and analysis have completed. If an error has occurred during the upload and analysis, then this will raise
+    a corresponding exception. Optionally waits for the upload and analysis to complete.
+
+    Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
+    until all upload and analysis (or errored) has completed and this method returns True.
+
+    Args:
+        wait: Optionally wait for the upload and analysis to complete? Default False.
+
+    Returns:
+        True if the upload and analysis are complete for all files.
+
+    Raises:
+        RequestError: if any request fails.
+        ModelError: if the upload or analysis failed.
+    &#34;&#34;&#34;
+    # Make sure a create is in progress.
+    if len(self.__upload_threads) &lt;= 0:
+        raise ModelError(i18n.t(&#39;models.data.no_create&#39;))
+
+    # Check the upload threads. This will raise an exception if an error has occurred.
+    first_error = None
+
+    for file_id, thread in self.__upload_threads.items():
+        if thread is not None:
+            thread_finished = False
+
+            try:
+                # Join will return immediately because of the timeout, but will raise an exception if something has gone wrong.
+                thread.join(timeout=None if wait else 0)
+
+                # Check if the thread is still running after the join.
+                thread_finished = not thread.is_alive()
+
+            except Exception as e:
+                # Something went wrong. Make sure we mark the upload as finished.
+                thread_finished = True
+
+                # If we are waiting for everything to complete, then we must not re-raise the error here so that everything else can be completed first.
+                # Instead, we save the error off and raise it later.
+                if wait:
+                    first_error = e if first_error is None else first_error
+                else:
+                    raise
+
+            finally:
+                # Make sure we clear the thread if it has finished.
+                if thread_finished:
+                    self.__upload_threads[file_id] = None
+
+    # Have all the uploads finished?
+    uploads_finished = all([value is None for value in self.__upload_threads.values()])
+
+    # Now check whether the analysis has completed. We do this in a loop so that we can wait until completion, but break out if we are not waiting. If an
+    # error occurs, then we assume that the analysis is complete to prevent indefinitely waiting.
+    complete = False
+
+    try:
+        if uploads_finished:
+            complete = self.check_analysis_complete(wait=wait)
+
+    except Exception as e:
+        # An error occurred, make sure we treat this as complete to prevent an indefinite loop.
+        complete = True
+
+        # If we already have an error to raise, make sure we do not overwrite it.
+        first_error = e if first_error is None else first_error
+
+    finally:
+        if complete:
+            # Tidy up any finished threads. This will allow us to indicate that everything is complete.
+            self.__upload_threads = {file_id: thread for file_id, thread in self.__upload_threads.items() if thread is not None}
+
+    # If we encountered an error, make sure we raise it.
+    if first_error is not None:
+        raise first_error
+
+    return len(self.__upload_threads) &lt;= 0</code></pre>
+</details>
 <div class="desc"><p>Checks whether the data object file(s) upload and analysis have completed. If an error has occurred during the upload and analysis, then this will raise
 a corresponding exception. Optionally waits for the upload and analysis to complete.</p>
 <p>Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
@@ -552,9 +758,97 @@ until all upload and analysis (or errored) has completed and this method returns
 <div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
 </dd>
 <dt id="fusion_platform.models.data.Data.get_stac_collection"><code class="name flex">
-<span>def <span class="ident">get_stac_collection</span></span>(<span>self, items, collection_file_name='.collection.stac', owner=None, created_at=None, detail=None)</span>
+<span>def <span class="ident">get_stac_collection</span></span>(<span>self,<br>items,<br>collection_file_name='.collection.stac',<br>owner=None,<br>created_at=None,<br>detail=None)</span>
 </code></dt>
 <dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_stac_collection(self, items, collection_file_name=DataFile._STAC_COLLECTION_FILE_NAME, owner=None, created_at=None, detail=None):
+    &#34;&#34;&#34;
+    Converts the data representation into a STAC collection with the specified STAC item file names.
+
+    Args:
+        items: The list of items to be put into the collection. This should be a tuple of (STAC item, item_file_name).
+        collection_file_name: The optional collection file name.
+        owner: The optional owner of the collection. Default None.
+        created_at: Optionally when the collection was created. Default None.
+        detail: The optional collection detail as a dictionary. Default None.
+
+    Returns:
+        A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.
+    &#34;&#34;&#34;
+    stac_extensions = []
+
+    # Form the providers.
+    provider = {
+        &#39;name&#39;: i18n.t(&#39;fusion_platform.organisation&#39;),
+        &#39;roles&#39;: [&#39;producer&#39;, &#39;licensor&#39;],
+        &#39;url&#39;: i18n.t(&#39;fusion_platform.url&#39;)
+    }
+
+    # Add in the optional processing information, if any.
+    if owner is not None:
+        provider[&#39;processing:lineage&#39;] = owner
+
+    if created_at is not None:
+        provider[&#39;processing.datetime&#39;] = created_at
+
+    if detail is not None:
+        provider[&#39;processing:software&#39;] = detail
+
+    if (owner is not None) or (created_at is not None) or (detail is not None):
+        stac_extensions.append(&#39;https://stac-extensions.github.io/processing/v1.2.0/schema.json&#39;)
+
+    # Form the links.
+    links = [
+        {&#39;rel&#39;: &#39;self&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+        {&#39;rel&#39;: &#39;root&#39;, &#39;href&#39;: collection_file_name, &#39;type&#39;: &#39;application/json&#39;},
+    ]
+
+    # Add in the files calculating the maximal spatial and temporal extents.
+    bbox = None
+    interval_start = None
+    interval_end = None
+
+    for item, item_file_name in items:
+        # So that we can extract things correctly, turn any mapping proxy into a dict (and relevant sub-mapping proxies).
+        item = dict(item)
+
+        if item.get(&#39;properties&#39;) is not None:
+            item[&#39;properties&#39;] = dict(item.get(&#39;properties&#39;))
+
+        # Calculate the spatial extent.
+        item_bbox = item.get(&#39;bbox&#39;)
+
+        if (bbox is None) or (len(bbox) &lt; 4):
+            bbox = item_bbox
+
+        if (bbox is not None) and (len(bbox) &gt;= 4) and (item_bbox is not None) and (len(item_bbox) &gt;= 4):
+            bbox = [min(bbox[0], item_bbox[0]), min(bbox[1], item_bbox[1]), max(bbox[2], item_bbox[2]), max(bbox[3], item_bbox[3])]
+
+        # Calculate the temporal extent.
+        item_datetime = dict_nested_get(item, [&#39;properties&#39;, &#39;datetime&#39;])
+        interval_start = item_datetime if interval_start is None else min(interval_start, item_datetime)
+        interval_end = item_datetime if interval_end is None else max(interval_end, item_datetime)
+
+        # Add in the link.
+        links.append({&#39;rel&#39;: &#39;item&#39;, &#39;href&#39;: item_file_name, &#39;type&#39;: &#39;application/geo+json&#39;})
+
+    # Build the STAC collection.
+    return {
+        &#39;type&#39;: &#39;Collection&#39;,
+        &#39;stac_version&#39;: &#39;1.0.0&#39;,
+        &#39;stac_extensions&#39;: stac_extensions,
+        &#39;id&#39;: self.id,
+        &#39;description&#39;: self.name,
+        &#39;license&#39;: &#39;proprietary&#39;,
+        &#39;providers&#39;: [provider],
+        &#39;extent&#39;: {&#39;spatial&#39;: {&#39;bbox&#39;: [bbox]}, &#39;temporal&#39;: {&#39;interval&#39;: [[interval_start, interval_end]]}},
+        &#39;links&#39;: links
+    }, collection_file_name</code></pre>
+</details>
 <div class="desc"><p>Converts the data representation into a STAC collection with the specified STAC item file names.</p>
 <h2 id="args">Args</h2>
 <dl>
@@ -592,28 +886,46 @@ until all upload and analysis (or errored) has completed and this method returns
 </p>
 <div class="desc inherited"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without …</p></div>
 </dd>
+<dt id="fusion_platform.models.data.Data.upload_progress"><code class="name flex">
+<span>def <span class="ident">upload_progress</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def upload_progress(self):
+    &#34;&#34;&#34;
+    Returns current upload progress.
+
+    Returns:
+        A list of tuples of the source and total number of bytes uploaded so far.
+
+    Raises:
+        ModelError: if no upload is in progress.
+    &#34;&#34;&#34;
+    # Make sure at least one upload is in progress.
+    if (self.__upload_threads is None) or (len(self.__upload_threads) == 0):
+        raise ModelError(i18n.t(&#39;models.data.no_upload&#39;))
+
+    return list(self.__upload_progress.values())</code></pre>
+</details>
+<div class="desc"><p>Returns current upload progress.</p>
+<h2 id="returns">Returns</h2>
+<p>A list of tuples of the source and total number of bytes uploaded so far.</p>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ModelError</code></dt>
+<dd>if no upload is in progress.</dd>
+</dl></div>
+</dd>
 </dl>
 </dd>
 <dt id="fusion_platform.models.data.DataSchema"><code class="flex name class">
 <span>class <span class="ident">DataSchema</span></span>
-<span>(</span><span>*, only: types.StrSequenceOrSet | None = None, exclude: types.StrSequenceOrSet = (), many: bool | None = None, context: dict | None = None, load_only: types.StrSequenceOrSet = (), dump_only: types.StrSequenceOrSet = (), partial: bool | types.StrSequenceOrSet | None = None, unknown: str | None = None)</span>
+<span>(</span><span>*,<br>only: types.StrSequenceOrSet | None = None,<br>exclude: types.StrSequenceOrSet = (),<br>many: bool | None = None,<br>context: dict | None = None,<br>load_only: types.StrSequenceOrSet = (),<br>dump_only: types.StrSequenceOrSet = (),<br>partial: bool | types.StrSequenceOrSet | None = None,<br>unknown: str | None = None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Schema class for data model.</p>
-<p>Each data has the following fields (and nested fields):</p>
-<ul>
-<li><strong>id</strong>: The unique identifier for the record.</li>
-<li><strong>created_at</strong>: When was the record created?</li>
-<li><strong>updated_at</strong>: When was the record last updated?</li>
-<li><strong>organisation_id</strong>: The owning organisation.</li>
-<li><strong>name</strong>: The name of the data item.</li>
-<li><strong>unlinked</strong>: Is the data item unlinked from any other model and therefore not in use?</li>
-<li><strong>unfulfilled</strong>: Indicates that the data item will never be used.</li>
-<li><strong>bounds</strong>: The longitude and latitude bounds for the file (west, south, east, north).</li>
-<li><strong>file_with_preview</strong>: Identifies a file owned by this data item which as a preview.</li>
-<li><strong>uploaded_organisation_id</strong>: The organisation for an uploaded data item.</li>
-<li><strong>deletable</strong>: Is this data model scheduled for deletion?</li>
-</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -656,12 +968,42 @@ until all upload and analysis (or errored) has completed and this method returns
         unknown = EXCLUDE
         ordered = True</code></pre>
 </details>
+<div class="desc"><p>Schema class for data model.</p>
+<p>Each data has the following fields (and nested fields):</p>
+<ul>
+<li><strong>id</strong>: The unique identifier for the record.</li>
+<li><strong>created_at</strong>: When was the record created?</li>
+<li><strong>updated_at</strong>: When was the record last updated?</li>
+<li><strong>organisation_id</strong>: The owning organisation.</li>
+<li><strong>name</strong>: The name of the data item.</li>
+<li><strong>unlinked</strong>: Is the data item unlinked from any other model and therefore not in use?</li>
+<li><strong>unfulfilled</strong>: Indicates that the data item will never be used.</li>
+<li><strong>bounds</strong>: The longitude and latitude bounds for the file (west, south, east, north).</li>
+<li><strong>file_with_preview</strong>: Identifies a file owned by this data item which as a preview.</li>
+<li><strong>uploaded_organisation_id</strong>: The organisation for an uploaded data item.</li>
+<li><strong>deletable</strong>: Is this data model scheduled for deletion?</li>
+</ul></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>marshmallow.schema.Schema</li>
 <li>marshmallow.base.SchemaABC</li>
 <li>abc.ABC</li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="fusion_platform.models.data.DataSchema.OPTIONS_CLASS"><code class="name">var <span class="ident">OPTIONS_CLASS</span> : type</code></dt>
+<dd>
+<div class="desc"><p>Defines defaults for <code>marshmallow.Schema.Meta</code>.</p></div>
+</dd>
+<dt id="fusion_platform.models.data.DataSchema.TYPE_MAPPING"><code class="name">var <span class="ident">TYPE_MAPPING</span> : dict[type, type[Field]]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="fusion_platform.models.data.DataSchema.error_messages"><code class="name">var <span class="ident">error_messages</span> : dict[str, str]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -673,7 +1015,7 @@ until all upload and analysis (or errored) has completed and this method returns
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.15.12
+Version: 1.16.6
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -703,10 +1045,16 @@ Version: 1.15.12
 <li><code><a title="fusion_platform.models.data.Data.get_stac_collection" href="#fusion_platform.models.data.Data.get_stac_collection">get_stac_collection</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.to_csv" href="model.html#fusion_platform.models.data.Data.to_csv">to_csv</a></code></li>
 <li><code><a title="fusion_platform.models.data.Data.update" href="model.html#fusion_platform.models.data.Data.update">update</a></code></li>
+<li><code><a title="fusion_platform.models.data.Data.upload_progress" href="#fusion_platform.models.data.Data.upload_progress">upload_progress</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="fusion_platform.models.data.DataSchema" href="#fusion_platform.models.data.DataSchema">DataSchema</a></code></h4>
+<ul class="">
+<li><code><a title="fusion_platform.models.data.DataSchema.OPTIONS_CLASS" href="#fusion_platform.models.data.DataSchema.OPTIONS_CLASS">OPTIONS_CLASS</a></code></li>
+<li><code><a title="fusion_platform.models.data.DataSchema.TYPE_MAPPING" href="#fusion_platform.models.data.DataSchema.TYPE_MAPPING">TYPE_MAPPING</a></code></li>
+<li><code><a title="fusion_platform.models.data.DataSchema.error_messages" href="#fusion_platform.models.data.DataSchema.error_messages">error_messages</a></code></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -714,7 +1062,7 @@ Version: 1.15.12
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
 </footer>
 </body>
 </html>

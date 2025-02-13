@@ -100,6 +100,7 @@ class Data(Model):
         super(Data, self).__init__(session)
 
         # Initialise the fields.
+        self.__upload_progress = {}
         self.__upload_threads = {}
 
     def __add_file(self, file_type, file):
@@ -138,10 +139,11 @@ class Data(Model):
             raise ModelError(i18n.t('models.data.failed_add_file_not_unique'))
 
         # Create and start a thread for the upload.
+        self.__upload_progress[file] = (file, 0)  # Indexed by file path, not file id.
         thread = None
 
         try:
-            thread = RaiseThread(target=self._session.upload_file, args=(url, file))
+            thread = RaiseThread(target=self._session.upload_file, args=(url, file, self.__upload_callback))
             thread.start()
 
         finally:
@@ -393,6 +395,12 @@ class Data(Model):
         interval_end = None
 
         for item, item_file_name in items:
+            # So that we can extract things correctly, turn any mapping proxy into a dict (and relevant sub-mapping proxies).
+            item = dict(item)
+
+            if item.get('properties') is not None:
+                item['properties'] = dict(item.get('properties'))
+
             # Calculate the spatial extent.
             item_bbox = item.get('bbox')
 
@@ -422,3 +430,30 @@ class Data(Model):
             'extent': {'spatial': {'bbox': [bbox]}, 'temporal': {'interval': [[interval_start, interval_end]]}},
             'links': links
         }, collection_file_name
+
+    def __upload_callback(self, url, source, size):
+        """
+        Callback method used to receive progress from upload. Updates the upload progress.
+
+        Args:
+            url: The URL to upload as a file.
+            source: The source file path.
+            size: The total size in bytes so far uploaded.
+        """
+        self.__upload_progress[source] = (source, size)
+
+    def upload_progress(self):
+        """
+        Returns current upload progress.
+
+        Returns:
+            A list of tuples of the source and total number of bytes uploaded so far.
+
+        Raises:
+            ModelError: if no upload is in progress.
+        """
+        # Make sure at least one upload is in progress.
+        if (self.__upload_threads is None) or (len(self.__upload_threads) == 0):
+            raise ModelError(i18n.t('models.data.no_upload'))
+
+        return list(self.__upload_progress.values())

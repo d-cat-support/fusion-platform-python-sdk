@@ -96,6 +96,8 @@ class Model(Base):
     _FIELD_SELECTOR = 'selector'
     _FIELD_SELECTORS = 'selectors'
     _FIELD_SSD_ID = 'ssd_id'
+    _FIELD_STAC_ITEM = 'stac_item'
+    _FIELD_STAC_ITEM_FILE = 'stac_item_file'
     _FIELD_STARTED_AT = 'started_at'
     _FIELD_PUBLISHABLE = 'publishable'
     _FIELD_SIZE = 'size'

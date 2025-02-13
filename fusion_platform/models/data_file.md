@@ -39,3 +39,5 @@
 * **geojson**: The content of the associated file if it is a GeoJSON file (of limited size).
 * **title**: The title for the selector.
 * **description**: The description of the selector.
+* **stac_item**: The STAC item associated with this file.
+* **stac_item_file**: The name of the STAC item file.

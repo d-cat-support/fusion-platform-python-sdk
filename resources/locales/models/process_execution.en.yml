@@ -7,4 +7,5 @@
 #
 
 en:
-  execution_failed: "Execution has failed"
+  execution_failed: "Execution has failed: %{abort_reason}"
+  execution_warning: "Execution has completed successfully but with a warning: %{abort_reason}"

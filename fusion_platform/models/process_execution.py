@@ -186,12 +186,17 @@ class ProcessExecution(Model):
             complete = self.progress >= 100
 
             # Raise an exception if the execution failed.
+            abort_reason = self.abort_reason if hasattr(self, Model._FIELD_ABORT_REASON) else None
+
             if complete and not self.success:
-                self._logger.error(i18n.t('models.process_execution.execution_failed'))
-                raise ModelError(i18n.t('models.process_execution.execution_failed'))
+                self._logger.error(i18n.t('models.process_execution.execution_failed', abort_reason=abort_reason))
+                raise ModelError(i18n.t('models.process_execution.execution_failed', abort_reason=abort_reason))
 
             if complete:
                 self._logger.debug('execution %s is complete', self.id)
+
+                if abort_reason is not None:
+                    self._logger.warning(i18n.t('models.process_execution.execution_warning', abort_reason=abort_reason))
 
             if (not wait) or complete:
                 break

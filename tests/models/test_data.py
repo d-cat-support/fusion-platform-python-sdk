@@ -7,6 +7,7 @@
 #
 
 from datetime import datetime, timezone
+import i18n
 import json
 import pytest
 import requests
@@ -177,6 +178,9 @@ class TestData(CustomTestCase):
             data._Model__persisted = False
             data._create(name, file_type, files, wait=True)
 
+            with pytest.raises(ModelError, match=i18n.t('models.data.no_upload')):
+                data.upload_progress()
+
     def test_create_no_wait(self):
         """
         Tests that a data item can be created without waiting for the upload and analysis to complete
@@ -279,8 +283,18 @@ class TestData(CustomTestCase):
             data._Model__persisted = False
             data._create(name, file_type, files)
 
+            progress = data.upload_progress()
+            self.assertIsNotNone(progress)
+            self.assertEqual(len(files), len(progress))
+
+            for i, file in enumerate(files):
+                self.assertEqual((file, 0), progress[i])
+
             while not data.create_complete():
                 sleep(0.1)
+
+            with pytest.raises(ModelError, match=i18n.t('models.data.no_upload')):
+                data.upload_progress()
 
     def test_delete(self):
         """

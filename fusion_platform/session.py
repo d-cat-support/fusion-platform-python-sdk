@@ -13,6 +13,7 @@ import logging
 import os
 import requests
 from tenacity import before_sleep_log, retry, retry_if_exception_type, stop_after_attempt, wait_random_exponential
+from tqdm.utils import CallbackIOWrapper
 
 import fusion_platform
 from fusion_platform.base import Base
@@ -45,6 +46,36 @@ class ValueError(SessionError):
     Exception raised on login failure.
     """
     pass
+
+
+class UploadCallback:
+    """
+    Provides a callback mechanism for uploads using the CallbackIOWrapper.
+    """
+
+    def __init__(self, url, source, callback):
+        """
+        Initialises the object.
+
+        Args:
+            url: The URL being uploaded to.
+            source: The source file path.
+            callback: The callback method used to receive upload progress.
+        """
+        self.__url = url
+        self.__source = source
+        self.__callback = callback
+        self.__upload_size = 0
+
+    def callback(self, size):
+        """
+        Receives the upload callback every time data is read from the associated file.
+
+        Args:
+            size: The number of bytes which have been read from the associated file.
+        """
+        self.__upload_size += size
+        self.__callback(self.__url, self.__source, self.__upload_size)
 
 
 class Session(Base):
@@ -257,19 +288,22 @@ class Session(Base):
         # Return the payload.
         return payload
 
-    def upload_file(self, url, source):
+    def upload_file(self, url, source, callback=None):
         """
         Uploads a file from the source path.
 
         Args:
             url: The URL to download as a file.
             source: The source file path.
+            callback: The optional callback method used to receive upload progress.
         """
         try:
             # Upload the file as a data stream.
             self._logger.info('uploading %s -> %s', url, source)
 
             with open(source, 'rb') as file:
+                # Wrap the file reader with a callback to give progress.
+                file = CallbackIOWrapper(UploadCallback(url, source, callback).callback, file, 'read') if callback is not None else file
                 response = requests.put(url, data=file)
 
                 # Raise any errors.

@@ -149,14 +149,16 @@ class TestProcessExecution(CustomTestCase):
 
             with pytest.raises(ModelError):
                 content['success'] = False
+                content['abort_reason'] = 'Execution failed'
                 mock.get(f"{Session.API_URL_DEFAULT}{path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: content}))
                 process_execution.check_complete(wait=True)
 
             content['success'] = True
             not_complete_content = content.copy()
             not_complete_content['progress'] = 50
+            content['abort_reason'] = 'Execution warning'
             mock.get(f"{Session.API_URL_DEFAULT}{path}",
-                     [{'text': json.dumps({Model._RESPONSE_KEY_MODEL: not_complete_content})}, {'text': json.dumps({Model._RESPONSE_KEY_MODEL: content})}, ])
+                     [{'text': json.dumps({Model._RESPONSE_KEY_MODEL: not_complete_content})}, {'text': json.dumps({Model._RESPONSE_KEY_MODEL: content})}])
             self.assertTrue(process_execution.check_complete(wait=True))
 
     def test_components(self):
