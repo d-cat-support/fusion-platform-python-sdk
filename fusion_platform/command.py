@@ -39,7 +39,7 @@ Localise.setup()
 
 import fusion_platform
 from fusion_platform.base import Base
-from fusion_platform.common.utilities import json_default
+from fusion_platform.common.utilities import json_default, string_blank
 from fusion_platform.models.data import Data
 from fusion_platform.models.model import Model
 from fusion_platform.session import RequestError
@@ -103,7 +103,9 @@ class Command(Base):
     _METRIC_S3_INPUT_SIZE = 'input_size'
     _METRIC_S3_OUTPUT_SIZE = 'output_size'
     _METRIC_S3_TRANSFER_BYTES = 's3_transfer_bytes'
+    _METRIC_GCS_TRANSFER_BYTES = 'gcs_transfer_bytes'
     _METRIC_EXTERNAL_TRANSFER_BYTES = 'external_transfer_bytes'
+    _METRIC_INTERNAL_TRANSFER_BYTES = 'internal_transfer_bytes'
 
     # Process other field constants.
     _MODEL_FIELDS = ['output_storage_period', 'run_type', 'repeat_count', 'repeat_start', 'repeat_end', 'repeat_gap', 'repeat_offset']
@@ -193,6 +195,7 @@ class Command(Base):
             while not finished:
                 # Either find the dispatchers from what has been loaded from the YAML file or prompt the user.
                 add = False
+                dispatch_intermediate = False
                 dispatcher_options = {}
 
                 if dispatchers is not None:
@@ -204,6 +207,8 @@ class Command(Base):
                         selected_dispatcher = filtered_dispatchers[0]
                         selected_dispatcher[Model._FIELD_USED] = True
                         add = True
+                        dispatch_intermediate = selected_dispatcher.get(Model._FIELD_DISPATCH_INTERMEDIATE) if selected_dispatcher.get(
+                            Model._FIELD_DISPATCH_INTERMEDIATE) is not None else False
                         dispatcher_options = selected_dispatcher.get(Model._FIELD_OPTIONS) if selected_dispatcher.get(Model._FIELD_OPTIONS) is not None else {}
 
                 else:
@@ -213,8 +218,29 @@ class Command(Base):
                     if (response is not None) and response.lower().startswith(i18n.t('command.prompt_yes').lower()[0]):
                         add = True
 
+                        if hasattr(dispatcher, Model._FIELD_DISPATCH_INTERMEDIATE):
+                            response = self.__get_input(i18n.t('command.dispatch_intermediate'),
+                                                        constrained_values=[i18n.t('command.prompt_no'), i18n.t('command.prompt_yes')])
+
+                            if (response is not None) and response.lower().startswith(i18n.t('command.prompt_yes').lower()[0]):
+                                dispatch_intermediate = True
+
                         for option in dispatcher.options:
-                            option_value = self.__get_input(option.name)
+                            finished_options = False
+                            option_value = None
+
+                            while not finished_options:
+                                constrained_values = option.constrained_values if option.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else None
+
+                                prompt_constrained_values = i18n.t('models.process.option.representation_constrained_values',
+                                                                   constrained_values=constrained_values) if constrained_values is not None else ''
+                                prompt_required = i18n.t('models.process.option.representation_required') if option.required else ''
+                                prompt = i18n.t('command.prompt_option', title=option.title, name=option.name, data_type=option.data_type,
+                                                constrained_values=prompt_constrained_values, required=prompt_required)
+
+                                option_value = self.__get_input(prompt, default=option.value, constrained_values=constrained_values)
+                                finished_options = (not option.required) or (
+                                        option.required and (option_value is not None) and (not string_blank(str(option_value))))
 
                             if option_value is not None:
                                 dispatcher_options[option.name] = option_value
@@ -224,7 +250,8 @@ class Command(Base):
                     dispatchers_added += 1
 
                     for option_name, option_value in dispatcher_options.items():
-                        process.update(dispatcher_number=dispatchers_added, option_name=option_name, value=option_value)
+                        process.update(dispatcher_number=dispatchers_added, option_name=option_name, value=option_value, coerce_value=True,
+                                       dispatch_intermediate=dispatch_intermediate)
                 else:
                     finished = True
 
@@ -254,12 +281,19 @@ class Command(Base):
         # Get the underlying service name.
         service, _ = organisation.find_services(ssd_id=process.ssd_id)
 
-        # Get the options and dispatchers.
+        # Get the options and dispatchers, optionally add in whether intermediate services are being dispatched.
         options = {option.name: self.__format_value(option.value, data_type=option.data_type) for option in process.options}
-        dispatchers = [
-            {Model._FIELD_NAME: dispatcher.name,
-             Model._FIELD_OPTIONS: {option.name: self.__format_value(option.value, data_type=option.data_type) for option in dispatcher.options}} for dispatcher in
-            process.dispatchers]
+        dispatchers = []
+
+        for dispatcher in process.dispatchers:
+            found_dispatcher = {Model._FIELD_NAME: dispatcher.name}
+
+            if hasattr(dispatcher, Model._FIELD_DISPATCH_INTERMEDIATE):
+                found_dispatcher[Model._FIELD_DISPATCH_INTERMEDIATE] = dispatcher.dispatch_intermediate
+
+            found_dispatcher[Model._FIELD_OPTIONS] = {option.name: self.__format_value(option.value, data_type=option.data_type) for option in dispatcher.options}
+
+            dispatchers.append(found_dispatcher)
 
         # Add in the standard options.
         for field in Command._MODEL_FIELDS:
@@ -418,7 +452,8 @@ class Command(Base):
 
         return found
 
-    def __download_execution(self, process, download_inputs, download_outputs, download_storage, download_intermediate, download_components, output_dir, execution):
+    def __download_execution(self, process, download_inputs, download_outputs, download_storage, download_intermediate, download_components, output_dir, wait,
+                             execution):
         """
         Downloads an execution.
 
@@ -430,6 +465,7 @@ class Command(Base):
             download_intermediate: Should intermediate components be downloaded?
             download_components: The names of the components that should be downloaded? If None or [], then all components are downloaded.
             output_dir: The output directory.
+            wait: Wait for the execution to complete?
             execution: The execution to be downloaded.
 
         Returns:
@@ -441,10 +477,10 @@ class Command(Base):
         metrics = []
         downloads = []
 
-        # Wait for the execution to complete. We explicitly wait in this method to keep the SDK free.
+        # Optionally wait for the execution to complete. We explicitly wait in this method to keep the SDK free.
         complete = False
 
-        while not complete:
+        while wait and (not complete):
             try:
                 complete = execution.check_complete()
             except:
@@ -480,15 +516,20 @@ class Command(Base):
         if (started_at is None) or (execution.started_at < started_at):
             started_at = execution.started_at
 
-        if (ended_at is None) or (execution.ended_at > ended_at):
-            ended_at = execution.ended_at
+        execution_ended_at = execution.ended_at if hasattr(execution, Model._FIELD_ENDED_AT) and (execution.ended_at is not None) else datetime.now(timezone.utc)
+
+        if (ended_at is None) or (execution_ended_at > ended_at):
+            ended_at = execution_ended_at
 
         for j, component in enumerate(components):
             # Download the component.
             component_name = '_'.join([item for item in re.sub(r'[\W]', '_', component.name).split('_') if len(item) > 0])
             component_dir = f"{str(j + 1)}_{component_name[:25]}"
             component_options = {item.get(Model._FIELD_NAME): item.get(Model._FIELD_VALUE) for item in component.options} if hasattr(component,
-                                                                                                                                     Model._FIELD_OPTIONS) else {}
+                                                                                                                                     Model._FIELD_OPTIONS) and (
+                                                                                                                                     component.options is not None) else {}
+            component_success = component.success if hasattr(component, Model._FIELD_SUCCESS) and (component.success is not None) else False
+            component_runtime = component.runtime if hasattr(component, Model._FIELD_RUNTIME) and (component.runtime is not None) else 0
 
             # Save the metrics for each component in the execution.
             # @formatter:off
@@ -497,25 +538,22 @@ class Command(Base):
                 Command._METRICS_PROCESS: process.name,
                 Command._METRICS_DURATION: ended_at - started_at if (started_at is not None) and (ended_at is not None) else 0,
                 Command._METRICS_COMPONENT: component.name,
-                Command._METRICS_SUCCESS: component.success,
+                Command._METRICS_SUCCESS: component_success,
                 Command._METRICS_CPU: component.cpu,
                 Command._METRICS_MEMORY: component.memory,
-                Command._METRICS_RUNTIME: component.runtime
+                Command._METRICS_RUNTIME: component_runtime
             }
             # @formatter:on
 
             # Only D-CAT services have metrics.
-            s3_transfer_bytes = 0
-            external_transfer_bytes = 0
-
             if hasattr(component, Command._METRICS_METRICS) and (component.metrics is not None):
-                s3_transfer_bytes = sum(
-                    [metric[Command._METRIC_S3_TRANSFER_BYTES] for metric in component.metrics if metric[Command._METRIC_S3_TRANSFER_BYTES] is not None])
-                external_transfer_bytes = sum([metric[Command._METRIC_EXTERNAL_TRANSFER_BYTES] for metric in component.metrics if
-                                               metric[Command._METRIC_EXTERNAL_TRANSFER_BYTES] is not None])
-
-            metric[Command._METRIC_S3_TRANSFER_BYTES] = s3_transfer_bytes
-            metric[Command._METRIC_EXTERNAL_TRANSFER_BYTES] = external_transfer_bytes
+                for key in [
+                    Command._METRIC_S3_TRANSFER_BYTES,
+                    Command._METRIC_GCS_TRANSFER_BYTES,
+                    Command._METRIC_EXTERNAL_TRANSFER_BYTES,
+                    Command._METRIC_INTERNAL_TRANSFER_BYTES
+                ]:
+                    metric[key] = sum([metric[key] for metric in component.metrics if metric.get(key) is not None])
 
             # Find each input, output and storage to download. While traversing each, save the input and output size. The size might not be immediately available
             # for every file, so wait for all items to be analysed.
@@ -574,8 +612,8 @@ class Command(Base):
                     with open(os.path.join(download_dir, stac_file_name), 'w') as stac_file:
                         stac_file.write(json.dumps(stac_definition, default=json_default))
 
-            metric[Command._METRIC_S3_INPUT_SIZE] = sum(input_sizes)
-            metric[Command._METRIC_S3_OUTPUT_SIZE] = sum(output_sizes)
+            metric[Command._METRIC_S3_INPUT_SIZE] = sum(input_sizes) if len(input_sizes) > 0 else ''
+            metric[Command._METRIC_S3_OUTPUT_SIZE] = sum(output_sizes) if len(output_sizes) > 0 else ''
             metrics.append(metric)
 
         return downloads, metrics
@@ -649,7 +687,7 @@ class Command(Base):
                 progress_bar.close()
 
     def download_process_execution(self, organisation, process_name, download_inputs, download_outputs, download_storage, download_intermediate,
-                                   download_components, save_metrics):
+                                   download_components, save_metrics, wait_for_execution_to_complete):
         """
         Downloads the inputs and/or outputs from a process or execution(s).
 
@@ -662,6 +700,7 @@ class Command(Base):
             download_intermediate: Should intermediate components be downloaded?
             download_components: The names of the components that should be downloaded? If None or [], then all components are downloaded.
             save_metrics: Save process metrics to file?
+            wait_for_execution_to_complete: Optionally wait for completion of the execution?
 
         Returns:
             The process model.
@@ -707,7 +746,8 @@ class Command(Base):
 
         # Do all the downloads in batches. We use small batches so that we do not swamp memory.
         batch_size = 2 * os.cpu_count()  # Downloads don't swamp CPU.
-        self.__print(logging.INFO, i18n.t('command.download_executions', executions=len(executions)))
+        wait = i18n.t('command.wait_for_completion') if wait_for_execution_to_complete else ''
+        self.__print(logging.INFO, i18n.t('command.download_executions', wait=wait, executions=len(executions)))
         progress_bar = tqdm(total=len(executions), bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE,
                             unit='execution')  # Unit matches keyword argument.
         progress_bar.set_postfix(execution=1)
@@ -715,7 +755,7 @@ class Command(Base):
         try:
             # Now download each execution in batches.
             partial_download_execution = partial(self.__download_execution, process, download_inputs, download_outputs, download_storage, download_intermediate,
-                                                 download_components, output_dir)
+                                                 download_components, output_dir, wait_for_execution_to_complete)
             results = []
 
             with Pool(nodes=batch_size) as pool:
@@ -855,7 +895,7 @@ class Command(Base):
             The user response.
         """
         default = constrained_values[0] if (default is None) and (constrained_values is not None) and (len(constrained_values) > 0) else default
-        input_prompt = f"{input_prompt}{' [' + default + ']' if default is not None else ''}: "
+        input_prompt = f"{input_prompt}{' [' + str(default) + ']' if default is not None else ''}: "
         constrained_values = [''] + constrained_values if constrained_values is not None else constrained_values
 
         # Set up any validation against constrained values.
@@ -1089,7 +1129,8 @@ class Command(Base):
                     # Also perform the download, if required.
                     if arguments.download:
                         process = self.download_process_execution(organisation, process_name, arguments.inputs, arguments.outputs, arguments.storage,
-                                                                  arguments.intermediate, arguments.component, arguments.metrics)
+                                                                  arguments.intermediate, arguments.component, arguments.metrics,
+                                                                  not arguments.no_wait_for_completion)
 
                         # And optionally remove the process and its inputs.
                         if arguments.remove:
@@ -1112,7 +1153,7 @@ class Command(Base):
                 for process_name in arguments.process:
                     # Download the process.
                     process = self.download_process_execution(organisation, process_name, arguments.inputs, arguments.outputs, arguments.storage,
-                                                              arguments.intermediate, arguments.component, arguments.metrics)
+                                                              arguments.intermediate, arguments.component, arguments.metrics, not arguments.no_wait_for_completion)
 
                     # And optionally remove the process and its inputs.
                     if arguments.remove:
@@ -1189,6 +1230,8 @@ class Command(Base):
                                   default=False, action="store_true")
         parser_start.add_argument(i18n.t('command.start.component_short'), i18n.t('command.start.component_long'), help=i18n.t('command.start.component_help'),
                                   nargs='*')
+        parser_start.add_argument(i18n.t('command.start.no_wait_for_completion_short'), i18n.t('command.start.no_wait_for_completion_long'),
+                                  help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action="store_true")
 
         # Define arguments.
         parser_define.add_argument(i18n.t('command.define.process_long'), help=i18n.t('command.define.process_help'), nargs='+')
@@ -1213,6 +1256,8 @@ class Command(Base):
                                      default=False, action="store_true")
         parser_download.add_argument(i18n.t('command.start.component_short'), i18n.t('command.start.component_long'), help=i18n.t('command.start.component_help'),
                                      nargs='*')
+        parser_download.add_argument(i18n.t('command.start.no_wait_for_completion_short'), i18n.t('command.start.no_wait_for_completion_long'),
+                                     help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action="store_true")
 
         return parser.parse_args()
 

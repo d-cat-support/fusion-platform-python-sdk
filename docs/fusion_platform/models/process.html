@@ -78,7 +78,10 @@ el.replaceWith(d);
         Returns:
             A string representation of the object.
         &#34;&#34;&#34;
-        return f&#34;{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False}): {self.documentation_summary}&#34;</code></pre>
+        dispatch_intermediate = self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False
+
+        return i18n.t(&#39;models.process.dispatcher.representation&#39;, name=self.name, ssd_id=self.ssd_id, dispatch_intermediate=dispatch_intermediate,
+                      documentation_summary=self.documentation_summary)</code></pre>
 </details>
 <div class="desc"><p>Model dispatcher class.</p>
 <p>Initialises the object.</p>
@@ -189,7 +192,10 @@ def options(self):
         Returns:
             A string representation of the object.
         &#34;&#34;&#34;
-        return f&#34;{self.title} ({self.file_type}) = {self.name + &#39; (&#39; + str(self.id) + &#39;)&#39; if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}&#34;</code></pre>
+        name = i18n.t(&#39;models.process.input.representation_name&#39;, name=self.name) if hasattr(self, self.__class__._FIELD_NAME) else &#39;&#39;
+        id = i18n.t(&#39;models.process.input.representation_id&#39;, id=self.id) if hasattr(self, self.__class__._FIELD_ID) else &#39;&#39;
+
+        return i18n.t(&#39;models.process.input.representation&#39;, title=self.title, file_type=self.file_type, name=name, id=id, description=self.description)</code></pre>
 </details>
 <div class="desc"><p>Model input class.</p>
 <p>Initialises the object.</p>
@@ -459,7 +465,12 @@ def options(self):
         Returns:
             A string representation of the object.
         &#34;&#34;&#34;
-        return f&#34;{self.title} (&#39;{self.name}&#39;, {self.data_type}{&#39; &#39; + str(self.constrained_values) if self.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else &#39;&#39;}{&#39;, required&#39; if self.required else &#39;&#39;}) = {self.value}: {self.description}&#34;</code></pre>
+        constrained_values = i18n.t(&#39;models.process.option.representation_constrained_values&#39;,
+                                    constrained_values=self.constrained_values) if self.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else &#39;&#39;
+        required = i18n.t(&#39;models.process.option.representation_required&#39;) if self.required else &#39;&#39;
+
+        return i18n.t(&#39;models.process.option.representation&#39;, title=self.title, name=self.name, data_type=self.data_type, constrained_values=constrained_values,
+                      required=required, value=self.value, description=self.description)</code></pre>
 </details>
 <div class="desc"><p>Model option class.</p>
 <p>Initialises the object.</p>
@@ -2091,11 +2102,11 @@ Otherwise, this method will block until the next scheduled execution has started
 </dd>
 <dt id="fusion_platform.models.process.ProcessSchema.TYPE_MAPPING"><code class="name">var <span class="ident">TYPE_MAPPING</span> : dict[type, type[Field]]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 <dt id="fusion_platform.models.process.ProcessSchema.error_messages"><code class="name">var <span class="ident">error_messages</span> : dict[str, str]</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The type of the None singleton.</p></div>
 </dd>
 </dl>
 </dd>
@@ -2109,7 +2120,7 @@ Otherwise, this method will block until the next scheduled execution has started
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.16.6
+Version: 1.17.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

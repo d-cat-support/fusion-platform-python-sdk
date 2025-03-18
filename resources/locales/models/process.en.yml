@@ -7,7 +7,19 @@
 #
 
 en:
+  dispatcher:
+    representation: "%{name} (%{ssd_id}, intermediate %{dispatch_intermediate}): %{documentation_summary}"
+
+  input:
+    representation: "%{title} (%{file_type}) =%{name}%{id}: %{description}"
+    representation_name: " %{name}"
+    representation_id: " (%{id})"
+
   option:
+    representation: "%{title} ('%{name}', %{data_type}%{constrained_values}%{required}) = %{value}: %{description}"
+    representation_constrained_values: " %{constrained_values}"
+    representation_required: ", required"
+
     constrained_names:
       title: "Constrained Names"
       description: "The constrained value names for the option."

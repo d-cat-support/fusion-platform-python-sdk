@@ -129,6 +129,7 @@ el.replaceWith(d);
     _FIELD_OUTPUTS = &#39;outputs&#39;
     _FIELD_PROCESS_STATUS = &#39;process_status&#39;
     _FIELD_RESOLUTION = &#39;resolution&#39;
+    _FIELD_RUNTIME = &#39;runtime&#39;
     _FIELD_SD = &#39;sd&#39;
     _FIELD_SELECTOR = &#39;selector&#39;
     _FIELD_SELECTORS = &#39;selectors&#39;
@@ -136,6 +137,7 @@ el.replaceWith(d);
     _FIELD_STAC_ITEM = &#39;stac_item&#39;
     _FIELD_STAC_ITEM_FILE = &#39;stac_item_file&#39;
     _FIELD_STARTED_AT = &#39;started_at&#39;
+    _FIELD_SUCCESS = &#39;success&#39;
     _FIELD_PUBLISHABLE = &#39;publishable&#39;
     _FIELD_SIZE = &#39;size&#39;
     _FIELD_UNIT = &#39;unit&#39;
@@ -807,7 +809,7 @@ el.replaceWith(d);
         Returns:
             A string representation of the object.
         &#34;&#34;&#34;
-        return f&#34;{self.__class__.__name__}{self.attributes}&#34;
+        return i18n.t(&#39;models.model.representation&#39;, name=self.__class__.__name__, attributes=self.attributes)
 
     def to_csv(self, exclude=None):
         &#34;&#34;&#34;
@@ -1125,7 +1127,7 @@ model attributes are sent to the Fusion Platform<sup>&reg;</sup> which will auto
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.16.6
+Version: 1.17.5
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

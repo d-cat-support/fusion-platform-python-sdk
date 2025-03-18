@@ -93,7 +93,9 @@ class ProcessServiceExecutionMetricSchema(Schema):
     tmp_total_bytes = fields.Integer(allow_none=True)
     tmp_free_bytes = fields.Integer(allow_none=True)
     s3_transfer_bytes = fields.Integer(allow_none=True)
+    gcs_transfer_bytes = fields.Integer(allow_none=True)
     external_transfer_bytes = fields.Integer(allow_none=True)
+    internal_transfer_bytes = fields.Integer(allow_none=True)
     comment = fields.String(allow_none=True)
 
     class Meta:

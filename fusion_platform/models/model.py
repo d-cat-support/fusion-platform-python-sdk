@@ -92,6 +92,7 @@ class Model(Base):
     _FIELD_OUTPUTS = 'outputs'
     _FIELD_PROCESS_STATUS = 'process_status'
     _FIELD_RESOLUTION = 'resolution'
+    _FIELD_RUNTIME = 'runtime'
     _FIELD_SD = 'sd'
     _FIELD_SELECTOR = 'selector'
     _FIELD_SELECTORS = 'selectors'
@@ -99,6 +100,7 @@ class Model(Base):
     _FIELD_STAC_ITEM = 'stac_item'
     _FIELD_STAC_ITEM_FILE = 'stac_item_file'
     _FIELD_STARTED_AT = 'started_at'
+    _FIELD_SUCCESS = 'success'
     _FIELD_PUBLISHABLE = 'publishable'
     _FIELD_SIZE = 'size'
     _FIELD_UNIT = 'unit'
@@ -770,7 +772,7 @@ class Model(Base):
         Returns:
             A string representation of the object.
         """
-        return f"{self.__class__.__name__}{self.attributes}"
+        return i18n.t('models.model.representation', name=self.__class__.__name__, attributes=self.attributes)
 
     def to_csv(self, exclude=None):
         """

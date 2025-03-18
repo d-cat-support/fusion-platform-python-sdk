@@ -51,5 +51,7 @@
     * **tmp_total_bytes**: The total temporary disk space in bytes.
     * **tmp_free_bytes**: The free temporary disk space in bytes.
     * **s3_transfer_bytes**: The number of bytes transferred in from S3.
-    * **external_transfer_bytes**: The number of bytes transferred in externally, excluding S3.
+    * **gcs_transfer_bytes**: The number of bytes transferred in from Google Cloud Storage.
+    * **external_transfer_bytes**: The number of bytes transferred in externally.
+    * **internal_transfer_bytes**: The number of bytes transferred in internally.
     * **comment**: Any comment recorded with the metric.

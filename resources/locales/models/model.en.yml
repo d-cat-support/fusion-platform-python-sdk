@@ -7,6 +7,8 @@
 #
 
 en:
+  representation: "%{name}%{attributes}"
+
   already_persisted: "Model is already persisted in the Fusion Platform(r)"
   not_persisted: "Model is not persisted in the Fusion Platform(r)"
 

@@ -154,6 +154,9 @@ en:
     metrics_short: "-t"
     metrics_long: "--metrics"
     metrics_help: "save process metrics to file (default %%(default)s)"
+    no_wait_for_completion_short: "-n"
+    no_wait_for_completion_long: "--no_wait_for_completion"
+    no_wait_for_completion_help: "do not wait for the execution to complete (default %%(default)s)'"
 
   define:
     command: "define"
@@ -168,11 +171,12 @@ en:
     process_help: "the name of the process, the process id or execution id to download"
 
   add_dispatcher: "Add %{dispatcher} dispatcher?"
+  dispatch_intermediate: "Dispatch intermediate components?"
   define_inputs: "Defining %{files} input file(s)..."
   define_process: "Defining '%{process}' (inputs %{inputs}, storage %{storage})"
   define_storage: "Defining storage file(s) for %{slices} slice(s)..."
   download_execution: "Downloading execution %{execution} to %{output}"
-  download_executions: "Gathering files for %{executions} execution(s)..."
+  download_executions: "Gathering files%{wait} for %{executions} execution(s)..."
   download_files: "Downloading %{files} file(s)..."
   download_process: "Downloading process '%{process}' to %{output}"
   download_process_execution: "Downloading '%{process}' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, metrics %{metrics}, components %{components})"
@@ -181,6 +185,7 @@ en:
   find_inputs: "Finding %{inputs} input file(s)..."
   organisation: "Organisation"
   password: "Password"
+  prompt_option: "%{title} ('%{name}', %{data_type}%{constrained_values}%{required})"
   prompt_no: "No"
   prompt_yes: "Yes"
   remove_input: "Removing input '%{input}'"
@@ -193,6 +198,7 @@ en:
   using_service: "Using service '%{service}'"
   using_storage: "Uploading storage '%{filename}' with id %{storage_id} to '%{storage_name}'"
   wait_for_next: "Waiting for next execution..."
+  wait_for_completion: " and waiting for completion"
 
   log_bookend: "************************************************************************************************"
   log_divider: "------------------------------------------------------------------------------------------------"

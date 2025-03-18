@@ -228,7 +228,12 @@ class Option(Model):
         Returns:
             A string representation of the object.
         """
-        return f"{self.title} ('{self.name}', {self.data_type}{' ' + str(self.constrained_values) if self.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else ''}{', required' if self.required else ''}) = {self.value}: {self.description}"
+        constrained_values = i18n.t('models.process.option.representation_constrained_values',
+                                    constrained_values=self.constrained_values) if self.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else ''
+        required = i18n.t('models.process.option.representation_required') if self.required else ''
+
+        return i18n.t('models.process.option.representation', title=self.title, name=self.name, data_type=self.data_type, constrained_values=constrained_values,
+                      required=required, value=self.value, description=self.description)
 
 
 # Define a model class for an input which overrides the representation to display more relevant information.
@@ -243,7 +248,10 @@ class Input(Model):
         Returns:
             A string representation of the object.
         """
-        return f"{self.title} ({self.file_type}) = {self.name + ' (' + str(self.id) + ')' if hasattr(self, self.__class__._FIELD_NAME) and hasattr(self, self.__class__._FIELD_ID) else None}: {self.description}"
+        name = i18n.t('models.process.input.representation_name', name=self.name) if hasattr(self, self.__class__._FIELD_NAME) else ''
+        id = i18n.t('models.process.input.representation_id', id=self.id) if hasattr(self, self.__class__._FIELD_ID) else ''
+
+        return i18n.t('models.process.input.representation', title=self.title, file_type=self.file_type, name=name, id=id, description=self.description)
 
 
 # Define a model class for a dispatcher which overrides the representation to display more relevant information.
@@ -268,7 +276,10 @@ class Dispatcher(Model):
         Returns:
             A string representation of the object.
         """
-        return f"{self.name} ({self.ssd_id}, intermediate {self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False}): {self.documentation_summary}"
+        dispatch_intermediate = self.dispatch_intermediate if hasattr(self, self.__class__._FIELD_DISPATCH_INTERMEDIATE) else False
+
+        return i18n.t('models.process.dispatcher.representation', name=self.name, ssd_id=self.ssd_id, dispatch_intermediate=dispatch_intermediate,
+                      documentation_summary=self.documentation_summary)
 
 
 # Define the model schema classes. These are maintained from the API definitions.
