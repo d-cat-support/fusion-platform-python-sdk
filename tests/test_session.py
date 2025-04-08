@@ -66,7 +66,7 @@ class TestSession(CustomTestCase):
             session = Session()
 
             with pytest.raises(RequestError):
-                session.download_file('https://www.d-cat.co.uk/.well-known/acme-challenge/test.html', destination)
+                session.download_file('https://www.d-cat.co.uk/assets/test.html', destination)
 
             self.assertFalse(os.path.exists(destination))
             session.download_file('https://www.d-cat.co.uk/home', destination, self.download_callback)

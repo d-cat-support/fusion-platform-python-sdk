@@ -260,6 +260,18 @@ class Command(Base):
 
         return process
 
+    def __data_name_to_file_name(self, data_name):
+        """
+        Converts a data item name into a sane file name (without extension).
+
+        Args:
+            data_name: The data item name to convert.
+
+        Returns:
+            The corresponding file name.
+        """
+        return re.sub(r"[^A-Za-z_\-]", '_', str(data_name)) if data_name is not None else None
+
     def define_process(self, organisation, process_name, download_inputs=False, download_storage=False):
         """
         Obtains the process definition for a process.
@@ -581,7 +593,8 @@ class Command(Base):
                 # Download the data item once it is complete.
                 data_item.check_analysis_complete(wait=True)
 
-                download_dir = os.path.join(execution_dir, component_dir, f"{data_type}_{str(k)}")
+                name = re.sub('_+', '_', f"{data_type.capitalize()}_{str(k)}_{self.__data_name_to_file_name(data_item.name)}").rstrip('_')
+                download_dir = os.path.join(execution_dir, component_dir, name)
                 os.makedirs(download_dir, exist_ok=True)
 
                 # We also create the corresponding STAC definitions.
@@ -1423,7 +1436,7 @@ class Command(Base):
 
     def __process_name_to_file_name(self, process_name):
         """
-        Converts a process name into a same file name (without extension).
+        Converts a process name into a sane file name (without extension).
 
         Args:
             process_name: The process name to convert.
