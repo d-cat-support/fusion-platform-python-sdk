@@ -20,7 +20,10 @@ i18n.add_translation('command.no_such_organisation', 'No such organisation \'%{o
 i18n.add_translation('command.no_such_input', 'No such input \'%{input_name}\'', 'en')
 i18n.add_translation('command.no_executions', 'No executions for process \'%{process}\'', 'en')
 i18n.add_translation('command.invalid_login_response', 'Incorrect username or password', 'en')
-i18n.add_translation('command.log_execution_group', ' (group \'%{group_id}\' %{group_index} of %{group_count})', 'en')
+i18n.add_translation('command.log_process_summary', '\'%{process}\': %{executions} execution(s) in %{groups} group(s) (%{progress}%% complete);%{group_progress}', 'en')
+i18n.add_translation('command.log_process_group', ' %{group_number}: %{executions} execution(s) (%{progress}%% complete);', 'en')
+i18n.add_translation('command.log_execution_group_index', ' %{group_index} of %{group_count}', 'en')
+i18n.add_translation('command.log_execution_group_id', 'Group %{group_number} of %{group_count} (%{group_id}):', 'en')
 i18n.add_translation('command.log_execution_duration', ' - %{minutes} minute(s)', 'en')
 i18n.add_translation('command.log_execution_period', ' (%{started_at}%{ended_at})', 'en')
 i18n.add_translation('command.log_execution_ended_at', ' -> %{ended_at}', 'en')
@@ -39,7 +42,7 @@ i18n.add_translation('command.log_dispatchers', 'Dispatchers:', 'en')
 i18n.add_translation('command.log_options', 'Options:', 'en')
 i18n.add_translation('command.log_outputs', 'Outputs:', 'en')
 i18n.add_translation('command.log_inputs', 'Inputs:', 'en')
-i18n.add_translation('command.log_execution', 'Execution \'%{id}\'%{period}: %{status}%{duration}%{group}', 'en')
+i18n.add_translation('command.log_execution', 'Execution%{label} \'%{id}\'%{period}: %{status}%{duration}', 'en')
 i18n.add_translation('command.log_service', 'Service \'%{service}\'', 'en')
 i18n.add_translation('command.log_process', 'Process \'%{process}\'', 'en')
 i18n.add_translation('command.log_field', '%{field}: %{value}', 'en')
@@ -65,7 +68,7 @@ i18n.add_translation('command.organisation', 'Organisation', 'en')
 i18n.add_translation('command.find_inputs', 'Finding %{inputs} input file(s)...', 'en')
 i18n.add_translation('command.executing', 'Executing...', 'en')
 i18n.add_translation('command.email', 'Email', 'en')
-i18n.add_translation('command.download_process_execution', 'Downloading \'%{process}\' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, metrics %{metrics}, components %{components})', 'en')
+i18n.add_translation('command.download_process_execution', 'Downloading \'%{process}\' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, STAC only %{stac_only}, metrics %{metrics}, components %{components})', 'en')
 i18n.add_translation('command.download_process', 'Downloading process \'%{process}\' to %{output}', 'en')
 i18n.add_translation('command.download_files', 'Downloading %{files} file(s)...', 'en')
 i18n.add_translation('command.download_executions', 'Gathering files%{wait} for %{executions} execution(s)...', 'en')
@@ -83,9 +86,12 @@ i18n.add_translation('command.define.process_help', 'the name of the process, th
 i18n.add_translation('command.define.process_long', 'process', 'en')
 i18n.add_translation('command.define.help', 'outputs a YAML file for each existing process', 'en')
 i18n.add_translation('command.define.command', 'define', 'en')
-i18n.add_translation('command.start.no_wait_for_completion_help', 'do not wait for the execution to complete (default %%(default)s)\'', 'en')
+i18n.add_translation('command.start.no_wait_for_completion_help', 'do not wait for the execution to complete (default %%(default)s)', 'en')
 i18n.add_translation('command.start.no_wait_for_completion_long', '--no_wait_for_completion', 'en')
 i18n.add_translation('command.start.no_wait_for_completion_short', '-n', 'en')
+i18n.add_translation('command.start.stac_only_help', 'only download the STAC metadata for the files (default %%(default)s)', 'en')
+i18n.add_translation('command.start.stac_only_long', '--stac', 'en')
+i18n.add_translation('command.start.stac_only_short', '-a', 'en')
 i18n.add_translation('command.start.metrics_help', 'save process metrics to file (default %%(default)s)', 'en')
 i18n.add_translation('command.start.metrics_long', '--metrics', 'en')
 i18n.add_translation('command.start.metrics_short', '-t', 'en')
@@ -127,6 +133,8 @@ i18n.add_translation('command.display.service_or_process_help', 'the names of th
 i18n.add_translation('command.display.service_or_process_long', 'process_or_service', 'en')
 i18n.add_translation('command.display.help', 'displays service information or a configured process', 'en')
 i18n.add_translation('command.display.command', 'display', 'en')
+i18n.add_translation('command.list.help', 'lists configured processes', 'en')
+i18n.add_translation('command.list.command', 'list', 'en')
 i18n.add_translation('command.subparser', 'displays a service or process, or starts, defines or downloads a process', 'en')
 i18n.add_translation('command.version_content', '%%(prog)s %{version} (%{version_date})', 'en')
 i18n.add_translation('command.version_help', 'show the version information and exit', 'en')
@@ -147,6 +155,7 @@ i18n.add_translation('command.deployment_short', '-y', 'en')
 i18n.add_translation('command.epilog', '''
 For more detailed options, use:
 
+  fusion_platform list --help
   fusion_platform display --help
   fusion_platform start --help
   fusion_platform define --help
@@ -158,7 +167,11 @@ Use this command to display service information and processes, and to start, dow
 defined by a YAML file.
 
 Usage:
-  The following will display information about one or more services or processes from the given \'service_or_process_name\'.
+  The following will list all currently configured processes:
+
+    fusion_platform list
+
+  The following will display information about one or more services or processes from the given \'service_or_process_name\':
 
     fusion_platform display <service_or_process_name> ...
 

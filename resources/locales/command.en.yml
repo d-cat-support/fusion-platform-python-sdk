@@ -13,7 +13,11 @@ en:
     defined by a YAML file.
 
     Usage:
-      The following will display information about one or more services or processes from the given 'service_or_process_name'.
+      The following will list all currently configured processes:
+    
+        fusion_platform list
+
+      The following will display information about one or more services or processes from the given 'service_or_process_name':
     
         fusion_platform display <service_or_process_name> ...
     
@@ -86,6 +90,7 @@ en:
   epilog: |
     For more detailed options, use:
     
+      fusion_platform list --help
       fusion_platform display --help
       fusion_platform start --help
       fusion_platform define --help
@@ -109,6 +114,10 @@ en:
   version_content: "%%(prog)s %{version} (%{version_date})"
 
   subparser: "displays a service or process, or starts, defines or downloads a process"
+
+  list:
+    command: "list"
+    help: "lists configured processes"
 
   display:
     command: "display"
@@ -154,9 +163,12 @@ en:
     metrics_short: "-t"
     metrics_long: "--metrics"
     metrics_help: "save process metrics to file (default %%(default)s)"
+    stac_only_short: "-a"
+    stac_only_long: "--stac"
+    stac_only_help: "only download the STAC metadata for the files (default %%(default)s)"
     no_wait_for_completion_short: "-n"
     no_wait_for_completion_long: "--no_wait_for_completion"
-    no_wait_for_completion_help: "do not wait for the execution to complete (default %%(default)s)'"
+    no_wait_for_completion_help: "do not wait for the execution to complete (default %%(default)s)"
 
   define:
     command: "define"
@@ -179,7 +191,7 @@ en:
   download_executions: "Gathering files%{wait} for %{executions} execution(s)..."
   download_files: "Downloading %{files} file(s)..."
   download_process: "Downloading process '%{process}' to %{output}"
-  download_process_execution: "Downloading '%{process}' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, metrics %{metrics}, components %{components})"
+  download_process_execution: "Downloading '%{process}' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, STAC only %{stac_only}, metrics %{metrics}, components %{components})"
   email: "Email"
   executing: "Executing..."
   find_inputs: "Finding %{inputs} input file(s)..."
@@ -206,7 +218,7 @@ en:
   log_field: "%{field}: %{value}"
   log_process: "Process '%{process}'"
   log_service: "Service '%{service}'"
-  log_execution: "Execution '%{id}'%{period}: %{status}%{duration}%{group}"
+  log_execution: "Execution%{label} '%{id}'%{period}: %{status}%{duration}"
   log_inputs: "Inputs:"
   log_outputs: "Outputs:"
   log_options: "Options:"
@@ -215,6 +227,7 @@ en:
   log_description: "Description:"
   log_assumptions: "Assumptions:"
   log_actions: "Actions:"
+
   log_execution_success: "success"
   log_execution_progress: "processing %{progress}%%"
   log_execution_stopped: "stopped"
@@ -225,7 +238,11 @@ en:
   log_execution_ended_at: " -> %{ended_at}"
   log_execution_period: " (%{started_at}%{ended_at})"
   log_execution_duration: " - %{minutes} minute(s)"
-  log_execution_group: " (group '%{group_id}' %{group_index} of %{group_count})"
+  log_execution_group_id: "Group %{group_number} of %{group_count} (%{group_id}):"
+  log_execution_group_index: " %{group_index} of %{group_count}"
+
+  log_process_group: " %{group_number}: %{executions} execution(s) (%{progress}%% complete);"
+  log_process_summary: "'%{process}': %{executions} execution(s) in %{groups} group(s) (%{progress}%% complete);%{group_progress}"
 
   invalid_login_response: "Incorrect username or password"
   no_executions: "No executions for process '%{process}'"

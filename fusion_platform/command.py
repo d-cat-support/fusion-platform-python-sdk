@@ -8,28 +8,28 @@ author: Matthew Casey
 
 import argparse
 from argparse import RawTextHelpFormatter
+from collections import defaultdict
 from copy import deepcopy
 import csv
 from datetime import datetime, timedelta, timezone
-from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from functools import partial
-import i18n
 import json
 import logging
-from marshmallow.utils import _Missing
 import os
-from pathos.multiprocessing import ProcessPool as Pool
-from prompt_toolkit import prompt
-from prompt_toolkit import print_formatted_text as print
-from prompt_toolkit.completion import WordCompleter
-from prompt_toolkit.validation import Validator
 import re
 import shutil
 import tempfile
 from time import sleep
-from tqdm import tqdm
 import uuid
+
+from dateutil.relativedelta import relativedelta
+import i18n
+from pathos.multiprocessing import ProcessPool as Pool
+from prompt_toolkit import print_formatted_text as print, prompt
+from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.validation import Validator
+from tqdm import tqdm
 import yaml
 
 # Make sure localisation is set up before any SDK-specific imports.
@@ -455,9 +455,35 @@ class Command(Base):
 
             self.__print_process(process)
 
-            # Display the status of any execution.
+            # Group executions, if they are in groups.
+            groups = defaultdict(list)
+
             for execution in process.executions:
-                self.__print_execution(execution)
+                if (hasattr(execution, Model._FIELD_GROUP_ID) and (execution.group_id is not None)) and (
+                        hasattr(execution, Model._FIELD_GROUP_INDEX) and (execution.group_index is not None)) and (
+                        hasattr(execution, Model._FIELD_GROUP_COUNT) and (execution.group_count is not None)):
+                    groups[execution.group_id].append(execution)
+
+            # Display the status of any execution, in groups if used.
+            if len(groups) > 0:
+                group_number = 1
+
+                for group_id, group_executions in groups.items():
+                    self.__print(logging.INFO,
+                                 i18n.t('command.log_execution_group_id', group_number=group_number, group_count=len(groups), group_id=group_id))
+
+                    for execution in sorted(group_executions, key=lambda execution: execution.group_index):
+                        self.__print_execution(execution, label=i18n.t('command.log_execution_group_index', group_index=execution.group_index,
+                                                                       group_count=execution.group_count))
+
+                    group_number += 1
+                    self.__print(logging.INFO, i18n.t('command.log_bookend'))
+
+            else:
+                for execution in process.executions:
+                    self.__print_execution(execution)
+
+                self.__print(logging.INFO, i18n.t('command.log_bookend'))
 
         except CommandError as e:
             self.__print(logging.DEBUG, str(e))
@@ -507,8 +533,8 @@ class Command(Base):
         group_count = None
         group_index = None
 
-        if hasattr(execution, Model._FIELD_GROUP_INDEX) and (execution.group_index is not None) and (not isinstance(execution.group_index, _Missing)) and hasattr(
-                execution, Model._FIELD_GROUP_COUNT) and (execution.group_count is not None) and (not isinstance(execution.group_count, _Missing)):
+        if hasattr(execution, Model._FIELD_GROUP_INDEX) and (execution.group_index is not None) and (isinstance(execution.group_index, int)) and hasattr(
+                execution, Model._FIELD_GROUP_COUNT) and (execution.group_count is not None) and (isinstance(execution.group_count, int)):
             group_count = execution.group_count
             group_index = execution.group_index
             number_of_group_digits = len(str(group_count))
@@ -528,7 +554,8 @@ class Command(Base):
         if (started_at is None) or (execution.started_at < started_at):
             started_at = execution.started_at
 
-        execution_ended_at = execution.ended_at if hasattr(execution, Model._FIELD_ENDED_AT) and (execution.ended_at is not None) else datetime.now(timezone.utc)
+        execution_ended_at = execution.ended_at if hasattr(execution, Model._FIELD_ENDED_AT) and (execution.ended_at is not None) else datetime.now(
+            timezone.utc)
 
         if (ended_at is None) or (execution_ended_at > ended_at):
             ended_at = execution_ended_at
@@ -700,7 +727,7 @@ class Command(Base):
                 progress_bar.close()
 
     def download_process_execution(self, organisation, process_name, download_inputs, download_outputs, download_storage, download_intermediate,
-                                   download_components, save_metrics, wait_for_execution_to_complete):
+                                   download_components, save_metrics, stac_only, wait_for_execution_to_complete):
         """
         Downloads the inputs and/or outputs from a process or execution(s).
 
@@ -713,6 +740,7 @@ class Command(Base):
             download_intermediate: Should intermediate components be downloaded?
             download_components: The names of the components that should be downloaded? If None or [], then all components are downloaded.
             save_metrics: Save process metrics to file?
+            stac_only: Save only stac assets?
             wait_for_execution_to_complete: Optionally wait for completion of the execution?
 
         Returns:
@@ -723,9 +751,9 @@ class Command(Base):
         if (not download_inputs) and (not download_outputs) and (not download_storage):
             download_outputs = True
 
-        self.__print(logging.INFO,
-                     i18n.t('command.download_process_execution', process=process_name, inputs=download_inputs, outputs=download_outputs, storage=download_storage,
-                            intermediate=download_intermediate, metrics=save_metrics, components=download_components))
+        self.__print(logging.INFO, i18n.t('command.download_process_execution', process=process_name, inputs=download_inputs, outputs=download_outputs,
+                                          storage=download_storage, intermediate=download_intermediate, stac_only=stac_only, metrics=save_metrics,
+                                          components=download_components))
 
         # We are downloading from an existing process.
         process, execution = self.get_process_or_execution(organisation, process_name)
@@ -790,8 +818,9 @@ class Command(Base):
             downloads.extend(execution_downloads)
             metrics.extend(execution_metrics)
 
-        # Download the files.
-        self.__download_files(downloads)
+        # Download the files unless we only want the stac information
+        if not stac_only:
+            self.__download_files(downloads)
 
         # Save the metrics to file.
         if save_metrics and (len(metrics) > 0):
@@ -1042,6 +1071,38 @@ class Command(Base):
         """
         return uuid.uuid5(uuid.NAMESPACE_URL, f"{process_id}_{group_count}_{group_index}_{ssd_id}_{chain_index}")
 
+    def list_processes(self, organisation):
+        """
+        Lists all configured processes.
+
+        Args:
+            organisation: The logged in organisation.
+        """
+        for process in organisation.processes:
+            executions = [execution for execution in process.executions]
+
+            # Get information about any groups.
+            groups = defaultdict(list)
+
+            for execution in executions:
+                if (hasattr(execution, Model._FIELD_GROUP_ID) and (execution.group_id is not None)) and (
+                        hasattr(execution, Model._FIELD_GROUP_INDEX) and (execution.group_index is not None)) and (
+                        hasattr(execution, Model._FIELD_GROUP_COUNT) and (execution.group_count is not None)):
+                    groups[execution.group_id].append(execution)
+
+            # Calculate the overall progress and for each group.
+            progress = sum([execution.progress for execution in executions]) // len(executions)
+            group_progress = ''
+
+            for i, group in enumerate(groups.values()):
+                progress = sum([execution.progress for execution in group]) // len(group)
+                group_progress += i18n.t('command.log_process_group', group_number=(i + 1), executions=len(group), progress=progress)
+
+            # Log the process information.
+            self.__print(logging.INFO,
+                         i18n.t('command.log_process_summary', process=process.name, executions=len(executions), progress=progress, groups=len(groups),
+                                group_progress=group_progress))
+
     def login(self, deployment, email, organisation_name):
         """
         Logs into the desired Fusion Platform(r) deployment and allows the user to select an organisation.
@@ -1117,12 +1178,16 @@ class Command(Base):
             # Login to the correct deployment and select the organisation.
             organisation, _, _ = self.login(arguments.deployment, arguments.email, arguments.organisation)
 
-            # Perform the display, start, define or download.
-            if arguments.command == i18n.t('command.display.command'):
-                # Display a service or process with the specified name or ids. If a service is displayed, we do not display a process.
+            # Perform the list, display, start, define or download.
+            if arguments.command == i18n.t('command.list.command'):
+                # List all processes.
+                self.list_processes(organisation)
+
+            elif arguments.command == i18n.t('command.display.command'):
+                # Display a service or process with the specified name or ids. If a process is displayed, we do not display a service.
                 for process_or_service in arguments.process_or_service:
-                    if not self.display_service(organisation, process_or_service):
-                        if not self.display_process(organisation, process_or_service):
+                    if not self.display_process(organisation, process_or_service):
+                        if not self.display_service(organisation, process_or_service):
                             self.__print(logging.WARNING, i18n.t('command.no_process_or_service', process_or_service=process_or_service))
 
             elif arguments.command == i18n.t('command.start.command'):
@@ -1142,7 +1207,7 @@ class Command(Base):
                     # Also perform the download, if required.
                     if arguments.download:
                         process = self.download_process_execution(organisation, process_name, arguments.inputs, arguments.outputs, arguments.storage,
-                                                                  arguments.intermediate, arguments.component, arguments.metrics,
+                                                                  arguments.intermediate, arguments.component, arguments.metrics, arguments.stac,
                                                                   not arguments.no_wait_for_completion)
 
                         # And optionally remove the process and its inputs.
@@ -1166,7 +1231,8 @@ class Command(Base):
                 for process_name in arguments.process:
                     # Download the process.
                     process = self.download_process_execution(organisation, process_name, arguments.inputs, arguments.outputs, arguments.storage,
-                                                              arguments.intermediate, arguments.component, arguments.metrics, not arguments.no_wait_for_completion)
+                                                              arguments.intermediate, arguments.component, arguments.metrics, arguments.stac,
+                                                              not arguments.no_wait_for_completion)
 
                     # And optionally remove the process and its inputs.
                     if arguments.remove:
@@ -1203,13 +1269,14 @@ class Command(Base):
                             version=i18n.t('command.version_content', version=fusion_platform.__version__, version_date=fusion_platform.__version_date__))
 
         subparsers.required = True
+        parser_list = subparsers.add_parser(i18n.t('command.list.command'), help=i18n.t('command.list.help'))
         parser_display = subparsers.add_parser(i18n.t('command.display.command'), help=i18n.t('command.display.help'))
         parser_start = subparsers.add_parser(i18n.t('command.start.command'), help=i18n.t('command.start.help'))
         parser_define = subparsers.add_parser(i18n.t('command.define.command'), help=i18n.t('command.define.help'))
         parser_download = subparsers.add_parser(i18n.t('command.download.command'), help=i18n.t('command.download.help'))
 
         # Add in the common arguments.
-        for subparser in [parser_display, parser_start, parser_define, parser_download]:
+        for subparser in [parser_list, parser_display, parser_start, parser_define, parser_download]:
             subparser.add_argument(i18n.t('command.deployment_short'), i18n.t('command.deployment_long'), help=i18n.t('command.deployment_help'),
                                    default=Command._DEPLOYMENT_PRODUCTION_IRL)
             subparser.add_argument(i18n.t('command.email_short'), i18n.t('command.email_long'), help=i18n.t('command.email_help'))
@@ -1222,9 +1289,10 @@ class Command(Base):
 
         # Start arguments.
         parser_start.add_argument(i18n.t('command.start.definition_long'), help=i18n.t('command.start.definition_help'), nargs='+')
-        parser_start.add_argument(i18n.t('command.start.input_list_short'), i18n.t('command.start.input_list_long'), help=i18n.t('command.start.input_list_help'),
+        parser_start.add_argument(i18n.t('command.start.input_list_short'), i18n.t('command.start.input_list_long'),
+                                  help=i18n.t('command.start.input_list_help'), nargs='*')
+        parser_start.add_argument(i18n.t('command.start.options_short'), i18n.t('command.start.options_long'), help=i18n.t('command.start.options_help'),
                                   nargs='*')
-        parser_start.add_argument(i18n.t('command.start.options_short'), i18n.t('command.start.options_long'), help=i18n.t('command.start.options_help'), nargs='*')
         parser_start.add_argument(i18n.t('command.start.wait_for_start_short'), i18n.t('command.start.wait_for_start_long'),
                                   help=i18n.t('command.start.wait_for_start_help'), default=False, action="store_true")
         parser_start.add_argument(i18n.t('command.start.download_short'), i18n.t('command.start.download_long'), help=i18n.t('command.start.download_help'),
@@ -1245,6 +1313,8 @@ class Command(Base):
                                   nargs='*')
         parser_start.add_argument(i18n.t('command.start.no_wait_for_completion_short'), i18n.t('command.start.no_wait_for_completion_long'),
                                   help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action="store_true")
+        parser_start.add_argument(i18n.t('command.start.stac_only_short'), i18n.t('command.start.stac_only_long'), help=i18n.t('command.start.stac_only_help'),
+                                  default=False, action="store_true")
 
         # Define arguments.
         parser_define.add_argument(i18n.t('command.define.process_long'), help=i18n.t('command.define.process_help'), nargs='+')
@@ -1267,10 +1337,12 @@ class Command(Base):
                                      help=i18n.t('command.start.intermediate_help'), default=False, action="store_true")
         parser_download.add_argument(i18n.t('command.start.metrics_short'), i18n.t('command.start.metrics_long'), help=i18n.t('command.start.metrics_help'),
                                      default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.component_short'), i18n.t('command.start.component_long'), help=i18n.t('command.start.component_help'),
-                                     nargs='*')
+        parser_download.add_argument(i18n.t('command.start.component_short'), i18n.t('command.start.component_long'),
+                                     help=i18n.t('command.start.component_help'), nargs='*')
         parser_download.add_argument(i18n.t('command.start.no_wait_for_completion_short'), i18n.t('command.start.no_wait_for_completion_long'),
                                      help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action="store_true")
+        parser_download.add_argument(i18n.t('command.start.stac_only_short'), i18n.t('command.start.stac_only_long'), help=i18n.t('command.start.stac_only_help'),
+                                     default=False, action="store_true")
 
         return parser.parse_args()
 
@@ -1290,18 +1362,20 @@ class Command(Base):
             else:
                 print(message)
 
-    def __print_execution(self, execution):
+    def __print_execution(self, execution, label=None):
         """
         Prints an execution. This just shows the status in a simple format.
 
         Args:
             execution: The execution to be logged.
+            label: Optional label for the execution. Default None.
         """
+        label = '' if label is None else label
 
         # Form the status of the execution.
         status = ''
-        group = ''
-        abort_reason = i18n.t('command.log_execution_abort_reason', abort_reason=execution.abort_reason) if hasattr(execution, Model._FIELD_ABORT_REASON) else ''
+        abort_reason = i18n.t('command.log_execution_abort_reason', abort_reason=execution.abort_reason) if hasattr(execution,
+                                                                                                                    Model._FIELD_ABORT_REASON) else ''
         exit_type = i18n.t('command.log_execution_exit_type', exit_type=execution.exit_type) if hasattr(execution, Model._FIELD_EXIT_TYPE) else ''
 
         if execution.success:
@@ -1323,16 +1397,10 @@ class Command(Base):
         ended_at = i18n.t('command.log_execution_ended_at', ended_at=execution.ended_at.strftime('%Y-%m-%d %H:%M:%S')) if hasattr(execution,
                                                                                                                                   Model._FIELD_ENDED_AT) else ''
         period = i18n.t('command.log_execution_period', started_at=started_at, ended_at=ended_at)
-        duration = i18n.t('command.log_execution_duration', minutes=round((execution.ended_at - execution.started_at).total_seconds() // 60)) if hasattr(execution,
-                                                                                                                                                         Model._FIELD_ENDED_AT) and (
-                                                                                                                                                         execution.ended_at is not None) else ''
+        duration = i18n.t('command.log_execution_duration', minutes=round((execution.ended_at - execution.started_at).total_seconds() // 60)) if hasattr(
+            execution, Model._FIELD_ENDED_AT) and (execution.ended_at is not None) else ''
 
-        if (hasattr(execution, Model._FIELD_GROUP_ID) and (execution.group_id is not None)) and (
-                hasattr(execution, Model._FIELD_GROUP_INDEX) and (execution.group_index is not None)) and (
-                hasattr(execution, Model._FIELD_GROUP_COUNT) and (execution.group_count is not None)):
-            group = i18n.t('command.log_execution_group', group_id=execution.group_id, group_index=execution.group_index, group_count=execution.group_count)
-
-        self.__print(logging.INFO, i18n.t('command.log_execution', id=execution.id, period=period, status=status, duration=duration, group=group))
+        self.__print(logging.INFO, i18n.t('command.log_execution', id=execution.id, label=label, period=period, status=status, duration=duration))
 
     def __print_process(self, process):
         """
