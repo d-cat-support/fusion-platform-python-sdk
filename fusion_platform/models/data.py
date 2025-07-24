@@ -57,7 +57,6 @@ class DataSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class Data(Model):
@@ -150,12 +149,14 @@ class Data(Model):
             # Make sure we record the thread so we can monitor it, even if it fails.
             self.__upload_threads[file_id] = thread
 
-    def check_analysis_complete(self, wait=False):
+    def check_analysis_complete(self, wait=False, extended_analysis=False):
         """
-        Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete.
+        Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete. Also, optionally checks
+        whether the extended analysis has completed as compared to just the basic analysis which is required for a file to be used.
 
         Args:
             wait: Optionally wait for the analysis to complete? Default False.
+            extended_analysis: Optionally check whether the extended analysis has completed, rather than only the required basic analysis. Default False.
 
         Returns:
             True if the analysis is complete for all files.
@@ -168,17 +169,26 @@ class Data(Model):
             complete = True
 
             # Load in each of the file models and check that every file has been uploaded, and has a publishable or error field to indicate that the analysis is
-            # complete.
+            # complete. For extended analysis, the number of ingesters is checked and how many of these have completed.
             for file in self.files:
                 self._logger.debug('file %s: %s', file.file_name, file.attributes)
 
-                has_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
+                has_basic_fields = hasattr(file, self.__class__._FIELD_SIZE) and (
                         hasattr(file, self.__class__._FIELD_PUBLISHABLE) or hasattr(file, self.__class__._FIELD_ERROR))
 
-                if not has_fields:
-                    self._logger.debug('file %s not yet analysed', file.file_name)
+                if not has_basic_fields:
+                    self._logger.debug('file %s basic analysis not complete', file.file_name)
                     complete = False
                     break
+
+                if extended_analysis:
+                    number_of_ingesters = file.number_of_ingesters if hasattr(file, self.__class__._FIELD_NUMBER_OF_INGESTERS) else 0
+                    ingesters = file.ingesters if hasattr(file, self.__class__._FIELD_INGESTERS) else {}
+
+                    if len(ingesters) < number_of_ingesters:
+                        self._logger.debug('file %s extended analysis not complete', file.file_name)
+                        complete = False
+                        break
 
             # Break the loop if we are not waiting or are complete.
             if (not wait) or complete:
@@ -252,19 +262,21 @@ class Data(Model):
             if len(self.__upload_threads) > 0:
                 self.create_complete(wait=wait)  # Ignore response.
 
-    def create_complete(self, wait=False):
+    def create_complete(self, wait=False, extended_analysis=False):
         """
         Checks whether the data object file(s) upload and analysis have completed. If an error has occurred during the upload and analysis, then this will raise
-        a corresponding exception. Optionally waits for the upload and analysis to complete.
+        a corresponding exception. Optionally waits for the upload and analysis to complete. Also, optionally checks whether the extended analysis has completed as
+        compared to just the basic analysis which is required for a file to be used.
 
         Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
         until all upload and analysis (or errored) has completed and this method returns True.
 
         Args:
             wait: Optionally wait for the upload and analysis to complete? Default False.
+            extended_analysis: Optionally check whether the extended analysis has completed, rather than only the required basic analysis. Default False.
 
         Returns:
-            True if the upload and analysis are complete for all files.
+            True if the upload and (basic or extended) analysis are complete for all files.
 
         Raises:
             RequestError: if any request fails.
@@ -313,7 +325,7 @@ class Data(Model):
 
         try:
             if uploads_finished:
-                complete = self.check_analysis_complete(wait=wait)
+                complete = self.check_analysis_complete(wait=wait, extended_analysis=extended_analysis)
 
         except Exception as e:
             # An error occurred, make sure we treat this as complete to prevent an indefinite loop.

@@ -181,7 +181,7 @@ class TestData(CustomTestCase):
             with pytest.raises(ModelError, match=i18n.t('models.data.no_upload')):
                 data.upload_progress()
 
-    def test_create_no_wait(self):
+    def test_create_no_wait_basic_analysis(self):
         """
         Tests that a data item can be created without waiting for the upload and analysis to complete
         """
@@ -291,6 +291,121 @@ class TestData(CustomTestCase):
                 self.assertEqual((file, 0), progress[i])
 
             while not data.create_complete():
+                sleep(0.1)
+
+            with pytest.raises(ModelError, match=i18n.t('models.data.no_upload')):
+                data.upload_progress()
+
+    def test_create_no_wait_extended_analysis(self):
+        """
+        Tests that a data item can be created without waiting for the upload and analysis to complete
+        """
+        with open(self.fixture_path('data.json'), 'r') as file:
+            data_content = json.loads(file.read())
+
+        with open(self.fixture_path('data_file.json'), 'r') as file:
+            file_content = json.loads(file.read())
+
+        url = 'https://upload.com/test'
+        add_file_content = {Model._RESPONSE_KEY_EXTRAS: {Data._RESPONSE_KEY_FILE: str(uuid.uuid4()), Data._RESPONSE_KEY_URL: url}}
+
+        session = Session()
+        organisation_id = data_content.get('organisation_id')
+        data_id = data_content.get(Model._FIELD_ID)
+        name = 'Glasgow'
+        file_type = fusion_platform.FILE_TYPE_GEOJSON,
+        files = [fusion_platform.EXAMPLE_GLASGOW_FILE]
+        create_path = Data._PATH_CREATE.format(organisation_id=organisation_id)
+        add_file_path = Data._PATH_ADD_FILE.format(organisation_id=organisation_id, data_id=data_id)
+        files_path = Data._PATH_FILES.format(organisation_id=organisation_id, data_id=data_id)
+
+        data = Data(session)
+        self.assertIsNotNone(data)
+
+        data._set_model(data_content)
+
+        with requests_mock.Mocker() as mock:
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{create_path}", exc=requests.exceptions.ConnectTimeout)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{create_path}", status_code=400)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+            with pytest.raises(ModelError):
+                mock.post(f"{Session.API_URL_DEFAULT}{create_path}", text='{}')
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+            mock.post(f"{Session.API_URL_DEFAULT}{create_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{add_file_path}", exc=requests.exceptions.ConnectTimeout)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+            with pytest.raises(RequestError):
+                mock.post(f"{Session.API_URL_DEFAULT}{add_file_path}", status_code=400)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+            with pytest.raises(ModelError):
+                mock.post(f"{Session.API_URL_DEFAULT}{add_file_path}", text='{}')
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+            mock.post(f"{Session.API_URL_DEFAULT}{add_file_path}", text=json.dumps(add_file_content))
+
+            with pytest.raises(RequestError):
+                mock.put(url, exc=requests.exceptions.ConnectTimeout)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+                while not data.create_complete(extended_analysis=True):
+                    sleep(0.1)
+
+            with pytest.raises(RequestError):
+                mock.put(url, status_code=400)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+                while not data.create_complete(extended_analysis=True):
+                    sleep(0.1)
+
+            mock.put(url, status_code=200)
+
+            with pytest.raises(RequestError):
+                mock.get(f"{Session.API_URL_DEFAULT}{files_path}", exc=requests.exceptions.ConnectTimeout)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+                while not data.create_complete(extended_analysis=True):
+                    sleep(0.1)
+
+            with pytest.raises(RequestError):
+                mock.get(f"{Session.API_URL_DEFAULT}{files_path}", status_code=400)
+                data._Model__persisted = False
+                data._create(name, file_type, files)
+
+                while not data.create_complete(extended_analysis=True):
+                    sleep(0.1)
+
+            mock.get(f"{Session.API_URL_DEFAULT}{files_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content]}))
+            data._Model__persisted = False
+            data._create(name, file_type, files)
+
+            progress = data.upload_progress()
+            self.assertIsNotNone(progress)
+            self.assertEqual(len(files), len(progress))
+
+            for i, file in enumerate(files):
+                self.assertEqual((file, 0), progress[i])
+
+            while not data.create_complete(extended_analysis=True):
                 sleep(0.1)
 
             with pytest.raises(ModelError, match=i18n.t('models.data.no_upload')):

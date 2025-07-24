@@ -29,7 +29,6 @@ class UserOrganisationSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class UserSchema(Schema):
@@ -81,7 +80,6 @@ class UserSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class User(Model):

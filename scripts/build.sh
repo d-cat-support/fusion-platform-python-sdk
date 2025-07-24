@@ -47,7 +47,7 @@ rm -rf dist
 rm -rf fusion_platform_python_sdk.egg-info
 
 # Now build the distribution.
-python setup.py sdist bdist_wheel
+PYTHONPATH=$(pwd) python -m build --sdist --wheel
 
 # Remove any of the build files.
 rm -rf build

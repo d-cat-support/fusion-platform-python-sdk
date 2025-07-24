@@ -32,7 +32,6 @@ class ProcessExecutionChainOptionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessExecutionChainSchema(Schema):
@@ -51,7 +50,6 @@ class ProcessExecutionChainSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessExecutionOptionSchema(Schema):
@@ -74,7 +72,6 @@ class ProcessExecutionOptionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessExecutionSchema(Schema):
@@ -119,7 +116,6 @@ class ProcessExecutionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessExecution(Model):

@@ -106,6 +106,10 @@
       "swap_free_bytes": 3741824,
       "tmp_total_bytes": 1073741824,
       "tmp_free_bytes": 741824,
+      "tmp_used_bytes": 741824,
+      "scratch_total_bytes": 1073741824,
+      "scratch_free_bytes": 741824,
+      "scratch_used_bytes": 741824,
       "s3_transfer_bytes": 1073741824,
       "external_transfer_bytes": 2147483648,
       "comment": "Test"

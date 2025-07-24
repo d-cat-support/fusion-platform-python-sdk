@@ -50,6 +50,10 @@
     * **swap_free_bytes**: The free swap space in bytes.
     * **tmp_total_bytes**: The total temporary disk space in bytes.
     * **tmp_free_bytes**: The free temporary disk space in bytes.
+    * **tmp_used_bytes**: The used temporary disk space in bytes.
+    * **scratch_total_bytes**: The total scratch disk space in bytes.
+    * **scratch_free_bytes**: The free scratch disk space in bytes.
+    * **scratch_used_bytes**: The used scratch disk space in bytes.
     * **s3_transfer_bytes**: The number of bytes transferred in from S3.
     * **gcs_transfer_bytes**: The number of bytes transferred in from Google Cloud Storage.
     * **external_transfer_bytes**: The number of bytes transferred in externally.

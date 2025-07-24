@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-<meta name="generator" content="pdoc3 0.11.5">
+<meta name="generator" content="pdoc3 0.11.6">
 <title>fusion_platform.models.process_service_execution API documentation</title>
 <meta name="description" content="Process service execution model class file …">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/13.0.0/sanitize.min.css" integrity="sha512-y1dtMcuvtTMJc1yPgEqF0ZjQbhnc/bFhyvIyVNb9Zk5mIGtqVaAB1Ttl28su8AvFMOY0EwRbAe+HCLqj6W7/KA==" crossorigin>
@@ -331,7 +331,7 @@ def outputs(self):
 </dd>
 <dt id="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema"><code class="flex name class">
 <span>class <span class="ident">ProcessServiceExecutionSchema</span></span>
-<span>(</span><span>*,<br>only: types.StrSequenceOrSet | None = None,<br>exclude: types.StrSequenceOrSet = (),<br>many: bool | None = None,<br>context: dict | None = None,<br>load_only: types.StrSequenceOrSet = (),<br>dump_only: types.StrSequenceOrSet = (),<br>partial: bool | types.StrSequenceOrSet | None = None,<br>unknown: str | None = None)</span>
+<span>(</span><span>*,<br>only: types.StrSequenceOrSet | None = None,<br>exclude: types.StrSequenceOrSet = (),<br>many: bool | None = None,<br>load_only: types.StrSequenceOrSet = (),<br>dump_only: types.StrSequenceOrSet = (),<br>partial: bool | types.StrSequenceOrSet | None = None,<br>unknown: types.UnknownOption | None = None)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -386,8 +386,7 @@ def outputs(self):
         &#34;&#34;&#34;
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         &#34;&#34;&#34;
-        unknown = EXCLUDE
-        ordered = True</code></pre>
+        unknown = EXCLUDE</code></pre>
 </details>
 <div class="desc"><p>Schema class for process service execution model.</p>
 <p>Each process service execution model has the following fields (and nested fields):</p>
@@ -450,6 +449,10 @@ def outputs(self):
 <li><strong>swap_free_bytes</strong>: The free swap space in bytes.</li>
 <li><strong>tmp_total_bytes</strong>: The total temporary disk space in bytes.</li>
 <li><strong>tmp_free_bytes</strong>: The free temporary disk space in bytes.</li>
+<li><strong>tmp_used_bytes</strong>: The used temporary disk space in bytes.</li>
+<li><strong>scratch_total_bytes</strong>: The total scratch disk space in bytes.</li>
+<li><strong>scratch_free_bytes</strong>: The free scratch disk space in bytes.</li>
+<li><strong>scratch_used_bytes</strong>: The used scratch disk space in bytes.</li>
 <li><strong>s3_transfer_bytes</strong>: The number of bytes transferred in from S3.</li>
 <li><strong>gcs_transfer_bytes</strong>: The number of bytes transferred in from Google Cloud Storage.</li>
 <li><strong>external_transfer_bytes</strong>: The number of bytes transferred in externally.</li>
@@ -461,8 +464,6 @@ def outputs(self):
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>marshmallow.schema.Schema</li>
-<li>marshmallow.base.SchemaABC</li>
-<li>abc.ABC</li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -473,6 +474,20 @@ def outputs(self):
 <dt id="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.TYPE_MAPPING"><code class="name">var <span class="ident">TYPE_MAPPING</span> : dict[type, type[Field]]</code></dt>
 <dd>
 <div class="desc"><p>The type of the None singleton.</p></div>
+</dd>
+<dt id="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.dict_class"><code class="name">var <span class="ident">dict_class</span> : type[dict]</code></dt>
+<dd>
+<div class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+(key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+d = {}
+for k, v in iterable:
+d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+in the keyword argument list.
+For example:
+dict(one=1, two=2)</p></div>
 </dd>
 <dt id="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.error_messages"><code class="name">var <span class="ident">error_messages</span> : dict[str, str]</code></dt>
 <dd>
@@ -490,7 +505,7 @@ def outputs(self):
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.17.9
+Version: 1.18.3
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>
@@ -525,6 +540,7 @@ Version: 1.17.9
 <ul class="">
 <li><code><a title="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.OPTIONS_CLASS" href="#fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.OPTIONS_CLASS">OPTIONS_CLASS</a></code></li>
 <li><code><a title="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.TYPE_MAPPING" href="#fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.TYPE_MAPPING">TYPE_MAPPING</a></code></li>
+<li><code><a title="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.dict_class" href="#fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.dict_class">dict_class</a></code></li>
 <li><code><a title="fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.error_messages" href="#fusion_platform.models.process_service_execution.ProcessServiceExecutionSchema.error_messages">error_messages</a></code></li>
 </ul>
 </li>
@@ -534,7 +550,7 @@ Version: 1.17.9
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.11.6</a>.</p>
 </footer>
 </body>
 </html>

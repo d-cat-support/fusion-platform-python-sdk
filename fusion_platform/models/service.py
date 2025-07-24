@@ -50,7 +50,6 @@ class ServiceActionValueSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceActionSchema(Schema):
@@ -68,7 +67,6 @@ class ServiceActionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceDefinitionLinkageSchema(Schema):
@@ -83,7 +81,6 @@ class ServiceDefinitionLinkageSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceDefinitionSchema(Schema):
@@ -99,7 +96,6 @@ class ServiceDefinitionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceGroupAggregatorOptionSchema(Schema):
@@ -115,7 +111,6 @@ class ServiceGroupAggregatorOptionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceGroupAggregatorSchema(Schema):
@@ -132,7 +127,6 @@ class ServiceGroupAggregatorSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceInputExpressionSchema(Schema):
@@ -150,7 +144,6 @@ class ServiceInputExpressionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceOptionExpressionSchema(Schema):
@@ -166,7 +159,6 @@ class ServiceOptionExpressionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceValidationSchema(Schema):
@@ -181,7 +173,6 @@ class ServiceValidationSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceOrganisationChargeExpressionSchema(Schema):
@@ -197,7 +188,6 @@ class ServiceOrganisationChargeExpressionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ServiceSchema(Schema):
@@ -268,7 +258,6 @@ class ServiceSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class Service(Model):

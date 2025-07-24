@@ -26,7 +26,6 @@ class CreditMonthlySpendSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class CreditSsdsSchema(Schema):
@@ -41,7 +40,6 @@ class CreditSsdsSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class CreditSchema(Schema):
@@ -73,7 +71,6 @@ class CreditSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class Credit(Model):

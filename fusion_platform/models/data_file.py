@@ -32,6 +32,8 @@ class DataFileSelectorSchema(Schema):
     area = fields.Decimal(allow_none=True)
     length = fields.Decimal(allow_none=True)
     points = fields.Integer(allow_none=True)
+    lines = fields.Integer(allow_none=True)
+    polygons = fields.Integer(allow_none=True)
 
     initial_values = fields.List(fields.String(required=True), allow_none=True)
     minimum = fields.Decimal(allow_none=True)
@@ -48,7 +50,6 @@ class DataFileSelectorSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class DataFileSchema(Schema):
@@ -80,6 +81,8 @@ class DataFileSchema(Schema):
     area = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     length = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     points = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    lines = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    polygons = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     size = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     error = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
@@ -89,6 +92,9 @@ class DataFileSchema(Schema):
     source = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     selectors = fields.List(fields.Nested(DataFileSelectorSchema()), allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
+    number_of_ingesters = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    ingesters = fields.Dict(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     downloads = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     geojson = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
@@ -106,7 +112,6 @@ class DataFileSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class DataFile(Model):

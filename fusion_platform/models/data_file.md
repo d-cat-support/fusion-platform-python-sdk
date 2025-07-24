@@ -13,6 +13,8 @@
 * **area**: The optional total area covered by the file content in metres squared.
 * **length**: The optional total length covered by the file content in metres.
 * **points**: The optional total number of points in the file.
+* **lines**: The optional total number of lines in the file.
+* **polygons**: The optional total number of polygons in the file.
 * **size**: The size of the file in bytes.
 * **error**: Was there an error encountered during analysis of the file?
 * **publishable**: Is the file suitable for publishing as it is without optimisation?
@@ -27,6 +29,8 @@
     * **area**: The optional area for the selector in metres squared.
     * **length**: The optional length for the selector in metres.
     * **points**: The optional total number of points in the selector.
+    * **lines**: The optional total number of lines in the selector.
+    * **polygons**: The optional total number of polygons in the selector.
     * **initial_values**: The first initial values associated with the selector.
     * **minimum**: The minimum value associated with the selector values.
     * **maximum**: The maximum value associated with the selector values.
@@ -35,6 +39,8 @@
     * **histogram_minimum**: The histogram maximum value associated with the selector values.
     * **histogram_maximum**: The histogram maximum value associated with the selector values.
     * **histogram**: The histogram associated with the selector values.
+* **number_of_ingesters**: The expected number of ingesters that may be used to analyse an uploaded, publishable file.
+* **ingesters**: The ingester analysis.
 * **downloads**: How many times has the file been downloaded?
 * **geojson**: The content of the associated file if it is a GeoJSON file (of limited size).
 * **title**: The title for the selector.

@@ -24,6 +24,10 @@
       "area": 21420824776.176483
     }
   ],
+  "number_of_ingesters": 1,
+  "ingesters": {
+    "Common": {}
+  },
   "stac_item": {
     "type": "Feature",
     "stac_version": "1.0.0",

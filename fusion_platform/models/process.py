@@ -298,7 +298,6 @@ class ProcessChainOptionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessChainSchema(Schema):
@@ -317,7 +316,6 @@ class ProcessChainSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessExecutionStatusSchema(Schema):
@@ -342,7 +340,6 @@ class ProcessExecutionStatusSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessSelectorSchema(Schema):
@@ -360,7 +357,6 @@ class ProcessSelectorSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessInputSchema(Schema):
@@ -386,7 +382,6 @@ class ProcessInputSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessOptionSchema(Schema):
@@ -416,7 +411,6 @@ class ProcessOptionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessDispatcherSchema(Schema):
@@ -435,7 +429,6 @@ class ProcessDispatcherSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessSchema(Schema):
@@ -498,7 +491,6 @@ class ProcessSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class Process(Model):

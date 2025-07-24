@@ -46,7 +46,6 @@ class ProcessServiceExecutionActionValueSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessServiceExecutionActionSchema(Schema):
@@ -64,7 +63,6 @@ class ProcessServiceExecutionActionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessServiceExecutionActionsSchema(Schema):
@@ -78,7 +76,6 @@ class ProcessServiceExecutionActionsSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessServiceExecutionMetricSchema(Schema):
@@ -92,6 +89,10 @@ class ProcessServiceExecutionMetricSchema(Schema):
     swap_free_bytes = fields.Integer(allow_none=True)
     tmp_total_bytes = fields.Integer(allow_none=True)
     tmp_free_bytes = fields.Integer(allow_none=True)
+    tmp_used_bytes = fields.Integer(allow_none=True)
+    scratch_total_bytes = fields.Integer(allow_none=True)
+    scratch_free_bytes = fields.Integer(allow_none=True)
+    scratch_used_bytes = fields.Integer(allow_none=True)
     s3_transfer_bytes = fields.Integer(allow_none=True)
     gcs_transfer_bytes = fields.Integer(allow_none=True)
     external_transfer_bytes = fields.Integer(allow_none=True)
@@ -103,7 +104,6 @@ class ProcessServiceExecutionMetricSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessServiceExecutionOptionSchema(Schema):
@@ -120,7 +120,6 @@ class ProcessServiceExecutionOptionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessServiceExecutionSchema(Schema):
@@ -172,7 +171,6 @@ class ProcessServiceExecutionSchema(Schema):
         When loading an object, make sure we exclude any unknown fields, rather than raising an exception, and put fields in their definition order.
         """
         unknown = EXCLUDE
-        ordered = True
 
 
 class ProcessServiceExecution(Model):
