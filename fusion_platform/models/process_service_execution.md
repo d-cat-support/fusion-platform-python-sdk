@@ -11,8 +11,12 @@
 * **started_at**: When did the execution start?
 * **ended_at**: When did the execution end?
 * **runtime**: The execution runtime in seconds.
+* **architecture**: The processor architecture used to run the image.
 * **cpu**: The number of CPUs used to run the image.
+* **gpu**: The number of GPUs used to run the image.
 * **memory**: The memory in megabytes used to run the image.
+* **storage**: The local storage space in gigabytes used to run the image.
+* **instance_type**: The instance type allocated for use by the service.
 * **actions**: The custom actions associated with this execution.
     * **name**: The name of the value.
     * **values**: The values required for the action.

@@ -364,8 +364,13 @@ def outputs(self):
     runtime = fields.Integer(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     # Removed input_size.
+    architecture = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     cpu = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    gpu = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     memory = fields.Decimal(required=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    storage = fields.Decimal(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+    instance_type = fields.String(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
+
     actions = fields.List(fields.Nested(ProcessServiceExecutionActionSchema()), allow_none=True)
     options = fields.List(fields.Nested(ProcessServiceExecutionOptionSchema()), allow_none=True,
                           metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
@@ -374,9 +379,8 @@ def outputs(self):
     # Removed storage_id.
     intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
-    # Removed task_definition_id.
-    # Removed access_point_ids.
-    # Removed security_group_id.
+    # Removed task_starts.
+    # Removed instance_id.
     success = fields.Boolean(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
 
     metrics = fields.List(fields.Nested(ProcessServiceExecutionMetricSchema()), allow_none=True,
@@ -404,8 +408,12 @@ def outputs(self):
 <li><strong>started_at</strong>: When did the execution start?</li>
 <li><strong>ended_at</strong>: When did the execution end?</li>
 <li><strong>runtime</strong>: The execution runtime in seconds.</li>
+<li><strong>architecture</strong>: The processor architecture used to run the image.</li>
 <li><strong>cpu</strong>: The number of CPUs used to run the image.</li>
+<li><strong>gpu</strong>: The number of GPUs used to run the image.</li>
 <li><strong>memory</strong>: The memory in megabytes used to run the image.</li>
+<li><strong>storage</strong>: The local storage space in gigabytes used to run the image.</li>
+<li><strong>instance_type</strong>: The instance type allocated for use by the service.</li>
 <li><strong>actions</strong>: The custom actions associated with this execution.<ul>
 <li><strong>name</strong>: The name of the value.</li>
 <li><strong>values</strong>: The values required for the action.<ul>
@@ -505,7 +513,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.18.3
+Version: 2.0.7
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

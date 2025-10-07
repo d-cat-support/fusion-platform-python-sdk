@@ -510,8 +510,6 @@ class Command(Base):
             The list of file tuples to be downloaded (file model, download path), and the metrics.
         """
         download_components = [] if download_components is None else download_components
-        started_at = process.created_at
-        ended_at = None
         metrics = []
         downloads = []
 
@@ -526,7 +524,7 @@ class Command(Base):
                 complete = True
 
             if not complete:
-                sleep(Model._API_UPDATE_WAIT_PERIOD)
+                sleep(process._session.api_update_wait_period)
 
         # Now download the inputs and/or outputs.
         execution_dir = output_dir
@@ -551,15 +549,6 @@ class Command(Base):
             )
         ]
 
-        if (started_at is None) or (execution.started_at < started_at):
-            started_at = execution.started_at
-
-        execution_ended_at = execution.ended_at if hasattr(execution, Model._FIELD_ENDED_AT) and (execution.ended_at is not None) else datetime.now(
-            timezone.utc)
-
-        if (ended_at is None) or (execution_ended_at > ended_at):
-            ended_at = execution_ended_at
-
         for j, component in enumerate(components):
             # Download the component.
             component_name = '_'.join([item for item in re.sub(r'[\W]', '_', component.name).split('_') if len(item) > 0])
@@ -567,6 +556,8 @@ class Command(Base):
             component_options = {item.get(Model._FIELD_NAME): item.get(Model._FIELD_VALUE) for item in component.options} if hasattr(component,
                                                                                                                                      Model._FIELD_OPTIONS) and (
                                                                                                                                      component.options is not None) else {}
+            component_started_at = component.started_at if hasattr(component, Model._FIELD_STARTED_AT) and (component.started_at is not None) else None
+            component_ended_at = component.ended_at if hasattr(component, Model._FIELD_ENDED_AT) and (component.ended_at is not None) else None
             component_success = component.success if hasattr(component, Model._FIELD_SUCCESS) and (component.success is not None) else False
             component_runtime = component.runtime if hasattr(component, Model._FIELD_RUNTIME) and (component.runtime is not None) else 0
 
@@ -575,7 +566,7 @@ class Command(Base):
             metric = {
                 Command._METRICS_EXECUTION: group_index if group_index is not None else 1,
                 Command._METRICS_PROCESS: process.name,
-                Command._METRICS_DURATION: ended_at - started_at if (started_at is not None) and (ended_at is not None) else 0,
+                Command._METRICS_DURATION: (component_ended_at - component_started_at).total_seconds() if (component_started_at is not None) and (component_ended_at is not None) else 0,
                 Command._METRICS_COMPONENT: component.name,
                 Command._METRICS_SUCCESS: component_success,
                 Command._METRICS_CPU: component.cpu,
@@ -1015,7 +1006,11 @@ class Command(Base):
 
         # If the service still cannot be found, then try it as a specific service for the organisation.
         if service is None:
-            service = next((item for item in organisation.own_services if (str(item.id) == service_name) or (str(item.ssd_id) == service_name)), None)
+            try:
+                service = next((item for item in organisation.own_services if (str(item.id) == service_name) or (str(item.ssd_id) == service_name)), None)
+            except RequestError:
+                # We will get a RequestError if the user is not sufficiently privileged to list the organisation's own services. We therefore ignore this error.
+                pass
 
         if service is None:
             raise CommandError(i18n.t('command.no_such_service', service=service_name))

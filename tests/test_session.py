@@ -53,7 +53,12 @@ class TestSession(CustomTestCase):
         """
         Test initialisation of the class to ensure no exceptions are raised.
         """
-        Session()
+        session = Session()
+        self.assertEqual(Session.API_UPDATE_WAIT_PERIOD_DEFAULT, session.api_update_wait_period)
+
+        api_update_wait_period_default = 45
+        session = Session(options={Session.API_UPDATE_WAIT_PERIOD: api_update_wait_period_default})
+        self.assertEqual(api_update_wait_period_default, session.api_update_wait_period)
 
     def test_download_file(self):
         """

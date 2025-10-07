@@ -198,7 +198,7 @@ class ProcessExecution(Model):
                 break
 
             # We are waiting, so block for a short while.
-            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+            sleep(self._session.api_update_wait_period)
 
         return complete
 

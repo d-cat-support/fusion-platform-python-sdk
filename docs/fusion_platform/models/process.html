@@ -1242,7 +1242,7 @@ def options(self):
                 raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
 
             # We are waiting, so block for a short while.
-            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
+            sleep(self._session.api_update_wait_period)</code></pre>
 </details>
 <div class="desc"><p>Process model class providing attributes and methods to manipulate process item details.</p>
 <p>Initialises the object.</p>
@@ -1962,7 +1962,7 @@ of setting inputs, options and dispatchers.</p>
             raise ModelError(i18n.t(&#39;models.process.execution_should_have_started&#39;))
 
         # We are waiting, so block for a short while.
-        sleep(self.__class__._API_UPDATE_WAIT_PERIOD)</code></pre>
+        sleep(self._session.api_update_wait_period)</code></pre>
 </details>
 <div class="desc"><p>Waits for the next execution of the process to start, according to its schedule. If executions are already started, this method will return immediately.
 Otherwise, this method will block until the next scheduled execution has started.</p>
@@ -2131,7 +2131,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.18.3
+Version: 2.0.7
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

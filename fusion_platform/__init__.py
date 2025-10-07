@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '1.18.3'
-__version_date__ = '2025-07-04T14:43:33Z'
+__version__ = '2.0.7'
+__version_date__ = '2025-10-07T07:06:32Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -142,7 +142,7 @@ def get_log_level():
     return logger.level
 
 
-def login(email=None, user_id=None, password=None, api_url=None):
+def login(email=None, user_id=None, password=None, api_url=None, session_options=None):
     """
     Attempts to log into the Fusion Platform<sup>&reg;</sup> to return a user model for the active session.
 
@@ -151,6 +151,7 @@ def login(email=None, user_id=None, password=None, api_url=None):
         user_id: The user account user id. Either an email address or a user id must be provided.
         password: The password for the user account.
         api_url: The optional custom API URL to use. Defaults to the production Fusion Platform<sup>&reg;</sup>.
+        session_options: The optional options to be passed to the session.
 
     Returns:
         The corresponding user model for the account on successful login.
@@ -160,7 +161,7 @@ def login(email=None, user_id=None, password=None, api_url=None):
         RequestError: on login failure.
     """
     # Create the session and attempt to login.
-    session = Session()
+    session = Session(options=session_options)
     session.login(email, user_id, password, api_url)
 
     # Now load the corresponding user model using the user id obtained from the session.

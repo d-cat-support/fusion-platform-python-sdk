@@ -194,7 +194,7 @@ el.replaceWith(d);
                 break
 
             # We are waiting, so block for a short while.
-            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+            sleep(self._session.api_update_wait_period)
 
         return complete
 
@@ -580,7 +580,7 @@ def files(self):
             break
 
         # We are waiting, so block for a short while.
-        sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+        sleep(self._session.api_update_wait_period)
 
     return complete</code></pre>
 </details>
@@ -1058,7 +1058,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.18.3
+Version: 2.0.7
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

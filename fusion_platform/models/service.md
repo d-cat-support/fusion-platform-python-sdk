@@ -46,8 +46,8 @@
     * **url**: The URL which can be executed to receive the value of the action.
     * **title**: The title for the action.
     * **description**: The description of the action.
-* **urls**: The list of allowed external URLs the service can access.
-* **cidrs**: The list of allowed external IP addresses as CIDRs the service can access.
+* **urls**: 
+* **cidrs**: 
 * **input_expressions**: The list of expressions which are applied to the inputs of the service.
     * **lhs_ssd_id**: The SSD associated with the left-hand side of the input expression.
     * **lhs_input**: The input associated with the left-hand side of the input expression.

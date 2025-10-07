@@ -86,14 +86,14 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 <p>The current log level, as specified by the logging package.</p></div>
 </dd>
 <dt id="fusion_platform.login"><code class="name flex">
-<span>def <span class="ident">login</span></span>(<span>email=None, user_id=None, password=None, api_url=None)</span>
+<span>def <span class="ident">login</span></span>(<span>email=None, user_id=None, password=None, api_url=None, session_options=None)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def login(email=None, user_id=None, password=None, api_url=None):
+<pre><code class="python">def login(email=None, user_id=None, password=None, api_url=None, session_options=None):
     &#34;&#34;&#34;
     Attempts to log into the Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt; to return a user model for the active session.
 
@@ -102,6 +102,7 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
         user_id: The user account user id. Either an email address or a user id must be provided.
         password: The password for the user account.
         api_url: The optional custom API URL to use. Defaults to the production Fusion Platform&lt;sup&gt;&amp;reg;&lt;/sup&gt;.
+        session_options: The optional options to be passed to the session.
 
     Returns:
         The corresponding user model for the account on successful login.
@@ -111,7 +112,7 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
         RequestError: on login failure.
     &#34;&#34;&#34;
     # Create the session and attempt to login.
-    session = Session()
+    session = Session(options=session_options)
     session.login(email, user_id, password, api_url)
 
     # Now load the corresponding user model using the user id obtained from the session.
@@ -128,6 +129,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 <dd>The password for the user account.</dd>
 <dt><strong><code>api_url</code></strong></dt>
 <dd>The optional custom API URL to use. Defaults to the production Fusion Platform<sup>&reg;</sup>.</dd>
+<dt><strong><code>session_options</code></strong></dt>
+<dd>The optional options to be passed to the session.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>The corresponding user model for the account on successful login.</p>
@@ -176,7 +179,7 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 1.18.3
+Version: 2.0.7
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

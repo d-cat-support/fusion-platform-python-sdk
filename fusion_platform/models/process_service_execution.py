@@ -148,8 +148,13 @@ class ProcessServiceExecutionSchema(Schema):
     runtime = fields.Integer(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     # Removed input_size.
+    architecture = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     cpu = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    gpu = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     memory = fields.Decimal(required=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    storage = fields.Decimal(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+    instance_type = fields.String(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
+
     actions = fields.List(fields.Nested(ProcessServiceExecutionActionSchema()), allow_none=True)
     options = fields.List(fields.Nested(ProcessServiceExecutionOptionSchema()), allow_none=True,
                           metadata={'read_only': True})  # Changed to prevent this being updated.
@@ -158,9 +163,8 @@ class ProcessServiceExecutionSchema(Schema):
     # Removed storage_id.
     intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
-    # Removed task_definition_id.
-    # Removed access_point_ids.
-    # Removed security_group_id.
+    # Removed task_starts.
+    # Removed instance_id.
     success = fields.Boolean(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
 
     metrics = fields.List(fields.Nested(ProcessServiceExecutionMetricSchema()), allow_none=True,

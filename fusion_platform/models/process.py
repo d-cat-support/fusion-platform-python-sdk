@@ -1151,4 +1151,4 @@ class Process(Model):
                 raise ModelError(i18n.t('models.process.execution_should_have_started'))
 
             # We are waiting, so block for a short while.
-            sleep(self.__class__._API_UPDATE_WAIT_PERIOD)
+            sleep(self._session.api_update_wait_period)

@@ -93,15 +93,22 @@ class Session(Base):
     # Default Fusion Platform<sup>&reg;</sup> API endpoint.
     API_URL_DEFAULT = 'https://api.thefusionplatform.com'
 
+    # Session option fields and their defaults.
+    API_UPDATE_WAIT_PERIOD = 'api_update_wait_period'  # Time in seconds to wait between checking jobs on the API.
+    API_UPDATE_WAIT_PERIOD_DEFAULT = 10
+
     # Mask keys.
     _MASK_KEYS = ['password', 'old_password', 'new_password', 'access_token', 'id_token', 'refresh_token']
 
     # Download temporary file name extension.
     DOWNLOAD_EXTENSION = '.download'
 
-    def __init__(self):
+    def __init__(self, options=None):
         """
         Initialises the object.
+
+            Args:
+                options: The optional session options.
         """
         super(Session, self).__init__()
 
@@ -109,6 +116,11 @@ class Session(Base):
         self.__user_id = None
         self.__bearer_token = None
         self.__api_url = Session.API_URL_DEFAULT
+
+        # Extract any options.
+        options = {} if options is None else options
+        self.api_update_wait_period = options.get(Session.API_UPDATE_WAIT_PERIOD, Session.API_UPDATE_WAIT_PERIOD_DEFAULT)
+        self._logger.debug('api_update_wait_period: %d', self.api_update_wait_period)
 
     def download_file(self, url, destination, callback=None):
         """
@@ -266,6 +278,9 @@ class Session(Base):
                         self._logger.error(message)
                     except:
                         pass  # Ignore the inability to extract the error message.
+
+                    if message is None:
+                        message = response
 
                     raise RequestError(i18n.t('session.request_failed', message=message))
 
