@@ -58,7 +58,7 @@ i18n.add_translation('command.upload_storage', 'Uploading %{files} storage file(
 i18n.add_translation('command.upload_inputs', 'Uploading %{inputs} input file(s)...', 'en')
 i18n.add_translation('command.storage_name', '%{process} Storage %{group_index} %{chain_index}', 'en')
 i18n.add_translation('command.start_process', 'Starting \'%{process}\' from service \'%{service}\'', 'en')
-i18n.add_translation('command.remove_process', 'Removing input \'%{process}\'', 'en')
+i18n.add_translation('command.remove_process', 'Removing process \'%{process}\'', 'en')
 i18n.add_translation('command.remove_input', 'Removing input \'%{input}\'', 'en')
 i18n.add_translation('command.prompt_yes', 'Yes', 'en')
 i18n.add_translation('command.prompt_no', 'No', 'en')

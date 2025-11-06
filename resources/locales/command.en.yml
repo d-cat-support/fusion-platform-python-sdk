@@ -201,7 +201,7 @@ en:
   prompt_no: "No"
   prompt_yes: "Yes"
   remove_input: "Removing input '%{input}'"
-  remove_process: "Removing input '%{process}'"
+  remove_process: "Removing process '%{process}'"
   start_process: "Starting '%{process}' from service '%{service}'"
   storage_name: "%{process} Storage %{group_index} %{chain_index}"
   upload_inputs: "Uploading %{inputs} input file(s)..."
