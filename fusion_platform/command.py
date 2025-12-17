@@ -25,7 +25,7 @@ import uuid
 
 from dateutil.relativedelta import relativedelta
 import i18n
-from pathos.multiprocessing import ProcessPool as Pool
+from pathos.multiprocessing import ThreadPool as Pool
 from prompt_toolkit import print_formatted_text as print, prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import Validator
@@ -777,7 +777,6 @@ class Command(Base):
             executions = [execution]
 
         # Do all the downloads in batches. We use small batches so that we do not swamp memory.
-        batch_size = 2 * os.cpu_count()  # Downloads don't swamp CPU.
         wait = i18n.t('command.wait_for_completion') if wait_for_execution_to_complete else ''
         self.__print(logging.INFO, i18n.t('command.download_executions', wait=wait, executions=len(executions)))
         progress_bar = tqdm(total=len(executions), bar_format=Command.__PROGRESS_BAR_FORMAT, colour=Command.__PROGRESS_BAR_COLOUR_ACTIVE,
@@ -790,8 +789,11 @@ class Command(Base):
                                                  download_components, output_dir, wait_for_execution_to_complete)
             results = []
 
-            with Pool(nodes=batch_size) as pool:
-                for i, result in enumerate(pool.uimap(partial_download_execution, executions)):
+            # We use a thread pool as it preserves the marshmallow configuration and log level. Using a ProcessPool resulted in fields being labelled as missing
+            # when the schema definition allowed for them to be None. When no parameters are supplied ThreadPool will use all available vCPUs which is sufficiently
+            # fast.
+            with Pool() as pool:
+                for i, result in enumerate(pool.imap(partial_download_execution, executions)):
                     progress_bar.set_postfix(execution=i + 1)
                     progress_bar.update(1)
                     results.append(result)
@@ -1002,12 +1004,15 @@ class Command(Base):
 
         # If the service cannot be found, try to find it by its id or SSD id.
         if service is None:
-            service = next((item for item in organisation.services if (str(item.id) == service_name) or (str(item.ssd_id) == service_name)), None)
+            service = next(
+                (item for item in organisation.services if (item.name == service_name) or (str(item.id) == service_name) or (str(item.ssd_id) == service_name)),
+                None)
 
         # If the service still cannot be found, then try it as a specific service for the organisation.
         if service is None:
             try:
-                service = next((item for item in organisation.own_services if (str(item.id) == service_name) or (str(item.ssd_id) == service_name)), None)
+                service = next((item for item in organisation.own_services if
+                                (item.name == service_name) or (str(item.id) == service_name) or (str(item.ssd_id) == service_name)), None)
             except RequestError:
                 # We will get a RequestError if the user is not sufficiently privileged to list the organisation's own services. We therefore ignore this error.
                 pass
@@ -1161,7 +1166,7 @@ class Command(Base):
         arguments = self.__parse_arguments()
 
         # Change the print and logging to the desired level.
-        self._logger.setLevel(logging.CRITICAL)
+        self._logger.setLevel(logging.WARNING)
 
         if arguments.debug:
             self._logger.setLevel(logging.DEBUG)
