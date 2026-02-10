@@ -1091,17 +1091,17 @@ class Command(Base):
                     groups[execution.group_id].append(execution)
 
             # Calculate the overall progress and for each group.
-            progress = sum([execution.progress for execution in executions]) // len(executions)
-            group_progress = ''
+            progress = sum([execution.progress for execution in executions]) // len(executions) if len(executions) > 0 else 0
+            group_progress_summary = ''
 
             for i, group in enumerate(groups.values()):
-                progress = sum([execution.progress for execution in group]) // len(group)
-                group_progress += i18n.t('command.log_process_group', group_number=(i + 1), executions=len(group), progress=progress)
+                group_progress = sum([execution.progress for execution in group]) // len(group)
+                group_progress_summary += i18n.t('command.log_process_group', group_number=(i + 1), executions=len(group), progress=group_progress)
 
             # Log the process information.
             self.__print(logging.INFO,
                          i18n.t('command.log_process_summary', process=process.name, executions=len(executions), progress=progress, groups=len(groups),
-                                group_progress=group_progress))
+                                group_progress=group_progress_summary))
 
     def login(self, deployment, email, organisation_name):
         """
