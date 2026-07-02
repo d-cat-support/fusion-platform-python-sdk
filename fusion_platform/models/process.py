@@ -588,7 +588,7 @@ class Process(Model):
                 break
 
         if found_dispatcher is None:
-            raise ModelError(i18n.t('models.process.cannot_find_dispatcher'))
+            raise ModelError(i18n.t('models.process.cannot_find_dispatcher', dispatcher=name if name is not None else number))
 
         # Add the dispatcher to the end of the existing list.
         dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
@@ -850,7 +850,7 @@ class Process(Model):
                 break
 
         if found_dispatcher is None:
-            raise ModelError(i18n.t('models.process.cannot_find_dispatcher'))
+            raise ModelError(i18n.t('models.process.cannot_find_dispatcher', dispatcher=number))
 
         # Remove the dispatcher from the existing list.
         dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
@@ -899,7 +899,7 @@ class Process(Model):
                 break
 
         if found_dispatcher is None:
-            raise ModelError(i18n.t('models.process.cannot_find_dispatcher'))
+            raise ModelError(i18n.t('models.process.cannot_find_dispatcher', dispatcher=number))
 
         # Get the dispatcher so that it can be modified.
         dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can access it.
@@ -921,7 +921,7 @@ class Process(Model):
                     break
 
             if found_option is None:
-                raise ModelError(i18n.t('models.process.cannot_find_option'))
+                raise ModelError(i18n.t('models.process.cannot_find_dispatcher_option', option=option_name))
 
             # We can now update the option. All options are expressed as strings with the correct format.
             option_value = Option.get_option_value(found_option, value, coerce_value)
@@ -981,7 +981,7 @@ class Process(Model):
                 break
 
         if found_input is None:
-            raise ModelError(i18n.t('models.process.cannot_find_input'))
+            raise ModelError(i18n.t('models.process.cannot_find_input', input=input.input if input is not None else number))
 
         # Check that all the files in the data object are ready to be used. Along the way, pick out the first file type.
         found_file_type = None
@@ -1041,7 +1041,7 @@ class Process(Model):
                 break
 
         if found_option is None:
-            raise ModelError(i18n.t('models.process.cannot_find_option'))
+            raise ModelError(i18n.t('models.process.cannot_find_option', option=option.name if option is not None else name))
 
         # We can now update the option. All options are expressed as strings with the correct format.
         option_value = Option.get_option_value(found_option, value, coerce_value)

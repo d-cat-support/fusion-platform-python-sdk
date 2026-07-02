@@ -679,7 +679,7 @@ def options(self):
                 break
 
         if found_dispatcher is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;, dispatcher=name if name is not None else number))
 
         # Add the dispatcher to the end of the existing list.
         dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
@@ -941,7 +941,7 @@ def options(self):
                 break
 
         if found_dispatcher is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;, dispatcher=number))
 
         # Remove the dispatcher from the existing list.
         dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
@@ -990,7 +990,7 @@ def options(self):
                 break
 
         if found_dispatcher is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;, dispatcher=number))
 
         # Get the dispatcher so that it can be modified.
         dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can access it.
@@ -1012,7 +1012,7 @@ def options(self):
                     break
 
             if found_option is None:
-                raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
+                raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher_option&#39;, option=option_name))
 
             # We can now update the option. All options are expressed as strings with the correct format.
             option_value = Option.get_option_value(found_option, value, coerce_value)
@@ -1072,7 +1072,7 @@ def options(self):
                 break
 
         if found_input is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_input&#39;))
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_input&#39;, input=input.input if input is not None else number))
 
         # Check that all the files in the data object are ready to be used. Along the way, pick out the first file type.
         found_file_type = None
@@ -1132,7 +1132,7 @@ def options(self):
                 break
 
         if found_option is None:
-            raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;))
+            raise ModelError(i18n.t(&#39;models.process.cannot_find_option&#39;, option=option.name if option is not None else name))
 
         # We can now update the option. All options are expressed as strings with the correct format.
         option_value = Option.get_option_value(found_option, value, coerce_value)
@@ -1442,7 +1442,7 @@ def options(self):
             break
 
     if found_dispatcher is None:
-        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;, dispatcher=name if name is not None else number))
 
     # Add the dispatcher to the end of the existing list.
     dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
@@ -1755,7 +1755,7 @@ ModelError if a model could not be loaded or validated from the Fusion Platform<
             break
 
     if found_dispatcher is None:
-        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;))
+        raise ModelError(i18n.t(&#39;models.process.cannot_find_dispatcher&#39;, dispatcher=number))
 
     # Remove the dispatcher from the existing list.
     dispatchers = list(self._model.get(self.__class__._FIELD_DISPATCHERS, []))  # Convert read-only tuple to list, so we can modify it.
@@ -2131,7 +2131,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.2
+Version: 2.2.3
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -78,6 +78,9 @@ class TestProcess(CustomTestCase):
             process.add_dispatcher(number=1)
             self.assertEqual(1, len([item for item in process.dispatchers]))
 
+            with pytest.raises(ModelError):
+                process.update(dispatcher_number=10, dispatch_intermediate=True)
+
             self.assertFalse(next(process.dispatchers).dispatch_intermediate)
             process.update(dispatcher_number=1, dispatch_intermediate=True)
             self.assertTrue(next(process.dispatchers).dispatch_intermediate)
@@ -88,6 +91,9 @@ class TestProcess(CustomTestCase):
             dispatchers = process.dispatchers
             self.assertTrue(next(dispatchers).dispatch_intermediate)
             self.assertFalse(next(dispatchers).dispatch_intermediate)
+
+            with pytest.raises(ModelError):
+                process.update(dispatcher_number=2, option_name='rubbish', value='test-rubbish')
 
             self.assertIsNone(list(list(process.dispatchers)[1].options)[0].value)
             process.update(dispatcher_number=2, option_name='bucket', value='test-bucket')
