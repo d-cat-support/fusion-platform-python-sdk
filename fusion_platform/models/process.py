@@ -1113,14 +1113,14 @@ class Process(Model):
             RequestError: if any request fails.
             ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
+        # Confirm that the model is executing. We do not do this in the loop as the process will be set to stop once all of its executions have finished.
+        if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_STOP):
+            raise ModelError(i18n.t('models.process.execution_stopped'))
+
         # Wait until we find the next execution.
         while True:
             # Load in the most recent version of the model.
             self.get(organisation_id=self.organisation_id)
-
-            # Check that the model is executing. It may have stopped on error.
-            if hasattr(self, self.__class__._FIELD_PROCESS_STATUS) and (self.process_status == Process._PROCESS_STATUS_STOP):
-                raise ModelError(i18n.t('models.process.execution_stopped'))
 
             # Check whether we have the next execution listed in the model. We sort the list to find the most recent.
             self._logger.debug('checking for next execution')
@@ -1143,7 +1143,7 @@ class Process(Model):
 
             # Stop if we have an execution which is beyond the repeat start date.
             if execution is not None:
-                self._logger.debug('execution %s found', execution.get(self.__class__._FIELD_ID))
+                self._logger.debug('execution %s found', execution)
                 break
 
             # If we have no recent executions, and longer than the allowed period has elapsed since the next execution was meant to start, then raise an exception.

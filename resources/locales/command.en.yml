@@ -113,21 +113,24 @@ en:
   version_help: "show the version information and exit"
   version_content: "%%(prog)s %{version} (%{version_date})"
 
-  subparser: "displays a service or process, or starts, defines or downloads a process"
+  subparser: "Commands are available to display a service or process, or start, define or download a process:"
 
   list:
     command: "list"
-    help: "lists configured processes"
+    help: "lists all configured processes"
+    description: "Lists all configured processes."
 
   display:
     command: "display"
-    help: "displays service information or a configured process"
+    help: "displays details of services or existing processes"
+    description: "Displays details of services or existing processes."
     service_or_process_long: "process_or_service"
     service_or_process_help: "the names of the service, id, SSD id, process, process id or associated execution id that are to be displayed"
 
   start:
     command: "start"
-    help: "starts a process"
+    help: "creates and starts new processes"
+    description: "Creates and starts new processes."
     definition_long: "service_or_yaml"
     definition_help: "the names of the service used to start processes or YAML files which defines everything"
     input_list_short: "-l"
@@ -172,13 +175,15 @@ en:
 
   define:
     command: "define"
-    help: "outputs a YAML file for each existing process"
+    help: "creates new YAML files to define existing processes"
+    description: "Creates new YAML files to define existing processes."
     process_long: "process"
     process_help: "the name of the process, the process id or execution id to build the YAML file"
 
   download:
     command: "download"
-    help: "downloads the inputs and/or outputs for each process"
+    help: "downloads the inputs and/or outputs for existing processes"
+    description: "Downloads the inputs and/or outputs for existing processes."
     process_long: "process"
     process_help: "the name of the process, the process id or execution id to download"
 

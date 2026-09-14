@@ -1264,16 +1264,19 @@ class Command(Base):
         )
 
         # Create the subparsers.
-        subparsers = parser.add_subparsers(help=i18n.t('command.subparser'), dest='command')
+        subparsers = parser.add_subparsers(description=i18n.t('command.subparser'), dest='command')
         parser.add_argument(i18n.t('command.version_short'), i18n.t('command.version_long'), help=i18n.t('command.version_help'), action='version',
                             version=i18n.t('command.version_content', version=fusion_platform.__version__, version_date=fusion_platform.__version_date__))
 
         subparsers.required = True
-        parser_list = subparsers.add_parser(i18n.t('command.list.command'), help=i18n.t('command.list.help'))
-        parser_display = subparsers.add_parser(i18n.t('command.display.command'), help=i18n.t('command.display.help'))
-        parser_start = subparsers.add_parser(i18n.t('command.start.command'), help=i18n.t('command.start.help'))
-        parser_define = subparsers.add_parser(i18n.t('command.define.command'), help=i18n.t('command.define.help'))
-        parser_download = subparsers.add_parser(i18n.t('command.download.command'), help=i18n.t('command.download.help'))
+        parser_list = subparsers.add_parser(i18n.t('command.list.command'), help=i18n.t('command.list.help'), description=i18n.t('command.list.description'))
+        parser_display = subparsers.add_parser(i18n.t('command.display.command'), help=i18n.t('command.display.help'),
+                                               description=i18n.t('command.display.description'))
+        parser_start = subparsers.add_parser(i18n.t('command.start.command'), help=i18n.t('command.start.help'), description=i18n.t('command.start.description'))
+        parser_define = subparsers.add_parser(i18n.t('command.define.command'), help=i18n.t('command.define.help'),
+                                              description=i18n.t('command.define.description'))
+        parser_download = subparsers.add_parser(i18n.t('command.download.command'), help=i18n.t('command.download.help'),
+                                                description=i18n.t('command.download.description'))
 
         # Add in the common arguments.
         for subparser in [parser_list, parser_display, parser_start, parser_define, parser_download]:
