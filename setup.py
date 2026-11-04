@@ -19,7 +19,7 @@ PACKAGE_DIR = pathlib.Path(__file__).parent
 # @formatter:off
 setup(
     name='fusion-platform-python-sdk',
-    version='2.2.5',
+    version='2.3.8',
     description='Python SDK used to interact with the Fusion Platform(r)',
     long_description=(PACKAGE_DIR / 'README.md').read_text(),
     long_description_content_type='text/markdown',
@@ -39,6 +39,7 @@ setup(
     packages=find_packages(exclude='tests'),
     include_package_data=True,
     install_requires=[
+        'keyring',
         'marshmallow',
         'pathos',
         'prompt_toolkit',

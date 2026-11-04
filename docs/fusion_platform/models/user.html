@@ -133,8 +133,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>User model class providing attributes and methods to manipulate user details.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>session</code></strong></dt>
 <dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
 <dt><strong><code>schema</code></strong></dt>
@@ -153,8 +154,9 @@ el.replaceWith(d);
 <em>Inherited from:</em>
 <code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
 </p>
-<div class="desc inherited"><h2 id="returns">Returns</h2>
-<p>The model attributes as a dictionary.</p></div>
+<div class="desc inherited"><p>Returns
+-----=
+The model attributes as a dictionary.</p></div>
 </dd>
 <dt id="fusion_platform.models.user.User.organisations"><code class="name">prop <span class="ident">organisations</span></code></dt>
 <dd>
@@ -178,10 +180,12 @@ def organisations(self):
                                                              self._model.get(&#39;organisations&#39;, [])])</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the organisations which the user belongs to.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the organisations.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the organisations.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -214,15 +218,15 @@ def organisations(self):
     self._session.request(path=self._get_path(self.__class__._PATH_CHANGE_PASSWORD), method=Session.METHOD_POST, body=body)</code></pre>
 </details>
 <div class="desc"><p>Changes the user password. The new password must conform to the current password policy.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>old</code></strong></dt>
 <dd>The old password.</dd>
 <dt><strong><code>new</code></strong></dt>
 <dd>The new password.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the update fails.</dd>
 </dl></div>
@@ -271,17 +275,20 @@ def organisations(self):
     return organisation, self.organisations</code></pre>
 </details>
 <div class="desc"><p>Searches for organisations with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>id</code></strong></dt>
 <dd>The organisation id to search for.</dd>
 <dt><strong><code>name</code></strong></dt>
 <dd>The name to search for (case-sensitive).</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The first found organisation object, or None if not found, and an iterator through the found organisation objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The first found organisation object, or None if not found, and an iterator through the found organisation objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -445,7 +452,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

@@ -83,6 +83,8 @@ el.replaceWith(d);
 
     # Useful fields and templates.
     _FIELD_ABORT_REASON = &#39;abort_reason&#39;
+    _FIELD_ALTERNATIVE = &#39;alternative&#39;
+    _FIELD_AREA = &#39;area&#39;
     _FIELD_AVAILABLE_DISPATCHERS = &#39;available_dispatchers&#39;
     _FIELD_BOUNDS = &#39;bounds&#39;
     _FIELD_CATEGORY = &#39;category&#39;
@@ -100,6 +102,7 @@ el.replaceWith(d);
     _FIELD_DOCUMENTATION_INPUTS = &#39;documentation_inputs&#39;
     _FIELD_DOCUMENTATION_OUTPUTS = &#39;documentation_outputs&#39;
     _FIELD_DOCUMENTATION_OPTIONS = &#39;documentation_options&#39;
+    _FIELD_DOWNLOADS = &#39;downloads&#39;
     _FIELD_ENDED_AT = &#39;ended_at&#39;
     _FIELD_ERROR = &#39;error&#39;
     _FIELD_EXECUTIONS = &#39;executions&#39;
@@ -120,7 +123,10 @@ el.replaceWith(d);
     _FIELD_INGESTERS = &#39;ingesters&#39;
     _FIELD_INPUT = &#39;input&#39;
     _FIELD_INPUTS = &#39;inputs&#39;
+    _FIELD_INTERMEDIATE = &#39;intermediate&#39;
     _FIELD_KEYWORDS = &#39;keywords&#39;
+    _FIELD_LENGTH = &#39;length&#39;
+    _FIELD_LINES = &#39;lines&#39;
     _FIELD_MAXIMUM = &#39;maximum&#39;
     _FIELD_MEAN = &#39;mean&#39;
     _FIELD_MINIMUM = &#39;minimum&#39;
@@ -129,19 +135,24 @@ el.replaceWith(d);
     _FIELD_NUMBER_OF_INGESTERS = &#39;number_of_ingesters&#39;
     _FIELD_OPTIONS = &#39;options&#39;
     _FIELD_OUTPUTS = &#39;outputs&#39;
+    _FIELD_POINTS = &#39;points&#39;
+    _FIELD_POLYGONS = &#39;polygons&#39;
     _FIELD_PROCESS_STATUS = &#39;process_status&#39;
+    _FIELD_PUBLISHABLE = &#39;publishable&#39;
     _FIELD_RESOLUTION = &#39;resolution&#39;
     _FIELD_RUNTIME = &#39;runtime&#39;
     _FIELD_SD = &#39;sd&#39;
     _FIELD_SELECTOR = &#39;selector&#39;
     _FIELD_SELECTORS = &#39;selectors&#39;
+    _FIELD_SIZE = &#39;size&#39;
+    _FIELD_SOURCE = &#39;source&#39;
     _FIELD_SSD_ID = &#39;ssd_id&#39;
     _FIELD_STAC_ITEM = &#39;stac_item&#39;
     _FIELD_STAC_ITEM_FILE = &#39;stac_item_file&#39;
+    _FIELD_STATISTICS_ID = &#39;statistics_id&#39;
     _FIELD_STARTED_AT = &#39;started_at&#39;
     _FIELD_SUCCESS = &#39;success&#39;
-    _FIELD_PUBLISHABLE = &#39;publishable&#39;
-    _FIELD_SIZE = &#39;size&#39;
+    _FIELD_TITLE = &#39;title&#39;
     _FIELD_UNIT = &#39;unit&#39;
     _FIELD_USED = &#39;used&#39;
     _FIELD_VALIDATION = &#39;validation&#39;
@@ -864,8 +875,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Model base class providing attributes and methods to manipulate models.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>session</code></strong></dt>
 <dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
 <dt><strong><code>schema</code></strong></dt>
@@ -916,8 +928,9 @@ def attributes(self):
 
     return attributes</code></pre>
 </details>
-<div class="desc"><h2 id="returns">Returns</h2>
-<p>The model attributes as a dictionary.</p></div>
+<div class="desc"><p>Returns
+-----=
+The model attributes as a dictionary.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -948,8 +961,9 @@ def attributes(self):
     self.__persisted = False</code></pre>
 </details>
 <div class="desc"><p>Attempts to delete the model object. This assumes the model is deleted using a DELETE RESTful request.</p>
-<h2 id="raises">Raises</h2>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the delete fails.</dd>
 </dl></div>
@@ -986,13 +1000,13 @@ def attributes(self):
 values are provided via keyword arguments. Any expected extras are also added. This assumes the model is obtained using a GET RESTful request, and that the
 model data is held with the expected dictionary key within the response. The model is then loaded using the supplied schema to obtain the corresponding
 Python representation of it, before loading it into the model as a set of read-only attributes.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>kwargs</code></strong></dt>
 <dd>Any explicit ids to be used.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the get fails.</dd>
 <dt><code><a title="fusion_platform.models.model.ModelError" href="#fusion_platform.models.model.ModelError">ModelError</a></code></dt>
@@ -1029,13 +1043,15 @@ Python representation of it, before loading it into the model as a set of read-o
     return &#39;,&#39;.join(header), &#39;,&#39;.join(line)</code></pre>
 </details>
 <div class="desc"><p>Converts the model attributes into a CSV string.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>exclude</code></strong></dt>
 <dd>A list of attribute names which should be excluded from the CSV.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The attribute names as a CSV header string and the model attributes as a CSV string.</p></div>
+<p>Returns
+-----=
+The attribute names as a CSV header string and the model attributes as a CSV string.</p></div>
 </dd>
 <dt id="fusion_platform.models.model.Model.update"><code class="name flex">
 <span>def <span class="ident">update</span></span>(<span>self, **kwargs)</span>
@@ -1079,13 +1095,13 @@ Python representation of it, before loading it into the model as a set of read-o
 <div class="desc"><p>Attempts to update the model object with the given values. For models which have not been persisted, the relevant fields are updated without validation,
 which will occur when the model is persisted. For models which have been persisted, the update is made via the Fusion Platform<sup>&reg;</sup>. All current
 model attributes are sent to the Fusion Platform<sup>&reg;</sup> which will automatically ignore any which are not allowed or are read-only.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>kwargs</code></strong></dt>
 <dd>The model attributes which are to be patched.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the update fails.</dd>
 <dt><code><a title="fusion_platform.models.model.ModelError" href="#fusion_platform.models.model.ModelError">ModelError</a></code></dt>
@@ -1126,7 +1142,7 @@ model attributes are sent to the Fusion Platform<sup>&reg;</sup> which will auto
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

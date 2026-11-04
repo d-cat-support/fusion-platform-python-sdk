@@ -19,8 +19,9 @@ class RaiseThread(Thread):
         """
         Initialises the object.
 
-        :param args: Positional arguments.
-        :param kwargs: Keyword arguments.
+        Args:
+            args: Positional arguments.
+            kwargs: Keyword arguments.
         """
         super(RaiseThread, self).__init__(*args, **kwargs)
 

@@ -12,24 +12,25 @@ from collections import defaultdict
 from copy import deepcopy
 import csv
 from datetime import datetime, timedelta, timezone
+from dateutil.relativedelta import relativedelta
 from decimal import Decimal
 from functools import partial
-import json
-import logging
-import os
-import re
-import shutil
-import tempfile
-from time import sleep
-import uuid
-
-from dateutil.relativedelta import relativedelta
 import i18n
+import json
+import keyring
+import logging
+import math
+import os
 from pathos.multiprocessing import ThreadPool as Pool
 from prompt_toolkit import print_formatted_text as print, prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.validation import Validator
+import re
+import shutil
+import tempfile
 from tqdm import tqdm
+from time import sleep
+import uuid
 import yaml
 
 # Make sure localisation is set up before any SDK-specific imports.
@@ -39,8 +40,9 @@ Localise.setup()
 
 import fusion_platform
 from fusion_platform.base import Base
-from fusion_platform.common.utilities import json_default, string_blank
+from fusion_platform.common.utilities import dict_nested_get, json_default, string_blank
 from fusion_platform.models.data import Data
+from fusion_platform.models.data_file import DataFile
 from fusion_platform.models.model import Model
 from fusion_platform.session import RequestError
 
@@ -84,10 +86,38 @@ class Command(Base):
         }
     }
 
+    _KEYRING_DEPLOYMENT_FORMAT = f"{fusion_platform.FUSION_PLATFORM}.{{deployment}}"
+
     # Useful download constants.
     _DOWNLOAD_INPUT = 'input'
     _DOWNLOAD_OUTPUT = 'output'
     _DOWNLOAD_STORAGE = 'storage'
+    _DOWNLOAD_STATISTICS = 'statistics'
+    _DOWNLOAD_UPLOAD = 'upload'
+
+    # Process execution exit types.
+    _EXIT_SUCCESS = 'success'
+    _EXIT_FATAL_ERROR = 'fatal error'
+    _EXIT_FATAL_WARNING = 'fatal warning'
+    _EXIT_NON_FATAL_WARNING = 'non-fatal warning'
+
+    # File types to extensions.
+    _FILE_TYPES_TO_EXTENSIONS = {
+        fusion_platform.FILE_TYPE_GEOTIFF: ['.tif', '.tiff'],
+        fusion_platform.FILE_TYPE_JPEG2000: ['.jp2'],
+        fusion_platform.FILE_TYPE_DEM: ['.dem'],
+        fusion_platform.FILE_TYPE_GEOJSON: ['.json', '.geojson'],
+        fusion_platform.FILE_TYPE_KML: ['.kml'],
+        fusion_platform.FILE_TYPE_KMZ: ['.kmz'],
+        fusion_platform.FILE_TYPE_CSV: ['.csv'],
+        fusion_platform.FILE_TYPE_ESRI_SHAPEFILE: ['.zip'],
+        fusion_platform.FILE_TYPE_JPEG: ['.jpeg', '.jpg'],
+        fusion_platform.FILE_TYPE_PNG: ['.png'],
+        fusion_platform.FILE_TYPE_PDF: ['.pdf'],
+        fusion_platform.FILE_TYPE_GZIP: ['.gz'],
+        fusion_platform.FILE_TYPE_ZIP: ['.zip']
+        # Not "Other" as it has no associated extensions.
+    }
 
     # Metrics used during download.
     _METRICS_FILE = 'metrics.csv'
@@ -130,8 +160,17 @@ class Command(Base):
 
     # Progress bar constants.
     __PROGRESS_BAR_FORMAT = '{l_bar}{bar:50}{r_bar}'
+    __PROGRESS_BAR_FORMAT_PROCESS = '{{percentage:3.0f}}%|{{bar:50}}| {current:>3}/{total:>3} (S {successes:>3}|W {warnings:>3}|E {errors:>3}|X {stopped:>3}), {process_status:>7}: {description}'
     __PROGRESS_BAR_COLOUR_ACTIVE = '#3379B6'
     __PROGRESS_BAR_COLOUR_COMPLETE = '#5BB85C'
+    __PROGRESS_BAR_COLOUR_WARNING = '#F09E22'
+    __PROGRESS_BAR_COLOUR_ERROR = '#D13B32'
+
+    # Error messages.
+    __DATA_ITEM_STILL_IN_USE = 'still in use'
+
+    # File constants.
+    __FILE_SIZE_UNIT_LIST = list(zip(['B ', 'KB', 'MB', 'GB', 'TB', 'PB'], [0, 0, 1, 2, 2, 2]))
 
     def __init__(self):
         """
@@ -152,113 +191,29 @@ class Command(Base):
         # Set the default print level.
         self.__print_level = logging.INFO
 
-    def __create_process(self, organisation, process_name, options, dispatchers, service, data_items):
+    def __bytes_to_human(self, size):
         """
-        Creates a new process based upon the service, options, dispatchers and input data items.
+        Converts a file size into a human-readable string. Based on https://gist.github.com/ElectroDrome/365347f9d71154a517d71b3655a768f7.
 
         Args:
-            organisation: The logged in organisation.
-            process_name: The name of the process.
-            options: The list of options.
-            dispatchers: The list of dispatchers.
-            service: The base service to create the process from.
-            data_items: The list of data items to be used as inputs.
+            size: The size in bytes.
 
         Returns:
-            The process model.
+            The human-readable version of the size.
         """
+        human = '0 B '
 
-        # Create a template process from the service.
-        process = organisation.new_process(name=process_name, service=service)
+        if size == 1:
+            human = '1 B '
 
-        # Configure the process to use the inputs and set its options. Note that we filter out model level fields and set those as keyword arguments.
-        for i, data_item in enumerate(data_items):
-            process.update(input_number=i + 1, data=data_item)
+        elif size > 1:
+            exponent = min(int(math.log(size, 1024)), len(Command.__FILE_SIZE_UNIT_LIST) - 1)
+            quotient = float(size) / (1024 ** exponent)
+            unit, number_of_decimal_places = Command.__FILE_SIZE_UNIT_LIST[exponent]
+            format_string = '{:.%sf} {}' % number_of_decimal_places
+            human = format_string.format(quotient, unit)
 
-        kwargs = {}
-
-        for key, value in options.items():
-            if key in Command._MODEL_FIELDS:
-                kwargs[key] = value
-            else:
-                process.update(option_name=key, value=value, coerce_value=True)
-
-        if len(kwargs) > 0:
-            process.update(**kwargs)
-
-        # Add in optional dispatchers.
-        dispatchers_added = 0
-
-        for i, dispatcher in enumerate(process.available_dispatchers):
-            finished = False
-
-            while not finished:
-                # Either find the dispatchers from what has been loaded from the YAML file or prompt the user.
-                add = False
-                dispatch_intermediate = False
-                dispatcher_options = {}
-
-                if dispatchers is not None:
-                    # See if any of the remaining dispatchers match this one. Once used, the corresponding dispatcher is marked as used.
-                    filtered_dispatchers = [item for item in dispatchers if
-                                            (item.get(Model._FIELD_NAME) == dispatcher.name) and (not item.get(Model._FIELD_USED, False))]
-
-                    if len(filtered_dispatchers) > 0:
-                        selected_dispatcher = filtered_dispatchers[0]
-                        selected_dispatcher[Model._FIELD_USED] = True
-                        add = True
-                        dispatch_intermediate = selected_dispatcher.get(Model._FIELD_DISPATCH_INTERMEDIATE) if selected_dispatcher.get(
-                            Model._FIELD_DISPATCH_INTERMEDIATE) is not None else False
-                        dispatcher_options = selected_dispatcher.get(Model._FIELD_OPTIONS) if selected_dispatcher.get(Model._FIELD_OPTIONS) is not None else {}
-
-                else:
-                    response = self.__get_input(i18n.t('command.add_dispatcher', dispatcher=dispatcher.name),
-                                                constrained_values=[i18n.t('command.prompt_no'), i18n.t('command.prompt_yes')])
-
-                    if (response is not None) and response.lower().startswith(i18n.t('command.prompt_yes').lower()[0]):
-                        add = True
-
-                        if hasattr(dispatcher, Model._FIELD_DISPATCH_INTERMEDIATE):
-                            response = self.__get_input(i18n.t('command.dispatch_intermediate'),
-                                                        constrained_values=[i18n.t('command.prompt_no'), i18n.t('command.prompt_yes')])
-
-                            if (response is not None) and response.lower().startswith(i18n.t('command.prompt_yes').lower()[0]):
-                                dispatch_intermediate = True
-
-                        for option in dispatcher.options:
-                            finished_options = False
-                            option_value = None
-
-                            while not finished_options:
-                                constrained_values = option.constrained_values if option.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else None
-
-                                prompt_constrained_values = i18n.t('models.process.option.representation_constrained_values',
-                                                                   constrained_values=constrained_values) if constrained_values is not None else ''
-                                prompt_required = i18n.t('models.process.option.representation_required') if option.required else ''
-                                prompt = i18n.t('command.prompt_option', title=option.title, name=option.name, data_type=option.data_type,
-                                                constrained_values=prompt_constrained_values, required=prompt_required)
-
-                                option_value = self.__get_input(prompt, default=option.value, constrained_values=constrained_values)
-                                finished_options = (not option.required) or (
-                                        option.required and (option_value is not None) and (not string_blank(str(option_value))))
-
-                            if option_value is not None:
-                                dispatcher_options[option.name] = option_value
-
-                if add:
-                    process.add_dispatcher(number=(i + 1))
-                    dispatchers_added += 1
-
-                    for option_name, option_value in dispatcher_options.items():
-                        process.update(dispatcher_number=dispatchers_added, option_name=option_name, value=option_value, coerce_value=True,
-                                       dispatch_intermediate=dispatch_intermediate)
-                else:
-                    finished = True
-
-        # Create the process, which will validate its options and inputs.
-        process.create()
-
-        return process
+        return human
 
     def __data_name_to_file_name(self, data_name):
         """
@@ -287,10 +242,10 @@ class Command(Base):
         """
         self.__print(logging.INFO, i18n.t('command.define_process', process=process_name, inputs=download_inputs, storage=download_storage))
 
-        # We are defining an existing process.
+        # We are defining an existing process. This will raise an exception if the process is not found.
         process, _ = self.get_process_or_execution(organisation, process_name)
 
-        # Get the underlying service name.
+        # Get the underlying service, if available. We only optionally use this for the name.
         service, _ = organisation.find_services(ssd_id=process.ssd_id)
 
         # Get the options and dispatchers, optionally add in whether intermediate services are being dispatched.
@@ -410,6 +365,109 @@ class Command(Base):
 
         return process_definition
 
+    def __delete_with_confirmation(self, item, force, prompt_message, delete_message):
+        """
+        Deletes the item with an optional confirmation prompt. The item is deleted if force is True or the user responds with Yes to the prompt.
+
+        Args:
+            item: The model item to delete. This must have a #delete method.
+            force: Force deletion without prompting for confirmation?
+            prompt_message: The message to be displayed with the prompt.
+            delete_message: The message to be displayed with the deletion.
+        """
+        delete = force
+
+        if not delete:
+            confirm = self.__get_input(prompt_message, constrained_values=[i18n.t('command.prompt_no'), i18n.t('command.prompt_yes')])
+
+            if (confirm is not None) and confirm.lower().startswith(i18n.t('command.prompt_yes').lower()[0]):
+                delete = True
+
+        if delete:
+            self.__print(logging.INFO, delete_message)
+            item.delete()
+
+    def delete_process(self, organisation, process_name, force):
+        """
+        Deletes all processes matching the process name or id. An execution id may also be provided in which case just the execution is deleted.
+
+        Args:
+            organisation: The logged in organisation.
+            process_name: The name of the process to delete.
+            force: Force deletion without prompting for confirmation?
+
+        Returns:
+            True if a process or execution was deleted.
+        """
+        attempted_delete = True
+
+        # Find the process or execution. This will raise an exception if the process is not found, which we catch.
+        process = None
+        execution = None
+
+        try:
+            process, execution = self.get_process_or_execution(organisation, process_name)
+        except CommandError:
+            attempted_delete = False
+
+        # Delete the process or execution. If an execution id has been provided, we will have both an execution and process, hence the order below is important to
+        # make sure we do not delete the process as well if just the execution is to be deleted.
+        if (process is not None) and (execution is not None):
+            self.__delete_with_confirmation(
+                execution,
+                force,
+                i18n.t('command.delete_execution_confirmation', execution=process_name, process=process.name),
+                i18n.t('command.delete_execution', execution=process_name, process=process.name)
+            )
+        elif process is not None:
+            self.__delete_with_confirmation(
+                process,
+                force,
+                i18n.t('command.delete_process_confirmation', process=process.name),
+                i18n.t('command.delete_process', process=process.name)
+            )
+
+        return attempted_delete
+
+    def delete_upload(self, organisation, upload_name, force):
+        """
+        Deletes all uploads matching the upload name or id.
+
+        Args:
+            organisation: The logged in organisation.
+            upload_name: The name of the upload to delete.
+            force: Force deletion without prompting for confirmation?
+
+        Returns:
+            True if an upload was deleted.
+        """
+        attempted_delete = True
+
+        # Find the data item. This will raise an exception if the data item is not found, which we catch.
+        data_item = None
+
+        try:
+            data_item = self.get_data(organisation, upload_name)
+        except CommandError:
+            attempted_delete = False
+
+        # Delete the data item. We catch any in use error to display a more friendly message.
+        if data_item is not None:
+            try:
+                self.__delete_with_confirmation(
+                    data_item,
+                    force,
+                    i18n.t('command.delete_upload_confirmation', upload=data_item.name),
+                    i18n.t('command.delete_upload', upload=data_item.name)
+                )
+            except RequestError as e:
+                if Command.__DATA_ITEM_STILL_IN_USE in str(e):
+                    pass  # A more friendly error will have already been displayed.
+                else:
+                    raise
+
+        return attempted_delete
+
     def display_service(self, organisation, service_name):
         """
         Displays the documentation for the service. If the service does not exist, it will be ignored.
@@ -480,8 +538,14 @@ class Command(Base):
                     self.__print(logging.INFO, i18n.t('command.log_bookend'))
 
             else:
+                has_executions = False
+
                 for execution in process.executions:
                     self.__print_execution(execution)
+                    has_executions = True
+
+                if not has_executions:
+                    self.__print(logging.INFO, i18n.t('command.log_no_executions'))
 
                 self.__print(logging.INFO, i18n.t('command.log_bookend'))
 
@@ -490,8 +554,8 @@ class Command(Base):
 
         return found
 
-    def __download_execution(self, process, download_inputs, download_outputs, download_storage, download_intermediate, download_components, output_dir, wait,
-                             execution):
+    def __download_execution(self, process, download_inputs, download_outputs, download_storage, download_statistics, download_intermediate, download_components,
+                             output_dir, wait, execution):
         """
         Downloads an execution.
 
@@ -500,6 +564,7 @@ class Command(Base):
             download_inputs: Should inputs be downloaded?
             download_outputs: Should outputs be downloaded?
             download_storage: Should storage be downloaded?
+            download_statistics: Should statistics be downloaded?
             download_intermediate: Should intermediate components be downloaded?
             download_components: The names of the components that should be downloaded? If None or [], then all components are downloaded.
             output_dir: The output directory.
@@ -510,8 +575,6 @@ class Command(Base):
             The list of file tuples to be downloaded (file model, download path), and the metrics.
         """
         download_components = [] if download_components is None else download_components
-        metrics = []
-        downloads = []
 
         # Optionally wait for the execution to complete. We explicitly wait in this method to keep the SDK free.
         complete = False
@@ -543,11 +606,14 @@ class Command(Base):
         components = [
             component
             for component in execution.components
-            if ((not component.intermediate) or (component.intermediate and download_intermediate)) and (
-                    (len(download_components) <= 0) or
-                    ((len(download_components) >= 1) and (component.name in download_components))
-            )
+            if ((not hasattr(component, Model._FIELD_INTERMEDIATE)) or (
+                (hasattr(component, Model._FIELD_INTERMEDIATE) and ((not component.intermediate) or (component.intermediate and download_intermediate))))) and (
+                       (len(download_components) <= 0) or ((len(download_components) >= 1) and (component.name in download_components)))
         ]
+
+        # Prepare the downloads and metrics for each component.
+        metrics = []
+        downloads = []
 
         for j, component in enumerate(components):
             # Download the component.
@@ -585,8 +651,7 @@ class Command(Base):
                 ]:
                     metric[key] = sum([metric[key] for metric in component.metrics if metric.get(key) is not None])
 
-            # Find each input, output and storage to download. While traversing each, save the input and output size. The size might not be immediately available
-            # for every file, so wait for all items to be analysed.
+            # Find each input, output, storage and statistics to download.
             data_items = []
 
             if download_inputs:
@@ -604,44 +669,17 @@ class Command(Base):
                 if storage_data_item is not None:
                     data_items += [(1, Command._DOWNLOAD_STORAGE, storage_data_item)]
 
-            input_sizes = []
-            output_sizes = []
+            if download_statistics:
+                statistics_data_item = self.__get_statistics_data_item(component)
 
-            for k, data_type, data_item in data_items:
-                # Download the data item once it is complete.
-                data_item.check_analysis_complete(wait=True)
+                if statistics_data_item is not None:
+                    data_items += [(1, Command._DOWNLOAD_STATISTICS, statistics_data_item)]
 
-                name = re.sub('_+', '_', f"{data_type.capitalize()}_{str(k)}_{self.__data_name_to_file_name(data_item.name)}").rstrip('_')
-                download_dir = os.path.join(execution_dir, component_dir, name)
-                os.makedirs(download_dir, exist_ok=True)
-
-                # We also create the corresponding STAC definitions.
-                stac_definitions = []
-
-                for file in data_item.files:
-                    path = os.path.join(download_dir, file.file_name)
-
-                    # Download each file for the data item. We don't do anything with "storage".
-                    if data_type == Command._DOWNLOAD_INPUT:
-                        input_sizes.append(file.size)
-                    elif data_type == Command._DOWNLOAD_OUTPUT:
-                        output_sizes.append(file.size)
-
-                    downloads.append((file, path, file.size))
-                    stac_item, stac_item_file = file.get_stac_item()
-
-                    if (stac_item is not None) and (stac_item_file is not None):
-                        stac_definitions.append((stac_item, stac_item_file))
-
-                if len(stac_definitions) > 0:
-                    stac_collection = data_item.get_stac_collection(stac_definitions, owner=component.name, created_at=component.created_at,
-                                                                    detail=component_options)
-                    stac_definitions.append(stac_collection)
-
-                # Write the STAC definitions.
-                for stac_definition, stac_file_name in stac_definitions:
-                    with open(os.path.join(download_dir, stac_file_name), 'w') as stac_file:
-                        stac_file.write(json.dumps(stac_definition, default=json_default))
+            # Prepare each download data item by finding the constituent files, creating the download directories and calculating the input and output sizes.
+            download_base_dir = os.path.join(execution_dir, component_dir)
+            input_sizes, output_sizes, component_downloads = self.__prepare_downloads(data_items, download_base_dir, owner=component.name,
+                                                                                      created_at=component.created_at, detail=component_options)
+            downloads.extend(component_downloads)
 
             metric[Command._METRIC_S3_INPUT_SIZE] = sum(input_sizes) if len(input_sizes) > 0 else ''
             metric[Command._METRIC_S3_OUTPUT_SIZE] = sum(output_sizes) if len(output_sizes) > 0 else ''
@@ -717,8 +755,8 @@ class Command(Base):
                 progress_bar.colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
                 progress_bar.close()
 
-    def download_process_execution(self, organisation, process_name, download_inputs, download_outputs, download_storage, download_intermediate,
-                                   download_components, save_metrics, stac_only, wait_for_execution_to_complete):
+    def download_process_execution(self, organisation, process_name, download_inputs, download_outputs, download_storage, download_statistics,
+                                   download_intermediate, download_components, save_metrics, stac_only, wait_for_execution_to_complete):
         """
         Downloads the inputs and/or outputs from a process or execution(s).
 
@@ -728,6 +766,7 @@ class Command(Base):
             download_inputs: Should inputs be downloaded?
             download_outputs: Should outputs be downloaded?
             download_storage: Should storage be downloaded?
+            download_statistics: Should statistics be downloaded?
             download_intermediate: Should intermediate components be downloaded?
             download_components: The names of the components that should be downloaded? If None or [], then all components are downloaded.
             save_metrics: Save process metrics to file?
@@ -739,18 +778,19 @@ class Command(Base):
         """
 
         # If we are downloading nothing, at least download the outputs.
-        if (not download_inputs) and (not download_outputs) and (not download_storage):
+        if (not download_inputs) and (not download_outputs) and (not download_storage) and (not download_statistics):
             download_outputs = True
 
-        self.__print(logging.INFO, i18n.t('command.download_process_execution', process=process_name, inputs=download_inputs, outputs=download_outputs,
-                                          storage=download_storage, intermediate=download_intermediate, stac_only=stac_only, metrics=save_metrics,
-                                          components=download_components))
+        self.__print(logging.INFO,
+                     i18n.t('command.download_process_execution', process=process_name, inputs=download_inputs, outputs=download_outputs, storage=download_storage,
+                            statistics=download_statistics, intermediate=download_intermediate, stac_only=stac_only, metrics=save_metrics,
+                            components=download_components))
 
         # We are downloading from an existing process.
         process, execution = self.get_process_or_execution(organisation, process_name)
 
         # Get the output directory and remove it if it exists.
-        output_dir = self.__process_name_to_file_name(process_name)
+        output_dir = self.__name_to_file_name(process.name)
         shutil.rmtree(output_dir, ignore_errors=True)
 
         if execution is None:
@@ -785,8 +825,8 @@ class Command(Base):
 
         try:
             # Now download each execution in batches.
-            partial_download_execution = partial(self.__download_execution, process, download_inputs, download_outputs, download_storage, download_intermediate,
-                                                 download_components, output_dir, wait_for_execution_to_complete)
+            partial_download_execution = partial(self.__download_execution, process, download_inputs, download_outputs, download_storage, download_statistics,
+                                                 download_intermediate, download_components, output_dir, wait_for_execution_to_complete)
             results = []
 
             # We use a thread pool as it preserves the marshmallow configuration and log level. Using a ProcessPool resulted in fields being labelled as missing
@@ -811,7 +851,7 @@ class Command(Base):
             downloads.extend(execution_downloads)
             metrics.extend(execution_metrics)
 
-        # Download the files unless we only want the stac information
+        # Download the files unless we only want the stac information.
         if not stac_only:
             self.__download_files(downloads)
 
@@ -823,6 +863,30 @@ class Command(Base):
                 writer.writerows(metrics)
 
         return process
+
+    def download_upload(self, organisation, upload_name):
+        """
+        Downloads the upload with the specified name.
+
+        Args:
+            organisation: The logged in organisation.
+            upload_name: The name of the upload to download.
+        """
+
+        # We are downloading from an existing upload.
+        data_item = self.get_data(organisation, upload_name)
+
+        # Get the output directory and remove it if it exists.
+        output_dir = self.__name_to_file_name(data_item.name)
+        shutil.rmtree(output_dir, ignore_errors=True)
+
+        self.__print(logging.INFO, i18n.t('command.download_upload', upload=upload_name, output=output_dir))
+
+        # Prepare each download data item by finding the constituent files.
+        _, _, downloads = self.__prepare_downloads([(1, Command._DOWNLOAD_UPLOAD, data_item)], output_dir, owner=None, created_at=data_item.created_at, detail=None)
+
+        # Download the files.
+        self.__download_files(downloads)
 
     def extract_start_parameters(self, service_or_yaml, input_list, option_list):
         """
@@ -836,7 +900,6 @@ class Command(Base):
         Returns:
             The service name, process name, input files, storage_files, options and dispatchers.
         """
-
         yaml_file = None
         service_name = None
         process_name = None
@@ -915,6 +978,33 @@ class Command(Base):
             formatted = json.dumps(dictionary)
 
         return formatted
+
+    def get_data(self, organisation, data_name):
+        """
+        Attempts to find a data item using the given data name or id.
+
+        Args:
+            organisation: The logged in organisation.
+            data_name: The name of the data item. This can also be the id.
+
+        Returns:
+            The found data item.
+
+        Raises:
+            CommandError: if a data item could not be found.
+        """
+
+        # Find the data item using its case-sensitive name (starts with).
+        data_item, _ = organisation.find_data(name=data_name)
+
+        # If the data item cannot be found, try to find it by its id.
+        if data_item is None:
+            data_item = next((item for item in organisation.data if (item.name == data_name) or (str(item.id) == data_name)), None)
+
+        if data_item is None:
+            raise CommandError(i18n.t('command.no_such_data_item', data=data_name))
+
+        return data_item
 
     def __get_input(self, input_prompt, is_password=False, default=None, constrained_values=None):
         """
@@ -1022,9 +1112,32 @@ class Command(Base):
 
         return service
 
+    def __get_statistics_data_item(self, process_service_execution):
+        """
+        Gets the statistics data item for a process service execution.
+
+        Args:
+            process_service_execution: The process service execution for which the statistics item is to be obtained.
+
+        Returns:
+            The statistics data item if found. Otherwise, None.
+        """
+        statistics_data_item = None
+        statistics_id = process_service_execution.statistics_id if hasattr(process_service_execution, Model._FIELD_STATISTICS_ID) and (
+                process_service_execution.statistics_id is not None) else None
+
+        if statistics_id is not None:
+            try:
+                statistics_data_item = Data._model_from_api_id(process_service_execution._session, organisation_id=process_service_execution.organisation_id,
+                                                               data_id=statistics_id)
+            except:
+                pass  # There is no statistics item.
+
+        return statistics_data_item
+
     def __get_storage_data_item(self, process, group_index, group_count, ssd_id, chain_index):
         """
-        Gets the storage date item for a process' group and chain index.
+        Gets the storage data item for a process' group and chain index.
 
         Args:
             process: The process for which the storage item is to be obtained.
@@ -1078,6 +1191,8 @@ class Command(Base):
         Args:
             organisation: The logged in organisation.
         """
+        count = 0
+
         for process in organisation.processes:
             executions = [execution for execution in process.executions]
 
@@ -1094,16 +1209,104 @@ class Command(Base):
             progress = sum([execution.progress for execution in executions]) // len(executions) if len(executions) > 0 else 0
             group_progress_summary = ''
 
-            for i, group in enumerate(groups.values()):
-                group_progress = sum([execution.progress for execution in group]) // len(group)
-                group_progress_summary += i18n.t('command.log_process_group', group_number=(i + 1), executions=len(group), progress=group_progress)
+            if len(groups) > 1:
+                for i, group in enumerate(groups.values()):
+                    group_progress = sum([execution.progress for execution in group]) // len(group)
+                    group_progress_summary += i18n.t('command.log_process_group', group_number=(i + 1), progress=group_progress)
 
-            # Log the process information.
-            self.__print(logging.INFO,
-                         i18n.t('command.log_process_summary', process=process.name, executions=len(executions), progress=progress, groups=len(groups),
-                                group_progress=group_progress_summary))
+            # Show the process information using a progress bar.
+            process_status = i18n.t(f"command.log_process_status.{process.process_status}")
+            warnings = sum([execution.exit_type in [Command._EXIT_NON_FATAL_WARNING, Command._EXIT_FATAL_WARNING] for execution in executions if
+                            hasattr(execution, Model._FIELD_EXIT_TYPE)])
+            errors = sum([execution.exit_type == Command._EXIT_FATAL_ERROR for execution in executions if hasattr(execution, Model._FIELD_EXIT_TYPE)])
+            successes = sum([execution.success for execution in executions]) - warnings  # Warnings also count as successes, but we want to report a valid total.
+            stopped = sum([execution.stopped for execution in executions])
+            current = sum([1 if execution.progress >= 100.0 else 0 for execution in executions])
+            total = len(executions) if len(executions) > 0 else 0
 
-    def login(self, deployment, email, organisation_name):
+            if progress < 100.0:
+                colour = Command.__PROGRESS_BAR_COLOUR_ACTIVE
+            elif errors > 0:
+                colour = Command.__PROGRESS_BAR_COLOUR_ERROR
+            elif warnings > 0:
+                colour = Command.__PROGRESS_BAR_COLOUR_WARNING
+            elif successes >= total:
+                colour = Command.__PROGRESS_BAR_COLOUR_COMPLETE
+            else:
+                colour = Command.__PROGRESS_BAR_COLOUR_ERROR
+
+            description = i18n.t('command.log_process_summary', process=process.name, group_progress=group_progress_summary)
+            bar_format = Command.__PROGRESS_BAR_FORMAT_PROCESS.format(current=current, total=total, process_status=process_status, successes=successes,
+                                                                      warnings=warnings, errors=errors, stopped=stopped, description=description)
+            progress_bar = tqdm(total=100.0, bar_format=bar_format, colour=colour)
+            progress_bar.update(progress)
+            progress_bar.close()
+
+            count += 1
+
+        if count <= 0:
+            self.__print(logging.INFO, i18n.t('command.log_no_processes'))
+
+    def list_services(self, organisation):
+        """
+        Lists all available services.
+
+        Args:
+            organisation: The logged in organisation.
+        """
+        count = 0
+
+        # Get a unique list of the latest services and sort them by name.
+        services = sorted(organisation.services, key=lambda service: service.name)
+
+        for service in services:
+            self.__print(logging.INFO, i18n.t('command.log_service_detail', name=service.name, summary=service.documentation_summary))
+            count += 1
+
+        if count <= 0:
+            self.__print(logging.INFO, i18n.t('command.log_no_services'))
+
+    def list_uploads(self, organisation):
+        """
+        Lists all uploads.
+
+        Args:
+            organisation: The logged in organisation.
+        """
+        count = 0
+
+        # Get the width of all upload names.
+        uploads = [data for data in organisation.data]
+        maximum_name_width = max([len(data.name) for data in uploads]) if len(uploads) > 0 else 0
+        blank_name = ' ' * maximum_name_width
+
+        for data in uploads:
+            name = data.name.ljust(maximum_name_width)
+
+            for i, file in enumerate(data.files):
+                file_name = file.file_name if hasattr(file, Model._FIELD_FILE_NAME) and (file.file_name is not None) else ''
+                crs = file.crs if hasattr(file, Model._FIELD_CRS) and (file.crs is not None) else ''
+                source = file.source if hasattr(file, Model._FIELD_SOURCE) and (file.source is not None) else None
+                size = self.__bytes_to_human(file.size) if hasattr(file, Model._FIELD_SIZE) and (file.size is not None) else ''
+
+                file_type = f" {file.file_type.ljust(14)}"
+                file_name = f" {file_name.ljust(20)}"
+                crs = f" {crs.ljust(10)}"
+                source = '  ' if source is not None else ' >'
+                size = f" {size.rjust(10)}"
+
+                self.__print(
+                    logging.INFO,
+                    i18n.t('command.log_data_file', name=name if i == 0 else blank_name, file_type=file_type, file_name=file_name, source=source, crs=crs,
+                           size=size)
+                )
+
+            count += 1
+
+        if count <= 0:
+            self.__print(logging.INFO, i18n.t('command.log_no_uploads'))
+
+    def login(self, deployment, email, organisation_name, no_save_password):
         """
         Logs into the desired Fusion Platform(r) deployment and allows the user to select an organisation.
 
@@ -1111,6 +1314,7 @@ class Command(Base):
             deployment: The deployment to use.
             email: The optional email address used to login. If not provided, the email will be prompted for.
             organisation_name: The optional organisation name. If not provided, the organisation will be prompted for.
+            no_save_password: Attempt to save the password using keyring? If this is True, no password will be saved and any existing password will be deleted.
 
         Returns:
             The selected organisation and its corresponding stage name and region.
@@ -1118,8 +1322,29 @@ class Command(Base):
 
         # Which API deployment?
         deployment = deployment.lower()
-        stage = Command.DEPLOYMENTS[deployment][Command._DEPLOYMENT_KEY_STAGE]
-        region = Command.DEPLOYMENTS[deployment][Command._DEPLOYMENT_KEY_REGION]
+        stage = dict_nested_get(Command.DEPLOYMENTS, [deployment, Command._DEPLOYMENT_KEY_STAGE])
+        region = dict_nested_get(Command.DEPLOYMENTS, [deployment, Command._DEPLOYMENT_KEY_REGION])
+
+        if (stage is None) or (region is None):
+            raise CommandError(i18n.t('command.no_such_deployment', deployment=deployment))
+
+        # If we are not saving passwords, then delete any password associated with the email address.
+        if no_save_password:
+            try:
+                keyring.delete_password(Command._KEYRING_DEPLOYMENT_FORMAT.format(deployment=deployment), email)
+            except:
+                # A Keyring suggests there is no suitable backend. Carry on regardless.
+                pass
+
+        # Attempt to get the password using keyring if we have an email address. This is linked to the deployment.
+        password = None
+
+        if email is not None:
+            try:
+                password = keyring.get_password(Command._KEYRING_DEPLOYMENT_FORMAT.format(deployment=deployment), email)
+            except:
+                # A Keyring suggests there is no suitable backend. Carry on regardless.
+                pass
 
         # Login with email address and password. We retry the email and password up to three times.
         count = 0
@@ -1128,17 +1353,30 @@ class Command(Base):
             if email is None:
                 email = self.__get_input(i18n.t('command.email'), default=email)
 
-            password = self.__get_input(i18n.t('command.password'), is_password=True)
+            if password is None:
+                password = self.__get_input(i18n.t('command.password'), is_password=True)
 
             try:
-                user = fusion_platform.login(email=email, password=password, api_url=Command.DEPLOYMENTS[deployment]['url'])
+                user = fusion_platform.login(email=email, password=password,
+                                             api_url=dict_nested_get(Command.DEPLOYMENTS, [deployment, Command._DEPLOYMENT_KEY_URL]))
                 break
             except RequestError as e:
                 count += 1
 
+                # Clear the password, which cannot have been correct for the email address.
+                password = None
+
                 # Cope with finger trouble.
                 if (i18n.t('command.invalid_login_response') not in str(e)) or (count >= 3):
                     raise
+
+        # We have successfully logged in. If allowed, save the email address and password for the deployment.
+        try:
+            if not no_save_password:
+                keyring.set_password(Command._KEYRING_DEPLOYMENT_FORMAT.format(deployment=deployment), email, password)
+        except:
+            # A Keyring suggests there is no suitable backend. Carry on regardless.
+            pass
 
         # Get the list of organisation names the user belongs to if the organisation is not provided.
         if organisation_name is None:
@@ -1176,19 +1414,94 @@ class Command(Base):
 
         try:
             # Login to the correct deployment and select the organisation.
-            organisation, _, _ = self.login(arguments.deployment, arguments.email, arguments.organisation)
+            organisation, _, _ = self.login(arguments.deployment, arguments.email, arguments.organisation, arguments.no_save_password)
 
-            # Perform the list, display, start, define or download.
-            if arguments.command == i18n.t('command.list.command'):
-                # List all processes.
-                self.list_processes(organisation)
+            # Perform the define, display, download, list, start or template.
+            if arguments.command == i18n.t('command.define.command'):
+                # Define one or more processes as YAML files.
+                for process_name in arguments.process:
+                    # Get the process definition, optionally downloading the inputs and storage to the current directory as well.
+                    process_definition = self.define_process(organisation, process_name, download_inputs=arguments.inputs, download_storage=arguments.storage)
+
+                    # Write the YAML to file. This will overwrite the existing file.
+                    file_name = f"{self.__name_to_file_name(process_name)}{Command._YAML_EXTENSION}"
+
+                    with open(file_name, 'w') as file:
+                        yaml.dump(process_definition, file, sort_keys=False, width=float('inf'))
+
+            elif arguments.command == i18n.t('command.delete.command'):
+                if arguments.process_or_upload == i18n.t('command.delete.process.command'):
+                    # Delete a process with the specified name or ids, or execution with ids.
+                    for process in arguments.process:
+                        if not self.delete_process(organisation, process, arguments.force):
+                            self.__print(logging.WARNING, i18n.t('command.no_such_process', process=process))
+
+                elif arguments.process_or_upload == i18n.t('command.delete.upload.command'):
+                    # Delete an upload with the specified name or ids.
+                    for upload in arguments.upload:
+                        if not self.delete_upload(organisation, upload, arguments.force):
+                            self.__print(logging.WARNING, i18n.t('command.no_such_upload', upload=upload))
+
+                else:
+                    # Unknown command.
+                    raise CommandError(i18n.t('command.unknown_command', command=arguments.process_or_upload))
 
             elif arguments.command == i18n.t('command.display.command'):
-                # Display a service or process with the specified name or ids. If a process is displayed, we do not display a service.
-                for process_or_service in arguments.process_or_service:
-                    if not self.display_process(organisation, process_or_service):
-                        if not self.display_service(organisation, process_or_service):
-                            self.__print(logging.WARNING, i18n.t('command.no_process_or_service', process_or_service=process_or_service))
+                if arguments.process_or_service == i18n.t('command.display.process.command'):
+                    # Display a process with the specified name or ids.
+                    for process in arguments.process:
+                        if not self.display_process(organisation, process):
+                            self.__print(logging.WARNING, i18n.t('command.no_such_process', process=process))
+
+                elif arguments.process_or_service == i18n.t('command.display.service.command'):
+                    # Display a service with the specified name or ids.
+                    for service in arguments.service:
+                        if not self.display_service(organisation, service):
+                            self.__print(logging.WARNING, i18n.t('command.no_such_service', service=service))
+
+                else:
+                    # Unknown command.
+                    raise CommandError(i18n.t('command.unknown_command', command=arguments.process_or_service))
+
+            elif arguments.command == i18n.t('command.download.command'):
+                if arguments.process_or_upload == i18n.t('command.download.process.command'):
+                    # Download one or more processes.
+                    for process_name in arguments.process:
+                        # Download the process.
+                        process = self.download_process_execution(organisation, process_name, arguments.inputs, arguments.outputs, arguments.storage,
+                                                                  arguments.statistics, arguments.intermediate, arguments.component, arguments.metrics,
+                                                                  arguments.stac,
+                                                                  not arguments.no_wait_for_completion)
+
+                        # And optionally remove the process and its inputs.
+                        if arguments.remove:
+                            self.remove_process_and_inputs(organisation, process)
+
+                elif arguments.process_or_upload == i18n.t('command.download.upload.command'):
+                    # Download one or more uploads.
+                    for upload_name in arguments.upload:
+                        self.download_upload(organisation, upload_name)
+
+                else:
+                    # Unknown command.
+                    raise CommandError(i18n.t('command.unknown_command', command=arguments.process_or_upload))
+
+            elif arguments.command == i18n.t('command.list.command'):
+                if arguments.process_service_or_upload == i18n.t('command.list.process.command'):
+                    # List all processes.
+                    self.list_processes(organisation)
+
+                elif arguments.process_service_or_upload == i18n.t('command.list.service.command'):
+                    # List all services.
+                    self.list_services(organisation)
+
+                elif arguments.process_service_or_upload == i18n.t('command.list.upload.command'):
+                    # List all uploads.
+                    self.list_uploads(organisation)
+
+                else:
+                    # Unknown command.
+                    raise CommandError(i18n.t('command.unknown_command', command=arguments.process_service_or_upload))
 
             elif arguments.command == i18n.t('command.start.command'):
                 # Start one or more processes.
@@ -1207,36 +1520,28 @@ class Command(Base):
                     # Also perform the download, if required.
                     if arguments.download:
                         process = self.download_process_execution(organisation, process_name, arguments.inputs, arguments.outputs, arguments.storage,
-                                                                  arguments.intermediate, arguments.component, arguments.metrics, arguments.stac,
-                                                                  not arguments.no_wait_for_completion)
+                                                                  arguments.statistics, arguments.intermediate, arguments.component, arguments.metrics,
+                                                                  arguments.stac, not arguments.no_wait_for_completion)
 
                         # And optionally remove the process and its inputs.
                         if arguments.remove:
                             self.remove_process_and_inputs(organisation, process)
 
-            elif arguments.command == i18n.t('command.define.command'):
-                # Define one or more processes as YAML files.
-                for process_name in arguments.process:
-                    # Get the process definition, optionally downloading the inputs and storage to the current directory as well.
-                    process_definition = self.define_process(organisation, process_name, download_inputs=arguments.inputs, download_storage=arguments.storage)
+            elif arguments.command == i18n.t('command.template.command'):
+                # Template one or more services.
+                for service_name in arguments.service:
+                    # Get the service definition.
+                    service_definition = self.template_service(organisation, service_name)
 
                     # Write the YAML to file. This will overwrite the existing file.
-                    file_name = f"{self.__process_name_to_file_name(process_name)}{Command._YAML_EXTENSION}"
+                    file_name = f"{self.__name_to_file_name(service_name)}{Command._YAML_EXTENSION}"
 
                     with open(file_name, 'w') as file:
-                        yaml.dump(process_definition, file, sort_keys=False, width=float('inf'))
+                        yaml.dump(service_definition, file, sort_keys=False, width=float('inf'))
 
-            elif arguments.command == i18n.t('command.download.command'):
-                # Download one or more processes.
-                for process_name in arguments.process:
-                    # Download the process.
-                    process = self.download_process_execution(organisation, process_name, arguments.inputs, arguments.outputs, arguments.storage,
-                                                              arguments.intermediate, arguments.component, arguments.metrics, arguments.stac,
-                                                              not arguments.no_wait_for_completion)
-
-                    # And optionally remove the process and its inputs.
-                    if arguments.remove:
-                        self.remove_process_and_inputs(organisation, process)
+            elif arguments.command == i18n.t('command.upload.command'):
+                # Upload files to an upload data item.
+                self.upload(organisation, arguments.upload_name, arguments.file_type, arguments.file)
 
             else:
                 # Unknown command.
@@ -1249,13 +1554,24 @@ class Command(Base):
             self.__print(logging.ERROR, str(e))
             exit(1)  # We want to exit with an error status.
 
+    def __name_to_file_name(self, process_name):
+        """
+        Converts a process name into a sane file name (without extension).
+
+        Args:
+            process_name: The process name to convert.
+
+        Returns:
+            The corresponding file name.
+        """
+        return re.sub(r"[^A-Za-z0-9._\-]", '_', str(process_name)) if process_name is not None else None
+
     def __parse_arguments(self):
         """
         Parses the command line arguments.
 
         :return: The parsed arguments.
         """
-
         parser = argparse.ArgumentParser(
             formatter_class=RawTextHelpFormatter,
             prog=i18n.t('command.program'),
@@ -1269,26 +1585,127 @@ class Command(Base):
                             version=i18n.t('command.version_content', version=fusion_platform.__version__, version_date=fusion_platform.__version_date__))
 
         subparsers.required = True
-        parser_list = subparsers.add_parser(i18n.t('command.list.command'), help=i18n.t('command.list.help'), description=i18n.t('command.list.description'))
-        parser_display = subparsers.add_parser(i18n.t('command.display.command'), help=i18n.t('command.display.help'),
-                                               description=i18n.t('command.display.description'))
-        parser_start = subparsers.add_parser(i18n.t('command.start.command'), help=i18n.t('command.start.help'), description=i18n.t('command.start.description'))
         parser_define = subparsers.add_parser(i18n.t('command.define.command'), help=i18n.t('command.define.help'),
                                               description=i18n.t('command.define.description'))
+        parser_delete = subparsers.add_parser(i18n.t('command.delete.command'), help=i18n.t('command.delete.help'),
+                                              description=i18n.t('command.delete.description'))
+        parser_display = subparsers.add_parser(i18n.t('command.display.command'), help=i18n.t('command.display.help'),
+                                               description=i18n.t('command.display.description'))
         parser_download = subparsers.add_parser(i18n.t('command.download.command'), help=i18n.t('command.download.help'),
                                                 description=i18n.t('command.download.description'))
+        parser_list = subparsers.add_parser(i18n.t('command.list.command'), help=i18n.t('command.list.help'), description=i18n.t('command.list.description'))
+        parser_start = subparsers.add_parser(i18n.t('command.start.command'), help=i18n.t('command.start.help'), description=i18n.t('command.start.description'))
+        parser_template = subparsers.add_parser(i18n.t('command.template.command'), help=i18n.t('command.template.help'),
+                                                description=i18n.t('command.template.description'))
+        parser_upload = subparsers.add_parser(i18n.t('command.upload.command'), help=i18n.t('command.upload.help'),
+                                              description=i18n.t('command.upload.description'))
+
+        # Create the subparses for delete.
+        delete_subparsers = parser_delete.add_subparsers(description=i18n.t('command.delete.subparser'), dest='process_or_upload')
+        delete_subparsers.required = True
+
+        parser_delete_process = delete_subparsers.add_parser(i18n.t('command.delete.process.command'), help=i18n.t('command.delete.process.help'),
+                                                             description=i18n.t('command.delete.process.description'))
+        parser_delete_upload = delete_subparsers.add_parser(i18n.t('command.delete.upload.command'), help=i18n.t('command.delete.upload.help'),
+                                                            description=i18n.t('command.delete.upload.description'))
+
+        # Create the subparses for display.
+        display_subparsers = parser_display.add_subparsers(description=i18n.t('command.display.subparser'), dest='process_or_service')
+        display_subparsers.required = True
+
+        parser_display_process = display_subparsers.add_parser(i18n.t('command.display.process.command'), help=i18n.t('command.display.process.help'),
+                                                               description=i18n.t('command.display.process.description'))
+        parser_display_service = display_subparsers.add_parser(i18n.t('command.display.service.command'), help=i18n.t('command.display.service.help'),
+                                                               description=i18n.t('command.display.service.description'))
+
+        # Create the subparses for download.
+        download_subparsers = parser_download.add_subparsers(description=i18n.t('command.download.subparser'), dest='process_or_upload')
+        download_subparsers.required = True
+
+        parser_download_process = download_subparsers.add_parser(i18n.t('command.download.process.command'), help=i18n.t('command.download.process.help'),
+                                                                 description=i18n.t('command.download.process.description'))
+        parser_download_upload = download_subparsers.add_parser(i18n.t('command.download.upload.command'), help=i18n.t('command.download.upload.help'),
+                                                                description=i18n.t('command.download.upload.description'))
+
+        # Create the subparses for list.
+        list_subparsers = parser_list.add_subparsers(description=i18n.t('command.list.subparser'), dest='process_service_or_upload')
+        list_subparsers.required = True
+
+        parser_list_process = list_subparsers.add_parser(i18n.t('command.list.process.command'), help=i18n.t('command.list.process.help'),
+                                                         description=i18n.t('command.list.process.description'))
+        parser_list_service = list_subparsers.add_parser(i18n.t('command.list.service.command'), help=i18n.t('command.list.service.help'),
+                                                         description=i18n.t('command.list.service.description'))
+        parser_list_upload = list_subparsers.add_parser(i18n.t('command.list.upload.command'), help=i18n.t('command.list.upload.help'),
+                                                        description=i18n.t('command.list.upload.description'))
 
         # Add in the common arguments.
-        for subparser in [parser_list, parser_display, parser_start, parser_define, parser_download]:
+        for subparser in [
+            parser_define,
+            parser_delete_process,
+            parser_delete_upload,
+            parser_display_process,
+            parser_display_service,
+            parser_download_process,
+            parser_download_upload,
+            parser_list_process,
+            parser_list_service,
+            parser_list_upload,
+            parser_start,
+            parser_template,
+            parser_upload
+        ]:
             subparser.add_argument(i18n.t('command.deployment_short'), i18n.t('command.deployment_long'), help=i18n.t('command.deployment_help'),
                                    default=Command._DEPLOYMENT_PRODUCTION_IRL)
             subparser.add_argument(i18n.t('command.email_short'), i18n.t('command.email_long'), help=i18n.t('command.email_help'))
             subparser.add_argument(i18n.t('command.organisation_short'), i18n.t('command.organisation_long'), help=i18n.t('command.organisation_help'))
+            subparser.add_argument(i18n.t('command.no_save_password_short'), i18n.t('command.no_save_password_long'), help=i18n.t('command.no_save_password_help'),
+                                   default=False, action='store_true')
             subparser.add_argument(i18n.t('command.debug_short'), i18n.t('command.debug_long'), help=i18n.t('command.debug_help'), default=False,
-                                   action="store_true")
+                                   action='store_true')
+
+        # Define arguments.
+        parser_define.add_argument(i18n.t('command.define.process_long'), help=i18n.t('command.define.process_help'), nargs='+')
+        parser_define.add_argument(i18n.t('command.start.inputs_short'), i18n.t('command.start.inputs_long'), help=i18n.t('command.start.inputs_help'),
+                                   default=False, action='store_true')
+        parser_define.add_argument(i18n.t('command.start.storage_short'), i18n.t('command.start.storage_long'), help=i18n.t('command.start.storage_help'),
+                                   default=False, action='store_true')
+
+        # Delete arguments.
+        parser_delete_upload.add_argument(i18n.t('command.delete.upload_long'), help=i18n.t('command.delete.upload_help'), nargs='+')
+        parser_delete_upload.add_argument(i18n.t('command.delete.force_short'), i18n.t('command.delete.force_long'), help=i18n.t('command.delete.force_help'),
+                                          default=False, action='store_true')
+        parser_delete_process.add_argument(i18n.t('command.delete.process_long'), help=i18n.t('command.delete.process_help'), nargs='+')
+        parser_delete_process.add_argument(i18n.t('command.delete.force_short'), i18n.t('command.delete.force_long'), help=i18n.t('command.delete.force_help'),
+                                           default=False, action='store_true')
 
         # Display arguments.
-        parser_display.add_argument(i18n.t('command.display.service_or_process_long'), help=i18n.t('command.display.service_or_process_help'), nargs='+')
+        parser_display_process.add_argument(i18n.t('command.display.process_long'), help=i18n.t('command.display.process_help'), nargs='+')
+        parser_display_service.add_argument(i18n.t('command.display.service_long'), help=i18n.t('command.display.service_help'), nargs='+')
+
+        # Download arguments.
+        parser_download_process.add_argument(i18n.t('command.download.process_long'), help=i18n.t('command.download.process_help'), nargs='+')
+        parser_download_process.add_argument(i18n.t('command.start.inputs_short'), i18n.t('command.start.inputs_long'), help=i18n.t('command.start.inputs_help'),
+                                             default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.outputs_short'), i18n.t('command.start.outputs_long'), help=i18n.t('command.start.outputs_help'),
+                                             default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.storage_short'), i18n.t('command.start.storage_long'), help=i18n.t('command.start.storage_help'),
+                                             default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.statistics_short'), i18n.t('command.start.statistics_long'),
+                                             help=i18n.t('command.start.statistics_help'), default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.remove_short'), i18n.t('command.start.remove_long'), help=i18n.t('command.start.remove_help'),
+                                             default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.intermediate_short'), i18n.t('command.start.intermediate_long'),
+                                             help=i18n.t('command.start.intermediate_help'), default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.metrics_short'), i18n.t('command.start.metrics_long'), help=i18n.t('command.start.metrics_help'),
+                                             default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.component_short'), i18n.t('command.start.component_long'),
+                                             help=i18n.t('command.start.component_help'), nargs='*')
+        parser_download_process.add_argument(i18n.t('command.start.no_wait_for_completion_short'), i18n.t('command.start.no_wait_for_completion_long'),
+                                             help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action='store_true')
+        parser_download_process.add_argument(i18n.t('command.start.stac_only_short'), i18n.t('command.start.stac_only_long'),
+                                             help=i18n.t('command.start.stac_only_help'),
+                                             default=False, action='store_true')
+        parser_download_upload.add_argument(i18n.t('command.download.upload_long'), help=i18n.t('command.download.upload_help'), nargs='+')
 
         # Start arguments.
         parser_start.add_argument(i18n.t('command.start.definition_long'), help=i18n.t('command.start.definition_help'), nargs='+')
@@ -1297,57 +1714,125 @@ class Command(Base):
         parser_start.add_argument(i18n.t('command.start.options_short'), i18n.t('command.start.options_long'), help=i18n.t('command.start.options_help'),
                                   nargs='*')
         parser_start.add_argument(i18n.t('command.start.wait_for_start_short'), i18n.t('command.start.wait_for_start_long'),
-                                  help=i18n.t('command.start.wait_for_start_help'), default=False, action="store_true")
+                                  help=i18n.t('command.start.wait_for_start_help'), default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.download_short'), i18n.t('command.start.download_long'), help=i18n.t('command.start.download_help'),
-                                  default=False, action="store_true")
+                                  default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.remove_short'), i18n.t('command.start.remove_long'), help=i18n.t('command.start.remove_help'),
-                                  default=False, action="store_true")
+                                  default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.inputs_short'), i18n.t('command.start.inputs_long'), help=i18n.t('command.start.inputs_help'),
-                                  default=False, action="store_true")
+                                  default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.outputs_short'), i18n.t('command.start.outputs_long'), help=i18n.t('command.start.outputs_help'),
-                                  default=False, action="store_true")
+                                  default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.storage_short'), i18n.t('command.start.storage_long'), help=i18n.t('command.start.storage_help'),
-                                  default=False, action="store_true")
+                                  default=False, action='store_true')
+        parser_start.add_argument(i18n.t('command.start.statistics_short'), i18n.t('command.start.statistics_long'), help=i18n.t('command.start.statistics_help'),
+                                  default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.intermediate_short'), i18n.t('command.start.intermediate_long'),
-                                  help=i18n.t('command.start.intermediate_help'), default=False, action="store_true")
+                                  help=i18n.t('command.start.intermediate_help'), default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.metrics_short'), i18n.t('command.start.metrics_long'), help=i18n.t('command.start.metrics_help'),
-                                  default=False, action="store_true")
+                                  default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.component_short'), i18n.t('command.start.component_long'), help=i18n.t('command.start.component_help'),
                                   nargs='*')
         parser_start.add_argument(i18n.t('command.start.no_wait_for_completion_short'), i18n.t('command.start.no_wait_for_completion_long'),
-                                  help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action="store_true")
+                                  help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action='store_true')
         parser_start.add_argument(i18n.t('command.start.stac_only_short'), i18n.t('command.start.stac_only_long'), help=i18n.t('command.start.stac_only_help'),
-                                  default=False, action="store_true")
+                                  default=False, action='store_true')
 
-        # Define arguments.
-        parser_define.add_argument(i18n.t('command.define.process_long'), help=i18n.t('command.define.process_help'), nargs='+')
-        parser_define.add_argument(i18n.t('command.start.inputs_short'), i18n.t('command.start.inputs_long'), help=i18n.t('command.start.inputs_help'),
-                                   default=False, action="store_true")
-        parser_define.add_argument(i18n.t('command.start.storage_short'), i18n.t('command.start.storage_long'), help=i18n.t('command.start.storage_help'),
-                                   default=False, action="store_true")
+        # Template arguments.
+        parser_template.add_argument(i18n.t('command.template.service_long'), help=i18n.t('command.template.service_help'), nargs='+')
 
-        # Download arguments.
-        parser_download.add_argument(i18n.t('command.download.process_long'), help=i18n.t('command.download.process_help'), nargs='+')
-        parser_download.add_argument(i18n.t('command.start.inputs_short'), i18n.t('command.start.inputs_long'), help=i18n.t('command.start.inputs_help'),
-                                     default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.outputs_short'), i18n.t('command.start.outputs_long'), help=i18n.t('command.start.outputs_help'),
-                                     default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.storage_short'), i18n.t('command.start.storage_long'), help=i18n.t('command.start.storage_help'),
-                                     default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.remove_short'), i18n.t('command.start.remove_long'), help=i18n.t('command.start.remove_help'),
-                                     default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.intermediate_short'), i18n.t('command.start.intermediate_long'),
-                                     help=i18n.t('command.start.intermediate_help'), default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.metrics_short'), i18n.t('command.start.metrics_long'), help=i18n.t('command.start.metrics_help'),
-                                     default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.component_short'), i18n.t('command.start.component_long'),
-                                     help=i18n.t('command.start.component_help'), nargs='*')
-        parser_download.add_argument(i18n.t('command.start.no_wait_for_completion_short'), i18n.t('command.start.no_wait_for_completion_long'),
-                                     help=i18n.t('command.start.no_wait_for_completion_help'), default=False, action="store_true")
-        parser_download.add_argument(i18n.t('command.start.stac_only_short'), i18n.t('command.start.stac_only_long'), help=i18n.t('command.start.stac_only_help'),
-                                     default=False, action="store_true")
+        # Upload arguments.
+        parser_upload.add_argument(i18n.t('command.upload.upload_name_long'), help=i18n.t('command.upload.upload_name_help'))
+        parser_upload.add_argument(i18n.t('command.upload.file_type_long'), help=i18n.t('command.upload.file_type_help'))
+        parser_upload.add_argument(i18n.t('command.upload.file_long'), help=i18n.t('command.upload.file_help'), nargs='+')
 
         return parser.parse_args()
+
+    def __prepare_downloads(self, data_items, download_base_dir, owner=None, created_at=None, detail=None):
+        """
+        Prepare each download data item by finding the constituent files, creating the download directories and calculating the input and output sizes. A STAC
+        collection is also written using the overarching owner, created at and detail for each of the data items.
+
+        Data items are allocated an item number to prefix the download directory with for inputs and outputs. They also have a data type which dictates what
+        download directory is used and whether to add the item to the input or output size lists, or create STAC item. Data types can be: _DOWNLOAD_INPUT,
+        _DOWNLOAD_OUTPUT, _DOWNLOAD_STORAGE, _DOWNLOAD_STATISTICS or _DOWNLOAD_UPLOAD.
+
+        Args:
+            data_items: A list of tuples containing the item number, data type and data model.
+            download_base_dir: The base directory into which the downloads will be placed in a subdirectory based upon the data item name.
+            owner: The optional owner of the STAC collection. Default None.
+            created_at: Optionally when the STAC collection was created. Default None.
+            detail: The optional STAC collection detail as a dictionary. Default None.
+
+        Returns:
+            The list of input sizes, list of output sizes and list of downloads to be performed.
+        """
+
+        # While traversing each, save the input and output size. The size might not be immediately available for every file, so wait for all items to be analysed.
+        input_sizes = []
+        output_sizes = []
+        downloads = []
+
+        for i, data_type, data_item in data_items:
+            # Download the data item once it is complete.
+            data_item.check_analysis_complete(wait=True)
+
+            if data_type in [Command._DOWNLOAD_INPUT, Command._DOWNLOAD_OUTPUT]:
+                name = re.sub('_+', '_', f"{data_type.capitalize()}_{str(i)}_{self.__data_name_to_file_name(data_item.name)}").rstrip('_')
+            else:
+                name = ''  # We do not need subdirectories for these data types.
+
+            download_dir = os.path.join(download_base_dir, name)
+            os.makedirs(download_dir, exist_ok=True)
+
+            # Get a list of the unique file names. This will be used in determining whether we need to make the file name unique.
+            files = [file for file in data_item.files]  # So that we do not request multiple times.
+            file_names = [file.file_name for file in files]
+            file_names_count = {file_name: file_names.count(file_name) for file_name in file_names}
+
+            # Queue the files for download. We also create the corresponding STAC definitions.
+            stac_definitions = []
+            used_file_names = set()
+
+            for file in files:
+                # We are downloading all the data item's files to a single directory, so we need to make sure the file names are unique.
+                i = 1
+                file_name = f"{i}-{file.file_name}" if file_names_count.get(file.file_name, 1) > 1 else file.file_name
+
+                while file_name in used_file_names:
+                    i += 1
+                    file_name = f"{i}-{file.file_name}"
+
+                used_file_names.add(file_name)
+                path = os.path.join(download_dir, file_name)
+
+                # Add the download for each file for the data item.
+                if data_type == Command._DOWNLOAD_INPUT:
+                    input_sizes.append(file.size)
+                elif data_type == Command._DOWNLOAD_OUTPUT:
+                    output_sizes.append(file.size)
+
+                downloads.append((file, path, file.size))
+
+                # Now get the corresponding STAC item. Note that we adjust the STAC item file name to match the unique file name generated above. This is achieved
+                # by replacing the STAC item file name.
+                stac_item_file = DataFile._STAC_ITEM_FILE_NAME_FORMAT.format(file_name=os.path.basename(file_name))
+                stac_item, _ = file.get_stac_item(file_name=file_name, item_file_name=stac_item_file)
+
+                if (data_type in [Command._DOWNLOAD_INPUT, Command._DOWNLOAD_OUTPUT, Command._DOWNLOAD_UPLOAD]) and (stac_item is not None) and (
+                        stac_item_file is not None):
+                    stac_definitions.append((stac_item, stac_item_file))
+
+            if len(stac_definitions) > 0:
+                stac_collection = data_item.get_stac_collection(stac_definitions, owner=owner, created_at=created_at, detail=detail)
+                stac_definitions.append(stac_collection)
+
+            # Write the STAC definitions.
+            for stac_definition, stac_file_name in stac_definitions:
+                with open(os.path.join(download_dir, stac_file_name), 'w') as stac_file:
+                    stac_file.write(json.dumps(stac_definition, default=json_default))
+
+        return input_sizes, output_sizes, downloads
 
     def __print(self, level, message, format=True, **kwargs):
         """
@@ -1505,17 +1990,103 @@ class Command(Base):
 
         self.__print(logging.INFO, i18n.t('command.log_bookend'))
 
-    def __process_name_to_file_name(self, process_name):
+    def __provision_process(self, process, inputs, options, dispatchers):
         """
-        Converts a process name into a sane file name (without extension).
+        Provisions a template process based upon the inputs, options and dispatchers. The supplied process template is updated and persisted.
 
         Args:
-            process_name: The process name to convert.
-
-        Returns:
-            The corresponding file name.
+            process: The template process.
+            inputs: The list of data items to be used as inputs.
+            options: The list of options.
+            dispatchers: The list of dispatchers.
         """
-        return re.sub(r"[^A-Za-z0-9._\-]", '_', str(process_name)) if process_name is not None else None
+
+        # Configure the process to use the inputs and set its options. Note that we filter out model level fields and set those as keyword arguments.
+        for i, input in enumerate(inputs):
+            process.update(input_number=i + 1, data=input)
+
+        kwargs = {}
+
+        for key, value in options.items():
+            if key in Command._MODEL_FIELDS:
+                kwargs[key] = value
+            else:
+                process.update(option_name=key, value=value, coerce_value=True)
+
+        if len(kwargs) > 0:
+            process.update(**kwargs)
+
+        # Add in optional dispatchers.
+        dispatchers_added = 0
+
+        for i, dispatcher in enumerate(process.available_dispatchers):
+            finished = False
+
+            while not finished:
+                # Either find the dispatchers from what has been loaded from the YAML file or prompt the user.
+                add = False
+                dispatch_intermediate = False
+                dispatcher_options = {}
+
+                if dispatchers is not None:
+                    # See if any of the remaining dispatchers match this one. Once used, the corresponding dispatcher is marked as used.
+                    filtered_dispatchers = [item for item in dispatchers if
+                                            (item.get(Model._FIELD_NAME) == dispatcher.name) and (not item.get(Model._FIELD_USED, False))]
+
+                    if len(filtered_dispatchers) > 0:
+                        selected_dispatcher = filtered_dispatchers[0]
+                        selected_dispatcher[Model._FIELD_USED] = True
+                        add = True
+                        dispatch_intermediate = selected_dispatcher.get(Model._FIELD_DISPATCH_INTERMEDIATE) if selected_dispatcher.get(
+                            Model._FIELD_DISPATCH_INTERMEDIATE) is not None else False
+                        dispatcher_options = selected_dispatcher.get(Model._FIELD_OPTIONS) if selected_dispatcher.get(Model._FIELD_OPTIONS) is not None else {}
+
+                else:
+                    response = self.__get_input(i18n.t('command.add_dispatcher', dispatcher=dispatcher.name),
+                                                constrained_values=[i18n.t('command.prompt_no'), i18n.t('command.prompt_yes')])
+
+                    if (response is not None) and response.lower().startswith(i18n.t('command.prompt_yes').lower()[0]):
+                        add = True
+
+                        if hasattr(dispatcher, Model._FIELD_DISPATCH_INTERMEDIATE):
+                            response = self.__get_input(i18n.t('command.dispatch_intermediate'),
+                                                        constrained_values=[i18n.t('command.prompt_no'), i18n.t('command.prompt_yes')])
+
+                            if (response is not None) and response.lower().startswith(i18n.t('command.prompt_yes').lower()[0]):
+                                dispatch_intermediate = True
+
+                        for option in dispatcher.options:
+                            finished_options = False
+                            option_value = None
+
+                            while not finished_options:
+                                constrained_values = option.constrained_values if option.data_type == fusion_platform.DATA_TYPE_CONSTRAINED else None
+
+                                prompt_constrained_values = i18n.t('models.process.option.representation_constrained_values',
+                                                                   constrained_values=constrained_values) if constrained_values is not None else ''
+                                prompt_required = i18n.t('models.process.option.representation_required') if option.required else ''
+                                prompt = i18n.t('command.prompt_option', title=option.title, name=option.name, data_type=option.data_type,
+                                                constrained_values=prompt_constrained_values, required=prompt_required)
+
+                                option_value = self.__get_input(prompt, default=option.value, constrained_values=constrained_values)
+                                finished_options = (not option.required) or (
+                                        option.required and (option_value is not None) and (not string_blank(str(option_value))))
+
+                            if option_value is not None:
+                                dispatcher_options[option.name] = option_value
+
+                if add:
+                    process.add_dispatcher(number=(i + 1))
+                    dispatchers_added += 1
+
+                    for option_name, option_value in dispatcher_options.items():
+                        process.update(dispatcher_number=dispatchers_added, option_name=option_name, value=option_value, coerce_value=True,
+                                       dispatch_intermediate=dispatch_intermediate)
+                else:
+                    finished = True
+
+        # Create the process, which will validate its options and inputs.
+        process.create()
 
     def remove_process_and_inputs(self, organisation, process):
         """
@@ -1636,18 +2207,22 @@ class Command(Base):
         """
         self.__print(logging.INFO, i18n.t('command.start_process', process=process_name, service=service_name))
 
-        # Upload the inputs.
-        if (input_files is not None) and (len(input_files) > 0):
-            data_items = self.__upload_or_find_inputs(organisation, process_name, input_files)
-        else:
-            data_items = []
-
         # Find the service.
         service = self.get_service(organisation, service_name)
         self.__print(logging.DEBUG, i18n.t('command.using_service', service=service.name))
 
-        # Create the process with its options and inputs.
-        process = self.__create_process(organisation, process_name, options, dispatchers, service, data_items)
+        # Create a template process from the service.
+        process = organisation.new_process(name=process_name, service=service)
+
+        # Upload or find the inputs. We upload using the known file types.
+        if (input_files is not None) and (len(input_files) > 0):
+            file_types = [input.file_type for input in process.inputs]
+            data_items = self.__upload_or_find_inputs(organisation, process_name, input_files, file_types)
+        else:
+            data_items = []
+
+        # Provision the process with its options, inputs and dispatchers.
+        self.__provision_process(process, data_items, options, dispatchers)
 
         # Upload the optional storage data items now that the process has been created because we need the process id.
         if (storage_files is not None) and (len(storage_files) > 0):
@@ -1664,7 +2239,111 @@ class Command(Base):
 
         return process
 
-    def __upload_or_find_inputs(self, organisation, process_name, input_files):
+    def template_service(self, organisation, service_name):
+        """
+        Obtains the service definition for a service.
+
+        Args:
+            organisation: The logged in organisation.
+            service_name: The name of the service to be defined. This can also be the id or SSD id.
+
+        Returns:
+            The service definition.
+        """
+        self.__print(logging.INFO, i18n.t('command.template_service', service=service_name))
+
+        # We are defining a service. This will raise an exception if the service is not found.
+        service = self.get_service(organisation, service_name)
+
+        # Create a template process from the service so that we can obtain the options, inputs and dispatchers.
+        process_name = f"{service.name} {datetime.now(timezone.utc).isoformat()}"
+        process = organisation.new_process(name=process_name, service=service)
+
+        # Get the options and add in any model-level attributes that are required. Any missing attributes are set to None.
+        options = {option.name: self.__format_value(option.value, data_type=option.data_type) for option in process.options}
+
+        for key in Command._MODEL_FIELDS:
+            options[key] = self.__format_value(getattr(process, key)) if hasattr(process, key) else self.__format_value(None)
+
+        # Add in the inputs.
+        inputs = []
+
+        for i, input in enumerate(process.inputs):
+            title = input.title if hasattr(input, Model._FIELD_TITLE) and (input.title is not None) else str(i + 1)
+            file_type = input.file_type if hasattr(input, Model._FIELD_FILE_TYPE) and (input.file_type is not None) else fusion_platform.FILE_TYPE_OTHER
+            extension = Command._FILE_TYPES_TO_EXTENSIONS.get(file_type)
+            extension = extension[0] if (extension is not None) and len(extension) > 0 else None
+            file = f"{self.__data_name_to_file_name(title.lower())}{extension if extension is not None else ''}"
+            inputs.append({Model._FIELD_NAME: title, Model._FIELD_FILE: file})
+
+        # Add in all available dispatchers and their options.
+        dispatchers = []
+
+        for dispatcher in process.available_dispatchers:
+            found_dispatcher = {Model._FIELD_NAME: dispatcher.name}
+            found_dispatcher[Model._FIELD_OPTIONS] = {option.name: self.__format_value(option.value, data_type=option.data_type) for option in dispatcher.options}
+            dispatchers.append(found_dispatcher)
+
+        # Build the definition.
+        service_definition = {
+            Command._YAML_SERVICE_NAME: service.name,
+            Command._YAML_PROCESS_NAME: process_name,
+            Command._YAML_INPUTS: inputs,
+            Command._YAML_OPTIONS: options,
+            Command._YAML_DISPATCHERS: dispatchers
+        }
+
+        return service_definition
+
+    def upload(self, organisation, upload_name, file_type, files):
+        """
+        Creates a new upload item with the specified file type and uploads the files to it.
+
+        Args:
+            organisation: The logged in organisation.
+            upload_name: The name of the upload to create.
+            file_type: The file type to be associated with the files.
+            files: The files to be uploaded.
+        """
+
+        # Make sure the file type is valid.
+        validated_file_types = [
+            item for item in list(Command._FILE_TYPES_TO_EXTENSIONS.keys()) + [fusion_platform.FILE_TYPE_OTHER] if file_type.lower() == item.lower()
+        ]
+
+        if len(validated_file_types) <= 0:
+            raise CommandError(i18n.t('command.unknown_file_type', file_type=file_type))
+
+        validated_file_type = validated_file_types[0]
+
+        # Check that all the files exist and that they have a valid extension.
+        total_size = 0
+
+        for file in files:
+            if not os.path.exists(file):
+                raise CommandError(i18n.t('command.missing_file', file=file))
+            else:
+                total_size += os.path.getsize(file)
+
+                # Check the extension for anything but the "Other" file type.
+                if validated_file_type != fusion_platform.FILE_TYPE_OTHER:
+                    extension = os.path.splitext(file.lower())[1]
+
+                    if extension not in Command._FILE_TYPES_TO_EXTENSIONS[validated_file_type]:
+                        raise CommandError(i18n.t('command.invalid_file_extension', file=file, extension=extension, file_type=validated_file_type))
+
+        # Make sure we have files to upload.
+        if len(files) <= 0:
+            raise CommandError(i18n.t('command.no_upload_files'))
+
+        # Create the required item. The upload has a progress bar.
+        self.__print(logging.INFO, i18n.t('command.upload_files', upload_name=upload_name, file_type=validated_file_type, number_of_files=len(files)))
+        created = organisation.create_data(name=upload_name, file_type=validated_file_type, files=files, wait=False)
+
+        # Wait for the analysis of any created items to complete.
+        self.__wait_for_uploads([(created, False, 0, total_size)])
+
+    def __upload_or_find_inputs(self, organisation, process_name, input_files, file_types):
         """
         Uploads or finds the inputs ready to start a process.
 
@@ -1672,10 +2351,13 @@ class Command(Base):
             organisation: The logged in organisation.
             process_name: The name of the process.
             input_files: The list of input files to be uploaded or pre-existing input names to be found.
+            file_type: The list of file types to be associated with the inputs.
 
         Returns:
             The found data items in the same order as the input files.
         """
+        file_types = [] if file_types is None else file_types
+        file_types = file_types + ([None] * (len(input_files) - len(file_types)))
         data_items = [None] * len(input_files)
         find_items = []
         create_items = []
@@ -1701,29 +2383,16 @@ class Command(Base):
                     extension = None
 
             if extension is not None:
-                # Create a data item for each input.
-                if (extension == '.tif') or (extension == '.tiff'):
-                    file_type = fusion_platform.FILE_TYPE_GEOTIFF
-                elif extension == '.jp2':
-                    file_type = fusion_platform.FILE_TYPE_JPEG2000
-                elif extension == '.dem':
-                    file_type = fusion_platform.FILE_TYPE_DEM
-                elif (extension == '.json') or (extension == '.geojson'):
-                    file_type = fusion_platform.FILE_TYPE_GEOJSON
-                elif extension == '.kml':
-                    file_type = fusion_platform.FILE_TYPE_KML
-                elif extension == '.kmz':
-                    file_type = fusion_platform.FILE_TYPE_KMZ
-                elif extension == '.csv':
-                    file_type = fusion_platform.FILE_TYPE_CSV
-                elif extension == '.zip':
-                    file_type = fusion_platform.FILE_TYPE_ESRI_SHAPEFILE
-                elif (extension == '.jpeg') or (extension == '.jpg'):
-                    file_type = fusion_platform.FILE_TYPE_JPEG
-                elif extension == '.png':
-                    file_type = fusion_platform.FILE_TYPE_PNG
-                else:
-                    file_type = fusion_platform.FILE_TYPE_OTHER
+                # Create a data item for each input. We try to use the supplied file types, but if they are not available, we guess the file type from the extension.
+                file_type = file_types[i]
+
+                if file_type is None:
+                    for key, value in Command._FILE_TYPES_TO_EXTENSIONS.items():
+                        if extension in value:
+                            file_type = key
+                            break
+
+                file_type = fusion_platform.FILE_TYPE_OTHER if file_type is None else file_type
 
                 input_name = f"{process_name} {i + 1}" if input_name is None else input_name
                 create_items.append((i, input_name, file_type, filename))
@@ -1776,7 +2445,7 @@ class Command(Base):
 
         Args:
             organisation: The logged in organisation.
-            storage_files: The list of storage files to be uploaded.
+            storage_files: The dictionary of storage files to be uploaded.
             process: The newly created process.
         """
         self.__print(logging.INFO, i18n.t('command.upload_storage', files=len(storage_files)))
@@ -1804,7 +2473,8 @@ class Command(Base):
                 created = organisation.create_data(name=storage_name, file_type=fusion_platform.FILE_TYPE_GZIP, files=[upload_file], wait=False, id=storage_id)
                 created_items.append((created, False, 0, os.path.getsize(upload_file)))
 
-                os.remove(upload_file)
+                if os.path.exists(upload_file):
+                    os.remove(upload_file)
 
         # Wait for the analysis of any created items to complete.
         self.__wait_for_uploads(created_items)

@@ -1,4 +1,5 @@
 build
+keyring
 marshmallow
 mock
 pathos

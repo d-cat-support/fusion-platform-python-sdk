@@ -158,8 +158,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Process execution model class providing attributes and methods to manipulate process execution item details.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>session</code></strong></dt>
 <dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
 <dt><strong><code>schema</code></strong></dt>
@@ -178,8 +179,9 @@ el.replaceWith(d);
 <em>Inherited from:</em>
 <code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
 </p>
-<div class="desc inherited"><h2 id="returns">Returns</h2>
-<p>The model attributes as a dictionary.</p></div>
+<div class="desc inherited"><p>Returns
+-----=
+The model attributes as a dictionary.</p></div>
 </dd>
 <dt id="fusion_platform.models.process_execution.ProcessExecution.components"><code class="name">prop <span class="ident">components</span></code></dt>
 <dd>
@@ -202,10 +204,12 @@ def components(self):
     return ProcessServiceExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_COMPONENTS))</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the process execution's components.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the component objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the component objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -239,13 +243,13 @@ def components(self):
 </details>
 <div class="desc"><p>Changes the delete expiry. This will either change the delete expiry of a single execution, or if the execution is in a group, all the corresponding
 executions in the group.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>delete_expiry</code></strong></dt>
 <dd>The new delete expiry.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the update fails.</dd>
 </dl></div>
@@ -306,15 +310,18 @@ executions in the group.</p>
     return complete</code></pre>
 </details>
 <div class="desc"><p>Checks whether the execution has completed. Optionally waits for the execution to complete.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>wait</code></strong></dt>
 <dd>Optionally wait for the execution to complete? Default False.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>True if the execution is complete.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+True if the execution is complete.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any request fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -513,7 +520,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

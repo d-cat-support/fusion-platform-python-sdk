@@ -8,11 +8,10 @@ author: Matthew Casey
 
 import i18n
 from marshmallow import Schema, EXCLUDE
-import os
 
 import fusion_platform
 from fusion_platform.common.raise_thread import RaiseThread
-from fusion_platform.common.utilities import datetime_parse, dict_nested_get
+from fusion_platform.common.utilities import dict_nested_get, value_from_read_only, value_to_read_only
 from fusion_platform.models import fields
 from fusion_platform.models.model import Model, ModelError
 
@@ -161,6 +160,12 @@ class DataFile(Model):
     _STAC_COLLECTION_FILE_NAME = '.collection.stac'
     _STAC_ITEM_FILE_NAME_FORMAT = '.{file_name}.stac'
 
+    # STAC item fields.
+    _STAC_ITEM_ASSETS = 'assets'
+    _STAC_ITEM_ASSET = 'asset'
+    _STAC_ITEM_HREF = 'href'
+    _STAC_ITEM_LINKS = 'links'
+
     def __init__(self, session):
         """
         Initialises the object.
@@ -291,13 +296,16 @@ class DataFile(Model):
 
         return url
 
-    def get_stac_item(self, item_file_name_format=_STAC_ITEM_FILE_NAME_FORMAT, collection_file_name=_STAC_COLLECTION_FILE_NAME):
+    def get_stac_item(self, item_file_name_format=_STAC_ITEM_FILE_NAME_FORMAT, collection_file_name=_STAC_COLLECTION_FILE_NAME, file_name=None,
+                      item_file_name=None):
         """
         Converts the data file representation into a STAC item.
 
         Args:
             item_file_name_format: The optional item file name format string, where the "file_name" placeholder is replaced with the item's file name.
             collection_file_name: The optional owning collection file name.
+            file_name: The optional overriding file name.
+            item_file_name: The optional overriding item file name.
 
         Returns:
             A tuple of the STAC item definition as a dictionary and the item file name used in the definition.
@@ -306,5 +314,29 @@ class DataFile(Model):
         # Extract the STAC item from the model.
         stac_item = self.stac_item if hasattr(self, Model._FIELD_STAC_ITEM) else None
         stac_item_file = self.stac_item_file if hasattr(self, Model._FIELD_STAC_ITEM_FILE) else None
+
+        # Make any required changes to the STAC item.
+        if (file_name is not None) or (item_file_name is not None):
+            # Convert the MappingProxy to a dictionary so we can modify it.
+            stac_item = value_from_read_only(stac_item)
+
+            # If an overriding file name has been provided, update the STAC definition to use it. This should just be in the asset list.
+            if file_name is not None:
+                href = dict_nested_get(stac_item, [DataFile._STAC_ITEM_ASSETS, DataFile._STAC_ITEM_ASSET, DataFile._STAC_ITEM_HREF])
+
+                if href is not None:
+                    stac_item[DataFile._STAC_ITEM_ASSETS][DataFile._STAC_ITEM_ASSET][DataFile._STAC_ITEM_HREF] = file_name
+
+            # If an overriding item file name has been provided, update the STAC definition to use it. This should be in the links as the first item.
+            if item_file_name is not None:
+                links = stac_item.get(DataFile._STAC_ITEM_LINKS, [])
+
+                if len(links) > 0:
+                    links[0][DataFile._STAC_ITEM_HREF] = item_file_name
+
+                stac_item_file = item_file_name  # Because we have changed the STAC item file name.
+
+            # Convert the STAC item back into a read-only MappingProxy.
+            stac_item = value_to_read_only(stac_item)
 
         return stac_item, stac_item_file

@@ -317,8 +317,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Organisation model class providing attributes and methods to manipulate organisation details.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>session</code></strong></dt>
 <dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
 <dt><strong><code>schema</code></strong></dt>
@@ -337,8 +338,9 @@ el.replaceWith(d);
 <em>Inherited from:</em>
 <code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
 </p>
-<div class="desc inherited"><h2 id="returns">Returns</h2>
-<p>The model attributes as a dictionary.</p></div>
+<div class="desc inherited"><p>Returns
+-----=
+The model attributes as a dictionary.</p></div>
 </dd>
 <dt id="fusion_platform.models.organisation.Organisation.credit"><code class="name">prop <span class="ident">credit</span></code></dt>
 <dd>
@@ -358,10 +360,12 @@ def credit(self):
     &#34;&#34;&#34;
     return Credit._model_from_api_id(self._session, organisation_id=self.id, id=self.id)  # Credit model id is the same as the organisation&#39;s id.</code></pre>
 </details>
-<div class="desc"><h2 id="returns">Returns</h2>
-<p>The credit model for the organisation.</p>
-<h2 id="raises">Raises</h2>
+<div class="desc"><p>Returns
+-----=
+The credit model for the organisation.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -389,10 +393,12 @@ def data(self):
     return Data._models_from_api_path(self._session, self._get_path(self.__class__._PATH_DATA))</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the organisation's uploaded data objects.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the data objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the data objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -420,10 +426,12 @@ def own_services(self):
     return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_OWN_SERVICES))</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the services owned by the organisation. This includes services which may not yet be approved.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the service objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the service objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -451,10 +459,12 @@ def processes(self):
     return Process._models_from_api_path(self._session, self._get_path(self.__class__._PATH_PROCESSES))</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the organisation's processes.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the process objects.</p>
-<h2 id="raises">Raises</h2>
-<p>RequestError if any get fails.
+<p>Returns
+-----=
+An iterator through the process objects.</p>
+<p>Raises
+-----=
+RequestError if any get fails.
 ModelError if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.</p></div>
 </dd>
 <dt id="fusion_platform.models.organisation.Organisation.services"><code class="name">prop <span class="ident">services</span></code></dt>
@@ -478,10 +488,12 @@ def services(self):
     return Service._models_from_api_path(self._session, self._get_path(self.__class__._PATH_SERVICES))</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the services available to the organisation for execution.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the service objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the service objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -527,8 +539,9 @@ def services(self):
     return data</code></pre>
 </details>
 <div class="desc"><p>Creates a data object for the organisation and uploads the corresponding files. Optionally waits for the upload and analysis to complete.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>The name of the data object.</dd>
 <dt><strong><code>file_type</code></strong></dt>
@@ -540,10 +553,12 @@ def services(self):
 <dt><strong><code>kwargs</code></strong></dt>
 <dd>The model attributes which override those already in the template.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The created data object.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The created data object.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the create fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -593,8 +608,9 @@ def services(self):
     return self.__class__._first_and_generator(find)</code></pre>
 </details>
 <div class="desc"><p>Searches for uploaded data objects with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>id</code></strong></dt>
 <dd>The data id to search for.</dd>
 <dt><strong><code>name</code></strong></dt>
@@ -602,10 +618,12 @@ def services(self):
 <dt><strong><code>search</code></strong></dt>
 <dd>The term to search for (case-insensitive).</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The first found data object, or None if not found, and an iterator through the found data objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The first found data object, or None if not found, and an iterator through the found data objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -645,8 +663,9 @@ def services(self):
 <div class="desc"><p>Searches for dispatcher services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.
 Dispatchers are specific services used by processes to dispatch outputs to particular destinations. These services should not be used to form processes
 themselves.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>id</code></strong></dt>
 <dd>The service id to search for.</dd>
 <dt><strong><code>ssd_id</code></strong></dt>
@@ -658,10 +677,12 @@ themselves.</p>
 <dt><strong><code>search</code></strong></dt>
 <dd>The term to search for (case-insensitive).</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The first found dispatcher service object, or None if not found, and an iterator through the found service objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The first found dispatcher service object, or None if not found, and an iterator through the found service objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -700,8 +721,9 @@ themselves.</p>
     return self.__class__._first_and_generator(find)</code></pre>
 </details>
 <div class="desc"><p>Searches for the organisation's processes with the specified id and/or (non-unique) name, returning the first object found and an iterator.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>id</code></strong></dt>
 <dd>The process id to search for.</dd>
 <dt><strong><code>name</code></strong></dt>
@@ -709,10 +731,12 @@ themselves.</p>
 <dt><strong><code>search</code></strong></dt>
 <dd>The term to search for (case-insensitive).</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The first found process object, or None if not found, and an iterator through the found process objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The first found process object, or None if not found, and an iterator through the found process objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -748,8 +772,9 @@ themselves.</p>
     return self.__find_services(self.__class__._PATH_SERVICES, id, ssd_id, name, keyword, search)</code></pre>
 </details>
 <div class="desc"><p>Searches for services with the specified id, SSD id, (non-unique) name and/or keywords, returning the first object found and an iterator.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>id</code></strong></dt>
 <dd>The service id to search for.</dd>
 <dt><strong><code>ssd_id</code></strong></dt>
@@ -761,10 +786,12 @@ themselves.</p>
 <dt><strong><code>search</code></strong></dt>
 <dd>The term to search for (case-insensitive).</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The first found service object, or None if not found, and an iterator through the found service objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The first found service object, or None if not found, and an iterator through the found service objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -811,17 +838,20 @@ themselves.</p>
     return process</code></pre>
 </details>
 <div class="desc"><p>Creates a new template process from the service object. This process is not persisted to the Fusion Platform<sup>&reg;</sup>.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>The name of the process.</dd>
 <dt><strong><code>service</code></strong></dt>
 <dd>The service for which the process is to be created.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The new template process object.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The new template process object.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the new fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -986,7 +1016,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

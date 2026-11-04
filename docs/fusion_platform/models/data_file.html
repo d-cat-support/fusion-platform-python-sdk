@@ -105,6 +105,12 @@ el.replaceWith(d);
     _STAC_COLLECTION_FILE_NAME = &#39;.collection.stac&#39;
     _STAC_ITEM_FILE_NAME_FORMAT = &#39;.{file_name}.stac&#39;
 
+    # STAC item fields.
+    _STAC_ITEM_ASSETS = &#39;assets&#39;
+    _STAC_ITEM_ASSET = &#39;asset&#39;
+    _STAC_ITEM_HREF = &#39;href&#39;
+    _STAC_ITEM_LINKS = &#39;links&#39;
+
     def __init__(self, session):
         &#34;&#34;&#34;
         Initialises the object.
@@ -235,13 +241,16 @@ el.replaceWith(d);
 
         return url
 
-    def get_stac_item(self, item_file_name_format=_STAC_ITEM_FILE_NAME_FORMAT, collection_file_name=_STAC_COLLECTION_FILE_NAME):
+    def get_stac_item(self, item_file_name_format=_STAC_ITEM_FILE_NAME_FORMAT, collection_file_name=_STAC_COLLECTION_FILE_NAME, file_name=None,
+                      item_file_name=None):
         &#34;&#34;&#34;
         Converts the data file representation into a STAC item.
 
         Args:
             item_file_name_format: The optional item file name format string, where the &#34;file_name&#34; placeholder is replaced with the item&#39;s file name.
             collection_file_name: The optional owning collection file name.
+            file_name: The optional overriding file name.
+            item_file_name: The optional overriding item file name.
 
         Returns:
             A tuple of the STAC item definition as a dictionary and the item file name used in the definition.
@@ -251,12 +260,37 @@ el.replaceWith(d);
         stac_item = self.stac_item if hasattr(self, Model._FIELD_STAC_ITEM) else None
         stac_item_file = self.stac_item_file if hasattr(self, Model._FIELD_STAC_ITEM_FILE) else None
 
+        # Make any required changes to the STAC item.
+        if (file_name is not None) or (item_file_name is not None):
+            # Convert the MappingProxy to a dictionary so we can modify it.
+            stac_item = value_from_read_only(stac_item)
+
+            # If an overriding file name has been provided, update the STAC definition to use it. This should just be in the asset list.
+            if file_name is not None:
+                href = dict_nested_get(stac_item, [DataFile._STAC_ITEM_ASSETS, DataFile._STAC_ITEM_ASSET, DataFile._STAC_ITEM_HREF])
+
+                if href is not None:
+                    stac_item[DataFile._STAC_ITEM_ASSETS][DataFile._STAC_ITEM_ASSET][DataFile._STAC_ITEM_HREF] = file_name
+
+            # If an overriding item file name has been provided, update the STAC definition to use it. This should be in the links as the first item.
+            if item_file_name is not None:
+                links = stac_item.get(DataFile._STAC_ITEM_LINKS, [])
+
+                if len(links) &gt; 0:
+                    links[0][DataFile._STAC_ITEM_HREF] = item_file_name
+
+                stac_item_file = item_file_name  # Because we have changed the STAC item file name.
+
+            # Convert the STAC item back into a read-only MappingProxy.
+            stac_item = value_to_read_only(stac_item)
+
         return stac_item, stac_item_file</code></pre>
 </details>
 <div class="desc"><p>DataFile model class providing attributes and methods to manipulate data file details.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>session</code></strong></dt>
 <dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
@@ -273,8 +307,9 @@ el.replaceWith(d);
 <em>Inherited from:</em>
 <code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
 </p>
-<div class="desc inherited"><h2 id="returns">Returns</h2>
-<p>The model attributes as a dictionary.</p></div>
+<div class="desc inherited"><p>Returns
+-----=
+The model attributes as a dictionary.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -325,17 +360,17 @@ el.replaceWith(d);
     self.download_complete(wait=wait)  # Ignore response.</code></pre>
 </details>
 <div class="desc"><p>Downloads the file to the specified path. Optionally waits for the download to complete.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>path</code></strong></dt>
 <dd>The local path to download the file to.</dd>
 <dt><strong><code>preview</code></strong></dt>
 <dd>Optionally specify that the preview (PNG) of the file should be downloaded instead of the main file.</dd>
 <dt><strong><code>wait</code></strong></dt>
 <dd>Optionally wait for the download to complete? Default False.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the download fails.</dd>
 </dl></div>
@@ -392,15 +427,18 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Checks whether the download has completed. If an error has occurred during the download, then this will raise a corresponding exception. Optionally waits
 for the download to complete.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>wait</code></strong></dt>
 <dd>Optionally wait for the download to complete? Default False.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>True if the download is complete.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+True if the download is complete.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any request fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -432,10 +470,12 @@ for the download to complete.</p>
     return self.__download_progress</code></pre>
 </details>
 <div class="desc"><p>Returns current download progress.</p>
-<h2 id="returns">Returns</h2>
-<p>A tuple of the URL, destination and total number of bytes downloaded so far.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A tuple of the URL, destination and total number of bytes downloaded so far.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ModelError</code></dt>
 <dd>if no download is in progress.</dd>
 </dl></div>
@@ -470,13 +510,13 @@ for the download to complete.</p>
     return url</code></pre>
 </details>
 <div class="desc"><p>Obtains a URL which can be used to download the file. This URL is only valid for up to 1 hour.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>preview</code></strong></dt>
 <dd>Optionally specify that the preview (PNG) URL for the file should be obtained instead of the URL for the main file.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the request fails.</dd>
 </dl></div>
@@ -492,20 +532,23 @@ for the download to complete.</p>
 <div class="desc inherited"><p>Gets the model object by loading it from the Fusion Platform<sup>&reg;</sup>. Uses the model's current id and base model id for the get unless …</p></div>
 </dd>
 <dt id="fusion_platform.models.data_file.DataFile.get_stac_item"><code class="name flex">
-<span>def <span class="ident">get_stac_item</span></span>(<span>self,<br>item_file_name_format='.{file_name}.stac',<br>collection_file_name='.collection.stac')</span>
+<span>def <span class="ident">get_stac_item</span></span>(<span>self,<br>item_file_name_format='.{file_name}.stac',<br>collection_file_name='.collection.stac',<br>file_name=None,<br>item_file_name=None)</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_stac_item(self, item_file_name_format=_STAC_ITEM_FILE_NAME_FORMAT, collection_file_name=_STAC_COLLECTION_FILE_NAME):
+<pre><code class="python">def get_stac_item(self, item_file_name_format=_STAC_ITEM_FILE_NAME_FORMAT, collection_file_name=_STAC_COLLECTION_FILE_NAME, file_name=None,
+                  item_file_name=None):
     &#34;&#34;&#34;
     Converts the data file representation into a STAC item.
 
     Args:
         item_file_name_format: The optional item file name format string, where the &#34;file_name&#34; placeholder is replaced with the item&#39;s file name.
         collection_file_name: The optional owning collection file name.
+        file_name: The optional overriding file name.
+        item_file_name: The optional overriding item file name.
 
     Returns:
         A tuple of the STAC item definition as a dictionary and the item file name used in the definition.
@@ -515,18 +558,48 @@ for the download to complete.</p>
     stac_item = self.stac_item if hasattr(self, Model._FIELD_STAC_ITEM) else None
     stac_item_file = self.stac_item_file if hasattr(self, Model._FIELD_STAC_ITEM_FILE) else None
 
+    # Make any required changes to the STAC item.
+    if (file_name is not None) or (item_file_name is not None):
+        # Convert the MappingProxy to a dictionary so we can modify it.
+        stac_item = value_from_read_only(stac_item)
+
+        # If an overriding file name has been provided, update the STAC definition to use it. This should just be in the asset list.
+        if file_name is not None:
+            href = dict_nested_get(stac_item, [DataFile._STAC_ITEM_ASSETS, DataFile._STAC_ITEM_ASSET, DataFile._STAC_ITEM_HREF])
+
+            if href is not None:
+                stac_item[DataFile._STAC_ITEM_ASSETS][DataFile._STAC_ITEM_ASSET][DataFile._STAC_ITEM_HREF] = file_name
+
+        # If an overriding item file name has been provided, update the STAC definition to use it. This should be in the links as the first item.
+        if item_file_name is not None:
+            links = stac_item.get(DataFile._STAC_ITEM_LINKS, [])
+
+            if len(links) &gt; 0:
+                links[0][DataFile._STAC_ITEM_HREF] = item_file_name
+
+            stac_item_file = item_file_name  # Because we have changed the STAC item file name.
+
+        # Convert the STAC item back into a read-only MappingProxy.
+        stac_item = value_to_read_only(stac_item)
+
     return stac_item, stac_item_file</code></pre>
 </details>
 <div class="desc"><p>Converts the data file representation into a STAC item.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>item_file_name_format</code></strong></dt>
 <dd>The optional item file name format string, where the "file_name" placeholder is replaced with the item's file name.</dd>
 <dt><strong><code>collection_file_name</code></strong></dt>
 <dd>The optional owning collection file name.</dd>
+<dt><strong><code>file_name</code></strong></dt>
+<dd>The optional overriding file name.</dd>
+<dt><strong><code>item_file_name</code></strong></dt>
+<dd>The optional overriding item file name.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A tuple of the STAC item definition as a dictionary and the item file name used in the definition.</p></div>
+<p>Returns
+-----=
+A tuple of the STAC item definition as a dictionary and the item file name used in the definition.</p></div>
 </dd>
 <dt id="fusion_platform.models.data_file.DataFile.to_csv"><code class="name flex">
 <span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
@@ -719,7 +792,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

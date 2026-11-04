@@ -9,25 +9,42 @@
 en:
   program: "fusion_platform"
   description: |
-    Use this command to display service information and processes, and to start, download or define processes. Processes can be selected via command line options or
-    defined by a YAML file.
+    Use this command to display service information and processes, to upload, download or delete files, or download, define, delete, list or start processes.
+    Processes can be selected via command line options or defined by a YAML file.
 
     Usage:
-      The following will list all currently configured processes:
+      The following will list all current processes:
     
-        fusion_platform list
+        fusion_platform list process
 
-      The following will display information about one or more services or processes from the given 'service_or_process_name':
+      The following will display information about one or more processes from the given 'process':
     
-        fusion_platform display <service_or_process_name> ...
-    
-      For a service, this will display the full service documentation, including its expected inputs and options. For a process, it will show the current process
-      configuration.
-    
-      The following will attempt to create one or more processes from the given 'service_name' to use the inputs (in order) and options and execute them. All
-      processes will use the same inputs and options:
+        fusion_platform display process <process> ...
 
-        fusion_platform start <service_name> ... -l <input_file|input_name> ... -p <option=value> ...
+      This will show the current process configuration, including options, inputs, outputs and dispatchers, and whether it has any executions.
+
+      The following will list all available services:
+    
+        fusion_platform list service
+
+      The following will display information about one or more services from the given 'service':
+    
+        fusion_platform display service <service> ...
+    
+      This will display the full service documentation, including its expected inputs and options.
+    
+      The following will list all current uploads:
+    
+        fusion_platform list upload
+
+      The following will upload files to a single upload item:
+    
+        fusion_platform upload <upload_name> <file_type> <file> ...
+    
+      The following will attempt to create one or more processes from the given 'service' to use the inputs (in order) and options and execute them. All processes
+      will use the same inputs and options:
+
+        fusion_platform start <service> ... -l <input_file|input_name> ... -p <option=value> ...
 
       The following will also attempt to create one or more processes and execute them, but this time with the parameters specified in the YAML files:
 
@@ -65,36 +82,67 @@ en:
       {tomorrow@hour:minute}:   Is replaced with tomorrow's date with the optional hour and minute (UTC). If '@hour:minute' is not provided, '@00:00' is assumed.
       {<day_name>@hour:minute}: Is replaced with the next occurrence of the specified day, including today. If '@hour:minute' is not provided, '@00:00' is assumed.
 
+      The following will create a YAML file template for one or more services. The YAML file will be named as a sanitised version of the service name with any
+      existing file overwritten:
+
+        fusion_platform template <service> ...
+
       The following will create a YAML file from one or more existing processes. The YAML file will be named as a sanitised version of the process name with any
       existing file overwritten:
 
-        fusion_platform define <process_name> ...
+        fusion_platform define <process> ...
 
       The following will optionally download all the outputs for the executions of a process. Only the last execution is downloaded, unless it is part of a group,
       in which case all the executions in the group are downloaded. The files are downloaded to a sanitised version of the process name with any existing directory
       replaced:
 
-        fusion_platform download <process_name> -o
+        fusion_platform download process <process> -o
+
+      The following will download an upload:
+
+        fusion_platform download upload <upload>
+
+      The following will delete a process with a confirmation prompt. If an execution id is provided, then only the specific execution will be deleted and not the
+      whole process or any other executions:
+    
+        fusion_platform delete process <process>
+
+      The following will delete an upload with a confirmation prompt. Uploads can only be deleted if they are not in use by any processes. This will delete the
+      upload matching the name provided, or corresponding id.
+
+        fusion_platform delete upload <upload>
 
       where
-        service_name: Is the name of the service used to create the process.
-        process_name: Is the name of the process, or for define or download a process id or an execution id.
-        input_file:   Is the path to an input file. The file's extension will be used to work out what type of file it is.
+        file:         Is the path to a file to be uploaded. The file's extension must match the expected file type.
+        file_type:    Is the type of file to be uploaded: CSV, DEM, ESRI Shapefile, GeoJSON, GeoTIFF, GZIP, JPEG, JPEG2000, KML, KMZ, PNG, PDF, ZIP or Other.
+        input_file:   Is the path to an input file. The file's extension must match the expected file type.
         input_name:   Is the name of an existing input within the Fusion Platform(r) which will be used.
+        option:       The precise (lower case) name of the option. For example, 'minimum_coverage' or 'repeat_count'.
+        process:      Is the name of the process, process id or an execution id.
+        process_name: Is the name of the process.
+        service:      Is the name of the service, id or SSD id.
+        service_name: Is the name of the service used to create the process.
         storage_id:   Is the UUID of the storage data item which should be uploaded.
         storage_file: Is the path to a storage file.
-        option:       The precise (lower case) name of the option. For example, 'minimum_coverage' or 'repeat_count'.
+        upload:       Is the name of the upload or id.
+        upload_name:  Is the name of the upload.
         value:        The value of the option. For date times, use ISO formatting, such as '2024-02-21T13:40:06.732527+00:00'
         yaml_file:    Is the path to the YAML file.
+
+      For each command, the deployment, email address and organisation name can be supplied as options. The password will be prompted for unless local password
+      storage is available and in use, in which case the email address and password will be saved for the deployment and used the next time.
 
   epilog: |
     For more detailed options, use:
     
       fusion_platform list --help
-      fusion_platform display --help
-      fusion_platform start --help
       fusion_platform define --help
+      fusion_platform delete --help
+      fusion_platform display --help
       fusion_platform download --help
+      fusion_platform start --help
+      fusion_platform template --help
+      fusion_platform upload --help
 
   deployment_short: "-y"
   deployment_long: "--deployment"
@@ -102,6 +150,9 @@ en:
   email_short: "-e"
   email_long: "--email"
   email_help: "the email address to be used to login"
+  no_save_password_short: "-k"
+  no_save_password_long: "--no_save_password"
+  no_save_password_help: "prevents the password from being saved to the local password storage service and deletes any password associated with the email address"
   organisation_short: "-g"
   organisation_long: "--organisation"
   organisation_help: "the organisation to be used"
@@ -113,26 +164,105 @@ en:
   version_help: "show the version information and exit"
   version_content: "%%(prog)s %{version} (%{version_date})"
 
-  subparser: "Commands are available to display a service or process, or start, define or download a process:"
+  subparser: "Commands are available to display service information and processes, to upload, download or delete files, or download, define, delete, list or start processes:"
 
-  list:
-    command: "list"
-    help: "lists all configured processes"
-    description: "Lists all configured processes."
+  define:
+    command: "define"
+    help: "creates new YAML files to define existing processes"
+    description: "Creates new YAML files to define existing processes."
+    process_long: "process"
+    process_help: "the name of the process, the process id or execution id to build the YAML file"
+
+  delete:
+    command: "delete"
+    help: "deletes existing processes or uploads"
+    description: "Deletes existing processes, executions or uploads."
+    subparser: "Commands are available to delete existing processes, executions or uploads:"
+    process_long: "process"
+    process_help: "the name or id of the process, or associated execution id, that is to be deleted"
+    upload_long: "upload"
+    upload_help: "the name or id of the upload that is to be deleted"
+    force_short: "-f"
+    force_long: "--force"
+    force_help: "force deletion without prompting (default %%(default)s)"
+
+    process:
+      command: "process"
+      help: "deletes existing processes or executions"
+      description: "Deletes existing processes or executions."
+
+    upload:
+      command: "upload"
+      help: "deletes uploads"
+      description: "Deletes uploads."
 
   display:
     command: "display"
-    help: "displays details of services or existing processes"
-    description: "Displays details of services or existing processes."
-    service_or_process_long: "process_or_service"
-    service_or_process_help: "the names of the service, id, SSD id, process, process id or associated execution id that are to be displayed"
+    help: "displays details of existing processes or services"
+    description: "Displays details of existing processes or services."
+    subparser: "Commands are available to display details of existing processes or services:"
+    process_long: "process"
+    process_help: "the name or id of the process, or associated execution id, that is to be displayed"
+    service_long: "service"
+    service_help: "the name, id or SSD id of the service that is to be displayed"
+
+    process:
+      command: "process"
+      help: "displays details of existing processes"
+      description: "Displays details of existing processes."
+
+    service:
+      command: "service"
+      help: "displays details of services"
+      description: "Displays details of services."
+
+  download:
+    command: "download"
+    help: "downloads existing processes, executions or uploads"
+    description: "Downloads existing processes, executions or uploads."
+    subparser: "Commands are available to download existing processes or uploads:"
+    process_long: "process"
+    process_help: "the name or id of the process, or associated execution id, that is to be downloaded"
+    upload_long: "upload"
+    upload_help: "the name or id of the upload that is to be downloaded"
+
+    process:
+      command: "process"
+      help: "downloads existing processes or executions"
+      description: "Downloads existing processes or executions."
+
+    upload:
+      command: "upload"
+      help: "downloads uploads"
+      description: "Downloads uploads."
+
+  list:
+    command: "list"
+    help: "lists all uploads, existing processes or available services"
+    description: "Lists all uploads, existing processes or available services."
+    subparser: "Commands are available to list uploads, existing processes or available services:"
+
+    process:
+      command: "process"
+      help: "lists existing processes"
+      description: "Lists existing processes."
+
+    service:
+      command: "service"
+      help: "lists available services"
+      description: "Lists available services."
+
+    upload:
+      command: "upload"
+      help: "lists uploads"
+      description: "Lists uploads."
 
   start:
     command: "start"
     help: "creates and starts new processes"
     description: "Creates and starts new processes."
     definition_long: "service_or_yaml"
-    definition_help: "the names of the service used to start processes or YAML files which defines everything"
+    definition_help: "the name, id or SSD id of the service that is to be used to start a process, or YAML file which defines the process"
     input_list_short: "-l"
     input_list_long: "--input_list"
     input_list_help: "the list of inputs to be used as either filenames or pre-existing input names"
@@ -157,6 +287,9 @@ en:
     storage_short: "-s"
     storage_long: "--storage"
     storage_help: "downloads the storage (default %%(default)s)"
+    statistics_short: "-q"
+    statistics_long: "--statistics"
+    statistics_help: "downloads the statistics (default %%(default)s)"
     intermediate_short: "-m"
     intermediate_long: "--intermediate"
     intermediate_help: "download the process inputs and/or outputs for all intermediate services (default %%(default)s)"
@@ -173,30 +306,41 @@ en:
     no_wait_for_completion_long: "--no_wait_for_completion"
     no_wait_for_completion_help: "do not wait for the execution to complete (default %%(default)s)"
 
-  define:
-    command: "define"
-    help: "creates new YAML files to define existing processes"
-    description: "Creates new YAML files to define existing processes."
-    process_long: "process"
-    process_help: "the name of the process, the process id or execution id to build the YAML file"
+  template:
+    command: "template"
+    help: "creates new YAML files as templates of services"
+    description: "Creates new YAML files as templates of services."
+    service_long: "service"
+    service_help: "the name of the service, id, SSD id to build the YAML file"
 
-  download:
-    command: "download"
-    help: "downloads the inputs and/or outputs for existing processes"
-    description: "Downloads the inputs and/or outputs for existing processes."
-    process_long: "process"
-    process_help: "the name of the process, the process id or execution id to download"
+  upload:
+    command: "upload"
+    help: "creates a single upload item and uploads files to it"
+    description: "Creates a single upload item and uploads files to it."
+    upload_name_long: "upload_name"
+    upload_name_help: "the name of the upload item to be created"
+    file_type_long: "file_type"
+    file_type_help: "the type of files to be associated with the upload: CSV, DEM, ESRI Shapefile, GeoJSON, GeoTIFF, GZIP, JPEG, JPEG2000, KML, KMZ, PNG, PDF, ZIP or Other"
+    file_long: "file"
+    file_help: "the path to the files to be uploaded"
 
   add_dispatcher: "Add %{dispatcher} dispatcher?"
   dispatch_intermediate: "Dispatch intermediate components?"
   define_inputs: "Defining %{files} input file(s)..."
   define_process: "Defining '%{process}' (inputs %{inputs}, storage %{storage})"
   define_storage: "Defining storage file(s) for %{slices} slice(s)..."
+  delete_execution: "Deleting execution %{execution} for process '%{process}'"
+  delete_execution_confirmation: "Are you sure you want to delete execution %{execution} for process '%{process}'?"
+  delete_process: "Deleting process '%{process}'"
+  delete_process_confirmation: "Are you sure you want to delete process '%{process}'?"
+  delete_upload: "Deleting upload '%{upload}'"
+  delete_upload_confirmation: "Are you sure you want to delete upload '%{upload}'?"
   download_execution: "Downloading execution %{execution} to %{output}"
   download_executions: "Gathering files%{wait} for %{executions} execution(s)..."
   download_files: "Downloading %{files} file(s)..."
   download_process: "Downloading process '%{process}' to %{output}"
-  download_process_execution: "Downloading '%{process}' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, STAC only %{stac_only}, metrics %{metrics}, components %{components})"
+  download_process_execution: "Downloading '%{process}' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, statistics %{statistics}, intermediate %{intermediate}, STAC only %{stac_only}, metrics %{metrics}, components %{components})"
+  download_upload: "Downloading upload '%{upload}' to %{output}"
   email: "Email"
   executing: "Executing..."
   find_inputs: "Finding %{inputs} input file(s)..."
@@ -209,6 +353,8 @@ en:
   remove_process: "Removing process '%{process}'"
   start_process: "Starting '%{process}' from service '%{service}'"
   storage_name: "%{process} Storage %{group_index} %{chain_index}"
+  template_service: "Templating '%{service}'"
+  upload_files: "Creating upload '%{upload_name}' with file type %{file_type} and uploading %{number_of_files} file(s)..."
   upload_inputs: "Uploading %{inputs} input file(s)..."
   upload_storage: "Uploading %{files} storage file(s)..."
   using_organisation: "Using organisation '%{organisation}'"
@@ -225,6 +371,7 @@ en:
   log_service: "Service '%{service}'"
   log_execution: "Execution%{label} '%{id}'%{period}: %{status}%{duration}"
   log_inputs: "Inputs:"
+  log_no_executions: "No executions"
   log_outputs: "Outputs:"
   log_options: "Options:"
   log_dispatchers: "Dispatchers:"
@@ -246,16 +393,33 @@ en:
   log_execution_group_id: "Group %{group_number} of %{group_count} (%{group_id}):"
   log_execution_group_index: " %{group_index} of %{group_count}"
 
-  log_process_group: " %{group_number}: %{executions} execution(s) (%{progress}%% complete);"
-  log_process_summary: "'%{process}': %{executions} execution(s) in %{groups} group(s) (%{progress}%% complete);%{group_progress}"
+  log_process_group: "; Group %{group_number}: %{progress}%%"
+  log_process_summary: "'%{process}'%{group_progress}"
+  log_no_processes: "No processes"
+  log_process_status:
+    draft: "Pending"
+    execute: "Execute"
+    stop: "Stopped"
+
+  log_service_detail: "'%{name}': %{summary}"
+  log_no_services: "No services"
+
+  log_data_file: "%{name}%{file_type}%{crs}%{size}%{source}%{file_name}"
+  log_no_uploads: "No uploads"
 
   invalid_login_response: "Incorrect username or password"
   no_executions: "No executions for process '%{process}'"
+  no_such_data_item: "No such data item '%{data}'"
+  no_such_deployment: "No such deployment '%{deployment}'"
   no_such_input: "No such input '%{input_name}'"
   no_such_organisation: "No such organisation '%{organisation}'"
   no_such_process: "No such process or execution '%{process}'"
   no_such_service: "No such service '%{service}'"
-  no_process_or_service: "No such service, process or execution '%{process_or_service}'"
+  no_such_upload: "No such upload '%{upload}'"
+  no_upload_files: "No files to upload"
   unknown_command: "Unknown command '%{command}'"
+  unknown_file_type: "Unknown file type %{file_type}"
+  missing_file: "Missing file %{file}"
+  invalid_file_extension: "File has an invalid extension (%{extension}) for files of type %{file_type}: %{file}"
   validate_constrained_error: "Not one of %{constrained}"
 

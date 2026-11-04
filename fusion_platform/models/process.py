@@ -759,8 +759,13 @@ class Process(Model):
             RequestError: if any get fails.
             ModelError: if a model could not be loaded or validated from the Fusion Platform<sup>&reg;</sup>.
         """
-        return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True,
-                                                      load_extras=False)  # Most recent first.
+
+        # Only query executions if the process has some listed.
+        if len(self._model.get(self.__class__._FIELD_EXECUTIONS, [])) > 0:
+            return ProcessExecution._models_from_api_path(self._session, self._get_path(self.__class__._PATH_EXECUTIONS), reverse=True,
+                                                          load_extras=False)  # Most recent first.
+        else:
+            return iter([])  # We cannot yield here as we may be yielding in the above.
 
     def find_executions(self, id=None, group_id=None):
         """

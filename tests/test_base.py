@@ -26,4 +26,4 @@ class TestBase(CustomTestCase):
         """
         Test main entry point to ensure no exceptions are raised.
         """
-        Base.main()
+        Base().main()

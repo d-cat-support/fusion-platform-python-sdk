@@ -471,8 +471,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Data model class providing attributes and methods to manipulate data item details.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>session</code></strong></dt>
 <dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
 </dl></div>
@@ -489,8 +490,9 @@ el.replaceWith(d);
 <em>Inherited from:</em>
 <code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
 </p>
-<div class="desc inherited"><h2 id="returns">Returns</h2>
-<p>The model attributes as a dictionary.</p></div>
+<div class="desc inherited"><p>Returns
+-----=
+The model attributes as a dictionary.</p></div>
 </dd>
 <dt id="fusion_platform.models.data.Data.files"><code class="name">prop <span class="ident">files</span></code></dt>
 <dd>
@@ -513,10 +515,12 @@ def files(self):
     return DataFile._models_from_api_path(self._session, self._get_path(self.__class__._PATH_FILES), organisation_id=self.organisation_id)</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the data object's files.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the data object's files.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the data object's files.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -586,17 +590,20 @@ def files(self):
 </details>
 <div class="desc"><p>Checks that the analysis of all files associated with this data object is complete. Optionally waits for the analysis to complete. Also, optionally checks
 whether the extended analysis has completed as compared to just the basic analysis which is required for a file to be used.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>wait</code></strong></dt>
 <dd>Optionally wait for the analysis to complete? Default False.</dd>
 <dt><strong><code>extended_analysis</code></strong></dt>
 <dd>Optionally check whether the extended analysis has completed, rather than only the required basic analysis. Default False.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>True if the analysis is complete for all files.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+True if the analysis is complete for all files.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -641,15 +648,18 @@ whether the extended analysis has completed as compared to just the basic analys
 </details>
 <div class="desc"><p>Creates a data object as a copy of the current object for the same organisation and with the same files. The copy is treated as if it has been uploaded,
 even if the source data object was created by the platform and not uploaded.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>name</code></strong></dt>
 <dd>The name of the copy.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The created copy.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The created copy.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if the copy fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -752,17 +762,20 @@ a corresponding exception. Optionally waits for the upload and analysis to compl
 compared to just the basic analysis which is required for a file to be used.</p>
 <p>Note, a failure of one file upload will not stop the upload of other files. Therefore, if an exception is raised, further calls to this method are required
 until all upload and analysis (or errored) has completed and this method returns True.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>wait</code></strong></dt>
 <dd>Optionally wait for the upload and analysis to complete? Default False.</dd>
 <dt><strong><code>extended_analysis</code></strong></dt>
 <dd>Optionally check whether the extended analysis has completed, rather than only the required basic analysis. Default False.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>True if the upload and (basic or extended) analysis are complete for all files.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+True if the upload and (basic or extended) analysis are complete for all files.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any request fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -882,8 +895,9 @@ until all upload and analysis (or errored) has completed and this method returns
     }, collection_file_name</code></pre>
 </details>
 <div class="desc"><p>Converts the data representation into a STAC collection with the specified STAC item file names.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>items</code></strong></dt>
 <dd>The list of items to be put into the collection. This should be a tuple of (STAC item, item_file_name).</dd>
 <dt><strong><code>collection_file_name</code></strong></dt>
@@ -895,8 +909,9 @@ until all upload and analysis (or errored) has completed and this method returns
 <dt><strong><code>detail</code></strong></dt>
 <dd>The optional collection detail as a dictionary. Default None.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.</p></div>
+<p>Returns
+-----=
+A tuple of the STAC collection definition as a dictionary and the collection file name used in the definition.</p></div>
 </dd>
 <dt id="fusion_platform.models.data.Data.to_csv"><code class="name flex">
 <span>def <span class="ident">to_csv</span></span>(<span>self, exclude=None)</span>
@@ -943,10 +958,12 @@ until all upload and analysis (or errored) has completed and this method returns
     return list(self.__upload_progress.values())</code></pre>
 </details>
 <div class="desc"><p>Returns current upload progress.</p>
-<h2 id="returns">Returns</h2>
-<p>A list of tuples of the source and total number of bytes uploaded so far.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+A list of tuples of the source and total number of bytes uploaded so far.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ModelError</code></dt>
 <dd>if no upload is in progress.</dd>
 </dl></div>
@@ -1058,7 +1075,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

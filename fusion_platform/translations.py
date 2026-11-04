@@ -12,16 +12,30 @@ import i18n
 
 # @formatter:off
 i18n.add_translation('command.validate_constrained_error', 'Not one of %{constrained}', 'en')
+i18n.add_translation('command.invalid_file_extension', 'File has an invalid extension (%{extension}) for files of type %{file_type}: %{file}', 'en')
+i18n.add_translation('command.missing_file', 'Missing file %{file}', 'en')
+i18n.add_translation('command.unknown_file_type', 'Unknown file type %{file_type}', 'en')
 i18n.add_translation('command.unknown_command', 'Unknown command \'%{command}\'', 'en')
-i18n.add_translation('command.no_process_or_service', 'No such service, process or execution \'%{process_or_service}\'', 'en')
+i18n.add_translation('command.no_upload_files', 'No files to upload', 'en')
+i18n.add_translation('command.no_such_upload', 'No such upload \'%{upload}\'', 'en')
 i18n.add_translation('command.no_such_service', 'No such service \'%{service}\'', 'en')
 i18n.add_translation('command.no_such_process', 'No such process or execution \'%{process}\'', 'en')
 i18n.add_translation('command.no_such_organisation', 'No such organisation \'%{organisation}\'', 'en')
 i18n.add_translation('command.no_such_input', 'No such input \'%{input_name}\'', 'en')
+i18n.add_translation('command.no_such_deployment', 'No such deployment \'%{deployment}\'', 'en')
+i18n.add_translation('command.no_such_data_item', 'No such data item \'%{data}\'', 'en')
 i18n.add_translation('command.no_executions', 'No executions for process \'%{process}\'', 'en')
 i18n.add_translation('command.invalid_login_response', 'Incorrect username or password', 'en')
-i18n.add_translation('command.log_process_summary', '\'%{process}\': %{executions} execution(s) in %{groups} group(s) (%{progress}%% complete);%{group_progress}', 'en')
-i18n.add_translation('command.log_process_group', ' %{group_number}: %{executions} execution(s) (%{progress}%% complete);', 'en')
+i18n.add_translation('command.log_no_uploads', 'No uploads', 'en')
+i18n.add_translation('command.log_data_file', '%{name}%{file_type}%{crs}%{size}%{source}%{file_name}', 'en')
+i18n.add_translation('command.log_no_services', 'No services', 'en')
+i18n.add_translation('command.log_service_detail', '\'%{name}\': %{summary}', 'en')
+i18n.add_translation('command.log_process_status.stop', 'Stopped', 'en')
+i18n.add_translation('command.log_process_status.execute', 'Execute', 'en')
+i18n.add_translation('command.log_process_status.draft', 'Pending', 'en')
+i18n.add_translation('command.log_no_processes', 'No processes', 'en')
+i18n.add_translation('command.log_process_summary', '\'%{process}\'%{group_progress}', 'en')
+i18n.add_translation('command.log_process_group', '; Group %{group_number}: %{progress}%%', 'en')
 i18n.add_translation('command.log_execution_group_index', ' %{group_index} of %{group_count}', 'en')
 i18n.add_translation('command.log_execution_group_id', 'Group %{group_number} of %{group_count} (%{group_id}):', 'en')
 i18n.add_translation('command.log_execution_duration', ' - %{minutes} minute(s)', 'en')
@@ -41,6 +55,7 @@ i18n.add_translation('command.log_summary', 'Summary:', 'en')
 i18n.add_translation('command.log_dispatchers', 'Dispatchers:', 'en')
 i18n.add_translation('command.log_options', 'Options:', 'en')
 i18n.add_translation('command.log_outputs', 'Outputs:', 'en')
+i18n.add_translation('command.log_no_executions', 'No executions', 'en')
 i18n.add_translation('command.log_inputs', 'Inputs:', 'en')
 i18n.add_translation('command.log_execution', 'Execution%{label} \'%{id}\'%{period}: %{status}%{duration}', 'en')
 i18n.add_translation('command.log_service', 'Service \'%{service}\'', 'en')
@@ -56,6 +71,8 @@ i18n.add_translation('command.using_service', 'Using service \'%{service}\'', 'e
 i18n.add_translation('command.using_organisation', 'Using organisation \'%{organisation}\'', 'en')
 i18n.add_translation('command.upload_storage', 'Uploading %{files} storage file(s)...', 'en')
 i18n.add_translation('command.upload_inputs', 'Uploading %{inputs} input file(s)...', 'en')
+i18n.add_translation('command.upload_files', 'Creating upload \'%{upload_name}\' with file type %{file_type} and uploading %{number_of_files} file(s)...', 'en')
+i18n.add_translation('command.template_service', 'Templating \'%{service}\'', 'en')
 i18n.add_translation('command.storage_name', '%{process} Storage %{group_index} %{chain_index}', 'en')
 i18n.add_translation('command.start_process', 'Starting \'%{process}\' from service \'%{service}\'', 'en')
 i18n.add_translation('command.remove_process', 'Removing process \'%{process}\'', 'en')
@@ -68,26 +85,37 @@ i18n.add_translation('command.organisation', 'Organisation', 'en')
 i18n.add_translation('command.find_inputs', 'Finding %{inputs} input file(s)...', 'en')
 i18n.add_translation('command.executing', 'Executing...', 'en')
 i18n.add_translation('command.email', 'Email', 'en')
-i18n.add_translation('command.download_process_execution', 'Downloading \'%{process}\' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, intermediate %{intermediate}, STAC only %{stac_only}, metrics %{metrics}, components %{components})', 'en')
+i18n.add_translation('command.download_upload', 'Downloading upload \'%{upload}\' to %{output}', 'en')
+i18n.add_translation('command.download_process_execution', 'Downloading \'%{process}\' (inputs %{inputs}, outputs %{outputs}, storage %{storage}, statistics %{statistics}, intermediate %{intermediate}, STAC only %{stac_only}, metrics %{metrics}, components %{components})', 'en')
 i18n.add_translation('command.download_process', 'Downloading process \'%{process}\' to %{output}', 'en')
 i18n.add_translation('command.download_files', 'Downloading %{files} file(s)...', 'en')
 i18n.add_translation('command.download_executions', 'Gathering files%{wait} for %{executions} execution(s)...', 'en')
 i18n.add_translation('command.download_execution', 'Downloading execution %{execution} to %{output}', 'en')
+i18n.add_translation('command.delete_upload_confirmation', 'Are you sure you want to delete upload \'%{upload}\'?', 'en')
+i18n.add_translation('command.delete_upload', 'Deleting upload \'%{upload}\'', 'en')
+i18n.add_translation('command.delete_process_confirmation', 'Are you sure you want to delete process \'%{process}\'?', 'en')
+i18n.add_translation('command.delete_process', 'Deleting process \'%{process}\'', 'en')
+i18n.add_translation('command.delete_execution_confirmation', 'Are you sure you want to delete execution %{execution} for process \'%{process}\'?', 'en')
+i18n.add_translation('command.delete_execution', 'Deleting execution %{execution} for process \'%{process}\'', 'en')
 i18n.add_translation('command.define_storage', 'Defining storage file(s) for %{slices} slice(s)...', 'en')
 i18n.add_translation('command.define_process', 'Defining \'%{process}\' (inputs %{inputs}, storage %{storage})', 'en')
 i18n.add_translation('command.define_inputs', 'Defining %{files} input file(s)...', 'en')
 i18n.add_translation('command.dispatch_intermediate', 'Dispatch intermediate components?', 'en')
 i18n.add_translation('command.add_dispatcher', 'Add %{dispatcher} dispatcher?', 'en')
-i18n.add_translation('command.download.process_help', 'the name of the process, the process id or execution id to download', 'en')
-i18n.add_translation('command.download.process_long', 'process', 'en')
-i18n.add_translation('command.download.description', 'Downloads the inputs and/or outputs for existing processes.', 'en')
-i18n.add_translation('command.download.help', 'downloads the inputs and/or outputs for existing processes', 'en')
-i18n.add_translation('command.download.command', 'download', 'en')
-i18n.add_translation('command.define.process_help', 'the name of the process, the process id or execution id to build the YAML file', 'en')
-i18n.add_translation('command.define.process_long', 'process', 'en')
-i18n.add_translation('command.define.description', 'Creates new YAML files to define existing processes.', 'en')
-i18n.add_translation('command.define.help', 'creates new YAML files to define existing processes', 'en')
-i18n.add_translation('command.define.command', 'define', 'en')
+i18n.add_translation('command.upload.file_help', 'the path to the files to be uploaded', 'en')
+i18n.add_translation('command.upload.file_long', 'file', 'en')
+i18n.add_translation('command.upload.file_type_help', 'the type of files to be associated with the upload: CSV, DEM, ESRI Shapefile, GeoJSON, GeoTIFF, GZIP, JPEG, JPEG2000, KML, KMZ, PNG, PDF, ZIP or Other', 'en')
+i18n.add_translation('command.upload.file_type_long', 'file_type', 'en')
+i18n.add_translation('command.upload.upload_name_help', 'the name of the upload item to be created', 'en')
+i18n.add_translation('command.upload.upload_name_long', 'upload_name', 'en')
+i18n.add_translation('command.upload.description', 'Creates a single upload item and uploads files to it.', 'en')
+i18n.add_translation('command.upload.help', 'creates a single upload item and uploads files to it', 'en')
+i18n.add_translation('command.upload.command', 'upload', 'en')
+i18n.add_translation('command.template.service_help', 'the name of the service, id, SSD id to build the YAML file', 'en')
+i18n.add_translation('command.template.service_long', 'service', 'en')
+i18n.add_translation('command.template.description', 'Creates new YAML files as templates of services.', 'en')
+i18n.add_translation('command.template.help', 'creates new YAML files as templates of services', 'en')
+i18n.add_translation('command.template.command', 'template', 'en')
 i18n.add_translation('command.start.no_wait_for_completion_help', 'do not wait for the execution to complete (default %%(default)s)', 'en')
 i18n.add_translation('command.start.no_wait_for_completion_long', '--no_wait_for_completion', 'en')
 i18n.add_translation('command.start.no_wait_for_completion_short', '-n', 'en')
@@ -103,6 +131,9 @@ i18n.add_translation('command.start.component_short', '-c', 'en')
 i18n.add_translation('command.start.intermediate_help', 'download the process inputs and/or outputs for all intermediate services (default %%(default)s)', 'en')
 i18n.add_translation('command.start.intermediate_long', '--intermediate', 'en')
 i18n.add_translation('command.start.intermediate_short', '-m', 'en')
+i18n.add_translation('command.start.statistics_help', 'downloads the statistics (default %%(default)s)', 'en')
+i18n.add_translation('command.start.statistics_long', '--statistics', 'en')
+i18n.add_translation('command.start.statistics_short', '-q', 'en')
 i18n.add_translation('command.start.storage_help', 'downloads the storage (default %%(default)s)', 'en')
 i18n.add_translation('command.start.storage_long', '--storage', 'en')
 i18n.add_translation('command.start.storage_short', '-s', 'en')
@@ -127,20 +158,75 @@ i18n.add_translation('command.start.options_short', '-p', 'en')
 i18n.add_translation('command.start.input_list_help', 'the list of inputs to be used as either filenames or pre-existing input names', 'en')
 i18n.add_translation('command.start.input_list_long', '--input_list', 'en')
 i18n.add_translation('command.start.input_list_short', '-l', 'en')
-i18n.add_translation('command.start.definition_help', 'the names of the service used to start processes or YAML files which defines everything', 'en')
+i18n.add_translation('command.start.definition_help', 'the name, id or SSD id of the service that is to be used to start a process, or YAML file which defines the process', 'en')
 i18n.add_translation('command.start.definition_long', 'service_or_yaml', 'en')
 i18n.add_translation('command.start.description', 'Creates and starts new processes.', 'en')
 i18n.add_translation('command.start.help', 'creates and starts new processes', 'en')
 i18n.add_translation('command.start.command', 'start', 'en')
-i18n.add_translation('command.display.service_or_process_help', 'the names of the service, id, SSD id, process, process id or associated execution id that are to be displayed', 'en')
-i18n.add_translation('command.display.service_or_process_long', 'process_or_service', 'en')
-i18n.add_translation('command.display.description', 'Displays details of services or existing processes.', 'en')
-i18n.add_translation('command.display.help', 'displays details of services or existing processes', 'en')
-i18n.add_translation('command.display.command', 'display', 'en')
-i18n.add_translation('command.list.description', 'Lists all configured processes.', 'en')
-i18n.add_translation('command.list.help', 'lists all configured processes', 'en')
+i18n.add_translation('command.list.upload.description', 'Lists uploads.', 'en')
+i18n.add_translation('command.list.upload.help', 'lists uploads', 'en')
+i18n.add_translation('command.list.upload.command', 'upload', 'en')
+i18n.add_translation('command.list.service.description', 'Lists available services.', 'en')
+i18n.add_translation('command.list.service.help', 'lists available services', 'en')
+i18n.add_translation('command.list.service.command', 'service', 'en')
+i18n.add_translation('command.list.process.description', 'Lists existing processes.', 'en')
+i18n.add_translation('command.list.process.help', 'lists existing processes', 'en')
+i18n.add_translation('command.list.process.command', 'process', 'en')
+i18n.add_translation('command.list.subparser', 'Commands are available to list uploads, existing processes or available services:', 'en')
+i18n.add_translation('command.list.description', 'Lists all uploads, existing processes or available services.', 'en')
+i18n.add_translation('command.list.help', 'lists all uploads, existing processes or available services', 'en')
 i18n.add_translation('command.list.command', 'list', 'en')
-i18n.add_translation('command.subparser', 'Commands are available to display a service or process, or start, define or download a process:', 'en')
+i18n.add_translation('command.download.upload.description', 'Downloads uploads.', 'en')
+i18n.add_translation('command.download.upload.help', 'downloads uploads', 'en')
+i18n.add_translation('command.download.upload.command', 'upload', 'en')
+i18n.add_translation('command.download.process.description', 'Downloads existing processes or executions.', 'en')
+i18n.add_translation('command.download.process.help', 'downloads existing processes or executions', 'en')
+i18n.add_translation('command.download.process.command', 'process', 'en')
+i18n.add_translation('command.download.upload_help', 'the name or id of the upload that is to be downloaded', 'en')
+i18n.add_translation('command.download.upload_long', 'upload', 'en')
+i18n.add_translation('command.download.process_help', 'the name or id of the process, or associated execution id, that is to be downloaded', 'en')
+i18n.add_translation('command.download.process_long', 'process', 'en')
+i18n.add_translation('command.download.subparser', 'Commands are available to download existing processes or uploads:', 'en')
+i18n.add_translation('command.download.description', 'Downloads existing processes, executions or uploads.', 'en')
+i18n.add_translation('command.download.help', 'downloads existing processes, executions or uploads', 'en')
+i18n.add_translation('command.download.command', 'download', 'en')
+i18n.add_translation('command.display.service.description', 'Displays details of services.', 'en')
+i18n.add_translation('command.display.service.help', 'displays details of services', 'en')
+i18n.add_translation('command.display.service.command', 'service', 'en')
+i18n.add_translation('command.display.process.description', 'Displays details of existing processes.', 'en')
+i18n.add_translation('command.display.process.help', 'displays details of existing processes', 'en')
+i18n.add_translation('command.display.process.command', 'process', 'en')
+i18n.add_translation('command.display.service_help', 'the name, id or SSD id of the service that is to be displayed', 'en')
+i18n.add_translation('command.display.service_long', 'service', 'en')
+i18n.add_translation('command.display.process_help', 'the name or id of the process, or associated execution id, that is to be displayed', 'en')
+i18n.add_translation('command.display.process_long', 'process', 'en')
+i18n.add_translation('command.display.subparser', 'Commands are available to display details of existing processes or services:', 'en')
+i18n.add_translation('command.display.description', 'Displays details of existing processes or services.', 'en')
+i18n.add_translation('command.display.help', 'displays details of existing processes or services', 'en')
+i18n.add_translation('command.display.command', 'display', 'en')
+i18n.add_translation('command.delete.upload.description', 'Deletes uploads.', 'en')
+i18n.add_translation('command.delete.upload.help', 'deletes uploads', 'en')
+i18n.add_translation('command.delete.upload.command', 'upload', 'en')
+i18n.add_translation('command.delete.process.description', 'Deletes existing processes or executions.', 'en')
+i18n.add_translation('command.delete.process.help', 'deletes existing processes or executions', 'en')
+i18n.add_translation('command.delete.process.command', 'process', 'en')
+i18n.add_translation('command.delete.force_help', 'force deletion without prompting (default %%(default)s)', 'en')
+i18n.add_translation('command.delete.force_long', '--force', 'en')
+i18n.add_translation('command.delete.force_short', '-f', 'en')
+i18n.add_translation('command.delete.upload_help', 'the name or id of the upload that is to be deleted', 'en')
+i18n.add_translation('command.delete.upload_long', 'upload', 'en')
+i18n.add_translation('command.delete.process_help', 'the name or id of the process, or associated execution id, that is to be deleted', 'en')
+i18n.add_translation('command.delete.process_long', 'process', 'en')
+i18n.add_translation('command.delete.subparser', 'Commands are available to delete existing processes, executions or uploads:', 'en')
+i18n.add_translation('command.delete.description', 'Deletes existing processes, executions or uploads.', 'en')
+i18n.add_translation('command.delete.help', 'deletes existing processes or uploads', 'en')
+i18n.add_translation('command.delete.command', 'delete', 'en')
+i18n.add_translation('command.define.process_help', 'the name of the process, the process id or execution id to build the YAML file', 'en')
+i18n.add_translation('command.define.process_long', 'process', 'en')
+i18n.add_translation('command.define.description', 'Creates new YAML files to define existing processes.', 'en')
+i18n.add_translation('command.define.help', 'creates new YAML files to define existing processes', 'en')
+i18n.add_translation('command.define.command', 'define', 'en')
+i18n.add_translation('command.subparser', 'Commands are available to display service information and processes, to upload, download or delete files, or download, define, delete, list or start processes:', 'en')
 i18n.add_translation('command.version_content', '%%(prog)s %{version} (%{version_date})', 'en')
 i18n.add_translation('command.version_help', 'show the version information and exit', 'en')
 i18n.add_translation('command.version_long', '--version', 'en')
@@ -151,6 +237,9 @@ i18n.add_translation('command.debug_short', '-b', 'en')
 i18n.add_translation('command.organisation_help', 'the organisation to be used', 'en')
 i18n.add_translation('command.organisation_long', '--organisation', 'en')
 i18n.add_translation('command.organisation_short', '-g', 'en')
+i18n.add_translation('command.no_save_password_help', 'prevents the password from being saved to the local password storage service and deletes any password associated with the email address', 'en')
+i18n.add_translation('command.no_save_password_long', '--no_save_password', 'en')
+i18n.add_translation('command.no_save_password_short', '-k', 'en')
 i18n.add_translation('command.email_help', 'the email address to be used to login', 'en')
 i18n.add_translation('command.email_long', '--email', 'en')
 i18n.add_translation('command.email_short', '-e', 'en')
@@ -161,32 +250,52 @@ i18n.add_translation('command.epilog', '''
 For more detailed options, use:
 
   fusion_platform list --help
-  fusion_platform display --help
-  fusion_platform start --help
   fusion_platform define --help
+  fusion_platform delete --help
+  fusion_platform display --help
   fusion_platform download --help
+  fusion_platform start --help
+  fusion_platform template --help
+  fusion_platform upload --help
 
 ''', 'en')
 i18n.add_translation('command.description', '''
-Use this command to display service information and processes, and to start, download or define processes. Processes can be selected via command line options or
-defined by a YAML file.
+Use this command to display service information and processes, to upload, download or delete files, or download, define, delete, list or start processes.
+Processes can be selected via command line options or defined by a YAML file.
 
 Usage:
-  The following will list all currently configured processes:
+  The following will list all current processes:
 
-    fusion_platform list
+    fusion_platform list process
 
-  The following will display information about one or more services or processes from the given \'service_or_process_name\':
+  The following will display information about one or more processes from the given \'process\':
 
-    fusion_platform display <service_or_process_name> ...
+    fusion_platform display process <process> ...
 
-  For a service, this will display the full service documentation, including its expected inputs and options. For a process, it will show the current process
-  configuration.
+  This will show the current process configuration, including options, inputs, outputs and dispatchers, and whether it has any executions.
 
-  The following will attempt to create one or more processes from the given \'service_name\' to use the inputs (in order) and options and execute them. All
-  processes will use the same inputs and options:
+  The following will list all available services:
 
-    fusion_platform start <service_name> ... -l <input_file|input_name> ... -p <option=value> ...
+    fusion_platform list service
+
+  The following will display information about one or more services from the given \'service\':
+
+    fusion_platform display service <service> ...
+
+  This will display the full service documentation, including its expected inputs and options.
+
+  The following will list all current uploads:
+
+    fusion_platform list upload
+
+  The following will upload files to a single upload item:
+
+    fusion_platform upload <upload_name> <file_type> <file> ...
+
+  The following will attempt to create one or more processes from the given \'service\' to use the inputs (in order) and options and execute them. All processes
+  will use the same inputs and options:
+
+    fusion_platform start <service> ... -l <input_file|input_name> ... -p <option=value> ...
 
   The following will also attempt to create one or more processes and execute them, but this time with the parameters specified in the YAML files:
 
@@ -224,27 +333,55 @@ Usage:
   {tomorrow@hour:minute}:   Is replaced with tomorrow\'s date with the optional hour and minute (UTC). If \'@hour:minute\' is not provided, \'@00:00\' is assumed.
   {<day_name>@hour:minute}: Is replaced with the next occurrence of the specified day, including today. If \'@hour:minute\' is not provided, \'@00:00\' is assumed.
 
+  The following will create a YAML file template for one or more services. The YAML file will be named as a sanitised version of the service name with any
+  existing file overwritten:
+
+    fusion_platform template <service> ...
+
   The following will create a YAML file from one or more existing processes. The YAML file will be named as a sanitised version of the process name with any
   existing file overwritten:
 
-    fusion_platform define <process_name> ...
+    fusion_platform define <process> ...
 
   The following will optionally download all the outputs for the executions of a process. Only the last execution is downloaded, unless it is part of a group,
   in which case all the executions in the group are downloaded. The files are downloaded to a sanitised version of the process name with any existing directory
   replaced:
 
-    fusion_platform download <process_name> -o
+    fusion_platform download process <process> -o
+
+  The following will download an upload:
+
+    fusion_platform download upload <upload>
+
+  The following will delete a process with a confirmation prompt. If an execution id is provided, then only the specific execution will be deleted and not the
+  whole process or any other executions:
+
+    fusion_platform delete process <process>
+
+  The following will delete an upload with a confirmation prompt. Uploads can only be deleted if they are not in use by any processes. This will delete the
+  upload matching the name provided, or corresponding id.
+
+    fusion_platform delete upload <upload>
 
   where
-    service_name: Is the name of the service used to create the process.
-    process_name: Is the name of the process, or for define or download a process id or an execution id.
-    input_file:   Is the path to an input file. The file\'s extension will be used to work out what type of file it is.
+    file:         Is the path to a file to be uploaded. The file\'s extension must match the expected file type.
+    file_type:    Is the type of file to be uploaded: CSV, DEM, ESRI Shapefile, GeoJSON, GeoTIFF, GZIP, JPEG, JPEG2000, KML, KMZ, PNG, PDF, ZIP or Other.
+    input_file:   Is the path to an input file. The file\'s extension must match the expected file type.
     input_name:   Is the name of an existing input within the Fusion Platform(r) which will be used.
+    option:       The precise (lower case) name of the option. For example, \'minimum_coverage\' or \'repeat_count\'.
+    process:      Is the name of the process, process id or an execution id.
+    process_name: Is the name of the process.
+    service:      Is the name of the service, id or SSD id.
+    service_name: Is the name of the service used to create the process.
     storage_id:   Is the UUID of the storage data item which should be uploaded.
     storage_file: Is the path to a storage file.
-    option:       The precise (lower case) name of the option. For example, \'minimum_coverage\' or \'repeat_count\'.
+    upload:       Is the name of the upload or id.
+    upload_name:  Is the name of the upload.
     value:        The value of the option. For date times, use ISO formatting, such as \'2024-02-21T13:40:06.732527+00:00\'
     yaml_file:    Is the path to the YAML file.
+
+  For each command, the deployment, email address and organisation name can be supplied as options. The password will be prompted for unless local password
+  storage is available and in use, in which case the email address and password will be saved for the deployment and used the next time.
 
 ''', 'en')
 i18n.add_translation('command.program', 'fusion_platform', 'en')

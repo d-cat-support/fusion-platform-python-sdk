@@ -1,0 +1,60 @@
+service_name: Sentinel-2 (Multispectral)
+process_name: Sentinel-2 (Multispectral) 2026-10-01T14:25:53.198164+00:00
+inputs:
+  - name: Area
+    file: area.json
+storage:
+  1_2_1ee67d9d-1220-43aa-a5e7-f33f2095d24a_1: storage1.tar.gz
+  1_2_6a67806d-e8db-4989-89ca-2d53d2c699c1_2: storage1.tar.gz
+options:
+  latest_date: true
+  latest_days: 5.0
+  start_date: null
+  end_date: null
+  maximum_scan_days: 5.0
+  scan_gap_days: 0.0
+  scan_order: coverage
+  merge_images: true
+  mask: true
+  best_coverage: false
+  minimum_coverage: 60.0
+  maximum_cloud: 95.0
+  output_storage_period: 3
+  run_type: run_once
+  repeat_count: 1
+  repeat_start: '2026-10-01T14:25:53.515379+00:00'
+  repeat_end: null
+  repeat_gap: null
+  repeat_offset: null
+dispatchers:
+  - name: AWS S3
+    options:
+      bucket: null
+      s3_key_format: '{organisation_id}_{organisation_name}/{process_id}_{process_name}/{process_execution_group_index}_{process_execution_id}_{process_execution_started_at}/{dispatching_service_name}/{output}_{output_name}/{file_name}'
+      access_key_id: null
+      secret_access_key: null
+      session_token: null
+      kms_key_id: null
+      outputs: '*'
+      output_file_pattern: '*'
+      output_stac: false
+      condition: 'True'
+  - name: Email
+    options:
+      emails: null
+      message: null
+      outputs: '*'
+      output_file_pattern: '*'
+      condition: 'True'
+  - name: Google Cloud Storage
+    options:
+      bucket: null
+      gcs_key_format: '{organisation_id}_{organisation_name}/{process_id}_{process_name}/{process_execution_group_index}_{process_execution_id}_{process_execution_started_at}/{dispatching_service_name}/{output}_{output_name}/{file_name}'
+      project_id: null
+      private_key: null
+      client_email: null
+      kms_key_id: null
+      outputs: '*'
+      output_file_pattern: '*'
+      output_stac: false
+      condition: 'True'

@@ -25,13 +25,14 @@ class TestSession(CustomTestCase):
     Session tests.
     """
 
-    def __init__(self, methodName):
+    def __init__(self, method_name):
         """
         Initialises the test case.
 
-        :param methodName: The test method name.
+        Args:
+            method_name: The test method name.
         """
-        super(TestSession, self).__init__(methodName)
+        super(TestSession, self).__init__(method_name)
 
         # Initialise the fields.
         self._download_size = None
@@ -40,9 +41,10 @@ class TestSession(CustomTestCase):
         """
         Test download callback method.
 
-        :param url: The URL to download as a file.
-        :param destination: The destination file path.
-        :param size: The total size in bytes so far downloaded.
+        Args:
+            url: The URL to download as a file.
+            destination: The destination file path.
+            size: The total size in bytes so far downloaded.
         """
         if self._download_size is None:
             self._download_size = size

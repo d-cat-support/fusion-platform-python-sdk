@@ -145,8 +145,9 @@ el.replaceWith(d);
 </details>
 <div class="desc"><p>Process service execution model class providing attributes and methods to manipulate process execution item details.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>session</code></strong></dt>
 <dd>The linked session object for interfacing with the Fusion Platform<sup>&reg;</sup>.</dd>
 <dt><strong><code>schema</code></strong></dt>
@@ -165,8 +166,9 @@ el.replaceWith(d);
 <em>Inherited from:</em>
 <code><a title="fusion_platform.models.model.Model" href="model.html#fusion_platform.models.model.Model">Model</a></code>.<code><a title="fusion_platform.models.model.Model.attributes" href="model.html#fusion_platform.models.model.Model.attributes">attributes</a></code>
 </p>
-<div class="desc inherited"><h2 id="returns">Returns</h2>
-<p>The model attributes as a dictionary.</p></div>
+<div class="desc inherited"><p>Returns
+-----=
+The model attributes as a dictionary.</p></div>
 </dd>
 <dt id="fusion_platform.models.process_service_execution.ProcessServiceExecution.inputs"><code class="name">prop <span class="ident">inputs</span></code></dt>
 <dd>
@@ -191,10 +193,12 @@ def inputs(self):
     return Data._models_from_api_ids(self._session, Data._get_ids_from_list(inputs, organisation_id=self.organisation_id))</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the process execution component's inputs.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the input data objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the input data objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -224,10 +228,12 @@ def outputs(self):
     return Data._models_from_api_ids(self._session, Data._get_ids_from_list(outputs, organisation_id=self.organisation_id))</code></pre>
 </details>
 <div class="desc"><p>Provides an iterator through the process execution component's outputs.</p>
-<h2 id="returns">Returns</h2>
-<p>An iterator through the output data objects.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+An iterator through the output data objects.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>RequestError</code></dt>
 <dd>if any get fails.</dd>
 <dt><code>ModelError</code></dt>
@@ -289,13 +295,15 @@ def outputs(self):
         raise</code></pre>
 </details>
 <div class="desc"><p>Downloads the log output from the component's execution to the specified path as a CSV file.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>path</code></strong></dt>
 <dd>The path to save the log records to.</dd>
 </dl>
-<h2 id="raises">Raises</h2>
-<p>RequestError if any get fails.</p></div>
+<p>Raises
+-----=
+RequestError if any get fails.</p></div>
 </dd>
 <dt id="fusion_platform.models.process_service_execution.ProcessServiceExecution.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, **kwargs)</span>
@@ -377,6 +385,7 @@ def outputs(self):
     inputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     outputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={&#39;hide&#39;: True})  # Changed to hide as an attribute.
     # Removed storage_id.
+    statistics_id = fields.UUID(allow_none=True, metadata={&#39;read_only&#39;: True})  # Changed to prevent this being updated.
     intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
     # Removed task_starts.
@@ -447,6 +456,7 @@ def outputs(self):
 <li><strong>validation</strong>: The optional validation for the option. This must be supplied for date/time and constrained values.</li>
 </ul>
 </li>
+<li><strong>statistics_id</strong>: The statistics file for the service.</li>
 <li><strong>intermediate</strong>: Is this an intermediate service?</li>
 <li><strong>success</strong>: Has the execution completed successfully?</li>
 <li><strong>metrics</strong>: Metrics recorded during the execution.<ul>
@@ -513,7 +523,7 @@ dict(one=1, two=2)</p></div>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

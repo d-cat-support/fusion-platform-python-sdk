@@ -11,8 +11,8 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 """
 
 # Do not modify the following two lines as they are maintained by the version.sh script.
-__version__ = '2.2.5'
-__version_date__ = '2026-09-01T12:45:40Z'
+__version__ = '2.3.8'
+__version_date__ = '2026-11-03T12:35:44Z'
 
 # Exclude certain sub-modules from documentation.
 # @formatter:off
@@ -81,8 +81,11 @@ __pdoc__ = {
 }
 # @formatter:on
 
+# The Fusion Platform(r).
+FUSION_PLATFORM = 'fusion_platform'
+
 # Logging constant.
-FUSION_PLATFORM_LOGGER = 'fusion_platform'
+FUSION_PLATFORM_LOGGER = FUSION_PLATFORM
 
 # Option data types.
 DATA_TYPE_NUMERIC = 'numeric'

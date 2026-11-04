@@ -438,8 +438,9 @@ def user_id(self):
     &#34;&#34;&#34;
     return self.__user_id</code></pre>
 </details>
-<div class="desc"><h2 id="returns">Returns</h2>
-<p>The user id.</p></div>
+<div class="desc"><p>Returns
+-----=
+The user id.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -506,8 +507,9 @@ def user_id(self):
 </details>
 <div class="desc"><p>Downloads a file to the destination path. The destination directories are created if they do not exist. The optional callback function receives three
 arguments which are the URL, destination and the number of bytes downloaded so far.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>url</code></strong></dt>
 <dd>The URL to download as a file.</dd>
 <dt><strong><code>destination</code></strong></dt>
@@ -575,10 +577,12 @@ email: The user account email address. Either an email address or a user id must
 user_id: The user account user id. Either an email address or a user id must be provided.
 password: The password for the user account.
 api_url: The optional custom API URL to use. Defaults to the production Fusion Platform<sup>&reg;</sup>.</p>
-<h2 id="returns">Returns</h2>
-<p>The corresponding user id on successful login.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The corresponding user id on successful login.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="fusion_platform.session.ValueError" href="#fusion_platform.session.ValueError">ValueError</a></code></dt>
 <dd>on incorrect parameters.</dd>
 <dt><code><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></code></dt>
@@ -664,8 +668,9 @@ def request(self, path=&#39;/&#39;, query_parameters=None, method=METHOD_GET, bo
 </details>
 <div class="desc"><p>Sends a request to the Fusion Platform<sup>&reg;</sup> using the specified path, method and JSON payload. This method will use the authentication bearer token, if
 available.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>path</code></strong></dt>
 <dd>The optional path. Default '/'.</dd>
 <dt><strong><code>query_parameters</code></strong></dt>
@@ -675,10 +680,12 @@ available.</p>
 <dt><strong><code>body</code></strong></dt>
 <dd>The optional body. Default None.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The decoded response body.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The decoded response body.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code><a title="fusion_platform.session.RequestError" href="#fusion_platform.session.RequestError">RequestError</a></code></dt>
 <dd>if the request failed.</dd>
 </dl></div>
@@ -724,8 +731,9 @@ available.</p>
         raise RequestError(i18n.t(&#39;session.request_failed&#39;, message=message)) from e</code></pre>
 </details>
 <div class="desc"><p>Uploads a file from the source path.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>url</code></strong></dt>
 <dd>The URL to download as a file.</dd>
 <dt><strong><code>source</code></strong></dt>
@@ -803,8 +811,9 @@ available.</p>
 </details>
 <div class="desc"><p>Provides a callback mechanism for uploads using the CallbackIOWrapper.</p>
 <p>Initialises the object.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>url</code></strong></dt>
 <dd>The URL being uploaded to.</dd>
 <dt><strong><code>source</code></strong></dt>
@@ -833,8 +842,9 @@ available.</p>
     self.__callback(self.__url, self.__source, self.__upload_size)</code></pre>
 </details>
 <div class="desc"><p>Receives the upload callback every time data is read from the associated file.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>size</code></strong></dt>
 <dd>The number of bytes which have been read from the associated file.</dd>
 </dl></div>
@@ -874,7 +884,7 @@ available.</p>
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

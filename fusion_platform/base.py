@@ -35,8 +35,7 @@ class Base:
         self._logger = logging.getLogger(fusion_platform.FUSION_PLATFORM_LOGGER)
         self._logger.debug('sdk %s (%s): %s', fusion_platform.__version__, fusion_platform.__version_date__, self.__class__.__name__)
 
-    @classmethod
-    def main(cls):
+    def main(self):
         """
         Main entry point when the package is executed from the command line.
         """
@@ -48,4 +47,4 @@ class Base:
 
 # Main entry point when the file is executed from the command line.
 if __name__ == "__main__":
-    Base.main()
+    Base().main()

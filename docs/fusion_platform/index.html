@@ -82,8 +82,9 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
     return logger.level</code></pre>
 </details>
 <div class="desc"><p>Gets the logging level for the SDK.</p>
-<h2 id="returns">Returns</h2>
-<p>The current log level, as specified by the logging package.</p></div>
+<p>Returns
+-----=
+The current log level, as specified by the logging package.</p></div>
 </dd>
 <dt id="fusion_platform.login"><code class="name flex">
 <span>def <span class="ident">login</span></span>(<span>email=None, user_id=None, password=None, api_url=None, session_options=None)</span>
@@ -119,8 +120,9 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
     return User._model_from_api_id(session, id=session.user_id)</code></pre>
 </details>
 <div class="desc"><p>Attempts to log into the Fusion Platform<sup>&reg;</sup> to return a user model for the active session.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>email</code></strong></dt>
 <dd>The user account email address. Either an email address or a user id must be provided.</dd>
 <dt><strong><code>user_id</code></strong></dt>
@@ -132,10 +134,12 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 <dt><strong><code>session_options</code></strong></dt>
 <dd>The optional options to be passed to the session.</dd>
 </dl>
-<h2 id="returns">Returns</h2>
-<p>The corresponding user model for the account on successful login.</p>
-<h2 id="raises">Raises</h2>
+<p>Returns
+-----=
+The corresponding user model for the account on successful login.</p>
 <dl>
+<dt>Raises</dt>
+<dt>-----=</dt>
 <dt><code>ValueError</code></dt>
 <dd>on incorrect parameters.</dd>
 <dt><code>RequestError</code></dt>
@@ -161,8 +165,9 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
     logger.setLevel(level)</code></pre>
 </details>
 <div class="desc"><p>Sets the logging level for the SDK.</p>
-<h2 id="args">Args</h2>
 <dl>
+<dt>Args</dt>
+<dt>-----=</dt>
 <dt><strong><code>level</code></strong></dt>
 <dd>The required log level, as specified by the logging package. For example,</dd>
 </dl></div>
@@ -179,7 +184,7 @@ API, and this is defined within the corresponding OpenAPI 3.0 specification, whi
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.2.5
+Version: 2.3.8
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

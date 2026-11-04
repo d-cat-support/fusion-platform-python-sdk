@@ -516,6 +516,9 @@ class TestProcess(CustomTestCase):
         with open(self.fixture_path('process.json'), 'r') as file:
             process_content = json.loads(file.read())
 
+        process_content_no_executions = process_content.copy()
+        process_content_no_executions.pop(Model._FIELD_EXECUTIONS)
+
         with open(self.fixture_path('process_execution.json'), 'r') as file:
             execution_content = json.loads(file.read())
 
@@ -529,6 +532,15 @@ class TestProcess(CustomTestCase):
 
         process = Process(session)
         self.assertIsNotNone(process)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",
+                     text=json.dumps({Model._RESPONSE_KEY_MODEL: process_content_no_executions, Model._RESPONSE_KEY_EXTRAS: {Model._FIELD_DISPATCHERS: extras}}))
+            process.get(organisation_id=organisation_id, process_id=process_id)
+            self.assertIsNotNone(process)
+            self.assertEqual(str(process_id), str(process.id))
+
+            self.assertEqual(0, len([item for item in process.executions]))
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{Session.API_URL_DEFAULT}{Process._PATH_GET.format(organisation_id=organisation_id, process_id=process_id)}",

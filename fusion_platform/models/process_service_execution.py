@@ -161,6 +161,7 @@ class ProcessServiceExecutionSchema(Schema):
     inputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
     outputs = fields.List(fields.UUID(required=True), allow_none=True, metadata={'hide': True})  # Changed to hide as an attribute.
     # Removed storage_id.
+    statistics_id = fields.UUID(allow_none=True, metadata={'read_only': True})  # Changed to prevent this being updated.
     intermediate = fields.Boolean(allow_none=True)
     # Removed task_id.
     # Removed task_starts.
