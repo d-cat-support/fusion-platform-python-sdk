@@ -222,8 +222,6 @@ class ServiceSchema(Schema):
     definition = fields.List(fields.Nested(ServiceDefinitionSchema()), allow_none=True)
     group_aggregators = fields.List(fields.Nested(ServiceGroupAggregatorSchema()), allow_none=True)
     actions = fields.List(fields.Nested(ServiceActionSchema()), allow_none=True)
-    urls = fields.List(fields.Url(required=True), allow_none=True)
-    cidrs = fields.List(fields.String(required=True), allow_none=True)
 
     input_expressions = fields.List(fields.Nested(ServiceInputExpressionSchema()), allow_none=True)
     input_validations = fields.List(fields.Nested(ServiceValidationSchema()), allow_none=True)

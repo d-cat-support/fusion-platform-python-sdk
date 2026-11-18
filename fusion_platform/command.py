@@ -120,7 +120,7 @@ class Command(Base):
     }
 
     # Metrics used during download.
-    _METRICS_FILE = 'metrics.csv'
+    _METRICS_FILE_FORMAT = '{name}_metrics.csv'
     _METRICS_METRICS = 'metrics'
     _METRICS_EXECUTION = 'execution'
     _METRICS_PROCESS = 'process'
@@ -468,50 +468,30 @@ class Command(Base):
 
         return attempted_delete
 
-    def display_service(self, organisation, service_name):
-        """
-        Displays the documentation for the service. If the service does not exist, it will be ignored.
-
-        Args:
-            organisation: The logged in organisation.
-            service_name: The name of the service to display.
-
-        Returns:
-            True if a service was displayed.
-        """
-        found = False
-
-        # Try to find any existing service, ignoring any error.
-        try:
-            service = self.get_service(organisation, service_name)
-            found = True
-
-            self.__print_service(service)
-
-        except CommandError as e:
-            self.__print(logging.DEBUG, str(e))
-
-        return found
-
-    def display_process(self, organisation, process_name):
+    def display_process(self, organisation, process_name, display_json=False):
         """
         Displays the current configuration of the process. If the process does not exist, it will be ignored.
 
         Args:
             organisation: The logged in organisation.
             process_name: The name of the process to display.
+            display_json: Output in JSON format.
 
         Returns:
-            True if a process was displayed.
+            A tuple with True if a process was displayed and the associated JSON content.
         """
         found = False
+        content = {}
+
+        # If JSON is being displayed, do not print anything from this method. We do not change the overall print level as we still want to output errors.
+        print_level = logging.NOTSET if display_json else logging.INFO
 
         # Try to find any existing process, ignoring any error.
         try:
             process, _ = self.get_process_or_execution(organisation, process_name)
             found = True
 
-            self.__print_process(process)
+            content = self.__print_process(process, print_level=print_level)
 
             # Group executions, if they are in groups.
             groups = defaultdict(list)
@@ -523,36 +503,79 @@ class Command(Base):
                     groups[execution.group_id].append(execution)
 
             # Display the status of any execution, in groups if used.
+            content[Model._FIELD_EXECUTIONS] = []
+
             if len(groups) > 0:
                 group_number = 1
 
                 for group_id, group_executions in groups.items():
-                    self.__print(logging.INFO,
+                    self.__print(print_level,
                                  i18n.t('command.log_execution_group_id', group_number=group_number, group_count=len(groups), group_id=group_id))
 
-                    for execution in sorted(group_executions, key=lambda execution: execution.group_index):
-                        self.__print_execution(execution, label=i18n.t('command.log_execution_group_index', group_index=execution.group_index,
-                                                                       group_count=execution.group_count))
+                    for i, execution in enumerate(sorted(group_executions, key=lambda execution: execution.group_index)):
+                        if i > 0:
+                            self.__print(print_level, i18n.t('command.log_divider'))
+
+                        execution_content = self.__print_execution(execution, label=i18n.t('command.log_execution_group_index', group_index=execution.group_index,
+                                                                                           group_count=execution.group_count), print_level=print_level)
+                        execution_content[Model._FIELD_GROUP_ID] = group_id
+                        execution_content[Model._FIELD_GROUP_INDEX] = execution.group_index
+                        execution_content[Model._FIELD_GROUP_COUNT] = execution.group_count
+                        content[Model._FIELD_EXECUTIONS].append(execution_content)
 
                     group_number += 1
-                    self.__print(logging.INFO, i18n.t('command.log_bookend'))
+                    self.__print(print_level, i18n.t('command.log_bookend'))
 
             else:
                 has_executions = False
 
-                for execution in process.executions:
-                    self.__print_execution(execution)
+                for i, execution in enumerate(process.executions):
+                    if i > 0:
+                        self.__print(print_level, i18n.t('command.log_divider'))
+
+                    execution_content = self.__print_execution(execution, print_level=print_level)
+                    content[Model._FIELD_EXECUTIONS].append(execution_content)
                     has_executions = True
 
                 if not has_executions:
-                    self.__print(logging.INFO, i18n.t('command.log_no_executions'))
+                    self.__print(print_level, i18n.t('command.log_no_executions'))
 
-                self.__print(logging.INFO, i18n.t('command.log_bookend'))
+                self.__print(print_level, i18n.t('command.log_bookend'))
 
         except CommandError as e:
             self.__print(logging.DEBUG, str(e))
 
-        return found
+        return found, content
+
+    def display_service(self, organisation, service_name, display_json=False):
+        """
+        Displays the documentation for the service. If the service does not exist, it will be ignored.
+
+        Args:
+            organisation: The logged in organisation.
+            service_name: The name of the service to display.
+            display_json: Output in JSON format.
+
+        Returns:
+            A tuple with True if a service was displayed and the associated JSON content.
+        """
+        found = False
+        content = {}
+
+        # If JSON is being displayed, do not print anything from this method. We do not change the overall print level as we still want to output errors.
+        print_level = logging.NOTSET if display_json else logging.INFO
+
+        # Try to find any existing service, ignoring any error.
+        try:
+            service = self.get_service(organisation, service_name)
+            found = True
+
+            content = self.__print_service(organisation, service, print_level=print_level)
+
+        except CommandError as e:
+            self.__print(logging.DEBUG, str(e))
+
+        return found, content
 
     def __download_execution(self, process, download_inputs, download_outputs, download_storage, download_statistics, download_intermediate, download_components,
                              output_dir, wait, execution):
@@ -777,8 +800,8 @@ class Command(Base):
             The process model.
         """
 
-        # If we are downloading nothing, at least download the outputs.
-        if (not download_inputs) and (not download_outputs) and (not download_storage) and (not download_statistics):
+        # If we are downloading nothing or not saving the metrics, at least download the outputs.
+        if (not download_inputs) and (not download_outputs) and (not download_storage) and (not download_statistics) and (not save_metrics):
             download_outputs = True
 
         self.__print(logging.INFO,
@@ -790,7 +813,8 @@ class Command(Base):
         process, execution = self.get_process_or_execution(organisation, process_name)
 
         # Get the output directory and remove it if it exists.
-        output_dir = self.__name_to_file_name(process.name)
+        safe_name = self.__name_to_file_name(process.name)
+        output_dir = safe_name
         shutil.rmtree(output_dir, ignore_errors=True)
 
         if execution is None:
@@ -851,14 +875,23 @@ class Command(Base):
             downloads.extend(execution_downloads)
             metrics.extend(execution_metrics)
 
-        # Download the files unless we only want the stac information.
+        # Download the files unless we only want the STAC information.
         if not stac_only:
             self.__download_files(downloads)
 
         # Save the metrics to file.
         if save_metrics and (len(metrics) > 0):
-            with open(Command._METRICS_FILE, 'w') as csv_file:
-                writer = csv.DictWriter(csv_file, metrics[0].keys())
+            metrics_file_name = Command._METRICS_FILE_FORMAT.format(name=safe_name)
+            self.__print(logging.INFO, i18n.t('command.save_metrics', file_name=metrics_file_name))
+
+            # Make sure that we have a superset of the fields recorded within the metrics so that we can write the header of the CSV file out.
+            fields = []
+
+            for metric in metrics:
+                fields.extend([field for field in metric.keys() if field not in fields])
+
+            with open(metrics_file_name, 'w') as csv_file:
+                writer = csv.DictWriter(csv_file, fields)
                 writer.writeheader()
                 writer.writerows(metrics)
 
@@ -1184,29 +1217,67 @@ class Command(Base):
         """
         return uuid.uuid5(uuid.NAMESPACE_URL, f"{process_id}_{group_count}_{group_index}_{ssd_id}_{chain_index}")
 
-    def list_processes(self, organisation):
+    def list_processes(self, organisation, display_json=False):
         """
         Lists all configured processes.
 
         Args:
             organisation: The logged in organisation.
+            display_json: Output in JSON format.
         """
         count = 0
 
+        # If JSON is being displayed, do not print anything from this method. We do not change the overall print level as we still want to output errors.
+        print_level = logging.NOTSET if display_json else logging.INFO
+
+        # Create the list of dictionaries containing the process values.
+        content = {Model._FIELD_PROCESSES: []}
+
         for process in organisation.processes:
+            process_content = {
+                Model._FIELD_ID: process.id,
+                Model._FIELD_NAME: process.name,
+                Model._FIELD_PROCESS_STATUS: process.process_status,
+                Model._FIELD_EXECUTIONS: []
+            }
+
+            # Find the executions.
             executions = [execution for execution in process.executions]
 
             # Get information about any groups.
             groups = defaultdict(list)
 
             for execution in executions:
+                seconds = round((execution.ended_at - execution.started_at).total_seconds()) if hasattr(execution, Model._FIELD_ENDED_AT) and (
+                        execution.ended_at is not None) else None
+
+                execution_content = {
+                    Model._FIELD_ID: execution.id,
+                    Model._FIELD_ABORT: execution.abort,
+                    Model._FIELD_ABORT_REASON: execution.abort_reason if hasattr(execution, Model._FIELD_ABORT_REASON) else None,
+                    Model._FIELD_EXIT_TYPE: execution.exit_type if hasattr(execution, Model._FIELD_EXIT_TYPE) else None,
+                    Model._FIELD_SUCCESS: execution.success,
+                    Model._FIELD_STOPPED: execution.stopped,
+                    Model._FIELD_PROGRESS: execution.progress,
+                    Model._FIELD_STARTED_AT: execution.started_at,
+                    Model._FIELD_ENDED_AT: execution.ended_at if hasattr(execution, Model._FIELD_ENDED_AT) else None,
+                    Model._FIELD_DURATION: seconds
+                }
+
                 if (hasattr(execution, Model._FIELD_GROUP_ID) and (execution.group_id is not None)) and (
                         hasattr(execution, Model._FIELD_GROUP_INDEX) and (execution.group_index is not None)) and (
                         hasattr(execution, Model._FIELD_GROUP_COUNT) and (execution.group_count is not None)):
                     groups[execution.group_id].append(execution)
 
+                    execution_content[Model._FIELD_GROUP_ID] = execution.group_id
+                    execution_content[Model._FIELD_GROUP_INDEX] = execution.group_index
+                    execution_content[Model._FIELD_GROUP_COUNT] = execution.group_count
+
+                process_content[Model._FIELD_EXECUTIONS].append(execution_content)
+
             # Calculate the overall progress and for each group.
             progress = sum([execution.progress for execution in executions]) // len(executions) if len(executions) > 0 else 0
+            process_content[Model._FIELD_PROGRESS] = progress
             group_progress_summary = ''
 
             if len(groups) > 1:
@@ -1214,7 +1285,7 @@ class Command(Base):
                     group_progress = sum([execution.progress for execution in group]) // len(group)
                     group_progress_summary += i18n.t('command.log_process_group', group_number=(i + 1), progress=group_progress)
 
-            # Show the process information using a progress bar.
+            # Gather the relevant information about the process.
             process_status = i18n.t(f"command.log_process_status.{process.process_status}")
             warnings = sum([execution.exit_type in [Command._EXIT_NON_FATAL_WARNING, Command._EXIT_FATAL_WARNING] for execution in executions if
                             hasattr(execution, Model._FIELD_EXIT_TYPE)])
@@ -1238,42 +1309,76 @@ class Command(Base):
             description = i18n.t('command.log_process_summary', process=process.name, group_progress=group_progress_summary)
             bar_format = Command.__PROGRESS_BAR_FORMAT_PROCESS.format(current=current, total=total, process_status=process_status, successes=successes,
                                                                       warnings=warnings, errors=errors, stopped=stopped, description=description)
-            progress_bar = tqdm(total=100.0, bar_format=bar_format, colour=colour)
-            progress_bar.update(progress)
-            progress_bar.close()
+
+            # Show the process information using a progress bar, if we are not displaying JSON.
+            if not display_json:
+                progress_bar = tqdm(total=100.0, bar_format=bar_format, colour=colour)
+                progress_bar.update(progress)
+                progress_bar.close()
+
+            content[Model._FIELD_PROCESSES].append(process_content)
 
             count += 1
 
         if count <= 0:
-            self.__print(logging.INFO, i18n.t('command.log_no_processes'))
+            self.__print(print_level, i18n.t('command.log_no_processes'))
 
-    def list_services(self, organisation):
+        # Output the JSON if that is what is being displayed.
+        if display_json:
+            self.__print(logging.INFO, json.dumps(content, default=json_default, indent=4), format=False)  # Keep the correct print level.
+
+    def list_services(self, organisation, display_json=False):
         """
         Lists all available services.
 
         Args:
             organisation: The logged in organisation.
+            display_json: Output in JSON format.
         """
         count = 0
+
+        # If JSON is being displayed, do not print anything from this method. We do not change the overall print level as we still want to output errors.
+        print_level = logging.NOTSET if display_json else logging.INFO
+
+        # Create the list of dictionaries containing the service values.
+        content = {Model._FIELD_SERVICES: []}
 
         # Get a unique list of the latest services and sort them by name.
         services = sorted(organisation.services, key=lambda service: service.name)
 
         for service in services:
-            self.__print(logging.INFO, i18n.t('command.log_service_detail', name=service.name, summary=service.documentation_summary))
+            self.__print(print_level, i18n.t('command.log_service_detail', name=service.name, summary=service.documentation_summary))
+            content[Model._FIELD_SERVICES].append({
+                Model._FIELD_ID: service.id,
+                Model._FIELD_SSD_ID: service.ssd_id,
+                Model._FIELD_NAME: service.name,
+                Model._FIELD_DOCUMENTATION_SUMMARY: service.documentation_summary
+            })
+
             count += 1
 
         if count <= 0:
-            self.__print(logging.INFO, i18n.t('command.log_no_services'))
+            self.__print(print_level, i18n.t('command.log_no_services'))
 
-    def list_uploads(self, organisation):
+        # Output the JSON if that is what is being displayed.
+        if display_json:
+            self.__print(logging.INFO, json.dumps(content, default=json_default, indent=4), format=False)  # Keep the correct print level.
+
+    def list_uploads(self, organisation, display_json=False):
         """
         Lists all uploads.
 
         Args:
             organisation: The logged in organisation.
+            display_json: Output in JSON format.
         """
         count = 0
+
+        # If JSON is being displayed, do not print anything from this method. We do not change the overall print level as we still want to output errors.
+        print_level = logging.NOTSET if display_json else logging.INFO
+
+        # Create the list of dictionaries containing the upload values.
+        content = {Model._FIELD_UPLOADS: []}
 
         # Get the width of all upload names.
         uploads = [data for data in organisation.data]
@@ -1282,6 +1387,11 @@ class Command(Base):
 
         for data in uploads:
             name = data.name.ljust(maximum_name_width)
+            upload_content = {
+                Model._FIELD_ID: data.id,
+                Model._FIELD_NAME: data.name,
+                Model._FIELD_FILES: []
+            }
 
             for i, file in enumerate(data.files):
                 file_name = file.file_name if hasattr(file, Model._FIELD_FILE_NAME) and (file.file_name is not None) else ''
@@ -1296,15 +1406,31 @@ class Command(Base):
                 size = f" {size.rjust(10)}"
 
                 self.__print(
-                    logging.INFO,
+                    print_level,
                     i18n.t('command.log_data_file', name=name if i == 0 else blank_name, file_type=file_type, file_name=file_name, source=source, crs=crs,
                            size=size)
                 )
 
+                upload_content[Model._FIELD_FILES].append({
+                    Model._FIELD_ID: file.id,
+                    Model._FIELD_FILE_NAME: file.file_name if hasattr(file, Model._FIELD_FILE_NAME) else None,
+                    Model._FIELD_FILE_TYPE: file.file_type,
+                    Model._FIELD_ALTERNATIVE: file.alternative if hasattr(file, Model._FIELD_ALTERNATIVE) else None,
+                    Model._FIELD_SOURCE: file.source if hasattr(file, Model._FIELD_SOURCE) else None,
+                    Model._FIELD_CRS: file.crs if hasattr(file, Model._FIELD_CRS) else None,
+                    Model._FIELD_SIZE: file.size if hasattr(file, Model._FIELD_SIZE) else None
+                })
+
+            content[Model._FIELD_UPLOADS].append(upload_content)
+
             count += 1
 
         if count <= 0:
-            self.__print(logging.INFO, i18n.t('command.log_no_uploads'))
+            self.__print(print_level, i18n.t('command.log_no_uploads'))
+
+        # Output the JSON if that is what is being displayed.
+        if display_json:
+            self.__print(logging.INFO, json.dumps(content, default=json_default, indent=4), format=False)  # Keep the correct print level.
 
     def login(self, deployment, email, organisation_name, no_save_password):
         """
@@ -1448,20 +1574,38 @@ class Command(Base):
 
             elif arguments.command == i18n.t('command.display.command'):
                 if arguments.process_or_service == i18n.t('command.display.process.command'):
+                    content = {Model._FIELD_PROCESSES: []}
+
                     # Display a process with the specified name or ids.
                     for process in arguments.process:
-                        if not self.display_process(organisation, process):
+                        found, process_content = self.display_process(organisation, process, display_json=arguments.json)
+
+                        if (not found) and (not arguments.json):
                             self.__print(logging.WARNING, i18n.t('command.no_such_process', process=process))
 
+                        if found:
+                            content[Model._FIELD_PROCESSES].append(process_content)
+
                 elif arguments.process_or_service == i18n.t('command.display.service.command'):
+                    content = {Model._FIELD_SERVICES: []}
+
                     # Display a service with the specified name or ids.
                     for service in arguments.service:
-                        if not self.display_service(organisation, service):
+                        found, service_content = self.display_service(organisation, service, display_json=arguments.json)
+
+                        if (not found) and (not arguments.json):
                             self.__print(logging.WARNING, i18n.t('command.no_such_service', service=service))
+
+                        if found:
+                            content[Model._FIELD_SERVICES].append(service_content)
 
                 else:
                     # Unknown command.
                     raise CommandError(i18n.t('command.unknown_command', command=arguments.process_or_service))
+
+                # Output the JSON if that is what is being displayed.
+                if arguments.json:
+                    self.__print(logging.INFO, json.dumps(content, default=json_default, indent=4), format=False)  # Keep the correct print level.
 
             elif arguments.command == i18n.t('command.download.command'):
                 if arguments.process_or_upload == i18n.t('command.download.process.command'):
@@ -1489,15 +1633,15 @@ class Command(Base):
             elif arguments.command == i18n.t('command.list.command'):
                 if arguments.process_service_or_upload == i18n.t('command.list.process.command'):
                     # List all processes.
-                    self.list_processes(organisation)
+                    self.list_processes(organisation, display_json=arguments.json)
 
                 elif arguments.process_service_or_upload == i18n.t('command.list.service.command'):
                     # List all services.
-                    self.list_services(organisation)
+                    self.list_services(organisation, display_json=arguments.json)
 
                 elif arguments.process_service_or_upload == i18n.t('command.list.upload.command'):
                     # List all uploads.
-                    self.list_uploads(organisation)
+                    self.list_uploads(organisation, display_json=arguments.json)
 
                 else:
                     # Unknown command.
@@ -1680,7 +1824,11 @@ class Command(Base):
 
         # Display arguments.
         parser_display_process.add_argument(i18n.t('command.display.process_long'), help=i18n.t('command.display.process_help'), nargs='+')
+        parser_display_process.add_argument(i18n.t('command.json_short'), i18n.t('command.json_long'), help=i18n.t('command.json_help'), default=False,
+                                            action='store_true')
         parser_display_service.add_argument(i18n.t('command.display.service_long'), help=i18n.t('command.display.service_help'), nargs='+')
+        parser_display_service.add_argument(i18n.t('command.json_short'), i18n.t('command.json_long'), help=i18n.t('command.json_help'), default=False,
+                                            action='store_true')
 
         # Download arguments.
         parser_download_process.add_argument(i18n.t('command.download.process_long'), help=i18n.t('command.download.process_help'), nargs='+')
@@ -1706,6 +1854,14 @@ class Command(Base):
                                              help=i18n.t('command.start.stac_only_help'),
                                              default=False, action='store_true')
         parser_download_upload.add_argument(i18n.t('command.download.upload_long'), help=i18n.t('command.download.upload_help'), nargs='+')
+
+        # List arguments.
+        parser_list_process.add_argument(i18n.t('command.json_short'), i18n.t('command.json_long'), help=i18n.t('command.json_help'), default=False,
+                                         action='store_true')
+        parser_list_service.add_argument(i18n.t('command.json_short'), i18n.t('command.json_long'), help=i18n.t('command.json_help'), default=False,
+                                         action='store_true')
+        parser_list_upload.add_argument(i18n.t('command.json_short'), i18n.t('command.json_long'), help=i18n.t('command.json_help'), default=False,
+                                        action='store_true')
 
         # Start arguments.
         parser_start.add_argument(i18n.t('command.start.definition_long'), help=i18n.t('command.start.definition_help'), nargs='+')
@@ -1850,17 +2006,21 @@ class Command(Base):
             else:
                 print(message)
 
-    def __print_execution(self, execution, label=None):
+    def __print_execution(self, execution, label=None, print_level=logging.INFO):
         """
         Prints an execution. This just shows the status in a simple format.
 
         Args:
             execution: The execution to be logged.
             label: Optional label for the execution. Default None.
+            print_level: The logging level to use. Default INFO.
+
+        Returns:
+            The execution content as a dictionary.
         """
         label = '' if label is None else label
 
-        # Form the status of the execution.
+        # Form the status of the execution...
         status = ''
         abort_reason = i18n.t('command.log_execution_abort_reason', abort_reason=execution.abort_reason) if hasattr(execution,
                                                                                                                     Model._FIELD_ABORT_REASON) else ''
@@ -1881,114 +2041,266 @@ class Command(Base):
         else:
             status = i18n.t('command.log_execution_failed', exit_type=exit_type, abort_reason=abort_reason)
 
+        # ...and the duration.
         started_at = execution.started_at.strftime('%Y-%m-%d %H:%M:%S')
         ended_at = i18n.t('command.log_execution_ended_at', ended_at=execution.ended_at.strftime('%Y-%m-%d %H:%M:%S')) if hasattr(execution,
                                                                                                                                   Model._FIELD_ENDED_AT) else ''
-        period = i18n.t('command.log_execution_period', started_at=started_at, ended_at=ended_at)
-        duration = i18n.t('command.log_execution_duration', minutes=round((execution.ended_at - execution.started_at).total_seconds() // 60)) if hasattr(
-            execution, Model._FIELD_ENDED_AT) and (execution.ended_at is not None) else ''
 
-        self.__print(logging.INFO, i18n.t('command.log_execution', id=execution.id, label=label, period=period, status=status, duration=duration))
+        seconds = round((execution.ended_at - execution.started_at).total_seconds()) if hasattr(execution, Model._FIELD_ENDED_AT) and (
+                execution.ended_at is not None) else None
+        duration = i18n.t('command.log_execution_duration', seconds=seconds) if seconds is not None else ''
+        period = i18n.t('command.log_execution_period', started_at=started_at, ended_at=ended_at, duration=duration)
 
-    def __print_process(self, process):
+        self.__print(print_level, i18n.t('command.log_execution', id=execution.id, label=label, period=period, status=status))
+
+        # Create the dictionary containing the execution values.
+        content = {
+            Model._FIELD_ID: execution.id,
+            Model._FIELD_ABORT: execution.abort,
+            Model._FIELD_ABORT_REASON: execution.abort_reason if hasattr(execution, Model._FIELD_ABORT_REASON) else None,
+            Model._FIELD_EXIT_TYPE: execution.exit_type if hasattr(execution, Model._FIELD_EXIT_TYPE) else None,
+            Model._FIELD_SUCCESS: execution.success,
+            Model._FIELD_STOPPED: execution.stopped,
+            Model._FIELD_PROGRESS: execution.progress,
+            Model._FIELD_STARTED_AT: execution.started_at,
+            Model._FIELD_ENDED_AT: execution.ended_at if hasattr(execution, Model._FIELD_ENDED_AT) else None,
+            Model._FIELD_DURATION: seconds,
+            Model._FIELD_COMPONENTS: []
+        }
+
+        # Now list the status of each service execution component.
+        for component in execution.components:
+            component_content = self.__print_service_execution(component, print_level=print_level)
+            content[Model._FIELD_COMPONENTS].append(component_content)
+
+        return content
+
+    def __print_process(self, process, print_level=logging.INFO):
         """
         Prints a process.
 
         Args:
             process: The process to be logged.
-        """
-        self.__print(logging.INFO, i18n.t('command.log_bookend'))
-        self.__print(logging.INFO, i18n.t('command.log_process', process=process.name))
+            print_level: The logging level to use. Default INFO.
 
+        Returns:
+            The process content as a dictionary.
+        """
+        self.__print(print_level, i18n.t('command.log_bookend'))
+        self.__print(print_level, i18n.t('command.log_process', process=process.name))
+
+        # Create the dictionary containing the process values.
+        content = {
+            Model._FIELD_ID: process.id,
+            Model._FIELD_SSD_ID: process.ssd_id,
+            Model._FIELD_NAME: process.name
+        }
+
+        # Get the process fields.
         for field in Command._MODEL_FIELDS:
             if hasattr(process, field):
-                self.__print(logging.INFO, i18n.t('command.log_field', field=field, value=getattr(process, field)))
+                value = getattr(process, field)
+                self.__print(print_level, i18n.t('command.log_field', field=field, value=value))
+                content[field] = value
 
+        # Get the process inputs.
         process_inputs = [input for input in process.inputs]
+        content[Model._FIELD_INPUTS] = []
 
         if len(process_inputs) > 0:
-            self.__print(logging.INFO, i18n.t('command.log_divider'))
-            self.__print(logging.INFO, i18n.t('command.log_inputs'))
+            self.__print(print_level, i18n.t('command.log_divider'))
+            self.__print(print_level, i18n.t('command.log_inputs'))
 
             for data_item in process_inputs:
-                self.__print(logging.INFO, str(data_item), format=False)
+                self.__print(print_level, str(data_item), format=False)
+                content[Model._FIELD_INPUTS].append({
+                    Model._FIELD_ID: data_item.id,
+                    Model._FIELD_FILE_TYPE: data_item.file_type,
+                    Model._FIELD_NAME: data_item.name if hasattr(data_item, Model._FIELD_NAME) else None,
+                    Model._FIELD_TITLE: data_item.title if hasattr(data_item, Model._FIELD_TITLE) else None,
+                    Model._FIELD_DESCRIPTION: data_item.description if hasattr(data_item, Model._FIELD_DESCRIPTION) else None
+                })
 
+        # Get the process options.
         process_options = [option for option in process.options]
+        content[Model._FIELD_OPTIONS] = []
 
         if len(process_options) > 0:
-            self.__print(logging.INFO, i18n.t('command.log_divider'))
-            self.__print(logging.INFO, i18n.t('command.log_options'))
+            self.__print(print_level, i18n.t('command.log_divider'))
+            self.__print(print_level, i18n.t('command.log_options'))
 
             for option in process_options:
-                self.__print(logging.INFO, str(option), format=False)
+                self.__print(print_level, str(option), format=False)
+                content[Model._FIELD_OPTIONS].append({
+                    Model._FIELD_NAME: option.name,
+                    Model._FIELD_VALUE: option.value if hasattr(option, Model._FIELD_VALUE) else None,
+                    Model._FIELD_REQUIRED: option.required,
+                    Model._FIELD_TITLE: option.title if hasattr(option, Model._FIELD_TITLE) else None,
+                    Model._FIELD_DESCRIPTION: option.description if hasattr(option, Model._FIELD_DESCRIPTION) else None
+                })
 
+        # Get the process dispatchers.
         process_dispatchers = [dispatcher for dispatcher in process.dispatchers]
+        content[Model._FIELD_DISPATCHERS] = []
 
         if len(process_dispatchers) > 0:
-            self.__print(logging.INFO, i18n.t('command.log_divider'))
-            self.__print(logging.INFO, i18n.t('command.log_dispatchers'))
+            self.__print(print_level, i18n.t('command.log_divider'))
+            self.__print(print_level, i18n.t('command.log_dispatchers'))
 
             for dispatcher in process_dispatchers:
-                self.__print(logging.INFO, i18n.t('command.log_subdivider'))
-                self.__print(logging.INFO, str(dispatcher), format=False)
+                self.__print(print_level, i18n.t('command.log_subdivider'))
+                self.__print(print_level, str(dispatcher), format=False)
+                dispatcher_options = []
 
                 for option in dispatcher.options:
-                    self.__print(logging.INFO, str(option), format=False)
+                    self.__print(print_level, str(option), format=False)
+                    dispatcher_options.append({
+                        Model._FIELD_NAME: option.name,
+                        Model._FIELD_VALUE: option.value if hasattr(option, Model._FIELD_VALUE) else None,
+                        Model._FIELD_REQUIRED: option.required,
+                        Model._FIELD_TITLE: option.title if hasattr(option, Model._FIELD_TITLE) else None,
+                        Model._FIELD_DESCRIPTION: option.description if hasattr(option, Model._FIELD_DESCRIPTION) else None
+                    })
 
-        self.__print(logging.INFO, i18n.t('command.log_bookend'))
+                content[Model._FIELD_DISPATCHERS].append({
+                    Model._FIELD_SSD_ID: dispatcher.ssd_id,
+                    Model._FIELD_NAME: option.name,
+                    Model._FIELD_OPTIONS: dispatcher_options
+                })
 
-    def __print_service(self, service):
+        self.__print(print_level, i18n.t('command.log_bookend'))
+
+        return content
+
+    def __print_service(self, organisation, service, print_level=logging.INFO):
         """
         Prints the documentation for a service.
 
         Args:
+            organisation: The logged in organisation.
             service: The service to be logged.
+            print_level: The logging level to use. Default INFO.
+
+        Returns:
+            The service content as a dictionary.
         """
-        self.__print(logging.INFO, i18n.t('command.log_bookend'))
-        self.__print(logging.INFO, i18n.t('command.log_service', service=service.name))
 
-        self.__print(logging.INFO, i18n.t('command.log_field', field=Model._FIELD_CATEGORIES, value=service.categories))
-        self.__print(logging.INFO, i18n.t('command.log_field', field=Model._FIELD_KEYWORDS, value=service.keywords))
+        # Create the dictionary containing the service values.
+        content = {
+            Model._FIELD_ID: service.id,
+            Model._FIELD_SSD_ID: service.ssd_id,
+            Model._FIELD_NAME: service.name,
+            Model._FIELD_CATEGORIES: service.categories,
+            Model._FIELD_KEYWORDS: service.keywords,
+        }
 
-        self.__print(logging.INFO, i18n.t('command.log_divider'))
-        self.__print(logging.INFO, i18n.t('command.log_summary'))
-        self.__print(logging.INFO, service.documentation_summary, format=False)
+        # Output the basic details.
+        self.__print(print_level, i18n.t('command.log_bookend'))
+        self.__print(print_level, i18n.t('command.log_service', service=service.name))
 
-        self.__print(logging.INFO, i18n.t('command.log_divider'))
-        self.__print(logging.INFO, i18n.t('command.log_description'))
-        self.__print(logging.INFO, service.documentation_description, format=False)
+        self.__print(print_level, i18n.t('command.log_field', field=Model._FIELD_CATEGORIES, value=service.categories))
+        self.__print(print_level, i18n.t('command.log_field', field=Model._FIELD_KEYWORDS, value=service.keywords))
 
-        self.__print(logging.INFO, i18n.t('command.log_divider'))
-        self.__print(logging.INFO, i18n.t('command.log_assumptions'))
-        self.__print(logging.INFO, service.documentation_assumptions, format=False)
+        # Output the documentation.
+        self.__print(print_level, i18n.t('command.log_divider'))
+        self.__print(print_level, i18n.t('command.log_summary'))
+        self.__print(print_level, service.documentation_summary, format=False)
+        content[Model._FIELD_DOCUMENTATION_SUMMARY] = service.documentation_summary
+
+        self.__print(print_level, i18n.t('command.log_divider'))
+        self.__print(print_level, i18n.t('command.log_description'))
+        self.__print(print_level, service.documentation_description, format=False)
+        content[Model._FIELD_DOCUMENTATION_DESCRIPTION] = service.documentation_description
+
+        self.__print(print_level, i18n.t('command.log_divider'))
+        self.__print(print_level, i18n.t('command.log_assumptions'))
+        self.__print(print_level, service.documentation_assumptions, format=False)
+        content[Model._FIELD_DOCUMENTATION_ASSUMPTIONS] = service.documentation_assumptions
 
         if len(service.documentation_actions.strip()) > 0:
-            self.__print(logging.INFO, i18n.t('command.log_divider'))
-            self.__print(logging.INFO, i18n.t('command.log_actions'))
-            self.__print(logging.INFO, service.documentation_actions, format=False)
+            self.__print(print_level, i18n.t('command.log_divider'))
+            self.__print(print_level, i18n.t('command.log_actions'))
+            self.__print(print_level, service.documentation_actions, format=False)
+            content[Model._FIELD_DOCUMENTATION_ACTIONS] = service.documentation_actions
 
         if hasattr(service, Model._FIELD_DOCUMENTATION_INPUTS):
-            self.__print(logging.INFO, i18n.t('command.log_divider'))
-            self.__print(logging.INFO, i18n.t('command.log_inputs'))
+            self.__print(print_level, i18n.t('command.log_divider'))
+            self.__print(print_level, i18n.t('command.log_inputs'))
+            content[Model._FIELD_DOCUMENTATION_INPUTS] = []
 
             for input in service.documentation_inputs:
-                self.__print(logging.INFO, str(input), format=False)
+                self.__print(print_level, str(input), format=False)
+                content[Model._FIELD_DOCUMENTATION_INPUTS].append(input)
 
         if hasattr(service, Model._FIELD_DOCUMENTATION_OUTPUTS):
-            self.__print(logging.INFO, i18n.t('command.log_divider'))
-            self.__print(logging.INFO, i18n.t('command.log_outputs'))
+            self.__print(print_level, i18n.t('command.log_divider'))
+            self.__print(print_level, i18n.t('command.log_outputs'))
+            content[Model._FIELD_DOCUMENTATION_OUTPUTS] = []
 
             for output in service.documentation_outputs:
-                self.__print(logging.INFO, str(output), format=False)
+                self.__print(print_level, str(output), format=False)
+                content[Model._FIELD_DOCUMENTATION_OUTPUTS].append(output)
 
         if hasattr(service, Model._FIELD_DOCUMENTATION_OPTIONS):
-            self.__print(logging.INFO, i18n.t('command.log_divider'))
-            self.__print(logging.INFO, i18n.t('command.log_options'))
+            self.__print(print_level, i18n.t('command.log_divider'))
+            self.__print(print_level, i18n.t('command.log_options'))
+            content[Model._FIELD_DOCUMENTATION_OPTIONS] = []
 
             for option in service.documentation_options:
-                self.__print(logging.INFO, str(option), format=False)
+                self.__print(print_level, str(option), format=False)
+                content[Model._FIELD_DOCUMENTATION_OPTIONS].append(option)
 
-        self.__print(logging.INFO, i18n.t('command.log_bookend'))
+        self.__print(print_level, i18n.t('command.log_bookend'))
+
+        return content
+
+    def __print_service_execution(self, service_execution, print_level=logging.INFO):
+        """
+        Prints a service execution. This just shows the status in a simple format.
+
+        Args:
+            service_execution: The service execution to be logged.
+            print_level: The logging level to use. Default INFO.
+
+        Returns:
+            The service execution content as a dictionary.
+        """
+
+        # Form the status of the execution...
+        success = service_execution.success if hasattr(service_execution, Model._FIELD_SUCCESS) else False
+        status = ''
+
+        if success:
+            status = i18n.t('command.log_execution_success')
+
+        elif hasattr(service_execution, Model._FIELD_ENDED_AT) and (service_execution.ended_at is not None):
+            status = i18n.t('command.log_execution_failed', exit_type='', abort_reason='')
+
+        else:
+            status = i18n.t('command.log_execution_running')
+
+        # ... and the duration.
+        started_at = service_execution.started_at.strftime('%Y-%m-%d %H:%M:%S')
+        ended_at = i18n.t('command.log_execution_ended_at', ended_at=service_execution.ended_at.strftime('%Y-%m-%d %H:%M:%S')) if hasattr(service_execution,
+                                                                                                                                          Model._FIELD_ENDED_AT) else ''
+        seconds = round((service_execution.ended_at - service_execution.started_at).total_seconds()) if hasattr(service_execution, Model._FIELD_ENDED_AT) and (
+                service_execution.ended_at is not None) else None
+        duration = i18n.t('command.log_execution_duration', seconds=seconds) if seconds is not None else ''
+        period = i18n.t('command.log_execution_period', started_at=started_at, ended_at=ended_at, duration=duration)
+
+        self.__print(print_level, i18n.t('command.log_service_execution', name=service_execution.name, period=period, status=status))
+
+        # Create the dictionary containing the service execution values.
+        content = {
+            Model._FIELD_ID: service_execution.id,
+            Model._FIELD_NAME: service_execution.name,
+            Model._FIELD_SUCCESS: success,
+            Model._FIELD_STARTED_AT: service_execution.started_at,
+            Model._FIELD_ENDED_AT: service_execution.ended_at if hasattr(service_execution, Model._FIELD_ENDED_AT) else None,
+            Model._FIELD_DURATION: seconds
+        }
+
+        return content
 
     def __provision_process(self, process, inputs, options, dispatchers):
         """

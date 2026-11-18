@@ -82,6 +82,7 @@ el.replaceWith(d);
     _EXTRAS_LIST = None
 
     # Useful fields and templates.
+    _FIELD_ABORT = &#39;abort&#39;
     _FIELD_ABORT_REASON = &#39;abort_reason&#39;
     _FIELD_ALTERNATIVE = &#39;alternative&#39;
     _FIELD_AREA = &#39;area&#39;
@@ -91,18 +92,23 @@ el.replaceWith(d);
     _FIELD_CATEGORIES = &#39;categories&#39;
     _FIELD_CHAINS = &#39;chains&#39;
     _FIELD_CHAIN_INDEX = &#39;chain_index&#39;
+    _FIELD_COMPONENTS = &#39;components&#39;
     _FIELD_CONSTRAINED_NAMES = &#39;constrained_names&#39;
     _FIELD_CONSTRAINED_VALUES = &#39;constrained_values&#39;
     _FIELD_CRS = &#39;crs&#39;
     _FIELD_DATA_TYPE = &#39;data_type&#39;
+    _FIELD_DESCRIPTION = &#39;description&#39;
     _FIELD_DISPATCH_INTERMEDIATE = &#39;dispatch_intermediate&#39;
     _FIELD_DISPATCHERS = &#39;dispatchers&#39;
     _FIELD_DOCUMENTATION_SUMMARY = &#39;documentation_summary&#39;
     _FIELD_DOCUMENTATION_DESCRIPTION = &#39;documentation_description&#39;
+    _FIELD_DOCUMENTATION_ASSUMPTIONS = &#39;documentation_assumptions&#39;
+    _FIELD_DOCUMENTATION_ACTIONS = &#39;documentation_actions&#39;
     _FIELD_DOCUMENTATION_INPUTS = &#39;documentation_inputs&#39;
     _FIELD_DOCUMENTATION_OUTPUTS = &#39;documentation_outputs&#39;
     _FIELD_DOCUMENTATION_OPTIONS = &#39;documentation_options&#39;
     _FIELD_DOWNLOADS = &#39;downloads&#39;
+    _FIELD_DURATION = &#39;duration&#39;
     _FIELD_ENDED_AT = &#39;ended_at&#39;
     _FIELD_ERROR = &#39;error&#39;
     _FIELD_EXECUTIONS = &#39;executions&#39;
@@ -111,6 +117,7 @@ el.replaceWith(d);
     _FIELD_FILE = &#39;file&#39;
     _FIELD_FILE_NAME = &#39;file_name&#39;
     _FIELD_FILE_TYPE = &#39;file_type&#39;
+    _FIELD_FILES = &#39;files&#39;
     _FIELD_GEOSPATIAL = &#39;geospatial&#39;
     _FIELD_GROUP_COUNT = &#39;group_count&#39;
     _FIELD_GROUP_ID = &#39;group_id&#39;
@@ -138,12 +145,16 @@ el.replaceWith(d);
     _FIELD_POINTS = &#39;points&#39;
     _FIELD_POLYGONS = &#39;polygons&#39;
     _FIELD_PROCESS_STATUS = &#39;process_status&#39;
+    _FIELD_PROCESSES = &#39;processes&#39;
+    _FIELD_PROGRESS = &#39;progress&#39;
     _FIELD_PUBLISHABLE = &#39;publishable&#39;
+    _FIELD_REQUIRED = &#39;required&#39;
     _FIELD_RESOLUTION = &#39;resolution&#39;
     _FIELD_RUNTIME = &#39;runtime&#39;
     _FIELD_SD = &#39;sd&#39;
     _FIELD_SELECTOR = &#39;selector&#39;
     _FIELD_SELECTORS = &#39;selectors&#39;
+    _FIELD_SERVICES = &#39;services&#39;
     _FIELD_SIZE = &#39;size&#39;
     _FIELD_SOURCE = &#39;source&#39;
     _FIELD_SSD_ID = &#39;ssd_id&#39;
@@ -151,9 +162,11 @@ el.replaceWith(d);
     _FIELD_STAC_ITEM_FILE = &#39;stac_item_file&#39;
     _FIELD_STATISTICS_ID = &#39;statistics_id&#39;
     _FIELD_STARTED_AT = &#39;started_at&#39;
+    _FIELD_STOPPED = &#39;stopped&#39;
     _FIELD_SUCCESS = &#39;success&#39;
     _FIELD_TITLE = &#39;title&#39;
     _FIELD_UNIT = &#39;unit&#39;
+    _FIELD_UPLOADS = &#39;uploads&#39;
     _FIELD_USED = &#39;used&#39;
     _FIELD_VALIDATION = &#39;validation&#39;
     _FIELD_VALUE = &#39;value&#39;
@@ -1142,7 +1155,7 @@ model attributes are sent to the Fusion Platform<sup>&reg;</sup> which will auto
 Fusion Platform<sup>&reg;</sup> Python SDK
 </h2>
 <p>
-Version: 2.3.8
+Version: 2.3.10
 </p>
 <p>
 &copy; <a href="https://www.d-cat.co.uk">Digital Content Analysis Technology Ltd</a>

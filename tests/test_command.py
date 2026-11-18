@@ -251,7 +251,7 @@ class TestCommand(CustomTestCase):
 
         with patch.object(sys, 'argv', ['program', 'display', 'process'] + processes):
             with patch.object(command, 'login', return_value=(organisation, None, None)) as mock_login:
-                with patch.object(Command, 'display_process', return_value=False) as mock_display_process:
+                with patch.object(Command, 'display_process', return_value=(False, {})) as mock_display_process:
                     command.main()
 
                     mock_login.assert_called_once()
@@ -277,7 +277,7 @@ class TestCommand(CustomTestCase):
 
         with patch.object(sys, 'argv', ['program', 'display', 'service'] + services):
             with patch.object(command, 'login', return_value=(organisation, None, None)) as mock_login:
-                with patch.object(Command, 'display_service', return_value=True) as mock_display_service:
+                with patch.object(Command, 'display_service', return_value=(True, {})) as mock_display_service:
                     command.main()
 
                     mock_login.assert_called_once()
@@ -1159,10 +1159,17 @@ class TestCommand(CustomTestCase):
 
         executions_path = Process._PATH_EXECUTIONS.format(organisation_id=organisation.id, process_id=process_id)
 
+        with open(self.fixture_path('process_service_execution.json'), 'r') as file:
+            process_service_execution_content = json.loads(file.read())
+
+        service_executions_path = ProcessExecution._PATH_COMPONENTS.format(organisation_id=organisation.id, process_execution_id=execution_content[Model._FIELD_ID])
+
         with requests_mock.Mocker() as mock:
             mock.get(f"{url}{processes_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: []}))
 
-            self.assertFalse(command.display_process(organisation, process_name))
+            found, content = command.display_process(organisation, process_name)
+            self.assertFalse(found)
+            self.assertIsNotNone(content)
 
             self.assertEqual(2, mock.call_count)
 
@@ -1171,7 +1178,9 @@ class TestCommand(CustomTestCase):
             mock.get(f"{url}{data_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
             mock.get(f"{url}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: []}))
 
-            self.assertTrue(command.display_process(organisation, process_name))
+            found, content = command.display_process(organisation, process_name)
+            self.assertTrue(found)
+            self.assertIsNotNone(content)
 
             self.assertEqual(5, mock.call_count)
 
@@ -1179,10 +1188,14 @@ class TestCommand(CustomTestCase):
             mock.get(f"{url}{processes_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content]}))
             mock.get(f"{url}{data_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
             mock.get(f"{url}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content]}))
+            mock.get(f"{url}{service_executions_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [process_service_execution_content, process_service_execution_content]}))
 
-            self.assertTrue(command.display_process(organisation, process_name))
+            found, content = command.display_process(organisation, process_name)
+            self.assertTrue(found)
+            self.assertIsNotNone(content)
 
-            self.assertEqual(5, mock.call_count)
+            self.assertEqual(6, mock.call_count)
 
         execution_content_group = execution_content.copy()
         execution_content_group[Model._FIELD_GROUP_ID] = str(uuid.uuid4())
@@ -1193,10 +1206,27 @@ class TestCommand(CustomTestCase):
             mock.get(f"{url}{processes_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content]}))
             mock.get(f"{url}{data_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
             mock.get(f"{url}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content_group]}))
+            mock.get(f"{url}{service_executions_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [process_service_execution_content, process_service_execution_content]}))
 
-            self.assertTrue(command.display_process(organisation, process_name))
+            found, content = command.display_process(organisation, process_name)
+            self.assertTrue(found)
+            self.assertIsNotNone(content)
 
-            self.assertEqual(4, mock.call_count)
+            self.assertEqual(5, mock.call_count)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{url}{processes_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content]}))
+            mock.get(f"{url}{data_path}", text=json.dumps({Model._RESPONSE_KEY_MODEL: data_content}))
+            mock.get(f"{url}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content_group]}))
+            mock.get(f"{url}{service_executions_path}",
+                     text=json.dumps({Model._RESPONSE_KEY_LIST: [process_service_execution_content, process_service_execution_content]}))
+
+            found, content = command.display_process(organisation, process_name, display_json=True)
+            self.assertTrue(found)
+            self.assertIsNotNone(content)
+
+            self.assertEqual(5, mock.call_count)
 
     def test_display_service(self):
         """
@@ -1216,14 +1246,27 @@ class TestCommand(CustomTestCase):
         with requests_mock.Mocker() as mock:
             mock.get(f"{url}{services_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: []}))
 
-            self.assertFalse(command.display_service(organisation, service_name))
+            found, content = command.display_service(organisation, service_name)
+            self.assertFalse(found)
+            self.assertIsNotNone(content)
 
             self.assertEqual(3, mock.call_count)
 
         with requests_mock.Mocker() as mock:
             mock.get(f"{url}{services_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [service_content]}))
 
-            self.assertTrue(command.display_service(organisation, service_name))
+            found, content = command.display_service(organisation, service_name)
+            self.assertTrue(found)
+            self.assertIsNotNone(content)
+
+            self.assertEqual(1, mock.call_count)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{url}{services_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [service_content]}))
+
+            found, content = command.display_service(organisation, service_name, display_json=True)
+            self.assertTrue(found)
+            self.assertIsNotNone(content)
 
             self.assertEqual(1, mock.call_count)
 
@@ -1414,7 +1457,7 @@ class TestCommand(CustomTestCase):
         path = '/path/to/file'
         size = 123
         downloads = [(file, path, size)] * number_of_downloads
-        metrics = [{Command._METRICS_RUNTIME: 1234}] * 10
+        metrics = ([{Command._METRICS_RUNTIME: 1234}] * 10) + ([{Command._METRICS_MEMORY: 4321}] * 10)
 
         download_inputs = False
         download_outputs = False
@@ -1941,6 +1984,14 @@ class TestCommand(CustomTestCase):
 
             self.assertEqual(2, mock.call_count)
 
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{url}{processes_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [process_content]}))
+            mock.get(f"{url}{executions_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [execution_content_group]}))
+
+            command.list_processes(organisation, display_json=True)
+
+            self.assertEqual(2, mock.call_count)
+
     def test_list_services(self):
         """
         Test list services.
@@ -1965,6 +2016,13 @@ class TestCommand(CustomTestCase):
             mock.get(f"{url}{services_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [service_content]}))
 
             command.list_services(organisation)
+
+            self.assertEqual(1, mock.call_count)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{url}{services_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [service_content]}))
+
+            command.list_services(organisation, display_json=True)
 
             self.assertEqual(1, mock.call_count)
 
@@ -2008,6 +2066,14 @@ class TestCommand(CustomTestCase):
             mock.get(f"{url}{files_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content, file_content, file_content]}))
 
             command.list_uploads(organisation)
+
+            self.assertEqual(2, mock.call_count)
+
+        with requests_mock.Mocker() as mock:
+            mock.get(f"{url}{data_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [data_content]}))
+            mock.get(f"{url}{files_path}", text=json.dumps({Model._RESPONSE_KEY_LIST: [file_content, file_content, file_content]}))
+
+            command.list_uploads(organisation, display_json=True)
 
             self.assertEqual(2, mock.call_count)
 
